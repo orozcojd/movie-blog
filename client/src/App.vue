@@ -3,7 +3,7 @@
     <v-app>
       <main>
         <v-container fluid>
-          <header/>
+          <Header/>
           <router-view/>
         </v-container>
       </main>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Header from '@/components/Header'
+import Header from '@/components/Header.vue'
 export default {
   name: 'App',
   components: {

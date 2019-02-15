@@ -6,11 +6,16 @@ import router from './router'
 import Vuetify from 'vuetify'
 import store from '@/store/index'
 import 'vuetify/dist/vuetify.min.css'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
+
 import { sync } from 'vuex-router-sync'
 
 Vue.config.productionTip = false
 
-Vue.use(Vuetify)
+Vue.use(Vuetify, {
+  iconfont: 'md'
+})
+
 sync(store, router)
 
 /* eslint-disable no-new */

@@ -10,4 +10,7 @@ module.exports = (app) => {
     app.post('/login',  
         AuthenticationController.login)
 
+    app.post('/postArticle',
+        AuthenticationController.postArticle
+    )
 }

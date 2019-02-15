@@ -1,5 +1,5 @@
 // controllers are used for declaring all the endpoints
-const {User} = require('../models')
+const {User, Post} = require('../models')
 const jwt = require('jsonwebtoken')
 const config = require('../config/config')
 
@@ -14,6 +14,7 @@ module.exports = {
     async register (req, res) {
         try {
             const user = await User.create(req.body)
+            console.log("INSIDE REGISTER")
             userJson = user.toJSON()
             res.send({
                 user: userJson,
@@ -54,6 +55,21 @@ module.exports = {
         } catch (err) {
             res.status(400).send({
                 error: 'An error has occured trying to log in'
+            })
+        }
+    },
+    async postArticle (req, res) {
+        try {
+            console.log(req.body)
+            const post = await Post.create(req.body)
+            res.send({
+                post: post
+            })
+        }
+        catch (err) {
+            res.status(400).send({
+                error: 'An error has occured trying to create post',
+                details: err
             })
         }
     }
