@@ -6,13 +6,21 @@ module.exports = (sequelize, dataTypes) => {
         author: {
           type: dataTypes.STRING
         },
+        body: {
+          type: dataTypes.TEXT
+        },
         category: {
           type: dataTypes.STRING
         },
         articleImage: {
           type: dataTypes.BLOB
-        }
-
+        },
+        // thumbnailTitle: {
+        //   type: dataTypes.STRING
+        // },
+        // thumbNailDescription: {
+        //   types: dataTypes.TEXT
+        // }
     })
 
     return Post
