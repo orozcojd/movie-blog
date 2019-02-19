@@ -2,10 +2,9 @@
   <div id="app">
     <v-app>
       <main>
-        <v-container fluid>
-          <Header/>
-          <router-view/>
-        </v-container>
+        <Header/>
+        <h1>My Header</h1>
+        <router-view/>
       </main>
     </v-app>
   </div>
