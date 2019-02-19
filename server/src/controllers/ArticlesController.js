@@ -24,10 +24,21 @@ module.exports = {
         res.send(articles);   
     }
     catch (err) {
-        res.status(400).send({
-            error: 'An error has occured trying to get articles',
-            details: err
-        })
+      res.status(400).send({
+          error: 'An error has occured trying to get articles',
+          details: err
+      })
+    }
+  },
+  async preview (req, res) {
+    try {
+      
+    }
+    catch (err) {
+      res.status(400).send({
+        error: 'An error has occured trying to get article previews',
+        details: err
+    })
     }
   },
   async show (req, res) {

@@ -19,6 +19,8 @@ module.exports = (app) => {
         ArticlesController.postArticle)
     app.get('/articles',
         ArticlesController.index)
+    app.get('/article-preview', 
+        ArticlesController.previews)
     app.get('/articles/:articleId',
         ArticlesController.show)
     app.put('/articles/:articleId',

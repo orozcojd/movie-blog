@@ -1,22 +1,25 @@
 <template>
   <v-card>
-    <v-layout>
-      <v-flex xs8 sm8>
+    <v-layout row wrap>
+      <v-flex xs12 md8>
         <v-img
         src="https://video-images.vice.com/articles/5c671c5922b38000079d73fe/lede/1550273165254-GettyImages-1019038092.jpeg?crop=1xw%3A0.84375xh%3Bcenter%2Ccenter&resize=2000%3A*"
-        height="550"
+        contain
         alt="latest-post-img" />
       </v-flex>
-      <v-flex class="layout" xs4 sm4>
+      <v-flex class="layout" xs12 md4>
           <v-layout align-space-around justify-space-between column fill-height class="header">
             <div class="title-preview"
               @click="$router.push({name: 'login'})">
-              <h1 align="left">
-                What We Know About a Portland Cop's Friendly Texts with a Far-Right Leader</h1>
-              <br>
-              <p align="left">
-                Activists are pissed.
-              </p>
+              <v-card-title primary-title>
+                <div>
+                  <h3 class="headline" align="left">What We Know About a Portland Cop's Friendly Texts with a Far-Right Leader</h3>
+                <br>
+                <p align="left">
+                  Activists are pissed.
+                </p>
+              </div>
+              </v-card-title>
             </div>
             <p align="right">Camille Tsalik</p>
           </v-layout>
@@ -41,7 +44,10 @@ export default {
 <style scoped>
 .header {
   margin: 10px;
-  }
+}
+.header-text {
+  font-size: 150%;
+}
 .title-preview {
   cursor: pointer;
 }

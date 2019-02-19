@@ -1,5 +1,5 @@
 <template>
-    <v-toolbar fixed light>
+    <v-toolbar fixed light app>
       <v-toolbar-side-icon to="/">
         <v-icon>home</v-icon>
       </v-toolbar-side-icon>
