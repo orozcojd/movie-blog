@@ -18,9 +18,7 @@ module.exports = {
   },
   async index (req, res) {
     try {
-        const articles = await Post.findAll({
-          limit: 10
-        })
+        const articles = await Post.find().limit(10);
         res.send(articles);   
     }
     catch (err) {
@@ -30,7 +28,7 @@ module.exports = {
       })
     }
   },
-  async preview (req, res) {
+  async previews (req, res) {
     try {
       
     }

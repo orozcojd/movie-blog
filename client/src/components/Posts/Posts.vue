@@ -31,9 +31,11 @@
 </template>
 
 <script>
+import ArticleService from '@/services/ArticleService'
+
 import PostPreview from '@/components/Posts/PostPreview'
 import LatestPost from '@/components/Posts/LatestPost'
-import WeeklyPostView from '@/components/Posts/WeeklyPostView'
+// import WeeklyPostView from '@/components/Posts/WeeklyPostView'
 export default {
   name: 'posts',
   data () {
@@ -50,7 +52,15 @@ export default {
     LatestPost
   },
   methods: {
-
+  },
+  async mounted () {
+    console.log('MOUNTED')
+    try {
+      const response = await ArticleService.showArticles()
+      console.log(response.data)
+    } catch (e) {
+      console.log(e)
+    }
   }
 }
 </script>
