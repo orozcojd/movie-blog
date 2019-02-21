@@ -7,14 +7,14 @@ const AuthenticationControllerPolicy = require('./policies/AuthenticationControl
 
 module.exports = (app) => {
     
-    //login
+    /* login */
     app.post('/register',
         AuthenticationControllerPolicy.register,
         AuthenticationController.register)
     app.post('/login',  
         AuthenticationController.login)
 
-    //articles
+    /* articles */
     app.post('/articles',
         ArticlesController.postArticle)
     app.get('/articles',

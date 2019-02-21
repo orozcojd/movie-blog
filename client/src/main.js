@@ -18,8 +18,7 @@ Vue.use(Vuetify, {
 
 sync(store, router)
 
-/* eslint-disable no-new */
-new Vue({
+new Vue({ // eslint-disable-line no-new
   el: '#app',
   router,
   store,

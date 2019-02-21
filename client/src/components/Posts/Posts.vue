@@ -21,9 +21,11 @@
     <br>
     <v-container fluid grid-list-md>
       <v-layout row wrap>
-        <v-flex md4 xs12 v-for="post in 10"
-          :key=post>
-          <post-preview :article="article"/>
+        <v-flex md4 xs12 v-for="article in articles"
+          :key=article.id>
+          <post-preview
+          class="post-preview"
+          :article="article"/>
         </v-flex>
       </v-layout>
     </v-container>
@@ -31,20 +33,16 @@
 </template>
 
 <script>
-import ArticleService from '@/services/ArticleService'
-
+'use strict'
 import PostPreview from '@/components/Posts/PostPreview'
 import LatestPost from '@/components/Posts/LatestPost'
+import { mapActions, mapState } from 'vuex'
+
 // import WeeklyPostView from '@/components/Posts/WeeklyPostView'
 export default {
   name: 'posts',
   data () {
     return {
-      article: {
-        title: "How the UK's Last Mass Shooting Still Hurts Locals 20 Years Later",
-        description: "In Dunblane, the town that saw the last mass shooting in British history, survivors and the victims' families grapple with its legacy.",
-        author: 'Jonathan Orozco'
-      }
     }
   },
   components: {
@@ -52,12 +50,28 @@ export default {
     LatestPost
   },
   methods: {
+    ...mapActions([
+      'getArticles'
+    ])
+    // navigateTo(articleId) {
+    //   console.log('clicked')
+    //   this.$router.push({
+    //     name: 'post',
+    //     params: articleId
+    //   })
+    // }
+  },
+  computed: {
+    ...mapState([
+      'articles'
+    ])
   },
   async mounted () {
     console.log('MOUNTED')
     try {
-      const response = await ArticleService.showArticles()
-      console.log(response.data)
+      if (!this.articles.length) {
+        await this.getArticles()
+      }
     } catch (e) {
       console.log(e)
     }
@@ -85,5 +99,8 @@ export default {
     /* flex-direction: row; */
     flex-wrap: wrap;
     justify-content: space-between;
+  }
+  .post-preview {
+    cursor: pointer;
   }
 </style>

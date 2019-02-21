@@ -1,5 +1,7 @@
 module.exports = () => ({
   token: null,
   user: null,
-  isUserLoggedIn: false
+  isUserLoggedIn: false,
+  articles: [],
+  new: []
 })

@@ -20,5 +20,4 @@ mongoose.connect(config.db.database,{
      useNewUrlParser: true 
     }
 );
-
 app.listen(config.port);
