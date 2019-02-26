@@ -9,11 +9,11 @@ let articleSchema = new Schema({
   body: String,
   category: String,
   img: String,
-  thumbNailDescription: String,
+  thumbnailDescription: String,
   comments: [{body: String, date: Date, user: String}],
   meta: {
     votes: Number,
     favs: Number
-  }
-})
+  },
+}, {timestamps: { createdAt: 'created_at'} })
 module.exports = mongoose.model('Blog', articleSchema);

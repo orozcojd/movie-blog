@@ -13,7 +13,11 @@ export default {
     commit(types.FETCH_ARTICLES, articles)
   },
   async updateArticle ({commit}, payload) {
-      let article = (await Api().put(`articles/:${payload._id}`, payload)).data
-      commit(types.UPDATE_ARTICLE, article)
+    let article = (await Api().put(`articles/:${payload._id}`, payload)).data
+    commit(types.UPDATE_ARTICLE, article)
+  },
+  async postArticle ({commit}, payload) {
+    let article = (await Api().post('article/', payload)).data
+    commit(types.POST_ARTICLE, article)
   }
 }

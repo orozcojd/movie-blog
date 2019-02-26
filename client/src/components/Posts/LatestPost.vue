@@ -1,28 +1,26 @@
 <template>
-  <v-card>
+  <v-card class="point-cursor"
+    @click="navigateTo(article._id)">
     <v-layout row wrap>
       <v-flex xs12 md8>
         <v-img
-        src="https://video-images.vice.com/articles/5c671c5922b38000079d73fe/lede/1550273165254-GettyImages-1019038092.jpeg?crop=1xw%3A0.84375xh%3Bcenter%2Ccenter&resize=2000%3A*"
+        :src="article.img"
         contain
-        alt="latest-post-img" />
+        alt="latest-post-img"/>
       </v-flex>
       <v-flex class="layout" xs12 md4>
-          <v-layout align-space-around justify-space-between column fill-height class="header">
-            <div class="title-preview"
-              @click="$router.push({name: 'login'})">
-              <v-card-title primary-title>
-                <div>
-                  <h3 class="headline" align="left">What We Know About a Portland Cop's Friendly Texts with a Far-Right Leader</h3>
-                <br>
-                <p align="left">
-                  Activists are pissed.
-                </p>
-              </div>
-              </v-card-title>
-            </div>
-            <p align="right">Camille Tsalik</p>
-          </v-layout>
+        <v-layout align-space-around justify-space-between column fill-height class="header">
+          <v-card-title primary-title>
+            <div>
+              <h3 class="headline" align="left">{{ article.title }}</h3>
+            <br>
+            <p align="left">
+              {{ article.thumbnailDescription }}
+            </p>
+          </div>
+          </v-card-title>
+          <p align="right">{{ article.author }}</p>
+        </v-layout>
       </v-flex>
     </v-layout>
   </v-card>
@@ -31,12 +29,25 @@
 <script>
 export default {
   name: 'latest-post',
+  props: {
+    article: {
+      type: Object,
+      required: true
+    }
+  },
   data () {
     return {
     }
   },
   methods: {
-
+    navigateTo (articleId) {
+      this.$router.push({
+        name: 'article-view',
+        params: {
+          id: articleId
+        }
+      })
+    }
   }
 }
 </script>
@@ -48,7 +59,7 @@ export default {
 .header-text {
   font-size: 150%;
 }
-.title-preview {
+.point-cursor {
   cursor: pointer;
 }
 

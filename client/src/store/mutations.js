@@ -25,5 +25,8 @@ export default {
     */
     let index = state.articles.findIndex(article => article._id === payload.article._id)
     Vue.set(state.articles, index, payload.article)
+  },
+  [types.POST_ARTICLE] (state, paylopad) {
+    console.log('mutating state')
   }
 }

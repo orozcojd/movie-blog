@@ -33,7 +33,7 @@ export default {
   methods: {
     navigateTo (articleId) {
       this.$router.push({
-        name: 'article-view',
+        name: 'admin-edit-post',
         params: {
           id: articleId
         }

@@ -15,7 +15,7 @@ module.exports = (app) => {
         AuthenticationController.login)
 
     /* articles */
-    app.post('/articles',
+    app.post('/article',
         ArticlesController.postArticle)
     app.get('/articles',
         ArticlesController.index)

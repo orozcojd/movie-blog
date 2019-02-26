@@ -30,7 +30,7 @@ module.exports = {
     */
     try {
       // Post.find().remove().exec();
-      const articles = await Post.find().limit(12);
+      const articles = await Post.find().limit(12).sort('-created_at');
       res.send(articles);   
     }
     catch (err) {

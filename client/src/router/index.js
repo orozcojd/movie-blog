@@ -1,39 +1,25 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/Login'
-import Posts from '@/components/Posts/Posts'
-import Register from '@/components/Register'
-import Post from '@/components/Posts/Post'
-import PostAdminView from '@/components/Posts/PostAdminView'
+// import Login from '@/components/Login'
+// import Register from '@/components/Register'
+
+import postRoutes from './posts'
+import adminRoutes from './admin'
 
 Vue.use(Router)
 
+let routes = postRoutes.concat(adminRoutes)
+console.log(routes)
 export default new Router({
-  routes: [
-    {
-      path: '/',
-      name: 'root',
-      component: Posts
-    },
-    {
-      path: '/article/:id',
-      name: 'article-view',
-      component: Post
-    },
-    {
-      path: '/article/:id/admin',
-      name: 'admin-article-view',
-      component: PostAdminView
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: Login
-    },
-    {
-      path: '/register',
-      name: 'register',
-      component: Register
-    }
-  ]
+  routes
 })
+// {
+//   path: '/login',
+//   name: 'login',
+//   component: Login
+// },
+// {
+//   path: '/register',
+//   name: 'register',
+//   component: Register
+// }

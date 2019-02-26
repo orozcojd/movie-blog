@@ -1,6 +1,6 @@
 <template>
   <div style="padding:5em">
-    <h1>admin view</h1>
+    <h1>Admin View</h1>
     <v-form
       ref="form"
       v-model="valid"
@@ -16,7 +16,11 @@
       <v-text-field
         label="Thumbnail Description"
         required
-        v-model="article.thumbNailDescription"/>
+        v-model="article.thumbnailDescription"/>
+      <v-text-field
+        label="Article Image"
+        required
+        v-model="article.img"/>
       <v-text-field
         label="Category"
         required
@@ -26,8 +30,16 @@
         required
         autoGrow
         v-model="article.body"/>
-        <v-btn @click="cancel">Cancel</v-btn>
-        <v-btn @click="submit">Submit</v-btn>
+        <v-btn
+          @click.prevent="cancel"
+          :disabled="validation.cancelDisabled"
+        >Cancel</v-btn>
+        <v-btn
+          @click.prevent="submit"
+          :color="validation.btnType"
+        >Submit</v-btn>
+        <br>
+        <div style="color:red"> {{ validation.error }}</div>
     </v-form>
   </div>
 </template>
@@ -51,20 +63,29 @@ export default {
   //     }
   //   }
   // },
-  name: 'Songs',
+  name: 'post-admin-view',
   mounted () {
-    this.article = JSON.parse(JSON.stringify(this.getArticle(this.$route.params.id)))
+    if (this.$route.params.id) {
+      this.article = JSON.parse(JSON.stringify(this.getArticle(this.$route.params.id)))
+    }
     // this.$validator.localize('en', this.dictionary)
   },
   data () {
     return {
       valid: true,
-      article: {}
+      article: {},
+      validation: {
+        btnType: 'undefined',
+        error: '',
+        cancelDisabled: false
+      },
+      requestRunning: false
     }
   },
   methods: {
     ...mapActions([
-      'updateArticle'
+      'updateArticle',
+      'postArticle'
     ]),
     cancel () {
       this.$router.push({
@@ -72,12 +93,29 @@ export default {
       })
     },
     async submit () {
-      let action = await this.updateArticle(new Article(this.article)).then(res => {
-        this.$router.push({
-          name: 'root'
-        })
+      if (this.requestRunning) {
+        return
+      }
+      // disable cancel button & prevent api from firing after multiple button clicks
+      this.requestRunning = true
+      this.validation.cancelDisabled = true
+      let updated
+      if (this.$route.params.id) {
+        updated = await this.updateArticle(new Article(this.article))
+      } else {
+        updated = await this.postArticle(new Article(this.article))
+      }
+      updated.then(res => {
+        this.validation.error = ''
+        this.validation.btnType = 'success'
+        setTimeout(() => {
+          this.$router.push({
+            name: 'root'
+          })
+        }, 1000)
       }).catch(err => {
-        alert(err)
+        this.validation.btnType = 'danger'
+        this.validation.error = err
       })
     }
   },
