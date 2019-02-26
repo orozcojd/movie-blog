@@ -49,7 +49,4 @@ export default {
 </script>
 
 <style scoped>
-  .post-preview {
-    cursor: pointer;
-  }
 </style>

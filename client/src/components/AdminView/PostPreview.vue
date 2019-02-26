@@ -1,6 +1,5 @@
 <template>
-  <v-card
-    @click="navigateTo(article._id)">
+  <v-card>
     <v-img
       lazy
       :src="article.img"
@@ -14,10 +13,18 @@
         <div align="right">{{ article.author }} </div>
       </div>
     </v-card-title>
+    <v-layout row fill-height justify-space-between align-end>
+      <v-btn @click="navigateTo(article._id)">Edit</v-btn>
+      <v-btn
+      @click="deletePost(article._id)"
+      color="error"
+      align="left">Delete</v-btn>
+    </v-layout>
   </v-card>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   name: 'post-preview',
   props: {
@@ -31,6 +38,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'deleteArticle'
+    ]),
     navigateTo (articleId) {
       this.$router.push({
         name: 'admin-edit-post',
@@ -38,6 +48,9 @@ export default {
           id: articleId
         }
       })
+    },
+    deletePost (articleId) {
+      this.deleteArticle(articleId)
     }
   }
 }

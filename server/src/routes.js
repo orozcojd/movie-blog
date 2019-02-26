@@ -25,4 +25,6 @@ module.exports = (app) => {
         ArticlesController.show)
     app.put('/articles/:articleId',
         ArticlesController.update)
+    app.delete('/article/:articleId',
+        ArticlesController.delete)
 }

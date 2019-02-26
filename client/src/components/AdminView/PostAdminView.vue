@@ -100,6 +100,7 @@ export default {
       this.requestRunning = true
       this.validation.cancelDisabled = true
       let updated
+      console.log(this.$route.params.id)
       if (this.$route.params.id) {
         updated = await this.updateArticle(new Article(this.article))
       } else {

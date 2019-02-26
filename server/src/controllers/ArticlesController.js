@@ -76,7 +76,7 @@ module.exports = {
     */
     try {
       const article = await Post.findByIdAndUpdate(
-        req.body._id,
+        req.params.articleId,
         req.body,
         {new: true}
       )
@@ -89,6 +89,24 @@ module.exports = {
           error: 'An error has occured trying to update the article',
           details: err
       })
+    }
+  },
+  async delete (req, res) {
+    /* */
+    try {
+      const deleteCount = await Post.deleteOne({
+        _id: req.params.articleId
+      })
+      res.send({
+        deleteCount: deleteCount,
+        id: req.params.articleId
+      })
+    }
+    catch (err) {
+      res.status(400).send({
+        error: 'An error has occured trying to delete the article',
+        details: err
+    })
     }
   }
 }

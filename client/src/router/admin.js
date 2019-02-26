@@ -18,7 +18,7 @@ const adminRoutes = [
     component: PostAdminView
   },
   {
-    path: '/admin/edit-post',
+    path: '/admin/edit-post/:id',
     name: 'admin-edit-post',
     component: PostAdminView
   },
