@@ -3,10 +3,11 @@
     <v-layout row wrap justify-space-around>
       <v-flex d-flex xs12 md6
         v-for="(category,index) in categories"
-        :key="index">
-        <admin-category-tile
-          :category="category">
-        </admin-category-tile>
+        :key="index"
+      >
+      <admin-category-tile
+        :category="category">
+      </admin-category-tile>
       </v-flex>
     </v-layout>
   </v-container>

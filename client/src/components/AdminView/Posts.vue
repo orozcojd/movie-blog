@@ -1,7 +1,7 @@
 <template>
   <v-container fluid grid-list-md>
     <v-layout row wrap>
-      <v-flex md4 xs12 v-for="article in articles.slice(1)"
+      <v-flex md4 xs12 v-for="article in articles"
         :key=article.id>
         <post-preview
         class="post-preview"
@@ -36,7 +36,9 @@ export default {
     ])
   },
   async mounted () {
-    console.log('MOUNTED')
+    /*
+      get articles from store
+    */
     try {
       if (!this.articles.length) {
         await this.getArticles()

@@ -7,6 +7,7 @@ let articleSchema = new Schema({
   title: String,
   author: String,
   body: String,
+  draft: Boolean,
   category: String,
   img: String,
   thumbnailDescription: String,

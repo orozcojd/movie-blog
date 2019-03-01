@@ -10,7 +10,9 @@ module.exports = {
       object if no error - otherwise returns 400 error 
     */
     try {
+      console.log('asdasd')
       const article = await Post.create(req.body)
+      console.log(article)
       res.send({
           article: article
         })

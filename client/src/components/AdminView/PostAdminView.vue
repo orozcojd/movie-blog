@@ -35,6 +35,9 @@
           :disabled="validation.cancelDisabled"
         >Cancel</v-btn>
         <v-btn
+          @click.prevent="submit; article.draft=true"
+        >Draft</v-btn>
+        <v-btn
           @click.prevent="submit"
           :color="validation.btnType"
         >Submit</v-btn>
@@ -99,25 +102,20 @@ export default {
       // disable cancel button & prevent api from firing after multiple button clicks
       this.requestRunning = true
       this.validation.cancelDisabled = true
-      let updated
-      console.log(this.$route.params.id)
       if (this.$route.params.id) {
-        updated = await this.updateArticle(new Article(this.article))
+        await this.updateArticle(new Article(this.article))
       } else {
-        updated = await this.postArticle(new Article(this.article))
+        await this.postArticle(new Article(this.article))
       }
-      updated.then(res => {
-        this.validation.error = ''
-        this.validation.btnType = 'success'
-        setTimeout(() => {
-          this.$router.push({
-            name: 'root'
-          })
-        }, 1000)
-      }).catch(err => {
-        this.validation.btnType = 'danger'
-        this.validation.error = err
-      })
+      this.validation.error = ''
+      this.validation.btnType = 'success'
+      setTimeout(() => {
+        this.$router.push({
+          name: 'root'
+        })
+      }, 1000)
+      // this.validation.btnType = 'danger'
+      // this.validation.error = err
     }
   },
   computed: {

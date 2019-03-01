@@ -4,8 +4,7 @@
     <v-img
       lazy
       :src="article.img"
-      aspect-ratio="2.75">
-    </v-img>
+      aspect-ratio="2.75"/>
     <v-card-title primary-title>
       <div style="width:100%">
         <h3 class="headline mb-0">{{ article.title }}</h3>

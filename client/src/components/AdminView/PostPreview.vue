@@ -14,11 +14,16 @@
       </div>
     </v-card-title>
     <v-layout row fill-height justify-space-between align-end>
-      <v-btn @click="navigateTo(article._id)">Edit</v-btn>
+      <v-btn
+        @click="navigateTo(article._id)"
+        :ripple="false"
+      >Edit</v-btn>
       <v-btn
       @click="deletePost(article._id)"
       color="error"
-      align="left">Delete</v-btn>
+      :ripple="false"
+      align="left"
+      >Delete</v-btn>
     </v-layout>
   </v-card>
 </template>

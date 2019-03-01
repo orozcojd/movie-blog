@@ -27,10 +27,13 @@ export default {
     Vue.set(state.articles, index, payload.article)
   },
   [types.POST_ARTICLE] (state, payload) {
-    console.log('mutating state')
+    /*
+      unshifts new article to start of state articles array
+    */
+    state.articles.unshift(payload.article)
   },
   [types.DELETE_ARTICLE] (state, payload) {
-    /* 
+    /*
       if response count, then removes index from state array otherwise returns
     */
     let count = payload.deleteCount.n
@@ -39,6 +42,5 @@ export default {
     }
     let index = state.articles.findIndex(article => article._id === payload.id)
     Vue.delete(state.articles, index)
-    console.log('after delete article mutation')
   }
 }

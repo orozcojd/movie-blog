@@ -24,7 +24,8 @@
     <v-container fluid grid-list-md>
       <v-layout row wrap>
         <v-flex md4 xs12 v-for="article in articles.slice(1)"
-          :key=article.id>
+          :key=article.id
+        >
           <post-preview
           class="post-preview"
           :article="article"/>
