@@ -26,13 +26,13 @@ const adminRoutes = [
     path: '/admin/edit-posts',
     name: 'admin-edit-posts',
     component: AdminPosts,
-    props: true
+    props: {drafts: false}
   },
   {
     path: '/admin/edit-drafts',
     name: 'admin-edit-drafts',
     component: AdminPosts,
-    props: true
+    props: {drafts: true}
   }
 ]
 

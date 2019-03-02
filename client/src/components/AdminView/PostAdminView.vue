@@ -1,5 +1,7 @@
 <template>
-  <div style="padding:5em">
+  <div style="padding:5em"
+    v-if="loaded"
+  >
     <h1>Admin View</h1>
     <v-form
       ref="form"
@@ -69,16 +71,20 @@ export default {
   name: 'post-admin-view',
   async mounted () {
     /* later change to - if not found in store fetch */
-    if (this.$route.params.id) {
-      if (!this.articles.length) {
-        await this.fetchArticle(this.$route.params.id)
+    let id = this.$route.params.id
+    if (id) {
+      this.article = this.getArticle(id)
+      if (!this.article) {
+        await this.fetchArticle(id)
+        this.article = JSON.parse(JSON.stringify(this.getSingleArticle))
       }
-      this.article = JSON.parse(JSON.stringify(this.getSingleArticle))
     }
+    this.loaded = true
     // this.$validator.localize('en', this.dictionary)
   },
   data () {
     return {
+      loaded: false,
       valid: true,
       article: {},
       validation: {
@@ -130,6 +136,7 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'getArticle',
       'getSingleArticle'
     ]),
     ...mapState([
