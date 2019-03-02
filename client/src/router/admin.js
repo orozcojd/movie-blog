@@ -25,7 +25,14 @@ const adminRoutes = [
   {
     path: '/admin/edit-posts',
     name: 'admin-edit-posts',
-    component: AdminPosts
+    component: AdminPosts,
+    props: true
+  },
+  {
+    path: '/admin/edit-drafts',
+    name: 'admin-edit-drafts',
+    component: AdminPosts,
+    props: true
   }
 ]
 

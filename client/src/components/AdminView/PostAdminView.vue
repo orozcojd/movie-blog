@@ -35,10 +35,10 @@
           :disabled="validation.cancelDisabled"
         >Cancel</v-btn>
         <v-btn
-          @click.prevent="submit; article.draft=true"
+          @click.prevent="article.draft=true; submit()"
         >Draft</v-btn>
         <v-btn
-          @click.prevent="submit"
+          @click.prevent="article.draft=false; submit()"
           :color="validation.btnType"
         >Submit</v-btn>
         <br>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 // const Article = require('@/Model/Article')
 import Article from '@/Model/Article.js'
 
@@ -67,9 +67,13 @@ export default {
   //   }
   // },
   name: 'post-admin-view',
-  mounted () {
+  async mounted () {
+    /* later change to - if not found in store fetch */
     if (this.$route.params.id) {
-      this.article = JSON.parse(JSON.stringify(this.getArticle(this.$route.params.id)))
+      if (!this.articles.length) {
+        await this.fetchArticle(this.$route.params.id)
+      }
+      this.article = JSON.parse(JSON.stringify(this.getSingleArticle))
     }
     // this.$validator.localize('en', this.dictionary)
   },
@@ -88,7 +92,8 @@ export default {
   methods: {
     ...mapActions([
       'updateArticle',
-      'postArticle'
+      'postArticle',
+      'fetchArticle'
     ]),
     cancel () {
       this.$router.push({
@@ -96,6 +101,7 @@ export default {
       })
     },
     async submit () {
+      console.log(this.article)
       if (this.requestRunning) {
         return
       }
@@ -103,7 +109,11 @@ export default {
       this.requestRunning = true
       this.validation.cancelDisabled = true
       if (this.$route.params.id) {
-        await this.updateArticle(new Article(this.article))
+        let payload = {
+          article: new Article(this.article),
+          id: this.$route.params.id
+        }
+        await this.updateArticle(payload)
       } else {
         await this.postArticle(new Article(this.article))
       }
@@ -113,14 +123,17 @@ export default {
         this.$router.push({
           name: 'root'
         })
-      }, 1000)
+      }, 500)
       // this.validation.btnType = 'danger'
       // this.validation.error = err
     }
   },
   computed: {
     ...mapGetters([
-      'getArticle'
+      'getSingleArticle'
+    ]),
+    ...mapState([
+      'articles'
     ])
     // titleErrors () {
     //   const errors = []

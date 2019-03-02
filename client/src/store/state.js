@@ -3,5 +3,6 @@ module.exports = () => ({
   user: null,
   isUserLoggedIn: false,
   articles: [],
+  article: {},
   new: []
 })

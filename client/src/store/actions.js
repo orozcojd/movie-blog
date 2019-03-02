@@ -8,15 +8,20 @@ export default {
   setUser ({commit}, user) {
     commit('setUser', user)
   },
+  async fetchArticle ({commit}, id) {
+    let article = (await Api().get(`articles/${id}`)).data
+    commit(types.FETCH_ARTICLE, article)
+  },
   async getArticles ({commit}) {
     let articles = (await Api().get('articles')).data
     commit(types.FETCH_ARTICLES, articles)
   },
   async updateArticle ({commit}, payload) {
-    let article = (await Api().put(`articles/${payload._id}`, payload)).data
+    let article = (await Api().put(`articles/${payload.id}`, payload.article)).data
     commit(types.UPDATE_ARTICLE, article)
   },
   async postArticle ({commit}, payload) {
+    console.log(payload)
     let article = (await Api().post('article/', payload)).data
     commit(types.POST_ARTICLE, article)
   },

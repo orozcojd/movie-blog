@@ -1,12 +1,12 @@
 <template>
   <v-container fluid grid-list-md>
     <v-layout row wrap>
-      <v-flex md4 xs12 v-for="article in articles"
+      <v-flex md4 xs12 v-for="article in filterArticles"
         :key=article.id>
         <post-preview
-        class="post-preview"
-        :article="article"
-        to='article-view'/>
+          class="post-preview"
+          :article="article"
+          to='article-view'/>
       </v-flex>
     </v-layout>
   </v-container>
@@ -17,7 +17,13 @@ import PostPreview from '@/components/AdminView/PostPreview'
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  name: 'Songs',
+  name: 'admin-view',
+  props: {
+    drafts: {
+      default: false,
+      required: false
+    }
+  },
   data () {
     return {
     }
@@ -33,7 +39,10 @@ export default {
   computed: {
     ...mapState([
       'articles'
-    ])
+    ]),
+    filterArticles () {
+      return this.articles.filter(article => article.draft === this.drafts)
+    }
   },
   async mounted () {
     /*

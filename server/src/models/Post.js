@@ -7,7 +7,10 @@ let articleSchema = new Schema({
   title: String,
   author: String,
   body: String,
-  draft: Boolean,
+  draft: {
+    type: Boolean,
+    default: false
+  },
   category: String,
   img: String,
   thumbnailDescription: String,

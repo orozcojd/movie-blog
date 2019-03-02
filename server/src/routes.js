@@ -22,7 +22,7 @@ module.exports = (app) => {
     app.get('/article-preview', 
         ArticlesController.previews)
     app.get('/articles/:articleId',
-        ArticlesController.show)
+        ArticlesController.show),
     app.put('/articles/:articleId',
         ArticlesController.update)
     app.delete('/article/:articleId',

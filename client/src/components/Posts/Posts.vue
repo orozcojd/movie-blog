@@ -1,8 +1,8 @@
 <template>
   <v-container fluid>
     <latest-post class="mb-med"
-      :article="articles[0]"
-      v-if="articles.length" />
+      :article="filterArticles[0]"
+      v-if="filterArticles.length" />
     <hr size="5" color="black">
     <br>
     <div class="weekly-header">
@@ -23,7 +23,7 @@
     <br>
     <v-container fluid grid-list-md>
       <v-layout row wrap>
-        <v-flex md4 xs12 v-for="article in articles.slice(1)"
+        <v-flex md4 xs12 v-for="article in filterArticles.slice(1)"
           :key=article.id
         >
           <post-preview
@@ -67,7 +67,11 @@ export default {
   computed: {
     ...mapState([
       'articles'
-    ])
+    ]),
+    filterArticles () {
+      console.log(this.articles)
+      return this.articles.filter(article => !article.draft)
+    }
   },
   async mounted () {
     console.log('MOUNTED')

@@ -7,5 +7,8 @@ export default {
   },
   getArticle: (state) => (id) => {
     return state.articles.find(article => article._id === id)
+  },
+  getSingleArticle: (state) => {
+    return state.article
   }
 }

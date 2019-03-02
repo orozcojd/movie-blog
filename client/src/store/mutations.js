@@ -18,13 +18,23 @@ export default {
     */
     state.articles = payload
   },
+  [types.FETCH_ARTICLE] (state, payload) {
+    /*
+      sets article object in store to payload
+    */
+    state.article = payload
+  },
   [types.UPDATE_ARTICLE] (state, payload) {
     /*
       finds the index of matching _id in articles array and updates value
       at that index with payload
     */
     let index = state.articles.findIndex(article => article._id === payload.article._id)
-    Vue.set(state.articles, index, payload.article)
+    if (index) {
+      Vue.set(state.articles, index, payload.article)
+    } else {
+      state.articles.push(payload)
+    }
   },
   [types.POST_ARTICLE] (state, payload) {
     /*

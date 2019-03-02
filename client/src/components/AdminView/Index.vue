@@ -28,12 +28,18 @@ export default {
           title: 'Edit Posts',
           to: {name: 'admin-edit-posts'}
         },
+        drafts: {
+          title: 'Edit Drafts',
+          to: {
+            name: 'admin-edit-drafts',
+            params: {
+              drafts: true
+            }
+          }
+        },
         addAdmin: {
           title: 'Add Admin User'
           // to:''
-        },
-        drafts: {
-          title: 'Edit Drafts'
         },
         statistics: {
           title: 'View Stats'
