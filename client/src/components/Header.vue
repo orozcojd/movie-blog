@@ -7,10 +7,10 @@
       <v-spacer/>
       <v-toolbar-items
         v-if="!isUserLoggedin()">
-        <v-btn flat to="/login">
+        <v-btn flat :to="{name:'admin-login'}">
           Log In
         </v-btn>
-        <v-btn flat to="/register">
+        <v-btn flat :to="{name:'admin-register'}">
           Sign Up
         </v-btn>
       </v-toolbar-items>
@@ -36,11 +36,11 @@ export default {
       'setUser'
     ]),
     logout () {
-      this.setToken(null)
-      this.setUser(null)
-      this.$router.push({
-        name: 'root'
-      })
+      // this.setToken(null)
+      // this.setUser(null)
+      // this.$router.push({
+      //   name: 'root'
+      // })
     }
   }
 }
