@@ -1,51 +1,52 @@
-// const mongoose = require('mongoose');
-// let Schema = mongoose.Schema;
-// const UserSchema = new Schema({
-//     email: String,
-//     firstName: String,
-//     lastName: String
-// });
+const mongoose = require('mongoose');
+let Schema = mongoose.Schema;
+const Promise = require('bluebird');
+const bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'));
+const config = require('../config/config')
+const jwt = require('jsonwebtoken');
 
-// module.exports = mongoose.model('User', UserSchema);
+const UserSchema = new Schema({
+    email: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    hash: String,
+
+});
+UserSchema.methods.hashPassword = function(password) {
+  /*
+    hashes password using bcrypt and sets user hash
+  */
+
+  const SALT_FACTOR = 8
+  bcrypt
+  .genSaltAsync(SALT_FACTOR)
+  .then(salt => {
+    return bcrypt.hashAsync(password, salt, null)})
+  .then(hash => {
+    this.hash = hash
+  })
+}
+
+UserSchema.methods.comparePasswords = async (password) => {
+  /*
+    returns boolean of bcrypt compare method
+  */
+  console.log(this)
+  return await bcrypt.compare(password, this.pass)
+}
+
+UserSchema.methods.generateToken = function() {
+  let expiry = new Date();
+  expiry.setDate(expiry.getDate() + 7);
+  
+  return jwt.sign({
+    _id: this._id,
+    email: this.email,
+    exp: parseInt(expiry.getTime() / 1000)
+  },config.authentication.jwtSecret)
+}
 
 
-
-// // const mongoose = require('mongoose')
-// // const Promise = require('bluebird');
-// // const bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'));
-
-// // function hashPassword (user, options) {
-// //     console.log('inside hash password');
-// //     const SALT_FACTOR = 8
-
-// //     if (!user.changed('password')) {
-// //         return;
-// //     }
-// //     return bcrypt
-// //     .genSaltAsync(SALT_FACTOR)
-// //     .then(salt => bcrypt.hashAsync(user.password, salt, null))
-// //     .then(hash => {
-// //         user.setDataValue('password', hash)
-// //     })
-// // }
-
-// // module.exports = (sequelize, dataTypes) => {
-// //     const User = sequelize.define('User', {
-// //         email: {
-// //             type: dataTypes.STRING,
-// //             unique: true
-// //         },
-// //         password: dataTypes.STRING
-// //     }, {
-// //         hooks: {
-// //             beforeCreate: hashPassword,
-// //             beforeUpdate: hashPassword,
-// //             // beforeSave: hashPassword
-// //         }
-// //     })
-// //     User.prototype.comparePassword = function (password) {
-// //         console.log(this.password)
-// //         return bcrypt.compareAsync(password, this.password)
-// //     }
-// //     return User
-// // }
+module.exports = mongoose.model('User', UserSchema);

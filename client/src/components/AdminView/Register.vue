@@ -1,5 +1,6 @@
 <template>
   <v-container fluid>
+    <h1>Register</h1>
     <v-layout
       align-center
       justify-center
@@ -8,9 +9,9 @@
         <v-card class="card-padding">
           <v-form>
             <v-text-field
-              label="Username"
+              label="Email"
               required
-              v-model="credentials.username"/>
+              v-model="credentials.email"/>
             <v-text-field
               label="Password"
               type="password"
@@ -26,19 +27,31 @@
 </template>
 
 <script>
+import AuthenticationService from '@/services/AuthenticationService'
 export default {
   name: 'register',
   data () {
     return {
       credentials: {
-        username: '',
+        email: '',
         password: ''
       }
     }
   },
   methods: {
-    submit () {
-      console.log('clicked')
+    async submit () {
+      try {
+        const response = await AuthenticationService.register(this.credentials)
+        this.setToken(response.data.token)
+        this.setUser(response.data.user)
+        console.log(response.data)
+        this.error = null
+        this.$router.push({
+          path: '/'
+        })
+      } catch (error) {
+        this.error = error.response.data.error
+      }
     }
   }
 }

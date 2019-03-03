@@ -1,61 +1,62 @@
 // controllers are used for declaring all the endpoints
-const {User} = require('../models')
-const jwt = require('jsonwebtoken')
+let {User} = require('../models')
 const config = require('../config/config')
+const passport = require('passport');
 
-function jwtSignUser (user) {
-    const ONE_WEEK = 60 * 60 * 24 * 7
-    return jwt.sign(user, config.authentication.jwtSecret, {
-        expiresIn: ONE_WEEK
-    })
-}
 
 module.exports = {
     async register (req, res) {
         try {
-            const user = await User.create(req.body)
             console.log("INSIDE REGISTER")
+            let user = new User();
+
+            // set user email
+            user.email = req.body.email;
+
+            // hash password and set pw
+            await user.hashPassword(req.body.password)
             userJson = user.toJSON()
-            res.send({
-                user: userJson,
-                token: jwtSignUser(userJson)
-            });
+            console.log(userJson)
+            user.save((err) => {
+                if(err) {
+                    res.status(400).send({
+                        error: 'Email already in use'
+                    })
+                }
+                else {
+                    let token;
+                    token = user.generateToken()
+                    res.status(200).send({
+                        "token": token
+                    })
+                }
+            })
         } catch (err) {
             res.status(400).send({
-                error: 'This email account is already in use.'
+                error: 'Unexpected error has occurred'
             })
         }
     },
-    async login (req, res) {
-        try {
-            const { email, password } = req.body
-            const user = await User.findOne({
-                where: {
-                    email: email
-                }
-            })
-            // console.log('user', user)
-            if(!user) {
-                return res.status(403).send({
-                    error: 'Login information was incorrect'
-                })
-            }
 
-            const isPasswordValid = await user.comparePassword(password)
-            if(!isPasswordValid) {
-                return res.status(403).send({
-                    error: 'Login information was not correct'
+    login (req, res) {
+        console.log('inside login')
+        passport.authenticate('local', (err, user, info) => {
+            console.log('PASSPORT CALL')
+            let token;
+            if (err) {
+                console.log('ERROR IN LOGIN')
+                res.status(404).json(err);
+                return;
+                }
+            if (user) {
+                token = user.generateToken();
+                res.status(200).send({
+                    "token": token
                 })
+            } else {
+                console.log('ANOTHER ERROR')
+                res.status(401).json(info)
             }
-            const userJson = user.toJSON()
-            res.send({
-                user: userJson,
-                token: jwtSignUser(userJson)
-            });
-        } catch (err) {
-            res.status(400).send({
-                error: 'An error has occured trying to log in'
-            })
-        }
+        })(req, res);
     }
 }
