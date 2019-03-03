@@ -28,6 +28,7 @@
 
 <script>
 import AuthenticationService from '@/services/AuthenticationService'
+import { mapActions } from 'vuex'
 export default {
   name: 'register',
   data () {
@@ -39,12 +40,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'setToken',
+      'setUser'
+    ]),
     async submit () {
       try {
         const response = await AuthenticationService.register(this.credentials)
         this.setToken(response.data.token)
         this.setUser(response.data.user)
-        console.log(response.data)
         this.error = null
         this.$router.push({
           path: '/'

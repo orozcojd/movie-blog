@@ -1,15 +1,24 @@
 import types from './types'
 import Vue from 'vue'
 export default {
-  setToken (state, token) {
+  [types.SET_TOKEN] (state, token) {
+    /*
+      sets state token to payload token
+      adds/removes token to/from local storage
+    */
     state.token = token
     if (token) {
       state.isUserLoggedIn = true
+      localStorage.setItem('session-token', token)
     } else {
       state.isUserLoggedIn = false
+      window.localStorage.removeItem('session-token')
     }
   },
-  setUser (state, user) {
+  [types.SET_USER] (state, user) {
+    /*
+      sets user to payload user
+    */
     state.user = user
   },
   [types.FETCH_ARTICLES] (state, payload) {

@@ -50,8 +50,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      // 'setToken',
-      // 'setUser'
+      'setToken',
+      'setUser'
     ]),
     async login () {
       try {
@@ -59,10 +59,10 @@ export default {
           email: this.email,
           password: this.password
         })
-        this.setToken(response.data.token)
-        this.setUser(response.data.user)
-        console.log(response.data)
-        this.error = null
+        console.log(response)
+        // this.setToken(response.data.token)
+        // this.setUser(email)
+        // this.error = null
       } catch (error) {
         this.error = error.response.data.error
       }

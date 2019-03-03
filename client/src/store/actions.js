@@ -3,10 +3,14 @@ import types from './types'
 
 export default {
   setToken ({commit}, token) {
-    commit('setToken', token)
+    commit(types.SET_TOKEN, token)
   },
   setUser ({commit}, user) {
-    commit('setUser', user)
+    commit(types.SET_USER, user)
+  },
+  getSetToken ({commit}) {
+    const token = localStorage.getItem('session-token')
+    commit(types.SET_TOKEN, token)
   },
   async fetchArticle ({commit}, id) {
     let article = (await Api().get(`articles/${id}`)).data

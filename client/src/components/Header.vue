@@ -6,7 +6,7 @@
       <v-toolbar-title>Movie Reviewer</v-toolbar-title>
       <v-spacer/>
       <v-toolbar-items
-        v-if="!isUserLoggedin()">
+        v-if="!isUserLoggedIn">
         <v-btn flat :to="{name:'admin-login'}">
           Log In
         </v-btn>
@@ -24,24 +24,35 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 export default {
   name: 'Header',
+  mounted () {
+    if (!this.getToken()) {
+      this.getSetToken()
+    }
+  },
   methods: {
     ...mapGetters([
-      'isUserLoggedin'
+      'getToken'
     ]),
     ...mapActions([
+      'getSetToken',
       'setToken',
       'setUser'
     ]),
     logout () {
-      // this.setToken(null)
-      // this.setUser(null)
-      // this.$router.push({
-      //   name: 'root'
-      // })
+      this.setToken(null)
+      this.setUser(null)
+      this.$router.push({
+        name: 'root'
+      })
     }
+  },
+  computed: {
+    ...mapState([
+      'isUserLoggedIn'
+    ])
   }
 }
 </script>

@@ -10,5 +10,8 @@ export default {
   },
   getSingleArticle: (state) => {
     return state.article
+  },
+  getToken: (state) => {
+    return state.token
   }
 }
