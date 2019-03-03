@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
-const Promise = require('bluebird');
-const bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'));
+const bcrypt = require('bcrypt');
 const config = require('../config/config')
 const jwt = require('jsonwebtoken');
 
@@ -14,27 +13,27 @@ const UserSchema = new Schema({
     hash: String,
 
 });
-UserSchema.methods.hashPassword = function(password) {
+UserSchema.methods.hashPassword = async function(password) {
   /*
     hashes password using bcrypt and sets user hash
   */
 
   const SALT_FACTOR = 8
-  bcrypt
-  .genSaltAsync(SALT_FACTOR)
+  await bcrypt
+  .genSalt(SALT_FACTOR)
   .then(salt => {
-    return bcrypt.hashAsync(password, salt, null)})
+    return bcrypt.hash(password, salt, null)})
   .then(hash => {
     this.hash = hash
   })
 }
 
-UserSchema.methods.comparePasswords = async (password) => {
+UserSchema.methods.comparePasswords = async function(password) {
   /*
-    returns boolean of bcrypt compare method
+    returns promise of bcrypt compare method
   */
-  console.log(this)
-  return await bcrypt.compare(password, this.pass)
+  match = await bcrypt.compare(password, this.hash, null)
+  return match
 }
 
 UserSchema.methods.generateToken = function() {

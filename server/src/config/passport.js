@@ -7,9 +7,7 @@ passport.use(new LocalStrategy({
   usernameField: 'email'
 },
   (username, password, done) => {
-    console.log('aaaaaa')
     User.findOne({email: username}, (err, user) => {
-      console.log('--------')
       if(err) { console.log(err); return done(err) }
       // return if user not found
       if(!user) {
@@ -17,16 +15,21 @@ passport.use(new LocalStrategy({
           message: 'Username not found'
         })
       }
-      // console.log(user)
-      // return if incorrect password
-      if(!user.comparePasswords(password)) {
+      user.comparePasswords(password)
+      .then(res => {
+        if(!match) {
+          return done(null, false, {
+            message: 'Password incorrect'
+          })
+        }
+        //return user object - valid creds
+        return done(null, user)
+      })
+      .catch(err => {
         return done(null, false, {
-          message: 'Password incorrect'
+          message: 'Internal Server Error'
         })
-      }
-      // return user object - valid creds
-      console.log('valid user')
-      return done(null, user)
+      })
     })
   }
 ))
