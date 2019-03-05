@@ -9,8 +9,13 @@ export default {
 		return {
 		}
 	},
-	methods: {
+	computed: {
 
+	},
+	mounted() {
+		
+	},
+	methods: {
 	}
 }
 </script>

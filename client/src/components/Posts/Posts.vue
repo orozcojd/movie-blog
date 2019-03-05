@@ -67,36 +67,27 @@ export default {
 		return {
 		}
 	},
-	methods: {
-		...mapActions([
-			'getArticles'
-		])
-		// navigateTo(articleId) {
-		//   console.log('clicked')
-		//   this.$router.push({
-		//     name: 'post',
-		//     params: articleId
-		//   })
-		// }
-	},
 	computed: {
 		...mapState([
 			'articles'
 		]),
 		filterArticles () {
-			console.log(this.articles)
 			return this.articles.filter(article => !article.draft)
 		}
 	},
 	async mounted () {
-		console.log('MOUNTED')
 		try {
 			if (!this.articles.length) {
 				await this.getArticles()
 			}
 		} catch (e) {
-			console.log(e)
+			// console.log(e)
 		}
+	},
+	methods: {
+		...mapActions([
+			'getArticles'
+		])
 	}
 }
 </script>

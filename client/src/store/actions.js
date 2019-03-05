@@ -25,7 +25,7 @@ export default {
 		commit(types.UPDATE_ARTICLE, article)
 	},
 	async postArticle ({commit}, payload) {
-		console.log(payload)
+		// console.log(payload)
 		let article = (await Api().post('article/', payload)).data
 		commit(types.POST_ARTICLE, article)
 	},

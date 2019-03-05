@@ -39,7 +39,7 @@ UserSchema.methods.comparePasswords = async function(password) {
 UserSchema.methods.generateToken = function() {
   let expiry = new Date();
   expiry.setDate(expiry.getDate() + 7);
-  
+  // expiry.setTime(expiry.getTime() + (30 * 1000))
   return jwt.sign({
     _id: this._id,
     email: this.email,

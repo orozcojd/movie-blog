@@ -46,9 +46,14 @@
 import { mapActions, mapGetters } from 'vuex'
 export default {
 	name: 'Header',
+	computed: {
+		...mapGetters([
+			'getToken',
+			'isUserLoggedin'
+		])
+	},
 	mounted () {
 		if (!this.getToken) {
-			console.log('true, no token, calling getsettoken action')
 			this.getSetToken()
 		}
 	},
@@ -65,12 +70,6 @@ export default {
 				name: 'root'
 			})
 		}
-	},
-	computed: {
-		...mapGetters([
-			'getToken',
-			'isUserLoggedin'
-		])
 	}
 }
 </script>

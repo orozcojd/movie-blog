@@ -29,15 +29,15 @@ export default {
 			article: {}
 		}
 	},
-	mounted () {
-		this.article = this.getArticle(this.$route.params.id)
-	},
-	methods: {
-	},
 	computed: {
 		...mapGetters([
 			'getArticle'
 		])
+	},
+	mounted () {
+		this.article = this.getArticle(this.$route.params.id)
+	},
+	methods: {
 	}
 }
 </script>

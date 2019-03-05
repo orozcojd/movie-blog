@@ -5,7 +5,6 @@ import AdminCategories from '@/components/AdminView/AdminCategories'
 import Login from '@/components/AdminView/Login'
 import Register from '@/components/AdminView/Register'
 import AuthGuard from '@/components/Authentication/AuthGuard'
-// import store from '@/store/index'
 
 const adminRoutes = [
 	{
@@ -65,7 +64,6 @@ const adminRoutes = [
 			}
 		]
 	}
-
 ]
 
 export default adminRoutes
