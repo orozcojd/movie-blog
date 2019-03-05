@@ -1,9 +1,14 @@
 <template>
   <v-container fluid>
-    <latest-post class="mb-med"
+    <latest-post
+      v-if="filterArticles.length"
+      class="mb-med"
       :article="filterArticles[0]"
-      v-if="filterArticles.length" />
-    <hr size="5" color="black">
+    />
+    <hr
+      size="5"
+      color="black"
+    >
     <br>
     <div class="weekly-header">
       <h2>Weekly Updates</h2>
@@ -21,14 +26,24 @@
       <h2>All posts</h2>
     </div>
     <br>
-    <v-container fluid grid-list-md>
-      <v-layout row wrap>
-        <v-flex md4 xs12 v-for="article in filterArticles.slice(1)"
-          :key=article.id
+    <v-container
+      fluid
+      grid-list-md
+    >
+      <v-layout
+        row
+        wrap
+      >
+        <v-flex
+          v-for="article in filterArticles.slice(1)"
+          :key="article.id"
+          md4
+          xs12
         >
           <post-preview
-          class="post-preview"
-          :article="article"/>
+            class="post-preview"
+            :article="article"
+          />
         </v-flex>
       </v-layout>
     </v-container>
@@ -43,46 +58,46 @@ import { mapActions, mapState } from 'vuex'
 
 // import WeeklyPostView from '@/components/Posts/WeeklyPostView'
 export default {
-  name: 'posts',
-  data () {
-    return {
-    }
-  },
-  components: {
-    PostPreview,
-    LatestPost
-  },
-  methods: {
-    ...mapActions([
-      'getArticles'
-    ])
-    // navigateTo(articleId) {
-    //   console.log('clicked')
-    //   this.$router.push({
-    //     name: 'post',
-    //     params: articleId
-    //   })
-    // }
-  },
-  computed: {
-    ...mapState([
-      'articles'
-    ]),
-    filterArticles () {
-      console.log(this.articles)
-      return this.articles.filter(article => !article.draft)
-    }
-  },
-  async mounted () {
-    console.log('MOUNTED')
-    try {
-      if (!this.articles.length) {
-        await this.getArticles()
-      }
-    } catch (e) {
-      console.log(e)
-    }
-  }
+	name: 'Posts',
+	components: {
+		PostPreview,
+		LatestPost
+	},
+	data () {
+		return {
+		}
+	},
+	methods: {
+		...mapActions([
+			'getArticles'
+		])
+		// navigateTo(articleId) {
+		//   console.log('clicked')
+		//   this.$router.push({
+		//     name: 'post',
+		//     params: articleId
+		//   })
+		// }
+	},
+	computed: {
+		...mapState([
+			'articles'
+		]),
+		filterArticles () {
+			console.log(this.articles)
+			return this.articles.filter(article => !article.draft)
+		}
+	},
+	async mounted () {
+		console.log('MOUNTED')
+		try {
+			if (!this.articles.length) {
+				await this.getArticles()
+			}
+		} catch (e) {
+			console.log(e)
+		}
+	}
 }
 </script>
 

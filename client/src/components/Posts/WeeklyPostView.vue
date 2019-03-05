@@ -1,21 +1,19 @@
 <template>
   <v-layout>
-    <v-card>
-      
-    </v-card>
+    <v-card />
   </v-layout>
 </template>
 
 <script>
 export default {
-  name: 'Songs',
-  data () {
-    return {
-    }
-  },
-  methods: {
+	name: 'Songs',
+	data () {
+		return {
+		}
+	},
+	methods: {
 
-  }
+	}
 }
 </script>
 

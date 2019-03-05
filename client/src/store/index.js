@@ -8,11 +8,11 @@ import mutations from '@/store/mutations'
 Vue.use(Vuex)
 
 const createStore = new Vuex.Store({
-  strict: true,
-  state,
-  getters,
-  actions,
-  mutations
+	strict: true,
+	state,
+	getters,
+	actions,
+	mutations
 })
 
 export default createStore

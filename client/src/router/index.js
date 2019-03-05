@@ -10,5 +10,5 @@ Vue.use(Router)
 
 let routes = postRoutes.concat(adminRoutes)
 export default new Router({
-  routes
+	routes
 })

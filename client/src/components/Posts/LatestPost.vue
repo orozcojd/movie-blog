@@ -1,25 +1,51 @@
 <template>
-  <v-card class="point-cursor"
-    @click="navigateTo(article._id)">
-    <v-layout row wrap>
-      <v-flex xs12 md8>
+  <v-card
+    class="point-cursor"
+    @click="navigateTo(article._id)"
+  >
+    <v-layout
+      row
+      wrap
+    >
+      <v-flex
+        xs12
+        md8
+      >
         <v-img
-        :src="article.img"
-        contain
-        alt="latest-post-img"/>
+          :src="article.img"
+          contain
+          alt="latest-post-img" 
+        />
       </v-flex>
-      <v-flex class="layout" xs12 md4>
-        <v-layout align-space-around justify-space-between column fill-height class="header">
+      <v-flex
+        class="layout"
+        xs12
+        md4
+      >
+        <v-layout
+          align-space-around
+          justify-space-between
+          column
+          fill-height
+          class="header"
+        >
           <v-card-title primary-title>
             <div>
-              <h3 class="headline" align="left">{{ article.title }}</h3>
-            <br>
-            <p align="left">
-              {{ article.thumbnailDescription }}
-            </p>
-          </div>
+              <h3
+                class="headline"
+                align="left"
+              >
+                {{ article.title }}
+              </h3>
+              <br>
+              <p align="left">
+                {{ article.thumbnailDescription }}
+              </p>
+            </div>
           </v-card-title>
-          <p align="right">{{ article.author }}</p>
+          <p align="right">
+            {{ article.author }}
+          </p>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -28,27 +54,27 @@
 
 <script>
 export default {
-  name: 'latest-post',
-  props: {
-    article: {
-      type: Object,
-      required: true
-    }
-  },
-  data () {
-    return {
-    }
-  },
-  methods: {
-    navigateTo (articleId) {
-      this.$router.push({
-        name: 'article-view',
-        params: {
-          id: articleId
-        }
-      })
-    }
-  }
+	name: 'LatestPost',
+	props: {
+		article: {
+			type: Object,
+			required: true
+		}
+	},
+	data () {
+		return {
+		}
+	},
+	methods: {
+		navigateTo (articleId) {
+			this.$router.push({
+				name: 'article-view',
+				params: {
+					id: articleId
+				}
+			})
+		}
+	}
 }
 </script>
 

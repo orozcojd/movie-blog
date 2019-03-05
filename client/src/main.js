@@ -13,15 +13,15 @@ import { sync } from 'vuex-router-sync'
 Vue.config.productionTip = false
 
 Vue.use(Vuetify, {
-  iconfont: 'md'
+	iconfont: 'md'
 })
 
 sync(store, router)
 
 new Vue({ // eslint-disable-line no-new
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
+	el: '#app',
+	router,
+	store,
+	components: { App },
+	template: '<App/>'
 })

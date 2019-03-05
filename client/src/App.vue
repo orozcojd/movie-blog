@@ -2,9 +2,9 @@
   <div id="app">
     <v-app>
       <v-content>
-        <Header/>
+        <Header />
         <!-- <h1>My Header</h1> -->
-        <router-view/>
+        <router-view />
       </v-content>
     </v-app>
   </div>
@@ -13,15 +13,15 @@
 <script>
 import Header from '@/components/Header.vue'
 export default {
-  name: 'App',
-  mounted () {
-  },
-  components: {
-    Header
-  },
-  methods: {
+	name: 'App',
+	components: {
+		Header
+	},
+	mounted () {
+	},
+	methods: {
 
-  }
+	}
 }
 </script>
 

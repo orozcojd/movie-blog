@@ -1,13 +1,13 @@
 <template>
-<div>
+  <div>
     <h1>Admin View</h1>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
 export default {
-  name: 'admin-index'
+	name: 'AdminIndex'
 }
 </script>
 

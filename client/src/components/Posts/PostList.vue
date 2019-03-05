@@ -1,12 +1,23 @@
 <template>
-  <v-container fluid grid-list-md>
-    <v-layout row wrap>
-      <v-flex md4 xs12 v-for="article in articles.slice(1)"
-        :key=article.id>
+  <v-container
+    fluid
+    grid-list-md
+  >
+    <v-layout
+      row
+      wrap
+    >
+      <v-flex
+        v-for="article in articles.slice(1)"
+        :key="article.id"
+        md4
+        xs12
+      >
         <post-preview
-        class="post-preview"
-        :article="article"
-        to='article-view'/>
+          class="post-preview"
+          :article="article"
+          to="article-view" 
+        />
       </v-flex>
     </v-layout>
   </v-container>
@@ -16,23 +27,23 @@
 import PostPreview from '@/components/Posts/PostPreview'
 
 export default {
-  name: 'Songs',
-  props: {
-    articles: {
-      type: Array,
-      required: true
-    }
-  },
-  components: {
-    PostPreview
-  },
-  data () {
-    return {
-    }
-  },
-  methods: {
+	name: 'Songs',
+	components: {
+		PostPreview
+	},
+	props: {
+		articles: {
+			type: Array,
+			required: true
+		}
+	},
+	data () {
+		return {
+		}
+	},
+	methods: {
 
-  }
+	}
 }
 </script>
 
