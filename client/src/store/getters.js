@@ -6,6 +6,12 @@ export default {
 		}
 		return false
 	},
+	getToken: (state) => {
+		return state.token
+	},
+	getUser: (state) => {
+		return state.user
+	},
 	getArticlesState: (state) => {
 		return state.articles
 	},
@@ -14,8 +20,5 @@ export default {
 	},
 	getSingleArticle: (state) => {
 		return state.article
-	},
-	getToken: (state) => {
-		return state.token
 	}
 }

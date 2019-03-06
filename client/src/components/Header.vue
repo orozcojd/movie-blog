@@ -9,6 +9,12 @@
     </v-toolbar-side-icon>
     <v-toolbar-title>Movie Reviewer</v-toolbar-title>
     <v-spacer />
+    <v-btn
+      v-if="!!getUser"
+      disabled
+    >
+      {{ getUser }}
+    </v-btn>
     <v-toolbar-items
       v-if="!isUserLoggedin"
     >
@@ -49,7 +55,8 @@ export default {
 	computed: {
 		...mapGetters([
 			'getToken',
-			'isUserLoggedin'
+			'isUserLoggedin',
+			'getUser'
 		])
 	},
 	mounted () {
@@ -61,13 +68,14 @@ export default {
 		...mapActions([
 			'getSetToken',
 			'setToken',
-			'setUser'
+			'setUser',
+			'logOut'
 		]),
 		logout () {
-			this.setToken(null)
-			this.setUser(null)
-			this.$router.push({
-				name: 'root'
+			this.logOut().then(() => {
+				this.$router.push({
+					name: 'root'
+				})
 			})
 		}
 	}

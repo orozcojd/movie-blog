@@ -49,9 +49,11 @@ module.exports = {
                 return;
                 }
             if (user) {
+                console.log(user)
                 token = user.generateToken();
                 res.status(200).send({
-                    "token": token
+                    "token": token,
+                    "user": user.email
                 })
             } else {
                 console.log('ANOTHER ERROR')

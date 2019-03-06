@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import AuthenticationService from '@/services/AuthenticationService'
 import { mapActions } from 'vuex'
 export default {
 	name: 'Login',
@@ -56,15 +55,14 @@ export default {
 	methods: {
 		...mapActions([
 			'setToken',
-			'setUser'
+			'setUser',
+			'login'
 		]),
 		async submit () {
-			await AuthenticationService.login({
+			this.login({
 				email: this.credentials.email,
 				password: this.credentials.password
-			}).then(res => {
-				this.setToken(res.data.token)
-				this.setUser(this.credentials.email)
+			}).then(() => {
 				this.error = null
 				this.$router.push({
 					path: '/admin'
@@ -73,6 +71,21 @@ export default {
 				this.error = err
 			})
 		}
+	// 	async submit () {
+	// 		await AuthenticationService.login({
+	// 			email: this.credentials.email,
+	// 			password: this.credentials.password
+	// 		}).then(res => {
+	// 			this.setToken(res.data.token)
+	// 			this.setUser(this.credentials.email)
+	// 			this.error = null
+	// 			this.$router.push({
+	// 				path: '/admin'
+	// 			})
+	// 		}).catch(err => {
+	// 			this.error = err
+	// 		})
+	// 	}
 	}
 }
 </script>

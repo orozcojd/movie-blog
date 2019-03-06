@@ -2,6 +2,29 @@ import Api from '@/services/Api'
 import types from './types'
 
 export default {
+
+	login({commit, dispatch}, payload) {
+		return new Promise((resolve, reject) => {
+			commit(types.AUTH_REQUEST)
+			Api().post('login', payload).then(res => {
+				commit(types.AUTH_SUCCESS)
+				dispatch('setToken', res.data.token)
+				dispatch('setUser', res.data.user)
+				resolve()
+			}).catch(err => {
+				commit(types.AUTH_ERR)
+				reject(err)
+			})
+		})
+	},
+	logOut({commit, dispatch}) {
+		return new Promise((resolve) => {
+			commit(types.AUTH_ERR)
+			dispatch('setToken', null)
+			dispatch('setUser', null)
+			resolve()
+		})
+	},
 	setToken ({commit}, token) {
 		commit(types.SET_TOKEN, token)
 	},

@@ -1,8 +1,26 @@
 import types from './types'
 import Vue from 'vue'
 export default {
-
-	[types.SET_TOKEN] (state, token) {
+	
+	[types.AUTH_REQUEST]: (state) => {
+		/*
+      sets user status state to to loading
+    */
+		state.userStatus = 'loading'
+	},
+	[types.AUTH_SUCCESS]: (state) => {
+		/*
+      sets user status state to to success
+    */
+		state.userStatus = 'success'
+	},
+	[types.AUTH_ERR]: (state) => {
+		/*
+      sets user status state to to error
+    */
+		state.userStatus = 'error'
+	},
+	[types.SET_TOKEN]: (state, token) => {
 		/*
       sets state token to payload token
       adds/removes token to/from local storage
