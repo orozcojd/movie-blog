@@ -4,12 +4,13 @@
     style="padding:5em"
   >
     <h1>Admin View</h1>
+    <tip-tap />
     <v-form
       ref="form"
       v-model="valid"
       lazy-validation
     >
-      <v-text-field
+      <!-- <v-text-field
         v-model="article.title"
         label="Article Title"
         required
@@ -36,11 +37,11 @@
       />
       <v-textarea
         v-model="article.body"
+        min-height="400px"
         label="Article Body"
         required
-        auto-grow 
-      />
-      <v-btn
+      /> -->
+      <!--  <v-btn
         :disabled="validation.cancelDisabled"
         @click.prevent="cancel"
       >
@@ -60,16 +61,15 @@
       <br>
       <div style="color:red">
         {{ validation.error }}
-      </div>
+      </div> -->
     </v-form>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
-// const Article = require('@/Model/Article')
+import TipTap from '@/components/Tools/TipTap'
 import Article from '@/Model/Article.js'
-
 // import { validationMixin } from 'vuelidate'
 // import { required, maxLength, email } from 'vuelidate/lib/validators'
 export default {
@@ -85,6 +85,9 @@ export default {
 	//   }
 	// },
 	name: 'PostAdminView',
+	components: {
+		TipTap
+	},
 	data () {
 		return {
 			loaded: false,
@@ -97,6 +100,22 @@ export default {
 			},
 			requestRunning: false
 		}
+	},
+	computed: {
+		...mapGetters([
+			'getArticle',
+			'getSingleArticle'
+		]),
+		...mapState([
+			'articles'
+		])
+		// titleErrors () {
+		//   const errors = []
+		//   if (!this.$v.article.title.$dirty) return errors
+		//   !this.$v.article.title.maxLength && errors.push('Article Title must be at most 10 characters long')
+		//   !this.$v.article.title.required && errors.push('Article Title is required.')
+		//   return errors
+		// },
 	},
 	async mounted () {
 		/* later change to - if not found in store fetch */
@@ -123,7 +142,7 @@ export default {
 			})
 		},
 		async submit () {
-			console.log(this.article)
+			// console.log(this.article)
 			if (this.requestRunning) {
 				return
 			}
@@ -135,6 +154,7 @@ export default {
 					article: new Article(this.article),
 					id: this.$route.params.id
 				}
+
 				await this.updateArticle(payload)
 			} else {
 				await this.postArticle(new Article(this.article))
@@ -149,22 +169,6 @@ export default {
 			// this.validation.btnType = 'danger'
 			// this.validation.error = err
 		}
-	},
-	computed: {
-		...mapGetters([
-			'getArticle',
-			'getSingleArticle'
-		]),
-		...mapState([
-			'articles'
-		])
-		// titleErrors () {
-		//   const errors = []
-		//   if (!this.$v.article.title.$dirty) return errors
-		//   !this.$v.article.title.maxLength && errors.push('Article Title must be at most 10 characters long')
-		//   !this.$v.article.title.required && errors.push('Article Title is required.')
-		//   return errors
-		// },
 	}
 }
 </script>

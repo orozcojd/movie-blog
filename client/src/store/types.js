@@ -10,9 +10,10 @@ export default {
 	FETCH_ARTICLE: 'FETCH_ARTICLE',
 	AUTH_REQUEST: 'AUTH_REQUEST',
 	AUTH_SUCCESS: 'AUTH_SUCCESS',
-	AUTH_ERR: 'AUTH_ERROR'
+	AUTH_ERR: 'AUTH_ERROR',
 
 	// actions
 
 	// getters
+
 }

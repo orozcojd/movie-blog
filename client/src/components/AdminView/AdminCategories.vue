@@ -1,18 +1,19 @@
 <template>
   <v-container
-fluid
-               grid-list-lg
->
+    fluid
+    grid-list-lg
+  >
     <v-layout
-row
-              wrap
-justify-space-around
->
+      row
+      wrap
+      justify-space-around
+    >
       <v-flex
-        d-flex
-        v-for="(category,index) in categories" xs12
+        v-for="(category,index) in categories"
         :key="index"
-              md6
+        d-flex
+        xs12
+        md6
       >
         <admin-category-tile
           :category="category"

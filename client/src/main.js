@@ -16,6 +16,7 @@ Vue.use(Vuetify, {
 	iconfont: 'md'
 })
 
+
 sync(store, router)
 
 new Vue({ // eslint-disable-line no-new

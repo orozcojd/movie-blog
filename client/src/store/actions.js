@@ -2,7 +2,6 @@ import Api from '@/services/Api'
 import types from './types'
 
 export default {
-
 	login({commit, dispatch}, payload) {
 		return new Promise((resolve, reject) => {
 			commit(types.AUTH_REQUEST)
@@ -44,7 +43,7 @@ export default {
 		commit(types.FETCH_ARTICLES, articles)
 	},
 	async updateArticle ({commit}, payload) {
-		let article = (await Api().put(`articles/${payload.id}`, payload.article)).data
+		let article = (await Api({}).put(`articles/${payload.id}`, payload.article)).data
 		commit(types.UPDATE_ARTICLE, article)
 	},
 	async postArticle ({commit}, payload) {
