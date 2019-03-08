@@ -50,95 +50,101 @@
     <editor-menu-bar :editor="editor">
       <div slot-scope="{ commands, isActive }">
         <button
-          @click="showImagePrompt(commands.image)"
+          @click.prevent="showImagePrompt(commands.image)"
         >
           <v-icon>add_photo_alternate</v-icon>
         </button>
         <button
           style="font-size: 18px"
           :class="{ 'highlight': isActive.heading({ level: 1 }) }"
-          @click="commands.heading({ level: 1 })"
+          @click.prevent="commands.heading({ level: 1 })"
         >
           <strong>H1</strong>
         </button>
         <button
           style="font-size: 18px"
           :class="{ 'highlight': isActive.heading({ level: 2 }) }"
-          @click="commands.heading({ level: 2 })"
+          @click.prevent="commands.heading({ level: 2 })"
         >
           <strong>H2</strong>
         </button>
         <button
           style="font-size: 18px"
           :class="{ 'highlight': isActive.heading({ level: 3 }) }"
-          @click="commands.heading({ level: 3 })"
+          @click.prevent="commands.heading({ level: 3 })"
         >
           <strong>H3</strong>
         </button>        
         <button
           :class="{ 'highlight': isActive.bold() }"
-          @click="commands.bold"
+          @click.prevent="commands.bold"
         >
           <v-icon>format_bold</v-icon>
         </button>
+        <!-- <button
+          :class="{ 'highlight': isActive.fontincrease() }"
+          @click="commands.fontincrease"
+        >
+          <v-icon>format_size</v-icon>
+        </button>         -->
         <button
           :class="{ 'highlight': isActive.italic() }"
-          @click="commands.italic"
+          @click.prevent="commands.italic"
         >
           <v-icon>format_italic</v-icon>
         </button>
         <button
           :class="{ 'highlight': isActive.strike() }"
-          @click="commands.strike"
+          @click.prevent="commands.strike"
         >
           <v-icon>strikethrough_s</v-icon>
         </button>
         <button
           :class="{ 'highlight': isActive.underline() }"
-          @click="commands.underline"
+          @click.prevent="commands.underline"
         >
           <v-icon>format_underline</v-icon>
         </button>
         <button
           :class="{ 'highlight': isActive.paragraph({ textAlign: 'left' }) }"
-          @click="commands.paragraph({ textAlign: 'left' })"
+          @click.prevent="commands.paragraph({ textAlign: 'left' })"
         >
           <v-icon>format_align_left</v-icon>
         </button>
         <button
           :class="{ 'highlight': isActive.paragraph({ textAlign: 'center' }) }"
-          @click="commands.paragraph({ textAlign: 'center' })"
+          @click.prevent="commands.paragraph({ textAlign: 'center' })"
         >
           <v-icon>format_align_center</v-icon>
         </button>
         <button
           :class="{ 'highlight': isActive.paragraph({ textAlign: 'right' }) }"
-          @click="commands.paragraph({ textAlign: 'right' })"
+          @click.prevent="commands.paragraph({ textAlign: 'right' })"
         >
           <v-icon>format_align_right</v-icon>
         </button>
         <button
           :class="{ 'highlight': isActive.bullet_list() }"
-          @click="commands.bullet_list"
+          @click.prevent="commands.bullet_list"
         >
           <v-icon>format_list_bulleted</v-icon>
         </button>
         <button
           :class="{ 'highlight': isActive.ordered_list() }"
-          @click="commands.ordered_list"
+          @click.prevent="commands.ordered_list"
         >
           <v-icon>format_list_numbered</v-icon>
         </button>
 
         <button
           :class="{ 'highlight': isActive.todo_list() }"
-          @click="commands.todo_list"
+          @click.prevent="commands.todo_list"
         >
           <v-icon>list_alt</v-icon>
         </button>
         <button
           :class="{ 'highlight': isActive.blockquote() }"
-          @click="commands.blockquote"
+          @click.prevent="commands.blockquote"
         >
           <v-icon>format_quote</v-icon>
         </button>
@@ -151,13 +157,13 @@
         </button> -->
         <button
           style="font-size: 18px"
-          @click="commands.undo"
+          @click.prevent="commands.undo"
         >
           <v-icon>undo</v-icon>
         </button>
         <button
           style="font-size: 18px"
-          @click="commands.redo"
+          @click.prevent="commands.redo"
         >
           <v-icon>redo</v-icon>
         </button>                                       
@@ -169,10 +175,6 @@
       class="editor__content"
       :editor="editor"
     />
-    {{ json }}
-    <!-- <div style="width: 400px; height: 800px">
-      <editor-content :editor="iframeEditor" />
-    </div> -->
   </div>
 </template>
 
@@ -198,8 +200,9 @@ import {
 	Image
 } from 'tiptap-extensions'
 import ParagraphAlignmentNode from './ParagraphAlignment'
+// import FontIncreaseNode from './FontIncrease.js'
+import { mapActions, mapMutations, mapState } from 'vuex'
 import Iframe from './Iframe'
-import { Bus } from '@/components/Tools/Bus.js'
 
 
 export default {
@@ -211,12 +214,6 @@ export default {
 	data() {
 		return {
 			loaded: false,
-			iframeEditor: new Editor({
-				extensions: [
-					new Iframe(),
-				],
-				// content: `<iframe src="https://www.youtube.com/embed/XIMLoLxmTDw" frameborder="0" allowfullscreen></iframe>`
-			}),
 			editor: new Editor({
 				extensions: [
 					new Image(),
@@ -237,15 +234,15 @@ export default {
 					new Underline(),
 					new History(),
 					new ParagraphAlignmentNode(),
+					new Iframe()
+					// new FontIncreaseNode()
 				],
 				autoFocus: true,
-				content: `
-          <h1>Yay Headlines!</h1>
-          <p>All these <strong>cool tags</strong> are working now.</p>
-        `,
-				onUpdate: ({ getJSON, getHTML }) => {
-					this.json = getJSON()
+				content: ``,
+				onUpdate: ({ getHTML }) => {
+					// this.json = getJSON()
 					this.html = getHTML()
+					this.body = this.html
 				},
 			}),
 			// Links data
@@ -255,20 +252,36 @@ export default {
 			linkMenuIsActive: false,
 		}
 	},
-	mounted() {
-		let vm = this;
-		Bus.$on('article-submit', function() {
-			console.log(JSON.stringify(vm.json))
-			Bus.$emit('tip-tap-object', {
-				json: vm.json,
-				html: vm.html
-			})
-		})
+	computed: {
+		...mapState([
+			'article'
+		]),
+		body: {
+			get() {
+				return this.article.body
+			},
+			set(value) {
+				this.UPDATE_ARTICLE_CONTENT({
+					type: 'body',
+					value: value
+				})
+			}
+		},
 	},
-	beforeDestroy() {
-		this.editor.destroy()
+	mounted() {
+		// set content editor on load
+		this.setContent()
 	},
 	methods: {
+		...mapActions([
+			'updateArticleContent'
+		]),
+		...mapMutations([
+			'UPDATE_ARTICLE_CONTENT'
+		]),
+		setContent () {
+			this.editor.setContent(this.body, true)
+		},
 		showImagePrompt(command) {
 			const src = prompt('Enter the url of your image here')
 			if (src !== null) {
@@ -345,8 +358,9 @@ li[data-done="false"] {
 /* iframe */
 .iframe {
   &__embed {
+    width: 50%;
     width: 100%;
-    height: 15rem;
+    height: 20rem;
     border: 0;
   }
   &__input {

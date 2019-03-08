@@ -34,6 +34,12 @@ export default {
 		const token = localStorage.getItem('session-token')
 		commit(types.SET_TOKEN, token)
 	},
+	updateArticleContent ({commit}, payload) {
+		commit(types.UPDATE_ARTICLE_CONTENT, payload)
+	},
+	setSingleArticle ({commit}, article) {
+		commit(types.SET_SINGLE_ARTICLE, article)
+	},
 	async fetchArticle ({commit}, id) {
 		let article = (await Api().get(`articles/${id}`)).data
 		commit(types.FETCH_ARTICLE, article)

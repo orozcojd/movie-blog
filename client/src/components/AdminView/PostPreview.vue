@@ -17,6 +17,10 @@
         <div align="right">
           {{ article.author }}
         </div>
+        <br>
+        <div align="left">
+          {{ article.updatedAt }}
+        </div>
       </div>
     </v-card-title>
     <v-layout

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="loaded"
-    style="padding:5em"
+    style="padding:20px"
   >
     <h1>Admin View</h1>
 
@@ -11,37 +11,31 @@
       lazy-validation
     >
       <v-text-field
-        v-model="article.title"
+        v-model="title"
         label="Article Title"
         required
       />
       <v-text-field
-        v-model="article.author"
+        v-model="author"
         label="Author"
         required
       />
       <v-text-field
-        v-model="article.thumbnailDescription"
+        v-model="thumbnailDescription"
         label="Thumbnail Description"
         required
       />
       <v-text-field
-        v-model="article.img"
+        v-model="img"
         label="Article Image"
         required 
       />
       <v-text-field
-        v-model="article.category"
+        v-model="category"
         label="Category"
         required 
       />
       <tip-tap />
-      <!-- <v-textarea
-        v-model="article.body"
-        min-height="400px"
-        label="Article Body"
-        required
-      /> -->
       <v-btn
         :disabled="validation.cancelDisabled"
         @click.prevent="cancel"
@@ -49,13 +43,13 @@
         Cancel
       </v-btn>
       <v-btn
-        @click.prevent="article.draft=true; emitRequest()"
+        @click.prevent="article.draft=true; submit()"
       >
         Draft
       </v-btn>
       <v-btn
         :color="validation.btnType"
-        @click.prevent="article.draft=false; emitRequest()"
+        @click.prevent="article.draft=false; submit()"
       >
         Submit
       </v-btn>
@@ -68,25 +62,12 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import TipTap from '@/components/Tools/TipTap'
 import Article from '@/Model/Article'
-import { Bus } from '@/components/Tools/Bus.js'
 
-// import { validationMixin } from 'vuelidate'
-// import { required, maxLength, email } from 'vuelidate/lib/validators'
 export default {
-	// mixins: [validationMixin],
-	// validations: {
-	//   name: { required, maxLength: maxLength(10) },
-	//   email: { required, email },
-	//   select: { required },
-	//   checkbox: {
-	//     checked (val) {
-	//       return val
-	//     }
-	//   }
-	// },
+
 	name: 'PostAdminView',
 	components: {
 		TipTap
@@ -95,71 +76,120 @@ export default {
 		return {
 			loaded: false,
 			valid: true,
-			article: {},
 			validation: {
 				btnType: 'undefined',
 				error: '',
 				cancelDisabled: false
 			},
 			requestRunning: false,
-			emitting: false,
 		}
 	},
 	computed: {
-		...mapGetters([
-			'getArticle',
-			'getSingleArticle'
-		]),
 		...mapState([
-			'articles'
-		])
-		// titleErrors () {
-		//   const errors = []
-		//   if (!this.$v.article.title.$dirty) return errors
-		//   !this.$v.article.title.maxLength && errors.push('Article Title must be at most 10 characters long')
-		//   !this.$v.article.title.required && errors.push('Article Title is required.')
-		//   return errors
-		// },
+			'article'
+		]),
+		...mapGetters([
+			'getArticle'		
+		]),
+		/* 
+			mapping state.article attributes to vuex mutations
+		*/
+		title: {
+			get() {
+				return this.article.title
+			},
+			set(value) {
+				this.UPDATE_ARTICLE_CONTENT({
+					type: 'title',
+					value: value
+				})
+			}
+		},
+		author: {
+			get() {
+				return this.article.author
+			},
+			set(value) {
+				this.UPDATE_ARTICLE_CONTENT({
+					type: 'author',
+					value: value
+				})
+			}
+		},
+		thumbnailDescription: {
+			get() {
+				return this.article.thumbnailDescription
+			},
+			set(value) {
+				this.UPDATE_ARTICLE_CONTENT({
+					type: 'thumbnailDescription',
+					value: value
+				})
+			}
+		},
+		img: {
+			get() {
+				return this.article.img
+			},
+			set(value) {
+				this.UPDATE_ARTICLE_CONTENT({
+					type: 'img',
+					value: value
+				})
+			}
+		},
+		category: {
+			get() {
+				return this.article.category
+			},
+			set(value) {
+				this.UPDATE_ARTICLE_CONTENT({
+					type: 'category',
+					value: value
+				})
+			}
+		},
+		/* 
+			end mapping state.article attributes to vuex mutations
+		*/
+
 	},
 	async mounted () {
 		/* later change to - if not found in store fetch */
 		let id = this.$route.params.id
-		if (id) {
-			this.article = this.getArticle(id)
-			if (!this.article) {
-				await this.fetchArticle(id)
-				this.article = JSON.parse(JSON.stringify(this.getSingleArticle))
+		// if article not found in store, fetch it
+		if(id){
+			let article = this.getArticle(id)
+			if(article) {
+				// if article set article state to article found in articles array
+				this.setSingleArticle(article)
 			}
-		}
+			else {
+				// else fetch then set article state
+				await this.fetchArticle(id)
+			}
+		}	
 		this.loaded = true
-		// this.$validator.localize('en', this.dictionary)
-		let vm = this
-		Bus.$on('tip-tap-object', (tapObj)=> {
-			console.log(JSON.stringify(tapObj))
-			vm.article.body = JSON.stringify(tapObj.json)
-			this.submit()
-		})
 	},
 	methods: {
+		...mapMutations([
+			'UPDATE_ARTICLE_CONTENT'
+		]),
 		...mapActions([
 			'updateArticle',
 			'postArticle',
-			'fetchArticle'
+			'fetchArticle',
+			'setSingleArticle'
 		]),
 		cancel () {
 			this.$router.push({
 				name: 'root'
 			})
 		},
-		emitRequest () {
-			Bus.$emit('article-submit')
-		},
 		async submit () {
-			// console.log(this.article)
 			if (this.requestRunning) {
 				return
 			}
-			// $emit event to notify child component send back data
 			
 			// disable cancel button & prevent api from firing after multiple button clicks
 			this.requestRunning = true
@@ -169,7 +199,6 @@ export default {
 					article: new Article(this.article),
 					id: this.$route.params.id
 				}
-
 				await this.updateArticle(payload)
 			} else {
 				await this.postArticle(new Article(this.article))

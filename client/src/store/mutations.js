@@ -66,6 +66,18 @@ export default {
 			state.articles.push(payload)
 		}
 	},
+	[types.SET_SINGLE_ARTICLE] (state, payload) {
+		/*
+			sets article state to payload
+		*/
+		state.article = payload
+	},
+	[types.UPDATE_ARTICLE_CONTENT] (state, payload) {
+		/* 
+			sets state article attribute to payload
+		*/
+		state.article[payload.type] = payload.value
+	},
 	[types.POST_ARTICLE] (state, payload) {
 		/*
       unshifts new article to start of state articles array

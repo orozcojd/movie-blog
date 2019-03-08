@@ -24,6 +24,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import ParagraphAlignmentNode from '@/components/Tools/ParagraphAlignment'
+import Iframe from '@/components/Tools/Iframe'
 import { Editor, EditorContent} from 'tiptap'
 import {
 	Blockquote,
@@ -75,6 +76,7 @@ export default {
 					new Underline(),
 					new History(),
 					new ParagraphAlignmentNode(),
+					new Iframe()
 				],
 				content: ``,
 				editable: false,
@@ -97,7 +99,7 @@ export default {
 	},
 	methods: {
 		setContent () {
-			this.editor.setContent(JSON.parse(this.article.body), true)
+			this.editor.setContent(this.article.body, true)
 		}
 	}
 }
