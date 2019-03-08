@@ -105,18 +105,18 @@
         >
           <v-icon>format_align_left</v-icon>
         </button>
-        <!-- <button
-          :class="{ 'highlight': isActive.paragraph() }"
-          @click="commands.paragraph"
+        <button
+          :class="{ 'highlight': isActive.paragraph({ textAlign: 'center' }) }"
+          @click="commands.paragraph({ textAlign: 'center' })"
         >
           <v-icon>format_align_center</v-icon>
-        </button> -->
-        <!-- <button
+        </button>
+        <button
           :class="{ 'highlight': isActive.paragraph({ textAlign: 'right' }) }"
           @click="commands.paragraph({ textAlign: 'right' })"
         >
           <v-icon>format_align_right</v-icon>
-        </button> -->
+        </button>
         <button
           :class="{ 'highlight': isActive.bullet_list() }"
           @click="commands.bullet_list"
@@ -136,12 +136,12 @@
         >
           <v-icon>list_alt</v-icon>
         </button>
-        <!-- <button
+        <button
           :class="{ 'highlight': isActive.blockquote() }"
           @click="commands.blockquote"
         >
           <v-icon>format_quote</v-icon>
-        </button> -->
+        </button>
         <!-- <button
           :class="{ 'is-active': isActive.link() }"
           @click="showLinkMenu(getMarkAttrs('link'))"
@@ -169,6 +169,7 @@
       class="editor__content"
       :editor="editor"
     />
+    {{ json }}
     <!-- <div style="width: 400px; height: 800px">
       <editor-content :editor="iframeEditor" />
     </div> -->
@@ -196,8 +197,10 @@ import {
 	History,
 	Image
 } from 'tiptap-extensions'
-import ParagraphAlignmentNode from './ParagraphAlignment.js'
-import Iframe from './Iframe.js'
+import ParagraphAlignmentNode from './ParagraphAlignment'
+import Iframe from './Iframe'
+import { Bus } from '@/components/Tools/Bus.js'
+
 
 export default {
 	components: {
@@ -239,13 +242,28 @@ export default {
 				content: `
           <h1>Yay Headlines!</h1>
           <p>All these <strong>cool tags</strong> are working now.</p>
-          <img src="https://66.media.tumblr.com/dcd3d24b79d78a3ee0f9192246e727f1/tumblr_o00xgqMhPM1qak053o1_400.gif" />
         `,
+				onUpdate: ({ getJSON, getHTML }) => {
+					this.json = getJSON()
+					this.html = getHTML()
+				},
 			}),
 			// Links data
+			json: '',
+			html: '',
 			linkUrl: null,
 			linkMenuIsActive: false,
 		}
+	},
+	mounted() {
+		let vm = this;
+		Bus.$on('article-submit', function() {
+			console.log(JSON.stringify(vm.json))
+			Bus.$emit('tip-tap-object', {
+				json: vm.json,
+				html: vm.html
+			})
+		})
 	},
 	beforeDestroy() {
 		this.editor.destroy()

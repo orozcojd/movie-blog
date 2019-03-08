@@ -4,13 +4,13 @@
     style="padding:5em"
   >
     <h1>Admin View</h1>
-    <tip-tap />
+
     <v-form
       ref="form"
       v-model="valid"
       lazy-validation
     >
-      <!-- <v-text-field
+      <v-text-field
         v-model="article.title"
         label="Article Title"
         required
@@ -35,33 +35,34 @@
         label="Category"
         required 
       />
-      <v-textarea
+      <tip-tap />
+      <!-- <v-textarea
         v-model="article.body"
         min-height="400px"
         label="Article Body"
         required
       /> -->
-      <!--  <v-btn
+      <v-btn
         :disabled="validation.cancelDisabled"
         @click.prevent="cancel"
       >
         Cancel
       </v-btn>
       <v-btn
-        @click.prevent="article.draft=true; submit()"
+        @click.prevent="article.draft=true; emitRequest()"
       >
         Draft
       </v-btn>
       <v-btn
         :color="validation.btnType"
-        @click.prevent="article.draft=false; submit()"
+        @click.prevent="article.draft=false; emitRequest()"
       >
         Submit
       </v-btn>
       <br>
       <div style="color:red">
         {{ validation.error }}
-      </div> -->
+      </div>
     </v-form>
   </div>
 </template>
@@ -69,7 +70,9 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import TipTap from '@/components/Tools/TipTap'
-import Article from '@/Model/Article.js'
+import Article from '@/Model/Article'
+import { Bus } from '@/components/Tools/Bus.js'
+
 // import { validationMixin } from 'vuelidate'
 // import { required, maxLength, email } from 'vuelidate/lib/validators'
 export default {
@@ -98,7 +101,8 @@ export default {
 				error: '',
 				cancelDisabled: false
 			},
-			requestRunning: false
+			requestRunning: false,
+			emitting: false,
 		}
 	},
 	computed: {
@@ -129,6 +133,12 @@ export default {
 		}
 		this.loaded = true
 		// this.$validator.localize('en', this.dictionary)
+		let vm = this
+		Bus.$on('tip-tap-object', (tapObj)=> {
+			console.log(JSON.stringify(tapObj))
+			vm.article.body = JSON.stringify(tapObj.json)
+			this.submit()
+		})
 	},
 	methods: {
 		...mapActions([
@@ -141,11 +151,16 @@ export default {
 				name: 'root'
 			})
 		},
+		emitRequest () {
+			Bus.$emit('article-submit')
+		},
 		async submit () {
 			// console.log(this.article)
 			if (this.requestRunning) {
 				return
 			}
+			// $emit event to notify child component send back data
+			
 			// disable cancel button & prevent api from firing after multiple button clicks
 			this.requestRunning = true
 			this.validation.cancelDisabled = true

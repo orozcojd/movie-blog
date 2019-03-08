@@ -1,4 +1,4 @@
-import { setBlockType } from 'tiptap-commands'
+import { toggleBlockType } from 'tiptap-commands'
 import { Node } from 'tiptap'
 
 export default class ParagraphNode extends Node {
@@ -26,9 +26,8 @@ export default class ParagraphNode extends Node {
 			toDOM: node => ['p', { style: `text-align: ${node.attrs.textAlign}` }, 0],
 		}
 	}
-
-	command({ type, attrs }) {
-		return setBlockType(type, attrs)
+	commands({ type, schema }) {
+		return attrs => toggleBlockType(type, schema.nodes.paragraph, attrs)
 	}
 
 }
