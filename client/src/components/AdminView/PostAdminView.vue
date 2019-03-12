@@ -1,64 +1,71 @@
 <template>
-  <div
+  <v-container
     v-if="loaded"
-    style="padding:20px"
   >
-    <h1>Admin View</h1>
-
-    <v-form
-      ref="form"
-      v-model="valid"
-      lazy-validation
+    <v-layout
+      align-center
+      justify-center
     >
-      <v-text-field
-        v-model="title"
-        label="Article Title"
-        required
-      />
-      <v-text-field
-        v-model="author"
-        label="Author"
-        required
-      />
-      <v-text-field
-        v-model="thumbnailDescription"
-        label="Thumbnail Description"
-        required
-      />
-      <v-text-field
-        v-model="img"
-        label="Article Image"
-        required 
-      />
-      <v-text-field
-        v-model="category"
-        label="Category"
-        required 
-      />
-      <tip-tap />
-      <v-btn
-        :disabled="validation.cancelDisabled"
-        @click.prevent="cancel"
+      <v-flex
+        xs12
+        md10
       >
-        Cancel
-      </v-btn>
-      <v-btn
-        @click.prevent="article.draft=true; submit()"
-      >
-        Draft
-      </v-btn>
-      <v-btn
-        :color="validation.btnType"
-        @click.prevent="article.draft=false; submit()"
-      >
-        Submit
-      </v-btn>
-      <br>
-      <div style="color:red">
-        {{ validation.error }}
-      </div>
-    </v-form>
-  </div>
+        <v-form
+          ref="form"
+          v-model="valid"
+          lazy-validation
+        >
+          <v-text-field
+            v-model="title"
+            label="Article Title"
+            required
+          />
+          <v-text-field
+            v-model="author"
+            label="Author"
+            required
+          />
+          <v-text-field
+            v-model="thumbnailDescription"
+            label="Thumbnail Description"
+            required
+          />
+          <v-text-field
+            v-model="img"
+            label="Article Image"
+            required 
+          />
+          <v-text-field
+            v-model="category"
+            label="Category"
+            required 
+          />
+          <tip-tap class="editor" />
+          <v-btn
+            :disabled="validation.cancelDisabled"
+            @click.prevent="cancel"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            @click.prevent="article.draft=true; submit()"
+          >
+            Draft
+          </v-btn>
+          <v-btn
+            :color="validation.btnType"
+            @click.prevent="article.draft=false; submit()"
+          >
+            Submit
+          </v-btn>
+          <br>
+          <div style="color:red">
+            {{ validation.error }}
+          </div>
+        </v-form>
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
@@ -168,12 +175,16 @@ export default {
 				// else fetch then set article state
 				await this.fetchArticle(id)
 			}
-		}	
+		}
+		else {
+			this.SET_SINGLE_ARTICLE({});
+		}
 		this.loaded = true
 	},
 	methods: {
 		...mapMutations([
-			'UPDATE_ARTICLE_CONTENT'
+			'UPDATE_ARTICLE_CONTENT',
+			'SET_SINGLE_ARTICLE'
 		]),
 		...mapActions([
 			'updateArticle',
@@ -216,7 +227,29 @@ export default {
 	}
 }
 </script>
+<style lang="scss">
+@import url('https://fonts.googleapis.com/css?family=Proza+Libre');
+blockquote::before {
+	content: "\201C"; /*Unicode for Left Double  */
+	position: relative;
+	float: left;
+	bottom: 20px;
 
-<style scoped>
-
+	/* font family */
+	font-family: 'Proza Libre', sans-serif;
+	font-size: 50px;
+	color: #FDA7DF;
+}
+blockquote {
+	width: 50%;
+	margin: 0px 50px 0px 50px;
+	color: #999;
+	// border-left: 2px solid #999;
+	padding-left: 1em;
+	
+}
+blockquote::after{
+  /*Reset to make sure*/
+  content: "";
+}
 </style>

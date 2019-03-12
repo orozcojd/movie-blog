@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tiptap-editor">
     <!-- Add Links -->
     <editor-menu-bubble
       class="menububble"
@@ -46,7 +46,6 @@
       </div>
     </editor-menu-bubble>
     <!-- End add Links -->
-
     <editor-menu-bar :editor="editor">
       <div slot-scope="{ commands, isActive }">
         <button
@@ -175,6 +174,7 @@
       class="editor__content"
       :editor="editor"
     />
+    <hr>
   </div>
 </template>
 
@@ -237,8 +237,8 @@ export default {
 					new Iframe()
 					// new FontIncreaseNode()
 				],
-				autoFocus: true,
-				content: ``,
+				// autoFocus: true,
+				content: `Article Body`,
 				onUpdate: ({ getHTML }) => {
 					// this.json = getJSON()
 					this.html = getHTML()
@@ -280,7 +280,8 @@ export default {
 			'UPDATE_ARTICLE_CONTENT'
 		]),
 		setContent () {
-			this.editor.setContent(this.body, true)
+			if(this.body)
+				this.editor.setContent(this.body, true)
 		},
 		showImagePrompt(command) {
 			const src = prompt('Enter the url of your image here')
@@ -308,7 +309,11 @@ export default {
 }
 </script>
 
-<style lang="scss" >
+<style lang="scss">
+
+.editor__content {
+  margin-bottom: 0;
+}
 /* Highlights focused editor component */
   .highlight{
     background-color:pink;

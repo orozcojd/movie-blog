@@ -1,5 +1,8 @@
 <template>
-  <div style="padding: 4em">
+  <div
+    class="post-content"
+    style="padding: 4em"
+  >
     <h1>{{ article.title }} </h1>
     <br>
     <div align="">
@@ -12,7 +15,6 @@
     />
     <br>
     <editor-content
-      class="editor__content"
       :editor="editor"
     />
     <!-- <p>
@@ -105,6 +107,10 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss">
+* {
+  .post-content &:focus{
+    outline: none
+	}
+}
 </style>
