@@ -41,7 +41,7 @@ export default {
 		navigateTo (articleId) {
 			this.$router.push({
 				name: 'article-view',
-				params: {
+				params: { 
 					id: articleId
 				}
 			})

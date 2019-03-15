@@ -5,5 +5,6 @@ module.exports = () => ({
 	user: null,
 	articles: [],
 	article: {},
-	new: []
+	new: [],
+	viewedArticles: []
 })

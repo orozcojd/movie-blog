@@ -60,7 +60,7 @@ export default {
       at that index with payload
     */
 		let index = state.articles.findIndex(article => article._id === payload.article._id)
-		if (index) {
+		if (index !== -1) {
 			Vue.set(state.articles, index, payload.article)
 		} else {
 			state.articles.push(payload)
@@ -94,5 +94,13 @@ export default {
 		}
 		let index = state.articles.findIndex(article => article._id === payload.id)
 		Vue.delete(state.articles, index)
+	},
+	[types.PUSH_VIEWED] (state, payload) {
+		let index = state.viewedArticles.findIndex(article => article.id === payload.id)
+		console.log(index)
+		if (index == -1) {
+			state.viewedArticles.push(payload)
+		}
+		console.log(state.viewedArticles)
 	}
 }

@@ -229,27 +229,5 @@ export default {
 </script>
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Proza+Libre');
-blockquote::before {
-	content: "\201C"; /*Unicode for Left Double  */
-	position: relative;
-	float: left;
-	bottom: 20px;
-
-	/* font family */
-	font-family: 'Proza Libre', sans-serif;
-	font-size: 50px;
-	color: #FDA7DF;
-}
-blockquote {
-	width: 50%;
-	margin: 0px 50px 0px 50px;
-	color: #999;
-	// border-left: 2px solid #999;
-	padding-left: 1em;
-	
-}
-blockquote::after{
-  /*Reset to make sure*/
-  content: "";
-}
+@import url('../../assets/style/tiptap.scss');
 </style>

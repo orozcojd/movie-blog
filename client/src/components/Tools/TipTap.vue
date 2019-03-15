@@ -311,72 +311,72 @@ export default {
 
 <style lang="scss">
 
-.editor__content {
-  margin-bottom: 0;
-}
-/* Highlights focused editor component */
-  .highlight{
-    background-color:pink;
-    border-radius: 5px;
-  }
-/* Limits image size to 400px */
-img {
-  height: 400px
-}
-/* To do List */
-ul[data-type="todo_list"] {
-  padding-left: 0;
-}
-li[data-type="todo_item"] {
-  display: flex;
-  flex-direction: row;
-}
-.todo-checkbox {
-  border: 2px solid pink;
-  height: 0.9em;
-  width: 0.9em;
-  box-sizing: border-box;
-  margin-right: 10px;
-  margin-top: 0.3rem;
-  user-select: none;
-  -webkit-user-select: none;
-  cursor: pointer;
-  border-radius: 0.2em;
-  background-color: transparent;
-  transition: 0.4s background;
-}
-.todo-content {
-  flex: 1;
-}
-li[data-done="true"] {
-  text-decoration: line-through;
-}
-li[data-done="true"] .todo-checkbox {
-  background-color: pink;
-}
-li[data-done="false"] {
-  text-decoration: none;
-}
+// .editor__content {
+//   margin-bottom: 0;
+// }
+// /* Highlights focused editor component */
+//   .highlight{
+//     background-color:pink;
+//     border-radius: 5px;
+//   }
+// /* Limits image size to 400px */
+// img {
+//   height: 400px
+// }
+// /* To do List */
+// ul[data-type="todo_list"] {
+//   padding-left: 0;
+// }
+// li[data-type="todo_item"] {
+//   display: flex;
+//   flex-direction: row;
+// }
+// .todo-checkbox {
+//   border: 2px solid pink;
+//   height: 0.9em;
+//   width: 0.9em;
+//   box-sizing: border-box;
+//   margin-right: 10px;
+//   margin-top: 0.3rem;
+//   user-select: none;
+//   -webkit-user-select: none;
+//   cursor: pointer;
+//   border-radius: 0.2em;
+//   background-color: transparent;
+//   transition: 0.4s background;
+// }
+// .todo-content {
+//   flex: 1;
+// }
+// li[data-done="true"] {
+//   text-decoration: line-through;
+// }
+// li[data-done="true"] .todo-checkbox {
+//   background-color: pink;
+// }
+// li[data-done="false"] {
+//   text-decoration: none;
+// }
 
-/* End to-do list */
+// /* End to-do list */
 
-/* iframe */
-.iframe {
-  &__embed {
-    width: 50%;
-    width: 100%;
-    height: 20rem;
-    border: 0;
-  }
-  &__input {
-    display: block;
-    width: 100%;
-    font: inherit;
-    border: 0;
-    border-radius: 5px;
-    background-color: rgba(black, 0.1);
-    padding: 0.3rem 0.5rem;
-  }
-}
+// /* iframe */
+// .iframe {
+//   &__embed {
+//     width: 50%;
+//     width: 100%;
+//     height: 20rem;
+//     border: 0;
+//   }
+//   &__input {
+//     display: block;
+//     width: 100%;
+//     font: inherit;
+//     border: 0;
+//     border-radius: 5px;
+//     background-color: rgba(black, 0.1);
+//     padding: 0.3rem 0.5rem;
+//   }
+// }
 /* End iframe */
 </style>

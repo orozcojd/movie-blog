@@ -1,20 +1,37 @@
 <template>
   <v-container fluid>
-    <latest-post
-      v-if="filterArticles.length"
-      class="mb-med"
-      :article="filterArticles[0]"
-    />
-    <hr
-      size="5"
-      color="black"
+    <v-layout
+      class="main-title"
+      justify-center
     >
-    <br>
-    <div class="weekly-header">
-      <h2>Weekly Updates</h2>
-    </div>
-    <br>
-    <!-- <v-container fluid grid-list-md class="weekly-container">
+      <v-flex
+        xs12
+        md9
+      >
+        <h1>Unsolicited.mp3</h1>
+      </v-flex>
+    </v-layout>
+    <v-layout
+      justify-center
+    >
+      <v-flex
+        xs12
+      >
+        <latest-post
+          v-if="filterArticles.length"
+          class="mb-med"
+          :article="filterArticles[0]"
+        />
+        <hr
+          size="5"
+          color="black"
+        >
+        <br>
+        <div class="weekly-header">
+          <h2>Weekly Updates</h2>
+        </div>
+        <br>
+        <!-- <v-container fluid grid-list-md class="weekly-container">
       <v-layout row fill-height>
         <v-flex v-for="post in 10"
           :key=post>
@@ -22,31 +39,33 @@
         </v-flex>
       </v-layout>
     </v-container> -->
-    <div class="weekly-header">
-      <h2>All posts</h2>
-    </div>
-    <br>
-    <v-container
-      fluid
-      grid-list-md
-    >
-      <v-layout
-        row
-        wrap
-      >
-        <v-flex
-          v-for="article in filterArticles.slice(1)"
-          :key="article.id"
-          md4
-          xs12
+        <div class="weekly-header">
+          <h2>All posts</h2>
+        </div>
+        <br>
+        <v-container
+          fluid
+          grid-list-md
         >
-          <post-preview
-            class="post-preview"
-            :article="article"
-          />
-        </v-flex>
-      </v-layout>
-    </v-container>
+          <v-layout
+            row
+            wrap
+          >
+            <v-flex
+              v-for="article in filterArticles.slice(1)"
+              :key="article.id"
+              md4
+              xs12
+            >
+              <post-preview
+                class="post-preview"
+                :article="article"
+              />
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
@@ -93,6 +112,19 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
+  @media only screen and (max-width: 400px) {
+    h1 {
+      font-size: 3rem !important;
+    }
+  }
+
+  .main-title {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 4rem;
+    margin-bottom: 1em;
+    color: #ceb6d9;
+  }
   .mb-lg {
     margin-top: 120px;
   }

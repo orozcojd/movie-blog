@@ -13,8 +13,9 @@
       >
         <v-img
           :src="article.img"
-          contain
+          
           alt="latest-post-img" 
+          max-height="600px"
         />
       </v-flex>
       <v-flex
