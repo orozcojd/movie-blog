@@ -1,5 +1,6 @@
 <template>
   <v-card
+    dark
     class="point-cursor"
     @click="navigateTo(article._id)"
   >

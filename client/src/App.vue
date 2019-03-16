@@ -33,7 +33,9 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  background-color: var(--v-accent-base);
+  color: var(--v-primary-base)
+  /* color: #2c3e50; */
   /* margin-top: 60px; */
 }
 </style>

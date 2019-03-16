@@ -1,5 +1,7 @@
 <template>
   <v-card
+    hover
+    dark
     @click="navigateTo(article._id)"
   >
     <v-img
@@ -7,12 +9,22 @@
       :src="article.img"
       aspect-ratio="2.75"
     />
-    <v-card-title primary-title>
-      <div style="width:100%">
-        <h3 class="headline mb-0">
+    <v-card-title
+      primary-title
+    >
+      <div
+        align="left"
+        style="width:100%;"
+      >
+        <h3
+          style="margin-bottom:10px"
+          class="headline"
+        >
           {{ article.title }}
         </h3>
-        <div align="left">
+        <div
+          style="height:70px;overflow:scroll"
+        >
           {{ article.thumbnailDescription }}
         </div>
         <br>

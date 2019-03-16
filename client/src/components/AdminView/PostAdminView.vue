@@ -17,26 +17,35 @@
         >
           <v-text-field
             v-model="title"
+            :rules="titleRules"
+            :counter="90"
             label="Article Title"
             required
           />
           <v-text-field
             v-model="author"
+            :rules="authorRules"
+            :counter="30"
             label="Author"
             required
           />
           <v-text-field
             v-model="thumbnailDescription"
+            :rules="descriptionRules"
+            :counter="120"
             label="Thumbnail Description"
             required
           />
           <v-text-field
             v-model="img"
+            :rules="imageRules"
             label="Article Image"
             required 
           />
           <v-text-field
             v-model="category"
+            :rules="categoryRules"
+            :counter="20"
             label="Category"
             required 
           />
@@ -48,20 +57,18 @@
             Cancel
           </v-btn>
           <v-btn
-            @click.prevent="article.draft=true; submit()"
+            :color="validation.draft"
+            @click.prevent="draft=true;validate('draft')"
           >
             Draft
           </v-btn>
           <v-btn
-            :color="validation.btnType"
-            @click.prevent="article.draft=false; submit()"
+            :color="validation.submit"
+            @click.prevent="draft=false; validate('submit')"
           >
             Submit
           </v-btn>
           <br>
-          <div style="color:red">
-            {{ validation.error }}
-          </div>
         </v-form>
       </v-flex>
     </v-layout>
@@ -72,7 +79,7 @@
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import TipTap from '@/components/Tools/TipTap'
 import Article from '@/Model/Article'
-
+import PostValidation from '@/components/Tools/PostValidation'
 export default {
 
 	name: 'PostAdminView',
@@ -81,14 +88,22 @@ export default {
 	},
 	data () {
 		return {
-			loaded: false,
 			valid: true,
+			/* validation rules */
+			titleRules: PostValidation.titleRules,
+			authorRules: PostValidation.authorRules,
+			descriptionRules: PostValidation.descriptionRules,
+			imageRules: PostValidation.imageRules,
+			categoryRules: PostValidation.categoryRules,
+
+			loaded: false,
+			requestRunning: false,
 			validation: {
-				btnType: 'undefined',
-				error: '',
+				draft: 'undefined',
+				submit: 'undefined',
+				// error: '',
 				cancelDisabled: false
 			},
-			requestRunning: false,
 		}
 	},
 	computed: {
@@ -156,13 +171,23 @@ export default {
 				})
 			}
 		},
+		draft: {
+			get() {
+				return this.article.draft
+			},
+			set(value) {
+				this.UPDATE_ARTICLE_CONTENT({
+					type: 'draft',
+					value: value
+				})
+			}
+		}
 		/* 
 			end mapping state.article attributes to vuex mutations
 		*/
 
 	},
 	async mounted () {
-		/* later change to - if not found in store fetch */
 		let id = this.$route.params.id
 		// if article not found in store, fetch it
 		if(id){
@@ -182,6 +207,20 @@ export default {
 		this.loaded = true
 	},
 	methods: {
+		validate (btnType) {
+			if (this.$refs.form.validate()) {
+				/* if validation is approved */
+				// this.snackbar = true
+				this.validation[btnType] = 'success'
+				this.submit()
+			}
+			else {
+				this.validation[btnType] = 'error'
+				setTimeout(() => {
+					this.validation[btnType] = 'undefined'
+				}, 2000)				
+			}
+		},
 		...mapMutations([
 			'UPDATE_ARTICLE_CONTENT',
 			'SET_SINGLE_ARTICLE'
@@ -214,15 +253,12 @@ export default {
 			} else {
 				await this.postArticle(new Article(this.article))
 			}
-			this.validation.error = ''
-			this.validation.btnType = 'success'
+			// this.validation.error = ''
 			setTimeout(() => {
 				this.$router.push({
 					name: 'root'
 				})
 			}, 500)
-			// this.validation.btnType = 'danger'
-			// this.validation.error = err
 		}
 	}
 }

@@ -1,0 +1,49 @@
+* {
+  .post-content &:focus{
+    outline: none
+	}
+}
+
+@media only screen and (max-width: 400px) {
+	.post-content {
+		padding-left: 15px !important;
+		padding-right: 15px !important;
+	}
+	.post-title {
+		// font-family: 'Marcellus SC', serif;
+		font-size: 1.75rem !important;
+		padding-left: 5px !important;
+		padding-right: 5px !important;
+	}
+	// .mb-small {
+	// 	margin-bottom: .5em;
+	// }
+	// .mb-med {
+	// 	margin-bottom: 2em;
+	// }
+	// .post-author {
+	// 	margin-bottom: .5em;
+	// }
+	.post-body {
+		font-size: 1.7rem !important;
+		// font-family: 'Abel', sans-serif;
+	}
+}
+/* export to file */
+.post-title {
+  font-family: 'Marcellus SC', serif;
+	font-size: 2.75rem;
+}
+.mb-small {
+	margin-bottom: .5em;
+}
+.mb-med {
+	margin-bottom: 2em;
+}
+.post-author {
+	margin-bottom: .5em;
+}
+.post-body {
+	font-size: 2rem;
+	font-family: 'Abel', sans-serif;
+}

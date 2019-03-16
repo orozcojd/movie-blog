@@ -6,7 +6,7 @@
     >
       <v-flex
         xs12
-        md9
+        md12
       >
         <h1>Unsolicited.mp3</h1>
       </v-flex>
@@ -118,12 +118,14 @@ export default {
       font-size: 3rem !important;
     }
   }
-
+  .container {
+    padding-top: 0 !important;
+  }
   .main-title {
     font-family: 'Permanent Marker', cursive;
-    font-size: 4rem;
-    margin-bottom: 1em;
-    color: #ceb6d9;
+    font-size: 5em;
+    /* margin-bottom: 1em; */
+    color: black;
   }
   .mb-lg {
     margin-top: 120px;

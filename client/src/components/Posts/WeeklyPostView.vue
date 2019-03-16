@@ -1,6 +1,8 @@
 <template>
   <v-layout>
-    <v-card />
+    <v-card
+      dark
+    />
   </v-layout>
 </template>
 

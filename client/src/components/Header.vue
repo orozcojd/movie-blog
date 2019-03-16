@@ -2,12 +2,18 @@
   <div>
     <v-navigation-drawer
       v-model="drawerRight"
+      class="accent"
       fixed
       right
       clipped
       app
     >
       <v-list dense>
+        <v-list-tile-title
+          style="margin-left: 10px"
+        >
+          Recently Viewed
+        </v-list-tile-title>
         <v-list-tile
           v-for="viewed in viewedArticles"
           :key="viewed.id"
@@ -26,11 +32,11 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
+      color="accent"
       fixed
-      light
       app
       dense
-      scroll-off-screen
+      :scroll-off-screen="!drawerRight"
       clipped-right
     >
       <v-toolbar-side-icon to="/">
@@ -85,7 +91,7 @@ export default {
 	name: 'Header',
 	data() {
 		return {
-			drawerRight: true,
+			drawerRight: false,
 			right: null,
 		}
 	},

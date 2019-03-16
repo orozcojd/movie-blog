@@ -9,11 +9,25 @@ import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 
 import { sync } from 'vuex-router-sync'
+// import colors from 'vuetify/es5/util/colors'
 
 Vue.config.productionTip = false
 
+
 Vue.use(Vuetify, {
-	iconfont: 'md'
+	options:{
+		// customProperties: true,
+	},
+	iconfont: 'md',
+	// theme:  {
+	// 	primary: '#ffffff',
+	// 	secondary: '#b0e0e6',
+	// 	accent: '#c4ced4',
+	// 	error: '#f44336',
+	// 	warning: '#ff5722',
+	// 	info: '#009688',
+	// 	success: '#8bc34a'
+	// }
 })
 
 
