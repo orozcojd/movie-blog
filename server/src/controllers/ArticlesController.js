@@ -1,7 +1,10 @@
 const {Post} = require('../models')
-// Post.remove({}, function(err) { 
+const {Tags} = require('../models')
+
+// Tags.remove({}, function(err) { 
 //   console.log('collection removed') 
 // });
+Tags.find().remove().exec();
 module.exports = {
   async postArticle (req, res) {
     /* 
@@ -31,13 +34,72 @@ module.exports = {
       if no error -- otherwise sends 400 error 
     */
     try {
-      // Post.find().remove().exec();
+      let options = req.body;
+      console.log(options)
       const articles = await Post.find().limit(12).sort('-created_at');
       res.send(articles);   
     }
     catch (err) {
       res.status(400).send({
           error: 'An error has occured trying to get articles',
+          details: err
+      })
+    }
+  },
+  async getTags (req, res) {
+    /* 
+      GET REQUEST
+      gets all tag names 
+    */
+    try {
+      console.log(req.params.tagName)
+      const tags = await Tags.find()
+      console.log(tags)
+      res.send(tags);
+    }
+    catch (err) {
+      res.status(400).send({
+          error: `An error has occured trying to get tags`,
+          details: err
+      })
+    }
+  },
+  async addTags (req, res) {
+    /* 
+      POST REQUEST
+      gets all tags categories 
+    */
+    try {
+      let tags = []
+      for(i = 0; i< req.body.length; i++) {
+        tags.push(await Tags.create(req.body[i]))
+      }
+      res.send(tags);
+    }
+    catch (err) {
+      res.status(400).send({
+          error: `An error has occured trying to get tags`,
+          details: err
+      })
+    }
+  },
+  async getArticlesByTag (req, res) {
+    /* 
+      GET REQUEST
+      gets all posts by tag name (tag) and limits to 12 posts. 
+      send array of articles if no error -- otherwise sends 400 error 
+    */
+    try {
+      console.log(req.params.tagName)
+      const article = await Post.find({
+        tags: req.params.tagName
+      }).limit(12).sort('-created_at')
+      console.log(article)
+      res.send(article);
+    }
+    catch (err) {
+      res.status(400).send({
+          error: `An error has occured trying to get article tag`,
           details: err
       })
     }

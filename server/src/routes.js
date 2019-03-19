@@ -28,6 +28,12 @@ module.exports = (app) => {
 	app.get('/articles',
 		// auth,
 		ArticlesController.index);
+	app.post('/tags', 
+		ArticlesController.addTags);
+	app.get('/tags',
+		ArticlesController.getTags);
+	app.get('/tag/:tagName',
+		ArticlesController.getArticlesByTag);
 	app.get('/article-preview', 
 		ArticlesController.previews);
 	app.get('/articles/:articleId',

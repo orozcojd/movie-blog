@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-app>
+    <v-app dark>
       <v-content>
         <Header />
         <!-- <h1>My Header</h1> -->
@@ -33,8 +33,8 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  background-color: var(--v-accent-base);
-  color: var(--v-primary-base)
+  /* background-color: var(--v-accent-base); */
+  /* color: var(--v-primary-base) */
   /* color: #2c3e50; */
   /* margin-top: 60px; */
 }

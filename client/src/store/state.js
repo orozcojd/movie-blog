@@ -6,5 +6,6 @@ module.exports = () => ({
 	articles: [],
 	article: {},
 	new: [],
-	viewedArticles: []
+	viewedArticles: [],
+	realms: []
 })

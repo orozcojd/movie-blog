@@ -1,5 +1,6 @@
 <template>
   <v-container
+    v-if="loaded"
     fluid
     grid-list-md
   >
@@ -7,8 +8,11 @@
       row
       wrap
     >
+      <v-flex md12>
+        <h1>{{ realm }}</h1>
+      </v-flex>
       <v-flex
-        v-for="article in articles.slice(1)"
+        v-for="article in articles"
         :key="article.id"
         md4
         xs12
@@ -26,29 +30,39 @@
 <script>
 import PostPreview from '@/components/Posts/PostPreview'
 
+import { mapActions, mapState } from 'vuex'
+
 export default {
-	name: 'Songs',
+  
+	name: 'RealmView',
 	components: {
 		PostPreview
 	},
-	props: {
-		articles: {
-			type: Array,
-			required: true
-		}
-	},
 	data () {
 		return {
+			realm: '',
+			loaded: false
 		}
 	},
+	computed: {
+		...mapState([
+			'articles'
+		]),
+	},
+	async mounted() {
+		let realm = this.$route.params.realmName
+		this.realm = realm.split('-').join(" ")
+		await this.getArticlesByRealm(realm)
+		this.loaded = true
+	},
 	methods: {
-
-	}
+		...mapActions([
+			'getArticlesByRealm'
+		])
+	},
 }
 </script>
 
 <style scoped>
-  .post-preview {
-    cursor: pointer;
-  }
+
 </style>

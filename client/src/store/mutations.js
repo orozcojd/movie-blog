@@ -48,6 +48,12 @@ export default {
     */
 		state.articles = payload
 	},
+	[types.FETCH_REALMS] (state, payload) {
+		state.realms = payload
+	},
+	[types.FETCH_BY_REALM] (state, payload) {
+		state.articles = payload
+	},
 	[types.FETCH_ARTICLE] (state, payload) {
 		/*
       sets article object in store to payload

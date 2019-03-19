@@ -44,9 +44,17 @@ export default {
 		let article = (await Api().get(`articles/${id}`)).data
 		commit(types.FETCH_ARTICLE, article)
 	},
-	async getArticles ({commit}) {
+	async getArticles ({commit},) {
 		let articles = (await Api().get('articles')).data
 		commit(types.FETCH_ARTICLES, articles)
+	},
+	async getRealms ({commit}, ) {
+		let realms = (await Api().get('realms')).data
+		commit(types.FETCH_REALMS, realms)
+	},
+	async getArticlesByRealm ({commit}, realm) {
+		let articles = (await Api().get(`/realm/${realm}`)).data
+		commit(types.FETCH_BY_REALM, articles)
 	},
 	async updateArticle ({commit}, payload) {
 		let article = (await Api({}).put(`articles/${payload.id}`, payload.article)).data

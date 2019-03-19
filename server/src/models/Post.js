@@ -2,7 +2,9 @@
   Schema for an Article  
 */
 const mongoose = require('mongoose');
+
 let Schema = mongoose.Schema;
+
 let articleSchema = new Schema({
 	title: String,
 	author: String,
@@ -12,6 +14,7 @@ let articleSchema = new Schema({
 		default: false
 	},
 	category: String,
+	tags: [String],
 	img: String,
 	thumbnailDescription: String,
 	comments: [{body: String, date: Date, user: String}],

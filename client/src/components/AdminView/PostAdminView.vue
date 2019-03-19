@@ -8,7 +8,7 @@
     >
       <v-flex
         xs12
-        md10
+        md8
       >
         <v-form
           ref="form"
@@ -49,6 +49,16 @@
             label="Category"
             required 
           />
+          <v-autocomplete
+            v-model="realms"
+            :items="realmChoices"
+            item-text="realm"
+            multiple
+            return-object
+            label="Choose Tags"
+            persistent-hint
+          />
+          {{ realms }}
           <tip-tap class="editor" />
           <v-btn
             :disabled="validation.cancelDisabled"
@@ -88,6 +98,8 @@ export default {
 	},
 	data () {
 		return {
+			isEditing: true,
+			realms: [],
 			valid: true,
 			/* validation rules */
 			titleRules: PostValidation.titleRules,
@@ -107,9 +119,10 @@ export default {
 		}
 	},
 	computed: {
-		...mapState([
-			'article'
-		]),
+		...mapState({
+			article:'article',
+			realmChoices:'realms'
+		}),
 		...mapGetters([
 			'getArticle'		
 		]),
@@ -171,6 +184,17 @@ export default {
 				})
 			}
 		},
+		// realm: {
+		// 	get() {
+		// 		return this.article.realm
+		// 	},
+		// 	set(value) {
+		// 		this.UPDATE_ARTICLE_CONTENT({
+		// 			type: 'realm',
+		// 			value: value
+		// 		})
+		// 	}
+		// },
 		draft: {
 			get() {
 				return this.article.draft
@@ -205,6 +229,7 @@ export default {
 			this.SET_SINGLE_ARTICLE({});
 		}
 		this.loaded = true
+		this.getRealms()
 	},
 	methods: {
 		validate (btnType) {
@@ -229,7 +254,8 @@ export default {
 			'updateArticle',
 			'postArticle',
 			'fetchArticle',
-			'setSingleArticle'
+			'setSingleArticle',
+			'getRealms'
 		]),
 		cancel () {
 			this.$router.push({

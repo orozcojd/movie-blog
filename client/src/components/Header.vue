@@ -32,7 +32,6 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
-      color="accent"
       fixed
       app
       dense
