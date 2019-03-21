@@ -13,10 +13,13 @@
         md11
       >
         <div
-          class="post-category"
+          class="post-realm"
           align="left"
+          @click="navigateTo(article.realm)"
         >
-          {{ article.category }}
+          <strong>
+            {{ article.realm }}
+          </strong>
         </div>
         <h1
           class="post-title"
@@ -183,6 +186,14 @@ export default {
 		]),
 		setContent () {
 			this.editor.setContent(this.article.body, true)
+		},
+		navigateTo (tag) {
+			this.$router.push({
+				name: 'tag-view',
+				params: {
+					tagName: tag
+				}
+			})
 		}
 	}
 }
@@ -230,6 +241,9 @@ export default {
 		font-size: 1.7rem !important;
 		// font-family: 'Abel', sans-serif;
 	}
+}
+.post-realm {
+	cursor: pointer;
 }
 /* export to file */
 .post-title {

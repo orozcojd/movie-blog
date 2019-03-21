@@ -1,10 +1,11 @@
 const {Post} = require('../models')
 const {Tags} = require('../models')
 
-// Tags.remove({}, function(err) { 
-//   console.log('collection removed') 
+
+// Post.find().remove().exec();
+// Tags.collection.dropAllIndexes(function (err, results) {
+//   // Handle errors
 // });
-Tags.find().remove().exec();
 module.exports = {
   async postArticle (req, res) {
     /* 
@@ -52,9 +53,8 @@ module.exports = {
       gets all tag names 
     */
     try {
-      console.log(req.params.tagName)
       const tags = await Tags.find()
-      console.log(tags)
+      // console.log(tags)
       res.send(tags);
     }
     catch (err) {
@@ -72,13 +72,14 @@ module.exports = {
     try {
       let tags = []
       for(i = 0; i< req.body.length; i++) {
-        tags.push(await Tags.create(req.body[i]))
+        let tag = await Tags.create(req.body[i])
+        tags.push(tag)
       }
       res.send(tags);
     }
     catch (err) {
       res.status(400).send({
-          error: `An error has occured trying to get tags`,
+          error: `An error has occured trying to add tags`,
           details: err
       })
     }
@@ -91,9 +92,12 @@ module.exports = {
     */
     try {
       console.log(req.params.tagName)
-      const article = await Post.find({
-        tags: req.params.tagName
-      }).limit(12).sort('-created_at')
+      const article = await Post
+      .find({})
+      .or([{tags: req.params.tagName},{realm: req.params.tagName}])
+      .limit(12)
+      .sort({date: 'desc'})
+      .exec(function(err, docs) { console.log('error') });
       console.log(article)
       res.send(article);
     }

@@ -9,7 +9,7 @@
       wrap
     >
       <v-flex md12>
-        <h1>{{ realm }}</h1>
+        <h1>{{ tag }}</h1>
       </v-flex>
       <v-flex
         v-for="article in articles"
@@ -34,13 +34,13 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
   
-	name: 'RealmView',
+	name: 'TagView',
 	components: {
 		PostPreview
 	},
 	data () {
 		return {
-			realm: '',
+			tag: '',
 			loaded: false
 		}
 	},
@@ -50,14 +50,14 @@ export default {
 		]),
 	},
 	async mounted() {
-		let realm = this.$route.params.realmName
-		this.realm = realm.split('-').join(" ")
-		await this.getArticlesByRealm(realm)
+		let tag = this.$route.params.tagName
+		this.tag = tag.split('-').join(" ")
+		await this.getArticlesByTag(tag)
 		this.loaded = true
 	},
 	methods: {
 		...mapActions([
-			'getArticlesByRealm'
+			'getArticlesByTag'
 		])
 	},
 }

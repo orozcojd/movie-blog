@@ -1,6 +1,6 @@
 import Posts from '@/components/Posts/Posts'
 import Post from '@/components/Posts/Post'
-import RealmView from '@/components/Posts/RealmView'
+import TagView from '@/components/Posts/TagView'
 const postRoutes = [
 	{
 		path: '/',
@@ -13,9 +13,9 @@ const postRoutes = [
 		component: Post
 	},
 	{
-		path: '/realm/:realmName',
-		name: 'realm-view',
-		component: RealmView
+		path: '/tag/:tagName',
+		name: 'tag-view',
+		component: TagView
 	},
 ]
 

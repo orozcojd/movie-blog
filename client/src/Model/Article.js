@@ -2,7 +2,7 @@ class Article {
 	constructor (args = {}) {
 		this.fill(args)
 	}
-	fill ({ title = null, draft = null, author = null, body = null, thumbnailDescription = null, img = null, category = null }) {
+	fill ({ title = null, draft = null, author = null, body = null, thumbnailDescription = null, img = null, realm = null }) {
 		// this._id = _id
 		this.title = title
 		this.draft = draft
@@ -10,7 +10,7 @@ class Article {
 		this.body = body
 		this.thumbnailDescription = thumbnailDescription
 		this.img = img
-		this.category = category
+		this.realm = realm
 	}
 }
 export default Article

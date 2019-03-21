@@ -13,7 +13,7 @@ let articleSchema = new Schema({
 		type: Boolean,
 		default: false
 	},
-	category: String,
+	realm: String,
 	tags: [String],
 	img: String,
 	thumbnailDescription: String,

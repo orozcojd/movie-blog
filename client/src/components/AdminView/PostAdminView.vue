@@ -42,23 +42,27 @@
             label="Article Image"
             required 
           />
-          <v-text-field
-            v-model="category"
-            :rules="categoryRules"
+          <v-autocomplete
+            v-model="realm"
+            :items="tagChoices"
+            :rules="realmRules"
             :counter="20"
-            label="Category"
-            required 
+            item-text="name"
+            item-value="name"
+            label="Realm"
+            required
           />
           <v-autocomplete
-            v-model="realms"
-            :items="realmChoices"
-            item-text="realm"
+            v-model="tags"
+            :items="tagChoices"
+            item-text="name"
+            item-value="name"
+            :item-disabled="disableRealm"
             multiple
-            return-object
             label="Choose Tags"
-            persistent-hint
+            small-chips
+            deletable-chips
           />
-          {{ realms }}
           <tip-tap class="editor" />
           <v-btn
             :disabled="validation.cancelDisabled"
@@ -99,14 +103,14 @@ export default {
 	data () {
 		return {
 			isEditing: true,
-			realms: [],
+			// tags: [],
 			valid: true,
 			/* validation rules */
 			titleRules: PostValidation.titleRules,
 			authorRules: PostValidation.authorRules,
 			descriptionRules: PostValidation.descriptionRules,
 			imageRules: PostValidation.imageRules,
-			categoryRules: PostValidation.categoryRules,
+			realmRules: PostValidation.realmRules,
 
 			loaded: false,
 			requestRunning: false,
@@ -121,8 +125,9 @@ export default {
 	computed: {
 		...mapState({
 			article:'article',
-			realmChoices:'realms'
+			tagChoices: 'tags'
 		}),
+
 		...mapGetters([
 			'getArticle'		
 		]),
@@ -173,28 +178,28 @@ export default {
 				})
 			}
 		},
-		category: {
+		realm: {
 			get() {
-				return this.article.category
+				return this.article.realm
 			},
 			set(value) {
 				this.UPDATE_ARTICLE_CONTENT({
-					type: 'category',
+					type: 'realm',
 					value: value
 				})
 			}
 		},
-		// realm: {
-		// 	get() {
-		// 		return this.article.realm
-		// 	},
-		// 	set(value) {
-		// 		this.UPDATE_ARTICLE_CONTENT({
-		// 			type: 'realm',
-		// 			value: value
-		// 		})
-		// 	}
-		// },
+		tags: {
+			get() {
+				return this.article.tags
+			},
+			set(value) {
+				this.UPDATE_ARTICLE_CONTENT({
+					type: 'tags',
+					value: value
+				})
+			}
+		},
 		draft: {
 			get() {
 				return this.article.draft
@@ -209,7 +214,20 @@ export default {
 		/* 
 			end mapping state.article attributes to vuex mutations
 		*/
-
+	},
+	watch: {
+		realm(val) {
+			/* 
+				if realm chosen is in list of tags chosen,
+				remove from tag array 
+			*/
+			if(val && this.tags.length) {
+				let index = this.tags.findIndex(tag => tag == val)
+				if(index > -1){
+					this.REMOVE_POST_TAG(index)
+				}
+			}
+		}
 	},
 	async mounted () {
 		let id = this.$route.params.id
@@ -229,7 +247,8 @@ export default {
 			this.SET_SINGLE_ARTICLE({});
 		}
 		this.loaded = true
-		this.getRealms()
+		await this.getTags()
+		console.log(this.tagChoices)
 	},
 	methods: {
 		validate (btnType) {
@@ -246,16 +265,23 @@ export default {
 				}, 2000)				
 			}
 		},
+		disableRealm (name) {
+			// console.log(this.realm)
+			// console.log(name.name)
+			if(name.name === this.realm)
+				return true
+		},
 		...mapMutations([
 			'UPDATE_ARTICLE_CONTENT',
 			'SET_SINGLE_ARTICLE'
+			,'REMOVE_POST_TAG'
 		]),
 		...mapActions([
 			'updateArticle',
 			'postArticle',
 			'fetchArticle',
 			'setSingleArticle',
-			'getRealms'
+			'getTags'
 		]),
 		cancel () {
 			this.$router.push({

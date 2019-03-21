@@ -2,6 +2,7 @@ import PostAdminView from '@/components/AdminView/PostAdminView'
 import AdminPosts from '@/components/AdminView/Posts'
 import Index from '@/components/AdminView/Index'
 import AdminCategories from '@/components/AdminView/AdminCategories'
+import AdminMain from '@/components/AdminView/AdminMain'
 import Login from '@/components/AdminView/Login'
 import Register from '@/components/AdminView/Register'
 import AuthGuard from '@/components/Authentication/AuthGuard'
@@ -60,6 +61,12 @@ const adminRoutes = [
 				name: 'admin-edit-drafts',
 				component: AdminPosts,
 				props: { drafts: true },
+				beforeEnter: AuthGuard.adminGuard()
+			},
+			{
+				path: 'edit-main',
+				name: 'admin-edit-main',
+				component: AdminMain,
 				beforeEnter: AuthGuard.adminGuard()
 			}
 		]

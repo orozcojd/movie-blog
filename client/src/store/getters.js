@@ -20,5 +20,8 @@ export default {
 	},
 	getSingleArticle: (state) => {
 		return state.article
+	},
+	getTags: (state) => {
+		return state.tags
 	}
 }

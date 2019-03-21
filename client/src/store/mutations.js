@@ -48,10 +48,10 @@ export default {
     */
 		state.articles = payload
 	},
-	[types.FETCH_REALMS] (state, payload) {
-		state.realms = payload
+	[types.FETCH_TAGS] (state, payload) {
+		state.tags = payload
 	},
-	[types.FETCH_BY_REALM] (state, payload) {
+	[types.FETCH_BY_TAG] (state, payload) {
 		state.articles = payload
 	},
 	[types.FETCH_ARTICLE] (state, payload) {
@@ -82,7 +82,7 @@ export default {
 		/* 
 			sets state article attribute to payload
 		*/
-		state.article[payload.type] = payload.value
+		Vue.set(state.article, payload.type, payload.value)
 	},
 	[types.POST_ARTICLE] (state, payload) {
 		/*
@@ -101,12 +101,23 @@ export default {
 		let index = state.articles.findIndex(article => article._id === payload.id)
 		Vue.delete(state.articles, index)
 	},
+	[types.ADD_TAGS] (state, payload) {
+		console.log(payload)
+		state.tags.push(payload)
+	},
+	[types.SET_TAGS] (state, payload) {
+		state.tags = payload
+	},
+	[types.REMOVE_TAG] (state, payload) {
+		state.tags.splice(payload, 1)
+	},
+	[types.REMOVE_POST_TAG] (state, payload) {
+		state.article.tags.splice(payload, 1)
+	},
 	[types.PUSH_VIEWED] (state, payload) {
 		let index = state.viewedArticles.findIndex(article => article.id === payload.id)
-		console.log(index)
 		if (index == -1) {
 			state.viewedArticles.push(payload)
 		}
-		console.log(state.viewedArticles)
 	}
 }

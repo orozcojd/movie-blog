@@ -4,7 +4,7 @@
 
 <script>
 export default {
-	name: 'Songs',
+	name: 'Blank',
 	data () {
 		return {
 		}

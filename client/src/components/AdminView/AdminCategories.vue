@@ -55,7 +55,8 @@ export default {
 					// to:''
 				},
 				statistics: {
-					title: 'View Stats'
+					title: 'Edit Admin Content',
+					to: {name: 'admin-edit-main'}
 				}
 			}
 		}

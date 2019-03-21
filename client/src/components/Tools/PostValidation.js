@@ -21,9 +21,9 @@ export default {
     	v => (v && (v.endsWith(".jpg") || v.endsWith("jpeg") || v.endsWith(".bmp")
       || v.endsWith(".gif") || v.endsWith(".png"))) || 'Must be a valid image format'
     ],
-	categoryRules: 
+	realmRules: 
     [
-    	v => !!v || 'Category is required',
-    	v => (v && v.length <= 20) || 'Category must be less than 20 characters'
+    	v => !!v || 'Realm is required',
+    	v => (v && v.length <= 20) || 'Realm must be less than 20 characters'
     ],
 }

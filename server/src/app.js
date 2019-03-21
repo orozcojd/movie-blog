@@ -31,7 +31,6 @@ app.use((err, req, res, next) => {
 		res.json({'message' : err.name + ': ' + err.message});
 	}
 });
-
 mongoose.connect(config.db.database,{
 	useNewUrlParser: true 
 }
