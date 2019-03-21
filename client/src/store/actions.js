@@ -44,13 +44,16 @@ export default {
 		let article = (await Api().get(`articles/${id}`)).data
 		commit(types.FETCH_ARTICLE, article)
 	},
-	async getArticles ({commit},) {
-		let articles = (await Api().get('articles')).data
+	async getArticles ({commit}) {
+		let articles = (await Api().get('articles')).data		
 		commit(types.FETCH_ARTICLES, articles)
 	},
-	async getTags ({commit}, ) {
+	async getTags ({commit}) {
 		let tags = (await Api().get('tags')).data
 		commit(types.FETCH_TAGS, tags)
+	},
+	async setTag ({commit}, payload) {
+		commit(types.SET_TAG, payload)
 	},
 	async postTags({commit}, payload) {
 		console.log(payload)

@@ -1,7 +1,13 @@
 const {Post} = require('../models')
 const {Tags} = require('../models')
 
-
+ function getTagById(id) {
+  const tag = Tags.find({
+    _id: id
+  })
+  return tag.name
+  // console.log(tag)
+}
 // Post.find().remove().exec();
 // Tags.collection.dropAllIndexes(function (err, results) {
 //   // Handle errors
@@ -37,7 +43,10 @@ module.exports = {
     try {
       let options = req.body;
       console.log(options)
-      const articles = await Post.find().limit(12).sort('-created_at');
+      const articles = await Post
+      .find()
+      .limit(12)
+      .sort('-created_at');
       res.send(articles);   
     }
     catch (err) {
@@ -92,12 +101,13 @@ module.exports = {
     */
     try {
       console.log(req.params.tagName)
+      console.log('***')
       const article = await Post
       .find({})
       .or([{tags: req.params.tagName},{realm: req.params.tagName}])
       .limit(12)
       .sort({date: 'desc'})
-      .exec(function(err, docs) { console.log('error') });
+      // .exec(function(err, docs) { console.log('error') });
       console.log(article)
       res.send(article);
     }

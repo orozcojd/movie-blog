@@ -9,8 +9,14 @@
       wrap
     >
       <v-flex md12>
-        <h1>{{ tag }}</h1>
+        <h1>{{ tagName }}</h1>
       </v-flex>
+    </v-layout>
+    <v-layout
+      v-if="articles.length"
+      row
+      wrap
+    >
       <v-flex
         v-for="article in articles"
         :key="article.id"
@@ -22,6 +28,17 @@
           :article="article"
           to="article-view" 
         />
+      </v-flex>
+    </v-layout>
+    <v-layout
+      v-else
+      justify-center
+      align-center
+      row
+      fill-height
+    >
+      <v-flex>
+        <h1>Articles will be coming soon!</h1>
       </v-flex>
     </v-layout>
   </v-container>
@@ -40,26 +57,51 @@ export default {
 	},
 	data () {
 		return {
-			tag: '',
+			// tagName: '',
 			loaded: false
 		}
 	},
 	computed: {
 		...mapState([
-			'articles'
+			'articles',
+			'tags',
+			'tag'
 		]),
+		tagName() {
+			return this.tag.name.split('-').join(" ")
+		}
 	},
 	async mounted() {
-		let tag = this.$route.params.tagName
-		this.tag = tag.split('-').join(" ")
-		await this.getArticlesByTag(tag)
+		// this.tagName = this.tag.name.split('-').join(" ")
 		this.loaded = true
+		let urlTag = this.$route.params.tagName
+		if(this.tag.name !== urlTag) {
+			let newTag = this.tags.find(tag => tag.name === urlTag)
+			if(!newTag) {
+				// if tag does not exist, go back to previous route
+				this.$router.go(-1)
+			}
+			else {
+				console.log(newTag)
+				this.setTag(newTag)
+				this.getArticlesByTag(newTag._id)
+			}
+      
+		}
+		this.getArticlesByTag(this.tag._id)
 	},
 	methods: {
 		...mapActions([
-			'getArticlesByTag'
+			'getArticlesByTag',
+			'getTags',
+			'setTag'
 		])
 	},
+	watch: {
+		$route(to, from) {
+			console.log('changed')
+		}
+	}
 }
 </script>
 

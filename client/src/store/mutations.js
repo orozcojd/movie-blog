@@ -105,6 +105,10 @@ export default {
 		console.log(payload)
 		state.tags.push(payload)
 	},
+	[types.SET_TAG] (state, payload) {
+		console.log(payload)
+		state.tag = payload
+	},
 	[types.SET_TAGS] (state, payload) {
 		state.tags = payload
 	},

@@ -7,5 +7,6 @@ module.exports = () => ({
 	article: {},
 	new: [],
 	viewedArticles: [],
-	tags: []
+	tags: [],
+	tag: {}
 })

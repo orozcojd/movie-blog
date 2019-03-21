@@ -1,5 +1,6 @@
 <template>
   <v-container
+    v-if="loaded"
     class="post-content"
     style="padding: 1em 4em 4em 4em"
     fluid
@@ -15,10 +16,13 @@
         <div
           class="post-realm"
           align="left"
-          @click="navigateTo(article.realm)"
+          @click="navigateTo({
+            _id: article.realm,
+            name: articleRealm
+          })"
         >
           <strong>
-            {{ article.realm }}
+            {{ articleRealm }}
           </strong>
         </div>
         <h1
@@ -95,6 +99,7 @@ export default {
 	},
 	data () {
 		return {
+			loaded: false,
 			// article: {},
 			editor: new Editor({
 				extensions: [
@@ -130,7 +135,8 @@ export default {
 	},
 	computed: {
 		...mapState([
-			'article'
+			'article',
+			'tags'
 		]),
 		...mapGetters([
 			'getArticle'
@@ -146,6 +152,10 @@ export default {
 					minute: 'numeric'
 				})
 			return date
+		},
+		articleRealm() {
+			// console.log(this.tags.find(tag => tag._id === this.article.realm))
+			return this.tags.find(tag => tag._id === this.article.realm).name
 		}
 	},
 	async mounted () {
@@ -166,7 +176,10 @@ export default {
 		else {
 			this.SET_SINGLE_ARTICLE({});
 		}
-		// this.loaded = true
+		if(!this.tags.length) {
+			await this.getTags()
+		}
+		this.loaded = true
 		this.setContent()
 		let viewed = {
 			title: this.article.title,
@@ -178,7 +191,8 @@ export default {
 	methods: {
 		...mapActions([
 			'fetchArticle',
-			'setSingleArticle'
+			'setSingleArticle',
+			'getTags'
 		]),
 		...mapMutations([
 			'PUSH_VIEWED',
@@ -191,8 +205,9 @@ export default {
 			this.$router.push({
 				name: 'tag-view',
 				params: {
-					tagName: tag
-				}
+					tagName: tag.name,
+					id: tag._id
+				},
 			})
 		}
 	}
