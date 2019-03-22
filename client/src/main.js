@@ -13,7 +13,6 @@ import { sync } from 'vuex-router-sync'
 
 Vue.config.productionTip = false
 
-
 Vue.use(Vuetify, {
 	options:{
 		customProperties: true,
@@ -29,7 +28,6 @@ Vue.use(Vuetify, {
 		success: '#8bc34a'
 	}
 })
-
 
 sync(store, router)
 

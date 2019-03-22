@@ -1,6 +1,6 @@
-/* 
-  Schema for an Article  
-*/
+/**
+ * Schema for an Article  
+ */
 const mongoose = require('mongoose');
 
 let Schema = mongoose.Schema;

@@ -20,9 +20,6 @@ const postRoutes = [
 		name: 'tag-view',
 		component: TagView,
 		beforeEnter: ArticleGuard.tagViewGuard(),
-		beforeRouteLeave: (to, from, next) => {
-			console.log('leaving')
-		}, 
 		props: true
 	},
 	{

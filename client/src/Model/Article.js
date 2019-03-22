@@ -2,6 +2,10 @@ class Article {
 	constructor (args = {}) {
 		this.fill(args)
 	}
+	/**
+	 * Fills class with object attributes
+	 * @param {object} param0 
+	 */
 	fill ({ title = null, draft = null, author = null, body = null, thumbnailDescription = null, img = null, realm = null }) {
 		// this._id = _id
 		this.title = title

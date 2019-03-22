@@ -1,6 +1,6 @@
-/*
-    initializes all models and sources them as .model-name
-*/
+/**
+ * Initializes all models and sources them as .model-name
+ */
 fs = require('fs');
 fs
 	.readdirSync(__dirname)

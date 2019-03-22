@@ -96,11 +96,6 @@ export default {
 			'getTags',
 			'setTag'
 		])
-	},
-	watch: {
-		$route(to, from) {
-			console.log('changed')
-		}
 	}
 }
 </script>

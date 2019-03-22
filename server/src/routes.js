@@ -2,15 +2,17 @@
 
 const AuthenticationController = require('./controllers/AuthenticationController');
 const ArticlesController = require('./controllers/ArticlesController');
+const TagsController = require('./controllers/TagsController');
 
-const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy');
-const jwt = require('express-jwt');
-const config = require('./config/config');
 
-let auth = jwt({
-	secret: config.authentication.jwtSecret,
-	userProperty: 'payload'
-});
+// const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy');
+// const jwt = require('express-jwt');
+// const config = require('./config/config');
+
+// let auth = jwt({
+// 	secret: config.authentication.jwtSecret,
+// 	userProperty: 'payload'
+// });
 
 module.exports = (app) => {
     
@@ -29,9 +31,9 @@ module.exports = (app) => {
 		// auth,
 		ArticlesController.index);
 	app.post('/tags', 
-		ArticlesController.addTags);
+		TagsController.addTags);
 	app.get('/tags',
-		ArticlesController.getTags);
+		TagsController.getTags);
 	app.get('/tag/:tagName',
 		ArticlesController.getArticlesByTag);
 	app.get('/article-preview', 

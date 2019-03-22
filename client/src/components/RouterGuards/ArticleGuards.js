@@ -1,6 +1,12 @@
 import store from '@/store/index'
 
 export default {
+	/**
+	 * Returns an asyncfunction to fetch all tags and cross-check
+	 * the current route param name is found in any of the tags.
+	 * If not found, redirects to 404 page otherwise dispatches
+	 * action to set state tag to tag matched
+	 */
 	tagViewGuard() {
 		return async function(to, from, next) {
 			// console.log('ENTERED GUARD')

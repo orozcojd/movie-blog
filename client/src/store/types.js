@@ -22,8 +22,5 @@ export default {
 	AUTH_SUCCESS: 'AUTH_SUCCESS',
 	AUTH_ERR: 'AUTH_ERROR',
 
-	// actions
-
-	// getters
-
+	// add hard coded string values here
 }
