@@ -3,34 +3,23 @@
     fluid
     grid-list-md
   >
-    <v-layout
-      row
-      wrap
-    >
-      <v-flex
-        v-for="article in filterArticles"
-        :key="article.id"
-        md4
-        xs12
-      >
-        <post-preview
-          class="post-preview"
-          :article="article"
-          to="article-view" 
-        />
-      </v-flex>
-    </v-layout>
+    <display-articles 
+      :articles="filterArticles"
+      :admin="true"
+    />
   </v-container>
 </template>
 
 <script>
-import PostPreview from '@/components/AdminView/PostPreview'
+// import PostPreview from '@/components/AdminView/PostPreview'
+import DisplayArticles from '@/components/Layouts/DisplayArticles'
 import { mapActions, mapState } from 'vuex'
 
 export default {
 	name: 'AdminView',
 	components: {
-		PostPreview
+		// PostPreview,
+		DisplayArticles
 	},
 	props: {
 		drafts: {
@@ -42,11 +31,6 @@ export default {
 	data () {
 		return {
 		}
-	},
-	methods: {
-		...mapActions([
-			'getArticles'
-		])
 	},
 	computed: {
 		...mapState([
@@ -67,8 +51,14 @@ export default {
 		} catch (e) {
 			console.log(e)
 		}
+	},
+	methods: {
+		...mapActions([
+			'getArticles'
+		])
 	}
 }
+
 </script>
 
 <style scoped>

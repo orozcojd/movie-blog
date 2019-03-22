@@ -51,17 +51,9 @@
             row
             wrap
           >
-            <v-flex
-              v-for="article in filterArticles.slice(1)"
-              :key="article.id"
-              md4
-              xs12
-            >
-              <post-preview
-                class="post-preview"
-                :article="article"
-              />
-            </v-flex>
+            <display-articles 
+              :articles="filterArticles.slice(1)"
+            />
           </v-layout>
         </v-container>
       </v-flex>
@@ -71,16 +63,17 @@
 
 <script>
 'use strict'
-import PostPreview from '@/components/Posts/PostPreview'
 import LatestPost from '@/components/Posts/LatestPost'
+import DisplayArticles from '@/components/Layouts/DisplayArticles'
+
 import { mapActions, mapState } from 'vuex'
 
 // import WeeklyPostView from '@/components/Posts/WeeklyPostView'
 export default {
 	name: 'Posts',
 	components: {
-		PostPreview,
-		LatestPost
+		LatestPost,
+		DisplayArticles
 	},
 	data () {
 		return {
