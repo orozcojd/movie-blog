@@ -176,9 +176,9 @@ export default {
 		else {
 			this.SET_SINGLE_ARTICLE({});
 		}
-		if(!this.tags.length) {
-			await this.getTags()
-		}
+		// if(!this.tags.length) {
+		// 	await this.getTags()
+		// }
 		this.loaded = true
 		this.setContent()
 		let viewed = {

@@ -34,10 +34,10 @@ export default {
 			let payload = token.split('.')[1]
 			payload = window.atob(payload)
 			state.userTokenDetails = JSON.parse(payload)
-			localStorage.setItem('session-token', token)
+			localStorage.setItem('unsolicited-session-token', token)
 		} else {
 			state.userTokenDetails = null
-			window.localStorage.removeItem('session-token')
+			window.localStorage.removeItem('unsolicited-session-token')
 		}
 	},
 	/**
@@ -47,6 +47,12 @@ export default {
 	 */
 	[types.SET_USER] (state, user) {
 		state.user = user
+		if(user) {
+			localStorage.setItem('unsolicited-user', state.user)
+		}
+		else{ 
+			window.localStorage.removeItem('unsolicited-user')
+		}
 	},
 	/**
 	 * Sets articles array to payload
@@ -57,9 +63,21 @@ export default {
 		state.articles = payload
 	},
 	/**
+	 * Maps realm ref_id in payload to names in object
+	 * in state tags array
+	 * @param {Vuex state} state 
+	 * @param {Array} payload 
+	 */
+	[types.FETCH_REALMS] (state, payload) {
+		state.realms = payload.map(realm => ({
+			ref_id: realm.ref_id,
+			name: state.tags.find(tag => tag._id === realm.ref_id).name || 'null'
+		}))
+	},
+	/**
 	 * Sets the state tags object to payload object
 	 * @param {Vuex state} state 
-	 * @param {object} payload 
+	 * @param {Array} payload 
 	 */
 	[types.FETCH_TAGS] (state, payload) {
 		state.tags = payload
@@ -158,7 +176,7 @@ export default {
 	/**
 	 * Splices state tags array by value of payload
 	 * @param {Vuex state} state 
-	 * @param {int} payload 
+	 * @param {number} payload 
 	 */
 	[types.REMOVE_TAG] (state, payload) {
 		state.tags.splice(payload, 1)
@@ -166,7 +184,7 @@ export default {
 	/**
 	 * Splices state articles tags attribute array by value of payload
 	 * @param {Vuex state} state 
-	 * @param {int} payload 
+	 * @param {number} payload 
 	 */
 	[types.REMOVE_POST_TAG] (state, payload) {
 		state.article.tags.splice(payload, 1)

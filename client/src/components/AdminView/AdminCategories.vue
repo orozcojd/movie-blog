@@ -32,16 +32,16 @@ export default {
 	},
 	data () {
 		return {
-			categories: {
-				create: {
+			categories: [
+				{
 					title: 'Create Post',
 					to: {name: 'admin-create-post'}
 				},
-				edit: {
+				{
 					title: 'Edit Posts',
 					to: {name: 'admin-edit-posts'}
 				},
-				drafts: {
+				{
 					title: 'Edit Drafts',
 					to: {
 						name: 'admin-edit-drafts',
@@ -50,15 +50,19 @@ export default {
 						}
 					}
 				},
-				addAdmin: {
+				{
 					title: 'Add Admin User'
 					// to:''
 				},
-				statistics: {
-					title: 'Edit Admin Content',
+				{
+					title: 'Edit Tags',
 					to: {name: 'admin-edit-main'}
+				},
+				{
+					title: 'Edit Realm Page',
+					to: {name: 'admin-edit-realm'}
 				}
-			}
+			]
 		}
 	}
 }

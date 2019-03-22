@@ -104,13 +104,18 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
-  @media only screen and (max-width: 400px) {
+// @import url('../../assets/style/tiptap.scss');
+
+@media only screen and (max-width: 420px) {
     h1 {
-      font-size: 3rem !important;
+      font-size: 3.5rem !important;
     }
   }
+  // h1 {
+  //     font-size: 6.75rem !important;
+  //   }
   .container {
     padding-top: 0 !important;
   }

@@ -3,6 +3,7 @@
 const AuthenticationController = require('./controllers/AuthenticationController');
 const ArticlesController = require('./controllers/ArticlesController');
 const TagsController = require('./controllers/TagsController');
+const RealmsController = require('./controllers/RealmsController');
 
 
 // const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy');
@@ -30,10 +31,14 @@ module.exports = (app) => {
 	app.get('/articles',
 		// auth,
 		ArticlesController.index);
-	app.post('/tags', 
-		TagsController.addTags);
+	app.get('/realms', 
+		RealmsController.getRealms);
+	app.post('/realms', 
+		RealmsController.addRealms);
 	app.get('/tags',
 		TagsController.getTags);
+	app.post('/tags', 
+		TagsController.addTags);
 	app.get('/tag/:tagName',
 		ArticlesController.getArticlesByTag);
 	app.get('/article-preview', 

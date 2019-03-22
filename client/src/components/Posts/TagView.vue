@@ -68,7 +68,7 @@ export default {
 			'tag'
 		]),
 		tagName() {
-			return this.tag.name.split('-').join(" ")
+			return this.tag.name.split('-').join(' ')
 		}
 	},
 	async mounted() {

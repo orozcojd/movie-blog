@@ -22,8 +22,8 @@
       </v-flex>
     </v-layout>
     <v-layout
-      justify-center
-      row 
+      justify-start
+      row
       wrap
     >
       <v-flex
@@ -81,8 +81,15 @@
         </div>
       </v-flex>
     </v-layout>
-    <v-layout>
-      <v-flex>
+    <v-layout
+      justify-center
+      row
+      wrap
+    >
+      <v-flex
+        xs12
+        md4
+      >
         <v-btn
           to="/admin"
         >

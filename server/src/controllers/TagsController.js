@@ -30,7 +30,7 @@ module.exports = {
 	async addTags (req, res) {
 		try {
 			let tags = [];
-			for(i = 0; i< req.body.length; i++) {
+			for(let i = 0; i< req.body.length; i++) {
 				let tag = await Tags.create(req.body[i]);
 				tags.push(tag);
 			}

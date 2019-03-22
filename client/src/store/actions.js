@@ -34,12 +34,22 @@ export default {
 			resolve()
 		})
 	},
+	
 	/**
 	 * Commits mutation to set state token to param token
 	 * @param {commit} param0 
 	 * @param {String} token 
 	 */
 	setToken ({commit}, token) {
+		commit(types.SET_TOKEN, token)
+	},
+	/**
+	 * Commits mutation to set local storage item in store
+	 * @param {commit} param0 
+	 */
+	getSetToken ({commit, dispatch}) {
+		const token = localStorage.getItem('unsolicited-session-token')
+		dispatch('getSetUser')
 		commit(types.SET_TOKEN, token)
 	},
 	/**
@@ -51,12 +61,12 @@ export default {
 		commit(types.SET_USER, user)
 	},
 	/**
-	 * Commits mutation to set local storage item in store
+	 * Gets user name from local storage and sets it to state 
 	 * @param {commit} param0 
 	 */
-	getSetToken ({commit}) {
-		const token = localStorage.getItem('session-token')
-		commit(types.SET_TOKEN, token)
+	getSetUser ({commit}) {
+		const user = localStorage.getItem('unsolicited-user')
+		commit(types.SET_USER, user)
 	},
 	/**
 	 * Commits mutation to set state article attribute to payload param
@@ -92,6 +102,16 @@ export default {
 	async getArticles ({commit}) {
 		let articles = (await Api().get('articles')).data		
 		commit(types.FETCH_ARTICLES, articles)
+	},
+	/**
+	 * Calls api to GET all realms and commits muation to 
+	 * set state realms array to retrieved result
+	 * @param {commit} param0 
+	 */
+	async getRealms ({commit, dispatch}) {
+		await dispatch('getTags')
+		let realms = (await Api().get('realms')).data
+		commit(types.FETCH_REALMS, realms)
 	},
 	/**
 	 * Calls api to GET all tags and commits muation to 

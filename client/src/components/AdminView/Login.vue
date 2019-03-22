@@ -71,21 +71,6 @@ export default {
 				this.error = err
 			})
 		}
-	// 	async submit () {
-	// 		await AuthenticationService.login({
-	// 			email: this.credentials.email,
-	// 			password: this.credentials.password
-	// 		}).then(res => {
-	// 			this.setToken(res.data.token)
-	// 			this.setUser(this.credentials.email)
-	// 			this.error = null
-	// 			this.$router.push({
-	// 				path: '/admin'
-	// 			})
-	// 		}).catch(err => {
-	// 			this.error = err
-	// 		})
-	// 	}
 	}
 }
 </script>

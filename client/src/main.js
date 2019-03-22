@@ -19,13 +19,13 @@ Vue.use(Vuetify, {
 	},
 	iconfont: 'md',
 	theme:  {
-		primary: '#ffffff',
-		secondary: '#b0e0e6',
-		accent: '#c4ced4',
-		error: '#f44336',
-		warning: '#ff5722',
-		info: '#009688',
-		success: '#8bc34a'
+		// primary: '#ffffff',
+		// secondary: '#b0e0e6',
+		// accent: '#c4ced4',
+		// error: '#f44336',
+		// warning: '#ff5722',
+		// info: '#009688',
+		// success: '#8bc34a'
 	}
 })
 

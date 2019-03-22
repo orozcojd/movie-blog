@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import Header from '@/components/Header.vue'
+import Header from '@/components/Layouts/Header.vue'
 export default {
 	name: 'App',
 	components: {
