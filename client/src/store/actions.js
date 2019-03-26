@@ -69,6 +69,65 @@ export default {
 		commit(types.SET_USER, user)
 	},
 	/**
+	 * Calls api to GET all realms and commits muation to 
+	 * set state realms array to retrieved result
+	 * @param {commit} param0 
+	 */
+	async getRealms ({commit, dispatch}) {
+		await dispatch('getTags')
+		let realms = (await Api().get('realms')).data
+		commit(types.FETCH_REALMS, realms)
+	},
+	/**
+	 * Calls api to GET all tags and commits muation to 
+	 * set state tags array to retrieved result
+	 * @param {commit} param0 
+	 */
+	async getTags ({commit}) {
+		let tags = (await Api().get('tags')).data
+		commit(types.FETCH_TAGS, tags)
+	},
+	/**
+	 * Commits mutation to set state tag object to payload tag
+	 * @param {commit} param0 
+	 * @param {Object} payload 
+	 */
+	async setTag ({commit}, payload) {
+		commit(types.SET_TAG, payload)
+	},
+	/**
+	 * Calls api to POST array of tags 
+	 * TODO: Commit mutation to set state tagd array to retrieved result
+	 * @param {commit} param0 
+	 * @param {Array} payload 
+	 */
+	async postTags({commit}, payload) {
+		let tags = (await Api().post('tags', payload)).data
+		commit(types.ADD_TAGS, tags)
+	},
+	/**
+	 * Calls api to DELETE array of tags 
+	 * Vuex mutation called within component 
+	 * to delete tags from state
+	 * @param {commit} param0 
+	 * @param {Array} payload 
+	 */
+	deleteTags ({commit}, payload) {
+		return new Promise(async (resolve, reject) => {
+			let params = {
+				data: payload
+			}
+			let deletedTags = (await Api().delete('tags', params)).data
+			resolve(deletedTags.deleteCount)
+			// await Api().delete('tags', params)
+			console.log(deletedTags)
+			// commit(types.REMOVE_TAG, deletedTags)
+		}).catch(err => {
+			console.log(err)
+			reject(err)
+		})
+	},
+	/**
 	 * Commits mutation to set state article attribute to payload param
 	 * @param {commit} param0 
 	 * @param {Object} payload 
@@ -102,44 +161,6 @@ export default {
 	async getArticles ({commit}) {
 		let articles = (await Api().get('articles')).data		
 		commit(types.FETCH_ARTICLES, articles)
-	},
-	/**
-	 * Calls api to GET all realms and commits muation to 
-	 * set state realms array to retrieved result
-	 * @param {commit} param0 
-	 */
-	async getRealms ({commit, dispatch}) {
-		await dispatch('getTags')
-		let realms = (await Api().get('realms')).data
-		commit(types.FETCH_REALMS, realms)
-	},
-	/**
-	 * Calls api to GET all tags and commits muation to 
-	 * set state tags array to retrieved result
-	 * @param {commit} param0 
-	 */
-	async getTags ({commit}) {
-		let tags = (await Api().get('tags')).data
-		commit(types.FETCH_TAGS, tags)
-	},
-	/**
-	 * Commits mutation to set state tag object to payload tag
-	 * @param {commit} param0 
-	 * @param {Object} payload 
-	 */
-	async setTag ({commit}, payload) {
-		commit(types.SET_TAG, payload)
-	},
-	/**
-	 * Calls api to POST array of tags 
-	 * TODO: Commit mutation to set state tagd array to retrieved result
-	 * @param {commit} param0 
-	 * @param {array} payload 
-	 */
-	async postTags({commit}, payload) {
-		console.log(payload)
-		let tags = (await Api().post('tags')).data
-		console.log(tags)
 	},
 	/**
 	 * Calls api to GET articles with associated tags 

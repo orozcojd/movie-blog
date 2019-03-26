@@ -43,5 +43,26 @@ module.exports = {
 			});
 		}
 	},
-
+	async deleteTags (req, res) {
+		try {
+			let tags = [];
+			for(let i = 0; i< req.body.length; i++) {
+				let tag = await Tags.deleteOne({
+					_id: req.body[i]._id
+				});
+				tags.push({
+					deleteCount: tag.n,
+					id: req.body[i]._id
+				});
+			}
+			let reducer = (accumulate, currentVal) => ({deleteCount: accumulate.deleteCount + currentVal.deleteCount});
+			res.send(tags.reduce(reducer));
+		}
+		catch (err) {
+			res.status(400).send({
+				error: 'An error has occured trying to add tags',
+				details: err
+			});
+		}
+	},
 };

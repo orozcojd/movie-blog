@@ -37,8 +37,10 @@ module.exports = (app) => {
 		RealmsController.addRealms);
 	app.get('/tags',
 		TagsController.getTags);
-	app.post('/tags', 
+	app.post('/tags',
 		TagsController.addTags);
+	app.delete('/tags',
+		TagsController.deleteTags);
 	app.get('/tag/:tagName',
 		ArticlesController.getArticlesByTag);
 	app.get('/article-preview', 

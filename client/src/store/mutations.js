@@ -150,12 +150,27 @@ export default {
 		Vue.delete(state.articles, index)
 	},
 	/**
-	 * Adds tag object to state array of tags
+	 * Pushes each object from payload array into state tags 
+	 * array
 	 * @param {Vuex state} state 
-	 * @param {object*} payload 
+	 * @param {Array} payload 
 	 */
 	[types.ADD_TAGS] (state, payload) {
-		state.tags.push(payload)
+		for(let i = 0; i < payload.length; i++) {
+			state.tags.push(payload[i])
+		}
+	},
+	/**
+	 * Find matching _id in state tags array and sets name of tag 
+	 * to name in payload 
+	 * @param {Vuex state} state 
+	 * @param {Object} payload 
+	 */
+	[types.EDIT_TAG_NAME] (state, payload) {
+		// let index = state.tags.findIndex(tag => tag._id === payload.id)
+		let tag = state.tags.find(tag => tag._id === payload.id)
+		tag.name = payload.name
+		// Vue.set(state.tags, index, tag)
 	},
 	/**
 	 * Sets state tag to payloadal
