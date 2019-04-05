@@ -11,15 +11,38 @@
         xs12
         md4
       >
-        <v-text-field 
-          v-model="newTag"
-          label="Enter New Tags Here"
-        />
-        <v-btn
-          @click="addTag"
+        <v-snackbar
+          v-model="snackbar"
+          :timeout="6000"
+          :top="true"
         >
-          Add To List
-        </v-btn>
+          {{ text }}
+          <v-btn
+            color="pink"
+            flat
+            @click="snackbar = false"
+          >
+            Close
+          </v-btn>
+        </v-snackbar>
+        <v-form
+          ref="addTagForm"
+          v-model="AddTagValid"
+          lazy-validation
+        >
+          <v-text-field 
+            v-model="newTag"
+            required
+            :rules="newTagRules"
+            :counter="35"
+            label="Enter New Tag Separated By Spaces"
+          />
+          <v-btn
+            @click="addTag"
+          >
+            Add To List
+          </v-btn>
+        </v-form>
       </v-flex>
     </v-layout>
     <v-layout
@@ -35,11 +58,11 @@
           <h1>
             Established Tags
           </h1>
+          <!-- @input="remove(tag)" -->
           <v-chip
             v-for="(tag, index) in chipTags"
             :key="index"
             close
-            @input="remove(tag)"
           >
             {{ tag.name }}
           </v-chip>
@@ -86,6 +109,7 @@
       justify-center
       row
       wrap
+      class="mb-med"
     >
       <v-flex
         xs12
@@ -97,49 +121,68 @@
           Cancel
         </v-btn>
         <v-btn
-          @click="submit"
+          :color="addRemoveBtnType"
+          @click="addRemoveTags"
         >
-          Submit
+          Add/Remove Tags
         </v-btn>
       </v-flex>
     </v-layout>
     <h1>Edit Tag Names</h1>
-    <v-layout
-      row
-      wrap
+    <v-form
+      ref="editNameForm"
+      v-model="EditTagValid"
+      lazy-validation
     >
-      <v-flex
-        v-for="(tag, i) in tags"
-        :key="i"
-        md4
-        xs12
-        style="padding: 15px"
+      <v-layout
+        row
+        wrap
       >
-        <v-text-field
-          :value="tags[i].name"
-          @input="updateTagName($event, tag._id)"
-        />
-      </v-flex>
-      <v-snackbar
-        v-model="snackbar"
-        :timeout="6000"
-        :top="true"
-      >
-        {{ text }}
-        <v-btn
-          color="pink"
-          flat
-          @click="snackbar = false"
+        <v-flex
+          v-for="(tag, i) in tags"
+          :key="i"
+          md4
+          xs12
+          style="padding: 15px"
         >
-          Close
-        </v-btn>
-      </v-snackbar>
-    </v-layout>
+          <v-text-field
+            :value="tags[i].name"
+            :rules="tagRules"
+            :counter="35"
+            @input="updateTagName($event, tag._id)"
+          />
+        </v-flex>
+      </v-layout>
+      <v-layout
+        justify-center
+        row
+        wrap
+        class="mb-med"
+      >
+        <v-flex
+          xs12
+          md4
+        >
+          <v-btn
+            to="/admin"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            :color="editNameBtnType"
+            @click="updateTagNames"
+          >
+            Update Tag Names
+          </v-btn>
+        </v-flex>
+      </v-layout>
+    </v-form>
   </v-container>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
+import AdminMainValidation from '@/components/Tools/AdminMainValidation'
 export default {
 	name: 'AdminEditMain',
 	data () {
@@ -148,7 +191,13 @@ export default {
 			removedTags: [],
 			addedTags: [],
 			snackbar: false,
-			text: ''
+			text: '',
+			addRemoveBtnType: 'default',
+			editNameBtnType: 'default',
+			AddTagValid: true,
+			EditTagValid: true,
+			tagRules: AdminMainValidation.tagRules,
+			newTagRules: AdminMainValidation.newTagRules
 		}
 	},
 	computed: {
@@ -182,7 +231,8 @@ export default {
 		...mapActions([
 			'getTags',
 			'postTags',
-			'deleteTags'
+			'deleteTags',
+			'updateTags'
 		]),
 		updateTagName(name, id) {
 			this.EDIT_TAG_NAME({
@@ -190,11 +240,26 @@ export default {
 				name: name
 			})
 		},
+		updateTagNames() {
+			if (this.$refs.editNameForm.validate()) {
+				this.updateTags(this.tags).then(() => {
+					this.editNameBtnType = 'success'
+				})
+			}
+			else {
+				this.editNameBtnType = 'error'
+			}
+			setTimeout(() => {
+				this.editNameBtnType = 'default'
+			}, 1500)
+		},
 		addTag() {
-			if(this.newTag !== '') {
-				let tag = this.newTag.split(' ').join('-')
+			if (this.$refs.addTagForm.validate()) {
+				let tag = this.newTag.trim()
+				tag = tag.split(' ').join('-')
 				this.addedTags.push(tag)
 				this.newTag = ''
+				this.AddTagValid = true
 			}
 		},
 		remove(val) {
@@ -209,25 +274,35 @@ export default {
 			this.ADD_TAGS([tag])
 			this.removedTags.splice(this.removedTags.indexOf(tag), 1)
 		},
-		submit() {
+
+		addRemoveTags() {
 			if(this.addedTags.length){
-				this.postTags(this.addedTags.map(name => ({name: name})))
+				this.postTags(this.addedTags.map(name => ({name: name}))).then(() => {
+					this.addedTags = []
+				})
 			}
+      
+			// delete tags was commented out - code unreachable
 			if(this.removedTags.length) {
-				console.log(this.removedTags)
 				this.deleteTags(this.removedTags).then(tag => {
 					this.removedTags = []
-					console.log(tag)
 					this.text= "Delete: " + tag.toString() + " tags"
 					this.snackbar = true
 				}
 				)
 			}
+			// toggle success on button
+			this.addRemoveBtnType = 'success'
+			setTimeout(() => {
+				this.addRemoveBtnType = 'default'
+			}, 1500)
 		}
 	}
 }
 </script>
 
 <style scoped>
-
+  .mb-med {
+    margin-bottom: 80px;
+  }
 </style>

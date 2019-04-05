@@ -39,6 +39,8 @@ module.exports = (app) => {
 		TagsController.getTags);
 	app.post('/tags',
 		TagsController.addTags);
+	app.put('/tags',
+		TagsController.update);
 	app.delete('/tags',
 		TagsController.deleteTags);
 	app.get('/tag/:tagName',

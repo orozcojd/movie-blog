@@ -106,6 +106,17 @@ export default {
 		commit(types.ADD_TAGS, tags)
 	},
 	/**
+	 * Calls api to PUT array of tags - updating
+	 * names of tags in db and commiting to Vuex store
+	 * @param {commit} param0 
+	 * @param {Array} payload 
+	 */
+	async updateTags ({commit}, payload) {
+		let tags = (await Api().put('tags', payload)).data
+		console.log(tags)
+		commit(types.FETCH_TAGS, tags.tags)
+	},
+	/**
 	 * Calls api to DELETE array of tags 
 	 * Vuex mutation called within component 
 	 * to delete tags from state

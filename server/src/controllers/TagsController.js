@@ -43,6 +43,37 @@ module.exports = {
 			});
 		}
 	},
+	/**
+   * PUT REQUEST
+   * Updates array of tags by id in tag object and sends the returned 
+	 * response if valid -- otherwise sends 400 error 
+   * @param {Object} req 
+   * @param {Object} res 
+   */
+	async update (req, res) {
+		try {
+			let tags = req.body;
+			let updated = [];
+			for(let i = 0; i< tags.length; i++) {
+				let tag = tags[i];
+				const updatedTag = await Tags.findByIdAndUpdate(
+					tag._id,
+					tag,
+					{new: true}
+				);
+				updated.push(updatedTag);
+			}
+			res.send({
+				tags: updated
+			});
+		}
+		catch (err) {
+			res.status(400).send({
+				error: 'An error has occured trying to update the article',
+				details: err
+			});
+		}
+	},
 	async deleteTags (req, res) {
 		try {
 			let tags = [];

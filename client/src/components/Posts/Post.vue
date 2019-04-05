@@ -14,16 +14,19 @@
         md11
       >
         <div
-          class="post-realm"
           align="left"
-          @click="navigateTo({
-            _id: article.realm,
-            name: articleRealm
-          })"
         >
-          <strong>
-            {{ articleRealm }}
-          </strong>
+          <a
+            href="#"
+            @click.prevent="navigateTo({
+              _id: article.realm,
+              name: articleRealm
+            })"
+          >
+            <strong>
+              {{ upperCaseString(articleRealm) }}
+            </strong>
+          </a>
         </div>
         <h1
           class="post-title"
@@ -57,9 +60,25 @@
           class="post-body"
           :editor="editor"
         />
-        <!-- <p>
-      {{ article.body }}
-    </p> -->
+        <strong>
+          <ul
+            align="left"
+            class="tag-list"
+          >
+            <li
+              v-for="(tag, index) in article.tags"
+              :key="index"
+              class="tag"
+            >
+              <a
+                @click.prevent="navigateTo({
+                  _id: tag,
+                  name: convertTagIdToName(tag)
+                })"
+              >{{ upperCaseString(convertTagIdToName(tag)) }}</a>
+            </li>
+          </ul>
+        </strong>
       </v-flex>
     </v-layout>
   </v-container>
@@ -155,7 +174,7 @@ export default {
 		},
 		articleRealm() {
 			// console.log(this.tags.find(tag => tag._id === this.article.realm))
-			return this.tags.find(tag => tag._id === this.article.realm).name
+			return this.convertTagIdToName(this.article.realm)
 		}
 	},
 	async mounted () {
@@ -198,6 +217,19 @@ export default {
 			'PUSH_VIEWED',
 			'SET_SINGLE_ARTICLE'
 		]),
+		convertTagIdToName (id) {
+			return this.tags.find(tag => tag._id === id).name.trim()
+		},
+		upperCaseString(str) {
+			let strArr = str.split('-')
+			let upperArr = []
+			for(let i = 0; i < strArr.length; i++) {
+				let str = strArr[i]
+				upperArr.push(str.charAt(0).toUpperCase() + str.slice(1))
+			}
+			return upperArr.join(' ')
+
+		},
 		setContent () {
 			this.editor.setContent(this.article.body, true)
 		},
@@ -257,9 +289,11 @@ export default {
 		// font-family: 'Abel', sans-serif;
 	}
 }
-.post-realm {
-	cursor: pointer;
+a {
+		color: inherit !important;
+		text-decoration: none !important;
 }
+
 /* export to file */
 .post-title {
   font-family: 'Marcellus SC', serif;
@@ -278,6 +312,22 @@ export default {
 	font-size: 2rem;
 	font-family: 'Abel', sans-serif;
 }
-
+.tag {
+	display: inline-block;
+}
+.tag::after {
+	content: ', ';
+	white-space: pre;
+}
+.tag:last-child::after {
+	content: '';
+}
+.tag-list::before {
+	content: 'Tags: ';
+	white-space: pre;
+}
+.tag-list {
+	padding-left: 0;
+}
 // @import url('../../assets/style/post.css');
 </style>
