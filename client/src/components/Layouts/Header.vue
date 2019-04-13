@@ -127,7 +127,6 @@ export default {
 		return {
 			drawerRight: false,
 			right: null,
-			// realms: ['Technology', 'Women', 'Politics', 'Future', 'Lifestyle'],
 			account: [['Admin', 'goTo("/admin")'], ['Logout', 'logout']]
 		}
 	},
@@ -135,7 +134,7 @@ export default {
 		...mapState([
 			'viewedArticles',
 			'user',
-			'realms',
+			'token',
 			'tags'
 		]),
 		...mapGetters([
@@ -143,19 +142,26 @@ export default {
 			'isUserLoggedin',
 			'getUser'
 		]),
+		realms () {
+			return this.tags.filter(tag => tag.realm === true)
+		}
 	},
 	async mounted () {
-		if(!this.realms.length) {
-			await this.getRealms()
+		if(this.token) {
+			await this.getTags()
 		}
-		if (!this.getToken) {
+		else {
+			await this.getTags({
+				params: {
+					realm: true
+				}
+			})
 			this.getSetToken()
 		}
-		console.log(this.realms)
 	},
 	methods: {
 		...mapActions([
-			'getRealms',
+			'getTags',
 			'getSetToken',
 			'setToken',
 			'setUser',

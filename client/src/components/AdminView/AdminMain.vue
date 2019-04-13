@@ -145,12 +145,29 @@
           xs12
           style="padding: 15px"
         >
-          <v-text-field
-            :value="tags[i].name"
-            :rules="tagRules"
-            :counter="35"
-            @input="updateTagName($event, tag._id)"
-          />
+          <v-card>
+            <v-container>
+              <v-text-field
+                :value="tags[i].name"
+                :rules="tagRules"
+                :counter="35"
+                label="Tag Name"
+                @input="updateTag($event, 'name', tag._id)"
+              />
+              <v-switch
+                :input-value="tags[i].realm"
+                :label="`Realm: ${tags[i].realm}`"
+                @change="updateTag($event, 'realm', tag._id)"
+              />
+              <v-text-field
+                v-if="tags[i].realm"
+                :value="tags[i].img"
+                :rules="imageRules"
+                label="Realm Image"
+                @input="updateTag($event, 'img', tag._id)"
+              />
+            </v-container>
+          </v-card>
         </v-flex>
       </v-layout>
       <v-layout
@@ -170,7 +187,7 @@
           </v-btn>
           <v-btn
             :color="editNameBtnType"
-            @click="updateTagNames"
+            @click="updateTagInfo"
           >
             Update Tag Names
           </v-btn>
@@ -183,6 +200,8 @@
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 import AdminMainValidation from '@/components/Tools/AdminMainValidation'
+import PostValidation from '@/components/Tools/PostValidation'
+
 export default {
 	name: 'AdminEditMain',
 	data () {
@@ -196,8 +215,10 @@ export default {
 			editNameBtnType: 'default',
 			AddTagValid: true,
 			EditTagValid: true,
+			/* validation rules */
 			tagRules: AdminMainValidation.tagRules,
-			newTagRules: AdminMainValidation.newTagRules
+			newTagRules: AdminMainValidation.newTagRules,
+			imageRules: PostValidation.imageRules,
 		}
 	},
 	computed: {
@@ -215,18 +236,21 @@ export default {
 				})
 			}
 		},
+		realmSelection: {
+			get() {
+				return this.ta
+			}
+		}
 	},
 	async mounted() {
-		if(!this.tags){
-			await this.getTags()
-		}
+		await this.getTags()
 	},
 	methods: {
 		...mapMutations([
 			'ADD_TAGS',
 			'SET_TAGS',
 			'REMOVE_TAG',
-			'EDIT_TAG_NAME'
+			'EDIT_TAG_VAL',
 		]),
 		...mapActions([
 			'getTags',
@@ -234,13 +258,14 @@ export default {
 			'deleteTags',
 			'updateTags'
 		]),
-		updateTagName(name, id) {
-			this.EDIT_TAG_NAME({
+		updateTag(val, type, id) {
+			this.EDIT_TAG_VAL({
 				id: id,
-				name: name
+				type: type,
+				val: val
 			})
 		},
-		updateTagNames() {
+		updateTagInfo() {
 			if (this.$refs.editNameForm.validate()) {
 				this.updateTags(this.tags).then(() => {
 					this.editNameBtnType = 'success'
@@ -252,7 +277,7 @@ export default {
 			setTimeout(() => {
 				this.editNameBtnType = 'default'
 			}, 1500)
-		},
+		},    
 		addTag() {
 			if (this.$refs.addTagForm.validate()) {
 				let tag = this.newTag.trim()

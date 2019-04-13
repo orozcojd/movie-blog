@@ -4,14 +4,31 @@
     fluid
     grid-list-md
   >
+    <v-parallax 
+      v-if="tag.img"
+      :src="tag.img"
+      class="mb-lg"
+    >
+      <v-layout
+        align-center
+      >
+        <v-flex md12>
+          <h1>{{ tagName }}</h1>
+        </v-flex>
+      </v-layout>
+    </v-parallax>
+    <!-- <v-layout
+      v-if="tag.img"
+    >
+      <v-img 
+        :src="tag.img"
+        aspect-ratio="2"
+      />
+    </v-layout> -->
     <v-layout
       row
       wrap
-    >
-      <v-flex md12>
-        <h1>{{ tagName }}</h1>
-      </v-flex>
-    </v-layout>
+    />
     <v-layout
       v-if="articles.length"
       row
@@ -101,5 +118,10 @@ export default {
 </script>
 
 <style scoped>
-
+	.h1 {
+		font-size: 4em !important;
+	}
+	.mb-lg {
+		margin-bottom: 5em;
+	}
 </style>

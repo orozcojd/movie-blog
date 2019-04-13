@@ -6,7 +6,7 @@
     <v-layout
       row
       wrap
-      justify-space-around
+      justify-start
     >
       <v-flex
         v-for="(category,index) in categories"
@@ -57,10 +57,6 @@ export default {
 				{
 					title: 'Edit Tags',
 					to: {name: 'admin-edit-main'}
-				},
-				{
-					title: 'Edit Realm Page',
-					to: {name: 'admin-edit-realm'}
 				}
 			]
 		}

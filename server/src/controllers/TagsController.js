@@ -4,13 +4,15 @@ module.exports = {
 	/**
    * GET REQUEST
    * Gets all tag names in db and returns array of tags
+	 * if optional query passed in, applies it to search
    * @param {Object} req 
    * @param {Object} res 
    */
 	async getTags (req, res) {
 		try {
-			const tags = await Tags.find();
-			// console.log(tags)
+			const tags = await Tags.find(
+				req.query
+			);
 			res.send(tags);
 		}
 		catch (err) {

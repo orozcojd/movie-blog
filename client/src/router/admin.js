@@ -6,7 +6,6 @@ import AdminPosts from '@/components/AdminView/Posts'
 import Index from '@/components/AdminView/Index'
 import AdminCategories from '@/components/AdminView/AdminCategories'
 import AdminMain from '@/components/AdminView/AdminMain'
-import AdminRealms from '@/components/AdminView/AdminRealms'
 
 
 const adminRoutes = [
@@ -69,12 +68,6 @@ const adminRoutes = [
 				path: 'edit-main',
 				name: 'admin-edit-main',
 				component: AdminMain,
-				beforeEnter: AuthGuard.adminGuard()
-			},
-			{
-				path: 'edit-realms',
-				name: 'admin-edit-realm',
-				component: AdminRealms,
 				beforeEnter: AuthGuard.adminGuard()
 			}
 		]

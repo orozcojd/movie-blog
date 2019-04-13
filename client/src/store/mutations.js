@@ -63,18 +63,6 @@ export default {
 		state.articles = payload
 	},
 	/**
-	 * Maps realm ref_id in payload to names in object
-	 * in state tags array
-	 * @param {Vuex state} state 
-	 * @param {Array} payload 
-	 */
-	[types.FETCH_REALMS] (state, payload) {
-		state.realms = payload.map(realm => ({
-			ref_id: realm.ref_id,
-			name: state.tags.find(tag => tag._id === realm.ref_id).name || 'null'
-		}))
-	},
-	/**
 	 * Sets the state tags object to payload object
 	 * @param {Vuex state} state 
 	 * @param {Array} payload 
@@ -161,15 +149,15 @@ export default {
 		}
 	},
 	/**
-	 * Find matching _id in state tags array and sets name of tag 
-	 * to name in payload 
+	 * Find matching _id in state tags array and sets val of tag 
+	 * to val in payload 
 	 * @param {Vuex state} state 
 	 * @param {Object} payload 
 	 */
-	[types.EDIT_TAG_NAME] (state, payload) {
+	[types.EDIT_TAG_VAL] (state, payload) {
 		// let index = state.tags.findIndex(tag => tag._id === payload.id)
 		let tag = state.tags.find(tag => tag._id === payload.id)
-		tag.name = payload.name
+		tag[payload.type] = payload.val
 		// Vue.set(state.tags, index, tag)
 	},
 	/**

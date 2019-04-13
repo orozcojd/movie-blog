@@ -111,7 +111,6 @@ export default {
 			descriptionRules: PostValidation.descriptionRules,
 			imageRules: PostValidation.imageRules,
 			realmRules: PostValidation.realmRules,
-
 			loaded: false,
 			requestRunning: false,
 			validation: {

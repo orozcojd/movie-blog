@@ -69,22 +69,12 @@ export default {
 		commit(types.SET_USER, user)
 	},
 	/**
-	 * Calls api to GET all realms and commits muation to 
-	 * set state realms array to retrieved result
-	 * @param {commit} param0 
-	 */
-	async getRealms ({commit, dispatch}) {
-		await dispatch('getTags')
-		let realms = (await Api().get('realms')).data
-		commit(types.FETCH_REALMS, realms)
-	},
-	/**
 	 * Calls api to GET all tags and commits muation to 
 	 * set state tags array to retrieved result
 	 * @param {commit} param0 
 	 */
-	async getTags ({commit}) {
-		let tags = (await Api().get('tags')).data
+	async getTags ({commit}, options = {}) {
+		let tags = (await Api().get('tags', options)).data
 		commit(types.FETCH_TAGS, tags)
 	},
 	/**

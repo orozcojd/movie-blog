@@ -3,8 +3,6 @@
 const AuthenticationController = require('./controllers/AuthenticationController');
 const ArticlesController = require('./controllers/ArticlesController');
 const TagsController = require('./controllers/TagsController');
-const RealmsController = require('./controllers/RealmsController');
-
 
 // const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy');
 // const jwt = require('express-jwt');
@@ -31,10 +29,6 @@ module.exports = (app) => {
 	app.get('/articles',
 		// auth,
 		ArticlesController.index);
-	app.get('/realms', 
-		RealmsController.getRealms);
-	app.post('/realms', 
-		RealmsController.addRealms);
 	app.get('/tags',
 		TagsController.getTags);
 	app.post('/tags',

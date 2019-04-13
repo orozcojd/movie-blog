@@ -7,6 +7,14 @@ let tagSchema = new Schema({
 		unique: true,
 		set: v => v.toLowerCase().split(' ').join('-'),
 		get: v => v.toLowerCase().split(' ').join('-')
+	},
+	img: {
+		type: String,
+		default: null
+	},
+	realm: {
+		type: Boolean,
+		default: false
 	}
 });
 module.exports = mongoose.model('Tags', tagSchema);
