@@ -76,7 +76,11 @@ export default {
 	 * @param {object} payload 
 	 */
 	[types.FETCH_BY_TAG] (state, payload) {
-		state.articles = payload
+		state.articles = payload.message
+		state.pages = payload.pages
+		if(payload.pageNo) {
+			state.page = payload.pageNo
+		}
 	},
 	/**
 	 * Sets article object in store to array of articles

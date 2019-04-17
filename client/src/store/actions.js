@@ -169,8 +169,10 @@ export default {
 	 * @param {commit} param0 
 	 * @param {String} tag 
 	 */
-	async getArticlesByTag ({commit}, tag) {
-		let articles = (await Api().get(`/tag/${tag}`)).data
+	async getArticlesByTag ({commit}, payload) {
+		console.log(payload)
+		let articles = (await Api().get(`/tag/${payload.query}`, payload.params)).data
+		console.log(articles)
 		commit(types.FETCH_BY_TAG, articles)
 	},
 	/**

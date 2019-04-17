@@ -88,13 +88,14 @@ export default {
 		}
 	},
 	async mounted () {
-		try {
-			if (!this.articles.length) {
-				await this.getArticles()
-			}
-		} catch (e) {
-			// console.log(e)
-		}
+		await this.getArticles()
+		// try {
+		// 	if (!this.articles.length) {
+		// 		await this.getArticles()
+		// 	}
+		// } catch (e) {
+		// 	// console.log(e)
+		// }
 	},
 	methods: {
 		...mapActions([

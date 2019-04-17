@@ -8,5 +8,7 @@ module.exports = () => ({
 	new: [],
 	viewedArticles: [],
 	tags: [],
-	tag: {}
+	tag: {},
+	page: 1,
+	pages: null
 })

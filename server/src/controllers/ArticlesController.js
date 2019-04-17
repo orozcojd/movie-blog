@@ -61,16 +61,30 @@ module.exports = {
    */
 	async getArticlesByTag (req, res) {
 		try {
-			console.log(req.params.tagName);
-			console.log('***');
+			const size = 12;
+			let pageNo = parseInt(req.query.page);
+			let query = {};
+			if(pageNo <= 0 || isNaN(pageNo)) {
+				// set pageNo to 1 if invalid
+				pageNo = 1;
+			}
+			let count = await Post.countDocuments({$or: [{tags: req.params.tagName},{realm: req.params.tagName}]}) ;
+			query.skip = size * (pageNo - 1);
+			query.limit = size;
+			query.sort = {created_at: 'desc'};
 			const article = await Post
-				.find({})
-				.or([{tags: req.params.tagName},{realm: req.params.tagName}])
-				.limit(12)
-				.sort({date: 'desc'});
+				.find({
+					$or: [{tags: req.params.tagName},{realm: req.params.tagName}]
+				}, {}, query);
+			const response = {
+				'message': article,
+				'pages': Math.ceil(count/size),
+				'pageNo': pageNo
+
+			};
 			// .exec(function(err, docs) { console.log('error') });
-			console.log(article);
-			res.send(article);
+			// console.log(response)
+			res.send(response);
 		}
 		catch (err) {
 			res.status(400).send({

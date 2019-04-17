@@ -4,7 +4,7 @@
     fluid
     grid-list-md
   >
-    <v-parallax 
+    <!-- <v-parallax 
       v-if="tag.img"
       :src="tag.img"
       class="mb-lg"
@@ -16,15 +16,15 @@
           <h1>{{ tagName }}</h1>
         </v-flex>
       </v-layout>
-    </v-parallax>
-    <!-- <v-layout
+    </v-parallax> -->
+    <v-layout
       v-if="tag.img"
     >
       <v-img 
         :src="tag.img"
         aspect-ratio="2"
       />
-    </v-layout> -->
+    </v-layout>
     <v-layout
       row
       wrap
@@ -58,6 +58,10 @@
         <h1>Articles will be coming soon!</h1>
       </v-flex>
     </v-layout>
+    <v-pagination
+      v-model="pageNo"
+      :length="pages"
+    />
   </v-container>
 </template>
 
@@ -82,16 +86,33 @@ export default {
 		...mapState([
 			'articles',
 			'tags',
-			'tag'
+			'tag',
+			'pages',
+			'page'
 		]),
 		tagName() {
 			return this.tag.name.split('-').join(' ')
+		},
+		pageNo: {
+			get() {
+				return this.page
+			},
+			set(val) {
+				this.$router.push({name: 'tag-view', query: {page: val}})
+			}
 		}
 	},
 	async mounted() {
-		// this.tagName = this.tag.name.split('-').join(" ")
 		this.loaded = true
-		let urlTag = this.$route.params.tagName
+		const urlTag = this.$route.params.tagName
+		const page = this.$route.query.page
+		let payload = {
+			params: {
+				params: {
+					page: page
+				}
+			}
+		}
 		if(this.tag.name !== urlTag) {
 			let newTag = this.tags.find(tag => tag.name === urlTag)
 			if(!newTag) {
@@ -101,11 +122,12 @@ export default {
 			else {
 				console.log(newTag)
 				this.setTag(newTag)
-				this.getArticlesByTag(newTag._id)
+				payload.query = newTag._id
+				this.getArticlesByTag(payload)
 			}
-      
 		}
-		this.getArticlesByTag(this.tag._id)
+		payload.query = this.tag._id
+		this.getArticlesByTag(payload)
 	},
 	methods: {
 		...mapActions([
