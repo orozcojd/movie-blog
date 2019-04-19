@@ -176,7 +176,7 @@ export default {
 	 * @param {Vuex mutation} param0 
 	 * @param {Object} payload 
 	 */
-	async getNextArticles({commit}, payload) {
+	async getNextArticles({commit, dispatch}, payload) {
 		const params = {
 			params: {
 				tags: payload.article.tags,
@@ -187,6 +187,20 @@ export default {
 		const nextArticles = (await Api().get('associated-articles', params)).data
 		if(nextArticles.message.length)
 			commit(types.FETCH_NEXT_ARTICLES, nextArticles)
+		else {
+			commit(types.MAX_RELATED_REACHED)
+		}
+	},
+	async getLatestUnrelated({commit}, payload) {
+		let params = {
+			params: {
+				latestUnrelated: true,
+				...payload
+			}
+		}
+		const nextArticles = (await Api().get('associated-articles', params)).data
+		commit(types.FETCH_UNRELATED_ARTICLES, nextArticles)
+		console.log(nextArticles)
 	},
 	/**
 	 * Calls api to GET articles with associated tags 

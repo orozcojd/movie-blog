@@ -95,20 +95,21 @@ export default {
 
 	},
 	[types.FETCH_NEXT_ARTICLES] (state, payload) {
-		// state.articleIds = payload.message
-		state.infiniteArticles.push(...payload.message)
-		state.pageNo = payload.pageNo
-		state.associatedArticles.pageNo +=1
-		// reset current index to 0 for new articles
-		state.currIndex = 0
-		// console.log(state.articleIds)
+		if(payload.message.length) {
+			state.infiniteArticles.push(...payload.message)
+			state.associatedArticles.pageNo +=1
+		}
+	},
+	[types.FETCH_UNRELATED_ARTICLES] (state, payload) {
+		if(payload.message.length) {
+			state.infiniteArticles.push(...payload.message)
+			state.unAssociatedArticles.pageNo +=1
+		}
 	},
 	[types.RESET_NEXT_ARTICLES] (state) {
 		state.infiniteArticles = []
 		state.associatedArticles = {
 			pageNo: 1,
-			currIndex: 0,
-			nextArticle: null,
 			articleIds: []
 		}
 	},
@@ -141,6 +142,9 @@ export default {
 			copiedTags.push(tmp)
 		}
 		state.article.tags = copiedTags
+	},
+	[types.MAX_RELATED_REACHED] (state) {
+		state.associatedArticles.maxRelatedReached = true
 	},
 	/**
 	 * Finds the index of matching _id in articles array and updates value

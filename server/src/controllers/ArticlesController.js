@@ -37,7 +37,7 @@ module.exports = {
 			let options = req.body;
 			console.log(options);
 			const articles = await Post
-				.find()
+				.find().lean()
 				// .limit(12)
 				.sort('-created_at');
 			res.send(articles);   
@@ -73,7 +73,7 @@ module.exports = {
 			const article = await Post
 				.find({
 					$or: [{tags: req.params.tagName},{realm: req.params.tagName}]
-				}, {}, query);
+				}, {}, query).lean();
 			const response = {
 				'message': article,
 				'pages': Math.ceil(count/size),
@@ -97,26 +97,47 @@ module.exports = {
 	 */
 	async associatedArticles(req, res) {
 		try {
-			console.log('INSIDE ASSOCIATED ARTICLES');
-			const tags = req.query.tags;
-			const realm = req.query.realm;
-			const currId = req.query.id;
-			const pageNo = req.query.skipNo;
-			const size = 5;
-			let query = {};
-			query.skip = size * (pageNo - 1);
-			query.limit = size;
-			query.sort = {created_at: 'desc'};
-			const article = await Post
-				.find({
-					$or: [{tags: tags},{realm: realm}, {realm: tags}, {tags: realm}],
-					$and: [{_id: { $ne: currId }}]
-				}, {}, query);
-			const response = {
-				'message': article,
-				'pageNo': pageNo
-			};
-			res.send(response);
+			if(req.query.latestUnrelated === 'true') {
+				const pageNo = req.query.pageNo;
+				const excludeIds = req.query.excludeIds;
+				const currId = req.query.id;
+				const size = 5;
+				let query = {};
+				query.skip = size * (pageNo - 1);
+				query.limit = size;
+				query.sort = {created_at: 'desc'};
+				const article = await Post
+					.find({
+						_id: {$nin: excludeIds},
+						$and: [{_id: { $ne: currId }}]
+					}).lean();
+				const response = {
+					'message': article,
+					'pageNo': pageNo
+				};
+				res.send(response);
+			}
+			else {
+				const tags = req.query.tags;
+				const realm = req.query.realm;
+				const currId = req.query.id;
+				const pageNo = req.query.skipNo;
+				const size = 5;
+				let query = {};
+				query.skip = size * (pageNo - 1);
+				query.limit = size;
+				query.sort = {created_at: 'desc'};
+				const article = await Post
+					.find({
+						$or: [{tags: tags},{realm: realm}, {realm: tags}, {tags: realm}],
+						$and: [{_id: { $ne: currId }}]
+					}, {}, query).lean();
+				const response = {
+					'message': article,
+					'pageNo': pageNo
+				};
+				res.send(response);
+			}
 		}
 		catch (err) {
 			res.status(400).send({
@@ -150,7 +171,7 @@ module.exports = {
    */
 	async show (req, res) {
 		try {
-			const article = await Post.findById(req.params.articleId);
+			const article = await Post.findById(req.params.articleId).lean();
 			res.send(article);
 		}
 		catch (err) {

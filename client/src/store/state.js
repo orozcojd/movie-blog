@@ -14,8 +14,11 @@ module.exports = () => ({
 	pages: null,
 	associatedArticles: {
 		pageNo: 1,
-		currIndex: 0,
-		nextArticle: null,
-		articleIds: []
+		articleIds: [],
+		maxRelatedReached: false
+	},
+	unAssociatedArticles: {
+		pageNo: 1,
+		articleIds: [],
 	}
 })

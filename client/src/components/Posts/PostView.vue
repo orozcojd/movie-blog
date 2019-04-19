@@ -31,11 +31,15 @@ export default {
 			'article',
 			'tags',
 			'associatedArticles',
-			'infiniteArticles'
+			'infiniteArticles',
+			'unAssociatedArticles'
 		]),
 		...mapGetters([
 			'getArticle'
 		]),
+		infiniteArticleIds () {
+			return this.infiniteArticles.map(article => article._id)
+		}
 	},
 	async mounted() {
 		console.log('inside postView')
@@ -43,13 +47,7 @@ export default {
 		let id = this.$route.params.id
 		await this.loadArticle(id)
 		this.loaded = true
-    
-		// this.setContent()
 		this.articleViewed()
-		// await this.getNextArticles({
-		// 	article: this.article,
-		// 	pageNo: this.associatedArticles.pageNo
-		// })
 	},
 	methods: {
 		...mapActions([
@@ -57,7 +55,8 @@ export default {
 			'setSingleArticle',
 			'getTags',
 			'getNextArticles',
-			'resetNextArticles'
+			'resetNextArticles',
+			'getLatestUnrelated'
 		]),
 		...mapMutations([
 			'SET_SINGLE_ARTICLE',
@@ -73,10 +72,21 @@ export default {
 		},
 		async loadMore() {
 			this.busy = true
-			await this.getNextArticles({
-				article: this.article,
-				pageNo: this.associatedArticles.pageNo
-			})
+			if(!this.associatedArticles.maxRelatedReached) {
+				console.log('not reached yet')
+				await this.getNextArticles({
+					article: this.article,
+					pageNo: this.associatedArticles.pageNo
+				})
+			}
+			else {
+				console.log('reached!')
+				this.getLatestUnrelated({
+					excludeIds: this.infiniteArticleIds,
+					...this.unAssociatedArticles,
+					id: this.article._id
+				})
+			}
 			this.busy = false
 		},
 		async loadArticle (id) {
