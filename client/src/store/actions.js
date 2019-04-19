@@ -129,6 +129,14 @@ export default {
 		})
 	},
 	/**
+	 * Commits mutation to convert state article tags & realms
+	 * from names to IDs
+	 * @param {commit} param0 
+	 */
+	prepareArticle({commit}) {
+		commit(types.NEW_ARTICLE)
+	},
+	/**
 	 * Commits mutation to set state article attribute to payload param
 	 * @param {commit} param0 
 	 * @param {Object} payload 
@@ -168,16 +176,17 @@ export default {
 	 * @param {Vuex mutation} param0 
 	 * @param {Object} payload 
 	 */
-	async getNextArticleIds({commit}, payload) {
+	async getNextArticles({commit}, payload) {
 		const params = {
 			params: {
 				tags: payload.article.tags,
 				realm: payload.article.realm,
 				id: payload.article._id,
-				skipNo: payload.skipNo
+				skipNo: payload.pageNo
 			}}
-		const nextArticleIds = (await Api().get('associated-articles', params)).data
-		commit(types.FETCH_NEXT_ARTICLES, nextArticleIds)
+		const nextArticles = (await Api().get('associated-articles', params)).data
+		if(nextArticles.message.length)
+			commit(types.FETCH_NEXT_ARTICLES, nextArticles)
 	},
 	/**
 	 * Calls api to GET articles with associated tags 
@@ -186,9 +195,7 @@ export default {
 	 * @param {String} tag 
 	 */
 	async getArticlesByTag ({commit}, payload) {
-		console.log(payload.params)
 		let articles = (await Api().get(`/tag/${payload.query}`, payload.params)).data
-		console.log(articles)
 		commit(types.FETCH_BY_TAG, articles)
 	},
 	/**
@@ -221,5 +228,8 @@ export default {
 	async deleteArticle ({commit}, payload) {
 		let deleteCount = (await Api().delete(`article/${payload}`, payload)).data
 		commit(types.DELETE_ARTICLE, deleteCount)
+	},
+	async resetNextArticles({commit}) {
+		commit(types.RESET_NEXT_ARTICLES)
 	}
 }

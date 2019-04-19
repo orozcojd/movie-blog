@@ -60,6 +60,7 @@ export default {
 	 * @param {object} payload 
 	 */
 	[types.FETCH_ARTICLES] (state, payload) {
+		console.log('inside')
 		state.articles = payload
 	},
 	/**
@@ -90,13 +91,56 @@ export default {
 	 */
 	[types.FETCH_ARTICLE] (state, payload) {
 		state.article = payload
+		state.infiniteArticles.push(payload)
+
 	},
 	[types.FETCH_NEXT_ARTICLES] (state, payload) {
-		state.articleIds = payload.message
+		// state.articleIds = payload.message
+		state.infiniteArticles.push(...payload.message)
 		state.pageNo = payload.pageNo
+		state.associatedArticles.pageNo +=1
 		// reset current index to 0 for new articles
 		state.currIndex = 0
-		console.log(state.articleIds)
+		// console.log(state.articleIds)
+	},
+	[types.RESET_NEXT_ARTICLES] (state) {
+		state.infiniteArticles = []
+		state.associatedArticles = {
+			pageNo: 1,
+			currIndex: 0,
+			nextArticle: null,
+			articleIds: []
+		}
+	},
+	/**
+	 * Maps state article tags & realms to corresponding IDs
+	 * TODO: refactor code export copies to tools
+	 * @param {Vuex state} state 
+	 */
+	[types.NEW_ARTICLE] (state) {
+		// copy realm object
+		let found = state.tags.find(tag => tag._id === state.article.realm)
+		let realmObj = {}
+		if(found) {
+			realmObj._id = found._id
+			realmObj.name = found.name
+			realmObj.img = found.image
+		}
+		state.article.realm = realmObj
+		// copy tags objects
+		found = state.tags.filter(function(tag) {
+			return this.indexOf(tag._id) >= 0;
+		},state.article.tags)
+		let copiedTags = []
+		for(let i = 0; i < found.length; i++) {
+			let current = found[i]
+			let tmp = {}
+			tmp._id = current._id
+			tmp.name = current.name
+			tmp.img = current.img
+			copiedTags.push(tmp)
+		}
+		state.article.tags = copiedTags
 	},
 	/**
 	 * Finds the index of matching _id in articles array and updates value
@@ -113,12 +157,15 @@ export default {
 		}
 	},
 	/**
-	 * Sets article state to array of articles
+	 * Sets article state payload and pushes article to
+	 * ifiniteArticles state
 	 * @param {Vuex state} state 
-	 * @param {array} payload 
+	 * @param {Object} payload 
 	 */
 	[types.SET_SINGLE_ARTICLE] (state, payload) {
+		console.log(payload)
 		state.article = payload
+		state.infiniteArticles.push(payload)
 	},
 	/**
 	 * Sets state article attribute to payload

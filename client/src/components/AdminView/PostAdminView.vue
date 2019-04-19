@@ -50,6 +50,7 @@
             item-text="name"
             item-value="name"
             label="Realm"
+            return-object
             required
           />
           <v-autocomplete
@@ -60,6 +61,7 @@
             :item-disabled="disableRealm"
             multiple
             label="Choose Tags"
+            return-object
             small-chips
             deletable-chips
           />
@@ -220,7 +222,7 @@ export default {
 				if realm chosen is in list of tags chosen,
 				remove from tag array 
 			*/
-			if(val && this.tags.length) {
+			if(val && this.tags && this.tags.length) {
 				let index = this.tags.findIndex(tag => tag == val)
 				if(index > -1){
 					this.REMOVE_POST_TAG(index)
@@ -245,9 +247,10 @@ export default {
 		else {
 			this.SET_SINGLE_ARTICLE({});
 		}
+		this.prepareArticle()
 		this.loaded = true
-		await this.getTags()
-		console.log(this.tagChoices)
+		// await this.getTags()
+
 	},
 	methods: {
 		validate (btnType) {
@@ -280,7 +283,8 @@ export default {
 			'postArticle',
 			'fetchArticle',
 			'setSingleArticle',
-			'getTags'
+			'getTags',
+			'prepareArticle'
 		]),
 		cancel () {
 			this.$router.push({
@@ -302,9 +306,10 @@ export default {
 				}
 				await this.updateArticle(payload)
 			} else {
+
 				await this.postArticle(new Article(this.article))
 			}
-			// this.validation.error = ''
+			this.validation.error = ''
 			setTimeout(() => {
 				this.$router.push({
 					name: 'root'

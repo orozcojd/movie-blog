@@ -63,7 +63,7 @@
         >
           <template v-slot:activator>
             <v-list-tile>
-              <v-list-tile-title>Recently Viewed</v-list-tile-title>
+              <v-list-tile-title>Recently Visited</v-list-tile-title>
             </v-list-tile>
           </template>
           <v-list-tile
@@ -181,7 +181,7 @@ export default {
 			this.$router.push({
 				name: name,
 				params: params,
-				query: {page: 1}
+				// query: {page: 1}
 			})
 		}
 	}

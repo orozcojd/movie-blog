@@ -7,12 +7,14 @@ import Vuetify from 'vuetify'
 import store from '@/store/index'
 import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import infiniteScroll from 'vue-infinite-scroll'
 
 import { sync } from 'vuex-router-sync'
 // import colors from 'vuetify/es5/util/colors'
 
 Vue.config.productionTip = false
 
+Vue.use(infiniteScroll)
 Vue.use(Vuetify, {
 	options:{
 		customProperties: true,

@@ -5,6 +5,7 @@ module.exports = () => ({
 	user: null,
 	articles: [],
 	article: {},
+	infiniteArticles: [],
 	new: [],
 	viewedArticles: [],
 	tags: [],

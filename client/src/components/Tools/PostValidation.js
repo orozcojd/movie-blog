@@ -24,6 +24,6 @@ export default {
 	realmRules: 
 		[
 			v => !!v || 'Realm is required',
-			v => (v && v.length <= 20) || 'Realm must be less than 20 characters'
+			v => (v && v._id !== undefined && v._id !== null) || 'Realm must be selected from the following drop down.'
 		],
 }

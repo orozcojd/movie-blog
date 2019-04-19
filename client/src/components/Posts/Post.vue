@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import ParagraphAlignmentNode from '@/components/Tools/ParagraphAlignment'
 import Iframe from '@/components/Tools/Iframe'
 import { Editor, EditorContent} from 'tiptap'
@@ -115,6 +115,10 @@ export default {
 		EditorContent
 	},
 	props: {
+		article: {
+			type: Object,
+			required: true
+		}
 	},
 	data () {
 		return {
@@ -153,13 +157,11 @@ export default {
 	},
 	computed: {
 		...mapState([
-			'article',
 			'tags',
-			'associatedArticles'
 		]),
-		...mapGetters([
-			'getArticle'
-		]),
+		// 	...mapGetters([
+		// 		'getArticle'
+		// 	]),
 		articleDate() {
 			let date = new Date(this.article.updatedAt).toLocaleString('en-us', 
 				{ 
@@ -178,53 +180,23 @@ export default {
 		}
 	},
 	async mounted () {
-		/* later change to - if not found in store fetch */
-		let id = this.$route.params.id
-		await this.loadArticle(id)
+		console.log('CALLING MOUNTED AGAIN')
+		await this.setContent()
 		this.loaded = true
-		this.setContent()
-		this.articleViewed()
-		await this.getNextArticleIds({
-			article: this.article,
-			pageNo: this.associatedArticles.pageNo
-		})
+		// this.articleViewed()
 	},
 	methods: {
-		...mapActions([
-			'fetchArticle',
-			'setSingleArticle',
-			'getTags',
-			'getNextArticleIds'
-		]),
 		...mapMutations([
 			'PUSH_VIEWED',
-			'SET_SINGLE_ARTICLE'
 		]),
-		async loadArticle (id) {
-		// if article not found in store, fetch it
-			if(id){
-				let article = this.getArticle(id)
-				if(article) {
-				// if article set article state to article found in articles array
-					this.setSingleArticle(article)
-				}
-				else {
-				// else fetch then set article state
-					await this.fetchArticle(id)
-				}
-			}
-			else {
-				this.SET_SINGLE_ARTICLE({});
-			}
-		},
-		articleViewed () {
-			let viewed = {
-				title: this.article.title,
-				id: this.article._id,
-				img: this.article.img
-			}
-			this.PUSH_VIEWED(viewed)
-		},
+		// articleViewed () {
+		// 	let viewed = {
+		// 		title: this.article.title,
+		// 		id: this.article._id,
+		// 		img: this.article.img
+		// 	}
+		// 	this.PUSH_VIEWED(viewed)
+		// },
 		convertTagIdToName (id) {
 			return this.tags.find(tag => tag._id === id).name.trim()
 		},
@@ -236,10 +208,10 @@ export default {
 				upperArr.push(str.charAt(0).toUpperCase() + str.slice(1))
 			}
 			return upperArr.join(' ')
-
 		},
-		setContent () {
-			this.editor.setContent(this.article.body, true)
+		async setContent () {
+			await this.editor.clearContent(true)
+			await this.editor.setContent(this.article.body, true)
 		},
 		navigateTo (tag) {
 			this.$router.push({
@@ -251,6 +223,67 @@ export default {
 			})
 		}
 	}
+	// 	...mapActions([
+	// 		'fetchArticle',
+	// 		'setSingleArticle',
+	// 		'getTags',
+	// 		'getNextArticles'
+	// 	]),
+	// 	...mapMutations([
+	// 		'PUSH_VIEWED',
+	// 		'SET_SINGLE_ARTICLE'
+	// 	]),
+	// 	async loadArticle (id) {
+	// 	// if article not found in store, fetch it
+	// 		if(id){
+	// 			let article = this.getArticle(id)
+	// 			if(article) {
+	// 			// if article set article state to article found in articles array
+	// 				this.setSingleArticle(article)
+	// 			}
+	// 			else {
+	// 			// else fetch then set article state
+	// 				await this.fetchArticle(id)
+	// 			}
+	// 		}
+	// 		else {
+	// 			this.SET_SINGLE_ARTICLE({});
+	// 		}
+	// 	},
+	// 	articleViewed () {
+	// 		let viewed = {
+	// 			title: this.article.title,
+	// 			id: this.article._id,
+	// 			img: this.article.img
+	// 		}
+	// 		this.PUSH_VIEWED(viewed)
+	// 	},
+	// 	convertTagIdToName (id) {
+	// 		return this.tags.find(tag => tag._id === id).name.trim()
+	// 	},
+	// 	upperCaseString(str) {
+	// 		let strArr = str.split('-')
+	// 		let upperArr = []
+	// 		for(let i = 0; i < strArr.length; i++) {
+	// 			let str = strArr[i]
+	// 			upperArr.push(str.charAt(0).toUpperCase() + str.slice(1))
+	// 		}
+	// 		return upperArr.join(' ')
+
+	// 	},
+	// 	setContent () {
+	// 		this.editor.setContent(this.article.body, true)
+	// 	},
+	// 	navigateTo (tag) {
+	// 		this.$router.push({
+	// 			name: 'tag-view',
+	// 			params: {
+	// 				tagName: tag.name,
+	// 				id: tag._id
+	// 			},
+	// 		})
+	// 	}
+	// }
 }
 </script>
 

@@ -102,18 +102,18 @@ module.exports = {
 			const realm = req.query.realm;
 			const currId = req.query.id;
 			const pageNo = req.query.skipNo;
-			const size = 30;
+			const size = 5;
 			let query = {};
 			query.skip = size * (pageNo - 1);
 			query.limit = size;
 			query.sort = {created_at: 'desc'};
 			const article = await Post
 				.find({
-					$or: [{tags: {$in: tags}},{realm: realm}],
+					$or: [{tags: tags},{realm: realm}, {realm: tags}, {tags: realm}],
 					$and: [{_id: { $ne: currId }}]
 				}, {}, query);
 			const response = {
-				'message': article.map((article) => article._id),
+				'message': article,
 				'pageNo': pageNo
 			};
 			res.send(response);
