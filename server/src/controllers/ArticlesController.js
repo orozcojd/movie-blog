@@ -13,9 +13,7 @@ module.exports = {
    */
 	async postArticle (req, res) {
 		try {
-			console.log('asdasd');
 			const article = await Post.create(req.body);
-			console.log(article);
 			res.send({
 				article: article
 			});
@@ -40,7 +38,7 @@ module.exports = {
 			console.log(options);
 			const articles = await Post
 				.find()
-				.limit(12)
+				// .limit(12)
 				.sort('-created_at');
 			res.send(articles);   
 		}
@@ -82,13 +80,47 @@ module.exports = {
 				'pageNo': pageNo
 
 			};
-			// .exec(function(err, docs) { console.log('error') });
-			// console.log(response)
 			res.send(response);
 		}
 		catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get article tag',
+				details: err
+			});
+		}
+	},
+	/**
+	 * Gets associated articles by TAG or REALM otherwise sends latest
+	 * articles 
+	 * @param {Object} req 
+	 * @param {Object} res 
+	 */
+	async associatedArticles(req, res) {
+		try {
+			console.log('INSIDE ASSOCIATED ARTICLES');
+			const tags = req.query.tags;
+			const realm = req.query.realm;
+			const currId = req.query.id;
+			const pageNo = req.query.skipNo;
+			const size = 30;
+			let query = {};
+			query.skip = size * (pageNo - 1);
+			query.limit = size;
+			query.sort = {created_at: 'desc'};
+			const article = await Post
+				.find({
+					$or: [{tags: {$in: tags}},{realm: realm}],
+					$and: [{_id: { $ne: currId }}]
+				}, {}, query);
+			const response = {
+				'message': article.map((article) => article._id),
+				'pageNo': pageNo
+			};
+			res.send(response);
+		}
+		catch (err) {
+			res.status(400).send({
+				error: 'An error has occured trying to get associated articles',
 				details: err
 			});
 		}

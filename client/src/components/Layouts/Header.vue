@@ -147,17 +147,17 @@ export default {
 		}
 	},
 	async mounted () {
-		if(this.token) {
-			await this.getTags()
+		if(!this.token) {
+			this.getSetToken()		
 		}
-		else {
-			await this.getTags({
-				params: {
-					realm: true
-				}
-			})
-			this.getSetToken()
-		}
+		this.getTags()
+		// else {
+		// 	await this.getTags({
+		// 		params: {
+		// 			realm: true
+		// 		}
+		// 	})
+		// }
 	},
 	methods: {
 		...mapActions([

@@ -120,7 +120,6 @@ export default {
 				this.$router.go(-1)
 			}
 			else {
-				console.log(newTag)
 				this.setTag(newTag)
 				payload.query = newTag._id
 				this.getArticlesByTag(payload)

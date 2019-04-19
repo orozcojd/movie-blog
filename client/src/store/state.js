@@ -10,5 +10,11 @@ module.exports = () => ({
 	tags: [],
 	tag: {},
 	page: 1,
-	pages: null
+	pages: null,
+	associatedArticles: {
+		pageNo: 1,
+		currIndex: 0,
+		nextArticle: null,
+		articleIds: []
+	}
 })

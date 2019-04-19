@@ -164,13 +164,29 @@ export default {
 		commit(types.FETCH_ARTICLES, articles)
 	},
 	/**
+	 * 
+	 * @param {Vuex mutation} param0 
+	 * @param {Object} payload 
+	 */
+	async getNextArticleIds({commit}, payload) {
+		const params = {
+			params: {
+				tags: payload.article.tags,
+				realm: payload.article.realm,
+				id: payload.article._id,
+				skipNo: payload.skipNo
+			}}
+		const nextArticleIds = (await Api().get('associated-articles', params)).data
+		commit(types.FETCH_NEXT_ARTICLES, nextArticleIds)
+	},
+	/**
 	 * Calls api to GET articles with associated tags 
 	 * from tag param and commits mutation to set state articles array
 	 * @param {commit} param0 
 	 * @param {String} tag 
 	 */
 	async getArticlesByTag ({commit}, payload) {
-		console.log(payload)
+		console.log(payload.params)
 		let articles = (await Api().get(`/tag/${payload.query}`, payload.params)).data
 		console.log(articles)
 		commit(types.FETCH_BY_TAG, articles)

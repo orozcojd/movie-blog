@@ -148,14 +148,14 @@ export default {
 					color: '#f00',
 					width: 5,
 				},
-
 			})
 		}
 	},
 	computed: {
 		...mapState([
 			'article',
-			'tags'
+			'tags',
+			'associatedArticles'
 		]),
 		...mapGetters([
 			'getArticle'
@@ -180,43 +180,51 @@ export default {
 	async mounted () {
 		/* later change to - if not found in store fetch */
 		let id = this.$route.params.id
-		// if article not found in store, fetch it
-		if(id){
-			let article = this.getArticle(id)
-			if(article) {
-				// if article set article state to article found in articles array
-				this.setSingleArticle(article)
-			}
-			else {
-				// else fetch then set article state
-				await this.fetchArticle(id)
-			}
-		}
-		else {
-			this.SET_SINGLE_ARTICLE({});
-		}
-		// if(!this.tags.length) {
-		// 	await this.getTags()
-		// }
+		await this.loadArticle(id)
 		this.loaded = true
 		this.setContent()
-		let viewed = {
-			title: this.article.title,
-			id: this.article._id,
-			img: this.article.img
-		}
-		this.PUSH_VIEWED(viewed)
+		this.articleViewed()
+		await this.getNextArticleIds({
+			article: this.article,
+			pageNo: this.associatedArticles.pageNo
+		})
 	},
 	methods: {
 		...mapActions([
 			'fetchArticle',
 			'setSingleArticle',
-			'getTags'
+			'getTags',
+			'getNextArticleIds'
 		]),
 		...mapMutations([
 			'PUSH_VIEWED',
 			'SET_SINGLE_ARTICLE'
 		]),
+		async loadArticle (id) {
+		// if article not found in store, fetch it
+			if(id){
+				let article = this.getArticle(id)
+				if(article) {
+				// if article set article state to article found in articles array
+					this.setSingleArticle(article)
+				}
+				else {
+				// else fetch then set article state
+					await this.fetchArticle(id)
+				}
+			}
+			else {
+				this.SET_SINGLE_ARTICLE({});
+			}
+		},
+		articleViewed () {
+			let viewed = {
+				title: this.article.title,
+				id: this.article._id,
+				img: this.article.img
+			}
+			this.PUSH_VIEWED(viewed)
+		},
 		convertTagIdToName (id) {
 			return this.tags.find(tag => tag._id === id).name.trim()
 		},

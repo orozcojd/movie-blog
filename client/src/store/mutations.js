@@ -72,6 +72,7 @@ export default {
 	},
 	/**
 	 * Sets articles object to payload
+	 * TODO Remove state.page in all code.
 	 * @param {Vuex state} state 
 	 * @param {object} payload 
 	 */
@@ -89,6 +90,13 @@ export default {
 	 */
 	[types.FETCH_ARTICLE] (state, payload) {
 		state.article = payload
+	},
+	[types.FETCH_NEXT_ARTICLES] (state, payload) {
+		state.articleIds = payload.message
+		state.pageNo = payload.pageNo
+		// reset current index to 0 for new articles
+		state.currIndex = 0
+		console.log(state.articleIds)
 	},
 	/**
 	 * Finds the index of matching _id in articles array and updates value
