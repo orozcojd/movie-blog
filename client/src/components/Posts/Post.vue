@@ -8,6 +8,7 @@
     <v-layout
       align-center
       justify-center
+      class="article-layout"
     >
       <v-flex
         xs12
@@ -62,6 +63,7 @@
         />
         <strong>
           <ul
+            v-if="article.tags.length"
             align="left"
             class="tag-list"
           >
@@ -81,6 +83,9 @@
         </strong>
       </v-flex>
     </v-layout>
+    <div
+      class="after-article"
+    />
   </v-container>
 </template>
 
@@ -159,9 +164,6 @@ export default {
 		...mapState([
 			'tags',
 		]),
-		// 	...mapGetters([
-		// 		'getArticle'
-		// 	]),
 		articleDate() {
 			let date = new Date(this.article.updatedAt).toLocaleString('en-us', 
 				{ 
@@ -175,28 +177,18 @@ export default {
 			return date
 		},
 		articleRealm() {
-			// console.log(this.tags.find(tag => tag._id === this.article.realm))
 			return this.convertTagIdToName(this.article.realm)
 		}
 	},
 	async mounted () {
-		console.log('CALLING MOUNTED AGAIN')
+		console.log('inside post')
 		await this.setContent()
 		this.loaded = true
-		// this.articleViewed()
 	},
 	methods: {
 		...mapMutations([
 			'PUSH_VIEWED',
 		]),
-		// articleViewed () {
-		// 	let viewed = {
-		// 		title: this.article.title,
-		// 		id: this.article._id,
-		// 		img: this.article.img
-		// 	}
-		// 	this.PUSH_VIEWED(viewed)
-		// },
 		convertTagIdToName (id) {
 			return this.tags.find(tag => tag._id === id).name.trim()
 		},
@@ -223,67 +215,6 @@ export default {
 			})
 		}
 	}
-	// 	...mapActions([
-	// 		'fetchArticle',
-	// 		'setSingleArticle',
-	// 		'getTags',
-	// 		'getNextArticles'
-	// 	]),
-	// 	...mapMutations([
-	// 		'PUSH_VIEWED',
-	// 		'SET_SINGLE_ARTICLE'
-	// 	]),
-	// 	async loadArticle (id) {
-	// 	// if article not found in store, fetch it
-	// 		if(id){
-	// 			let article = this.getArticle(id)
-	// 			if(article) {
-	// 			// if article set article state to article found in articles array
-	// 				this.setSingleArticle(article)
-	// 			}
-	// 			else {
-	// 			// else fetch then set article state
-	// 				await this.fetchArticle(id)
-	// 			}
-	// 		}
-	// 		else {
-	// 			this.SET_SINGLE_ARTICLE({});
-	// 		}
-	// 	},
-	// 	articleViewed () {
-	// 		let viewed = {
-	// 			title: this.article.title,
-	// 			id: this.article._id,
-	// 			img: this.article.img
-	// 		}
-	// 		this.PUSH_VIEWED(viewed)
-	// 	},
-	// 	convertTagIdToName (id) {
-	// 		return this.tags.find(tag => tag._id === id).name.trim()
-	// 	},
-	// 	upperCaseString(str) {
-	// 		let strArr = str.split('-')
-	// 		let upperArr = []
-	// 		for(let i = 0; i < strArr.length; i++) {
-	// 			let str = strArr[i]
-	// 			upperArr.push(str.charAt(0).toUpperCase() + str.slice(1))
-	// 		}
-	// 		return upperArr.join(' ')
-
-	// 	},
-	// 	setContent () {
-	// 		this.editor.setContent(this.article.body, true)
-	// 	},
-	// 	navigateTo (tag) {
-	// 		this.$router.push({
-	// 			name: 'tag-view',
-	// 			params: {
-	// 				tagName: tag.name,
-	// 				id: tag._id
-	// 			},
-	// 		})
-	// 	}
-	// }
 }
 </script>
 
@@ -303,6 +234,14 @@ export default {
   .post-content &:focus{
     outline: none
 	}
+}
+.article-layout {
+	margin-bottom: 10rem;
+}
+.after-article {
+	height: 6px;
+	background-color: black;
+
 }
 
 @media only screen and (max-width: 400px) {

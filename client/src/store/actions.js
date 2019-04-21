@@ -121,7 +121,6 @@ export default {
 			let deletedTags = (await Api().delete('tags', params)).data
 			resolve(deletedTags.deleteCount)
 			// await Api().delete('tags', params)
-			console.log(deletedTags)
 			// commit(types.REMOVE_TAG, deletedTags)
 		}).catch(err => {
 			console.log(err)
@@ -172,8 +171,9 @@ export default {
 		commit(types.FETCH_ARTICLES, articles)
 	},
 	/**
-	 * 
-	 * @param {Vuex mutation} param0 
+	 * Calls API to GET associated articles by tag, realms found in current
+	 * article and commits payload to store
+	 * @param {commit} param0 
 	 * @param {Object} payload 
 	 */
 	async getNextArticles({commit, dispatch}, payload) {
@@ -182,15 +182,29 @@ export default {
 				tags: payload.article.tags,
 				realm: payload.article.realm,
 				id: payload.article._id,
-				skipNo: payload.pageNo
+				pageNo: payload.pageNo
 			}}
-		const nextArticles = (await Api().get('associated-articles', params)).data
+		const nextArticles = (await Api().get('infinite-articles', params)).data
 		if(nextArticles.message.length)
 			commit(types.FETCH_NEXT_ARTICLES, nextArticles)
 		else {
-			commit(types.MAX_RELATED_REACHED)
+			dispatch('setMaxRelated', true)
 		}
 	},
+	/**
+	 * Commits mutation to toggle state variable to payload
+	 * @param {commit} param0 
+	 * @param {Boolean} payload 
+	 */
+	setMaxRelated({commit}, payload) {
+		commit(types.MAX_RELATED_REACHED, payload)
+	},
+	/**
+	 * Calls API to GET unrelated articles sorted by 
+	 * created_at field and commits to store
+	 * @param {commit} param0 
+	 * @param {Object} payload 
+	 */
 	async getLatestUnrelated({commit}, payload) {
 		let params = {
 			params: {
@@ -198,9 +212,8 @@ export default {
 				...payload
 			}
 		}
-		const nextArticles = (await Api().get('associated-articles', params)).data
+		const nextArticles = (await Api().get('infinite-articles', params)).data
 		commit(types.FETCH_UNRELATED_ARTICLES, nextArticles)
-		console.log(nextArticles)
 	},
 	/**
 	 * Calls api to GET articles with associated tags 

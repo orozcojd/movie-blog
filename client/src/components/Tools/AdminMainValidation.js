@@ -6,8 +6,8 @@ export default {
 			v => (v && v.length <= 35) || 'Tag length must not exceed 35 characters'
 		],
 	newTagRules:
-    [
-    	v => !!v.trim() || 'Tag is required',
-    	v => (v && v.length <= 35) || 'Tag length must not exceed 35 characters'
-    ],
+		[
+			v => !!v.trim() || 'Tag is required',
+			v => (v && v.length <= 35) || 'Tag length must not exceed 35 characters'
+		],
 }

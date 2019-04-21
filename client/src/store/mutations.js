@@ -97,7 +97,8 @@ export default {
 	[types.FETCH_NEXT_ARTICLES] (state, payload) {
 		if(payload.message.length) {
 			state.infiniteArticles.push(...payload.message)
-			state.associatedArticles.pageNo +=1
+			state.associatedArticles.pageNo += 1
+			state.associatedArticles.articleIds.push(...(payload.message.map(article => article._id)))
 		}
 	},
 	[types.FETCH_UNRELATED_ARTICLES] (state, payload) {
@@ -112,6 +113,10 @@ export default {
 			pageNo: 1,
 			articleIds: []
 		}
+		state.unAssociatedArticles = {
+			pageNo: 1,
+			
+		}
 	},
 	/**
 	 * Maps state article tags & realms to corresponding IDs
@@ -120,6 +125,8 @@ export default {
 	 */
 	[types.NEW_ARTICLE] (state) {
 		// copy realm object
+		if(Object.keys(state.article).length === 0 && state.article.constructor === Object)
+			return
 		let found = state.tags.find(tag => tag._id === state.article.realm)
 		let realmObj = {}
 		if(found) {
@@ -143,8 +150,8 @@ export default {
 		}
 		state.article.tags = copiedTags
 	},
-	[types.MAX_RELATED_REACHED] (state) {
-		state.associatedArticles.maxRelatedReached = true
+	[types.MAX_RELATED_REACHED] (state, payload) {
+		state.maxRelatedReached = payload
 	},
 	/**
 	 * Finds the index of matching _id in articles array and updates value
@@ -167,7 +174,6 @@ export default {
 	 * @param {Object} payload 
 	 */
 	[types.SET_SINGLE_ARTICLE] (state, payload) {
-		console.log(payload)
 		state.article = payload
 		state.infiniteArticles.push(payload)
 	},

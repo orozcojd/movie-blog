@@ -1,14 +1,18 @@
 <template>
   <div
     v-infinite-scroll="loadMore"
-    infinite-scroll-disabled="busy"
+    :infinite-scroll-disabled="busy"
     infinite-scroll-distance="10"
   >
-    <post
-      v-for="(article, index) in infiniteArticles"
-      :key="index"
-      :article="article"
-    />
+    <div
+      v-if="loaded"
+    >
+      <post
+        v-for="(article, index) in infiniteArticles"
+        :key="index"
+        :article="article"
+      />
+    </div>
   </div>
 </template>
 
@@ -32,17 +36,30 @@ export default {
 			'tags',
 			'associatedArticles',
 			'infiniteArticles',
-			'unAssociatedArticles'
+			'unAssociatedArticles',
+			'maxRelatedReached'
 		]),
 		...mapGetters([
-			'getArticle'
+			'getArticle',
 		]),
+
 		infiniteArticleIds () {
 			return this.infiniteArticles.map(article => article._id)
+		},
+	},
+	watch:{
+		async maxRelatedReached(val, prev) {
+			if(prev === false && val === true) {
+				await this.getLatestUnrelated({
+					excludeIds: this.infiniteArticleIds,
+					...this.unAssociatedArticles,
+					id: this.article._id
+				})
+			}
 		}
 	},
 	async mounted() {
-		console.log('inside postView')
+		this.setMaxRelated(false)
 		this.resetNextArticles()
 		let id = this.$route.params.id
 		await this.loadArticle(id)
@@ -56,7 +73,8 @@ export default {
 			'getTags',
 			'getNextArticles',
 			'resetNextArticles',
-			'getLatestUnrelated'
+			'getLatestUnrelated',
+			'setMaxRelated'
 		]),
 		...mapMutations([
 			'SET_SINGLE_ARTICLE',
@@ -71,18 +89,18 @@ export default {
 			this.PUSH_VIEWED(viewed)
 		},
 		async loadMore() {
+			if(!this.loaded)
+				return
 			this.busy = true
-			if(!this.associatedArticles.maxRelatedReached) {
-				console.log('not reached yet')
+			if(!this.maxRelatedReached) {
 				await this.getNextArticles({
 					article: this.article,
 					pageNo: this.associatedArticles.pageNo
 				})
 			}
 			else {
-				console.log('reached!')
-				this.getLatestUnrelated({
-					excludeIds: this.infiniteArticleIds,
+				await this.getLatestUnrelated({
+					excludeIds: this.associatedArticles.articleIds,
 					...this.unAssociatedArticles,
 					id: this.article._id
 				})
@@ -95,7 +113,7 @@ export default {
 				let article = this.getArticle(id)
 				if(article) {
 					// if article set article state to article found in articles array
-					this.setSingleArticle(article)
+					await this.setSingleArticle(article)
 				}
 				else {
 				// else fetch then set article state
@@ -103,7 +121,7 @@ export default {
 				}
 			}
 			else {
-				this.SET_SINGLE_ARTICLE({});
+				// this.SET_SINGLE_ARTICLE({});
 			}
 		}
 	}

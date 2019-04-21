@@ -249,8 +249,6 @@ export default {
 		}
 		this.prepareArticle()
 		this.loaded = true
-		// await this.getTags()
-
 	},
 	methods: {
 		validate (btnType) {
@@ -306,7 +304,6 @@ export default {
 				}
 				await this.updateArticle(payload)
 			} else {
-
 				await this.postArticle(new Article(this.article))
 			}
 			this.validation.error = ''

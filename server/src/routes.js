@@ -39,7 +39,7 @@ module.exports = (app) => {
 		TagsController.deleteTags);
 	app.get('/tag/:tagName',
 		ArticlesController.getArticlesByTag);
-	app.get('/associated-articles',
+	app.get('/infinite-articles',
 		ArticlesController.associatedArticles);
 	app.get('/article-preview', 
 		ArticlesController.previews);

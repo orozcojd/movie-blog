@@ -91,53 +91,46 @@ module.exports = {
 	},
 	/**
 	 * Gets associated articles by TAG or REALM otherwise sends latest
+	 * articles sorted by created_at
 	 * articles 
 	 * @param {Object} req 
 	 * @param {Object} res 
 	 */
 	async associatedArticles(req, res) {
 		try {
+			const pageNo = req.query.pageNo;
+			const currId = req.query.id;
+			const size = 5;
+			let options = {};
+			let query = {};
+			options.skip = size * (pageNo - 1);
+			options.limit = size;
+			options.sort = {created_at: 'desc'};
+			
 			if(req.query.latestUnrelated === 'true') {
-				const pageNo = req.query.pageNo;
 				const excludeIds = req.query.excludeIds;
-				const currId = req.query.id;
-				const size = 5;
-				let query = {};
-				query.skip = size * (pageNo - 1);
-				query.limit = size;
-				query.sort = {created_at: 'desc'};
-				const article = await Post
-					.find({
-						_id: {$nin: excludeIds},
-						$and: [{_id: { $ne: currId }}]
-					}).lean();
-				const response = {
-					'message': article,
-					'pageNo': pageNo
+				query = {
+					// _id: { $ne: currId }
+					_id: {$nin: excludeIds},
+					$and: [{_id: { $ne: currId }}]
 				};
-				res.send(response);
 			}
 			else {
+				console.log(req.query);
 				const tags = req.query.tags;
 				const realm = req.query.realm;
-				const currId = req.query.id;
-				const pageNo = req.query.skipNo;
-				const size = 5;
-				let query = {};
-				query.skip = size * (pageNo - 1);
-				query.limit = size;
-				query.sort = {created_at: 'desc'};
-				const article = await Post
-					.find({
-						$or: [{tags: tags},{realm: realm}, {realm: tags}, {tags: realm}],
-						$and: [{_id: { $ne: currId }}]
-					}, {}, query).lean();
-				const response = {
-					'message': article,
-					'pageNo': pageNo
+				query = {
+					$or: [{realm: realm}, {realm: tags}, {tags: [realm]}, {tags: {$in: tags}}],
+					$and: [{_id: { $ne: currId }}]
 				};
-				res.send(response);
 			}
+			const article = await Post
+				.find(query, {}, options).lean();
+			const response = {
+				'message': article,
+				'pageNo': pageNo
+			};
+			res.send(response);
 		}
 		catch (err) {
 			res.status(400).send({

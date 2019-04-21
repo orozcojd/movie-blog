@@ -15,8 +15,9 @@ module.exports = () => ({
 	associatedArticles: {
 		pageNo: 1,
 		articleIds: [],
-		maxRelatedReached: false
+		// maxRelatedReached: false
 	},
+	maxRelatedReached: false,
 	unAssociatedArticles: {
 		pageNo: 1,
 		articleIds: [],
