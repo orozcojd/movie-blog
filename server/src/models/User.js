@@ -11,8 +11,23 @@ const UserSchema = new Schema({
 		unique: true
 	},
 	hash: String,
-
+	permission: {
+		type: Number,
+		default: 2
+	},
+	contributorName: {
+		type: String,
+		required: true,
+		unique: true
+	}
 });
+
+UserSchema.methods.createUser = async function(user) {
+	this.email = user.email;
+	this.permission = user.permission;
+	this.contributorName = user.contributorName;
+};
+
 UserSchema.methods.hashPassword = async function(password) {
 	/**
    * Hashes password using bcrypt and sets user hash

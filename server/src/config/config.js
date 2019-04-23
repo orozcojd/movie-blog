@@ -7,6 +7,10 @@ module.exports = {
 		password: process.env.DB_PASS || 'personalblog',
 	},
 	authentication: {
-		jwtSecret: process.env.JWT_SECRET || 'secret'
+		jwtSecret: process.env.JWT_SECRET || 'secret',
+		tmpUser: process.env.tmpUserName || 'jonathan',
+		tmpPsswrd: process.env.tmpPasswrd || 'password',
+		superUser: process.env.superUser || 1,
+		AdminUser: process.env.adminUser || 2
 	}
 };

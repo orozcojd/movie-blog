@@ -2,6 +2,15 @@ import Api from '@/services/Api'
 import types from './types'
 
 export default {
+
+	async addUser({commit}, payload) {
+		await Api().post('addUser', payload).catch(err => {
+			return Promise.reject(err.response.data.error)
+		})
+
+
+	},
+
 	/**
 	 * Logs in user if validated by backend and
 	 * Commits result to store

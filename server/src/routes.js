@@ -14,14 +14,18 @@ const TagsController = require('./controllers/TagsController');
 // });
 
 module.exports = (app) => {
-    
+	
+	//delete
+	app.get('/users',
+		AuthenticationController.getUsers);
 	/* login */
 	app.post('/register',
 		// AuthenticationControllerPolicy.register,
 		AuthenticationController.register);
 	app.post('/login',  
 		AuthenticationController.login);
-
+	app.post('/addUser', 
+		AuthenticationController.addUser);
 	/* articles */
 	app.post('/article',
 		// auth,

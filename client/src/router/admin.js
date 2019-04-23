@@ -6,7 +6,7 @@ import AdminPosts from '@/components/AdminView/Posts'
 import Index from '@/components/AdminView/Index'
 import AdminCategories from '@/components/AdminView/AdminCategories'
 import AdminMain from '@/components/AdminView/AdminMain'
-
+import AddUser from '@/components/AdminView/AddUser'
 
 const adminRoutes = [
 	{
@@ -20,6 +20,12 @@ const adminRoutes = [
 				beforeEnter: AuthGuard.adminGuard()
 			},
 			{
+				path: 'add-user',
+				name: 'admin-add-user',
+				component: AddUser,
+				beforeEnter: AuthGuard.adminGuard()
+			},
+			{
 				path: 'login',
 				name: 'admin-login',
 				component: Login,
@@ -30,7 +36,7 @@ const adminRoutes = [
 				path: 'register',
 				name: 'admin-register',
 				component: Register,
-				beforeEnter: AuthGuard.adminGuard()
+				// beforeEnter: AuthGuard.adminGuard()
 			},
 			{
 				path: 'article/:id',

@@ -26,7 +26,7 @@
 <script>
 import AdminCategoryTile from './AdminCategoryTile'
 export default {
-	name: 'AdminIndex',
+	name: 'AdminCategories',
 	components: {
 		AdminCategoryTile
 	},
@@ -51,8 +51,8 @@ export default {
 					}
 				},
 				{
-					title: 'Add Admin User'
-					// to:''
+					title: 'Add Admin User',
+					to: {name: 'admin-add-user'}
 				},
 				{
 					title: 'Edit Tags',

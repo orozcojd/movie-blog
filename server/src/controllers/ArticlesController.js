@@ -97,6 +97,7 @@ module.exports = {
 	 * @param {Object} res 
 	 */
 	async associatedArticles(req, res) {
+		console.log(req.query);
 		try {
 			const pageNo = req.query.pageNo;
 			const currId = req.query.id;
@@ -116,7 +117,7 @@ module.exports = {
 				};
 			}
 			else {
-				console.log(req.query);
+				
 				const tags = req.query.tags;
 				const realm = req.query.realm;
 				query = {

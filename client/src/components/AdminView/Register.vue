@@ -54,6 +54,7 @@ export default {
 		async submit () {
 			try {
 				const response = await AuthenticationService.register(this.credentials)
+				console.log(response.data)
 				this.setToken(response.data.token)
 				this.setUser(response.data.user)
 				this.error = null

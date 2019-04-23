@@ -21,5 +21,11 @@ module.exports = () => ({
 	unAssociatedArticles: {
 		pageNo: 1,
 		articleIds: [],
+	},
+	request: {
+		success: false,
+		error: false,
+		errorMsg: ''
+
 	}
 })
