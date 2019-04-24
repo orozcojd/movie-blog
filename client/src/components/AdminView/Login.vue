@@ -23,7 +23,10 @@
               required
             />
             <br>
-            <v-btn @click="submit">
+            <v-btn 
+              type="submit"
+              @click="submit"
+            >
               Submit
             </v-btn>
           </v-form>
@@ -59,6 +62,7 @@ export default {
 			'login'
 		]),
 		async submit () {
+			console.log('clicked')
 			this.login({
 				email: this.credentials.email,
 				password: this.credentials.password

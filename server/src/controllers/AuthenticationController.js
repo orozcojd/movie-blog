@@ -41,12 +41,7 @@ module.exports = {
 					else {
 						const token = user.generateToken();
 						res.status(200).send({
-							// user: {
-							// 	email: user.email,
-							// 	permission: user.permission,
-							// 	contributorName: user.contributorName
-							// },
-							token: token
+							message: `User ${user.email} was created`
 						});
 					}
 				});
@@ -129,7 +124,7 @@ module.exports = {
 				token = user.generateToken();
 				res.status(200).send({
 					'token': token,
-					'user': user.email
+					'user': user
 				});
 			} else {
 				// console.log('ANOTHER ERROR');

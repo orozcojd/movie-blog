@@ -9,7 +9,7 @@
       justify-start
     >
       <v-flex
-        v-for="(category,index) in categories"
+        v-for="(category,index) in viewableCategories"
         :key="index"
         d-flex
         xs12
@@ -25,6 +25,8 @@
 
 <script>
 import AdminCategoryTile from './AdminCategoryTile'
+import { mapState } from 'vuex'
+
 export default {
 	name: 'AdminCategories',
 	components: {
@@ -35,11 +37,13 @@ export default {
 			categories: [
 				{
 					title: 'Create Post',
-					to: {name: 'admin-create-post'}
+					to: {name: 'admin-create-post'},
+					granted: () => { return true }
 				},
 				{
 					title: 'Edit Posts',
-					to: {name: 'admin-edit-posts'}
+					to: {name: 'admin-edit-posts'},
+					granted: () => { return true }
 				},
 				{
 					title: 'Edit Drafts',
@@ -48,19 +52,36 @@ export default {
 						params: {
 							drafts: true
 						}
-					}
+					},
+					granted: () => { return true }
 				},
 				{
 					title: 'Add Admin User',
-					to: {name: 'admin-add-user'}
+					to: {name: 'admin-add-user'},
+					granted: () => {return this.permissionGranted}
 				},
 				{
 					title: 'Edit Tags',
-					to: {name: 'admin-edit-main'}
+					to: {name: 'admin-edit-main'},
+					granted: () => { return true }
 				}
 			]
 		}
-	}
+	},
+	computed: {
+		...mapState([
+			'user'
+		]),
+		viewableCategories () {
+			return this.categories.filter((category) => {
+				return category.granted && category.granted()
+			})
+		},
+		permissionGranted() {
+			return !!this.user && this.user.permission === 1
+		}
+
+	},
 }
 </script>
 

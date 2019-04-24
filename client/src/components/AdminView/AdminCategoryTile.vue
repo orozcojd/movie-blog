@@ -25,6 +25,7 @@
 </template>
 
 <script>
+
 export default {
 	name: 'AdminCategoryTile',
 	props: {
@@ -37,9 +38,7 @@ export default {
 		return {
 		}
 	},
-	methods: {
 
-	}
 }
 </script>
 

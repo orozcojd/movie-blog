@@ -4,11 +4,13 @@ import types from './types'
 export default {
 
 	async addUser({commit}, payload) {
-		await Api().post('addUser', payload).catch(err => {
-			return Promise.reject(err.response.data.error)
-		})
-
-
+		await Api().post('addUser', payload)
+			.then(res => {
+				return Promise.resolve(res.data)
+			})
+			.catch(err => {
+				return Promise.reject(err.response.data.error)
+			})
 	},
 
 	/**
@@ -74,7 +76,7 @@ export default {
 	 * @param {commit} param0 
 	 */
 	getSetUser ({commit}) {
-		const user = localStorage.getItem('unsolicited-user')
+		const user = JSON.parse(localStorage.getItem('unsolicited-user'))
 		commit(types.SET_USER, user)
 	},
 	/**

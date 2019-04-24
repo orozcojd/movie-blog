@@ -14,7 +14,7 @@
         >
           <template v-slot:activator>
             <v-list-tile>
-              <v-list-tile-title v-text="user" />
+              <v-list-tile-title v-text="user.contributorName" />
             </v-list-tile>
           </template>
           <v-list-tile

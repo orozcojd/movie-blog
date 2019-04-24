@@ -48,7 +48,7 @@ export default {
 	[types.SET_USER] (state, user) {
 		state.user = user
 		if(user) {
-			localStorage.setItem('unsolicited-user', state.user)
+			localStorage.setItem('unsolicited-user', JSON.stringify(state.user))
 		}
 		else{ 
 			window.localStorage.removeItem('unsolicited-user')
