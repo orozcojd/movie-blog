@@ -156,7 +156,7 @@
               />
               <v-switch
                 :input-value="tags[i].realm"
-                :label="`Realm: ${tags[i].realm}`"
+                :label="`Use Tag as Realm: ${tags[i].realm}`"
                 @change="updateTag($event, 'realm', tag._id)"
               />
               <v-text-field
@@ -302,7 +302,9 @@ export default {
 
 		addRemoveTags() {
 			if(this.addedTags.length){
-				this.postTags(this.addedTags.map(name => ({name: name}))).then(() => {
+				this.postTags(this.addedTags.map(name => ({name: name}))).then((response) => {
+					this.text= response.message
+					this.snackbar = true
 					this.addedTags = []
 				})
 			}
@@ -311,7 +313,7 @@ export default {
 			if(this.removedTags.length) {
 				this.deleteTags(this.removedTags).then(tag => {
 					this.removedTags = []
-					this.text= "Delete: " + tag.toString() + " tags"
+					this.text= "Deleted: " + tag.toString() + " tags"
 					this.snackbar = true
 				}
 				)

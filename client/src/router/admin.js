@@ -7,6 +7,7 @@ import Index from '@/components/AdminView/Index'
 import AdminCategories from '@/components/AdminView/AdminCategories'
 import AdminMain from '@/components/AdminView/AdminMain'
 import AddUser from '@/components/AdminView/AddUser'
+import AdminPostPreview from '@/components/AdminView/AdminPostPreview'
 
 const adminRoutes = [
 	{
@@ -75,6 +76,12 @@ const adminRoutes = [
 				name: 'admin-edit-main',
 				component: AdminMain,
 				beforeEnter: AuthGuard.adminGuard()
+			},
+			{
+				path: 'preview-post',
+				name: 'admin-post-preview',
+				props: true,
+				component: AdminPostPreview
 			}
 		]
 	}

@@ -125,11 +125,16 @@ export default {
 	 */
 	[types.NEW_ARTICLE] (state) {
 		// copy realm object
-		if(Object.keys(state.article).length === 0 && state.article.constructor === Object)
+		if(Object.keys(state.article).length === 0 && state.article.constructor === Object){
+			console.log(state.article)
 			return
+		}
+		else if(state.article.realm._id) {
+			return
+		}
 		let found = state.tags.find(tag => tag._id === state.article.realm)
 		let realmObj = {}
-		if(found) {
+		if(!!found && found !== -1) {
 			realmObj._id = found._id
 			realmObj.name = found.name
 			realmObj.img = found.image
@@ -213,8 +218,9 @@ export default {
 	 * @param {Array} payload 
 	 */
 	[types.ADD_TAGS] (state, payload) {
-		for(let i = 0; i < payload.length; i++) {
-			state.tags.push(payload[i])
+		const tags = payload.tags
+		for(let i = 0; i < tags.length; i++) {
+			state.tags.push(tags[i])
 		}
 	},
 	/**

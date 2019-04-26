@@ -1,7 +1,9 @@
 <template>
   <v-card
-    hover
-    dark
+    :hover="true"
+    raised
+    
+    
     @click="navigateTo(article._id)"
   >
     <v-img

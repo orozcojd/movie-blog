@@ -190,7 +190,8 @@ module.exports = {
 				{new: true}
 			);
 			res.send({
-				article: article
+				article: article,
+				message: 'Article was updated!'
 			});
 		}
 		catch (err) {

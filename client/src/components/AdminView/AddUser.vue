@@ -131,7 +131,7 @@ export default {
 					})
 					.catch(err => {
 						this.error = true
-						this.errorMsg = err
+						this.errorMsg = err.response.data.error
 						this.submitColor = 'error'
 						setTimeout(() => {
 							this.error = false

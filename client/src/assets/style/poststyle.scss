@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Proza+Libre');
+@import url('https://fonts.googleapis.com/css?family=Abel');
+
+@import url('https://fonts.googleapis.com/css?family=Marcellus+SC');
+@import url('https://fonts.googleapis.com/css?family=Kreon');
+@import url('https://fonts.googleapis.com/css?family=Marcellus');
+@import url('https://fonts.googleapis.com/css?family=Lato');
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+a {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+/* export to file */
+.post-title {
+font-family: 'Marcellus SC', serif;
+font-size: 2.75rem;
+}
+.mb-small {
+margin-bottom: .5em;
+}
+.mb-med {
+margin-bottom: 2em;
+}
+.post-author {
+margin-bottom: .5em;
+}
+.post-body {
+font-size: 2rem;
+font-family: 'Abel', sans-serif;
+}
+.tag {
+display: inline-block;
+}
+.tag::after {
+content: ', ';
+white-space: pre;
+}
+.tag:last-child::after {
+content: '';
+}
+.tag-list::before {
+content: 'Tags: ';
+white-space: pre;
+}
+.tag-list {
+padding-left: 0;
+}

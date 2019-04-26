@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-app dark>
+    <v-app>
       <v-content>
         <Header />
         <!-- <h1>My Header</h1> -->

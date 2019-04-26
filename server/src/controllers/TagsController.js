@@ -36,7 +36,10 @@ module.exports = {
 				let tag = await Tags.create(req.body[i]);
 				tags.push(tag);
 			}
-			res.send(tags);
+			res.send({
+				tags: tags,
+				message: 'Your new tags added!'
+			});
 		}
 		catch (err) {
 			res.status(400).send({
@@ -66,12 +69,13 @@ module.exports = {
 				updated.push(updatedTag);
 			}
 			res.send({
-				tags: updated
+				tags: updated,
+				message: 'Your tag edits were saved!'
 			});
 		}
 		catch (err) {
 			res.status(400).send({
-				error: 'An error has occured trying to update the article',
+				error: 'An error has occured trying to update the tag',
 				details: err
 			});
 		}

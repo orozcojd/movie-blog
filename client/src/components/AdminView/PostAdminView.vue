@@ -42,6 +42,13 @@
             label="Article Image"
             required 
           />
+          <v-text-field
+            v-model="imgCred"
+            :rules="descriptionRules"
+            :counter="120"
+            label="Image Description"
+            required 
+          />
           <v-autocomplete
             v-model="realm"
             :items="tagChoices"
@@ -66,6 +73,7 @@
             deletable-chips
           />
           <tip-tap class="editor" />
+          <br><br>
           <v-btn
             :disabled="validation.cancelDisabled"
             @click.prevent="cancel"
@@ -84,10 +92,30 @@
           >
             Submit
           </v-btn>
+          <v-btn
+            @click="previewPost"
+          >
+            Preview
+          </v-btn>
           <br>
         </v-form>
       </v-flex>
     </v-layout>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="4000"
+      :top="true"
+      :multi-line="true"
+    >
+      {{ snackText }}
+      <v-btn
+        color="pink"
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -119,8 +147,10 @@ export default {
 				draft: 'undefined',
 				submit: 'undefined',
 				// error: '',
-				cancelDisabled: false
+				cancelDisabled: false,
 			},
+			snackbar: false,
+			snackText: ''
 		}
 	},
 	computed: {
@@ -179,6 +209,17 @@ export default {
 				})
 			}
 		},
+		imgCred: {
+			get () {
+				return this.article.imgCred
+			},
+			set (value) {
+				this.UPDATE_ARTICLE_CONTENT({
+					type: 'imgCred',
+					value: value
+				})
+			}
+		},
 		realm: {
 			get() {
 				return this.article.realm
@@ -192,6 +233,7 @@ export default {
 		},
 		tags: {
 			get() {
+				console.log(this.article.tags)
 				return this.article.tags
 			},
 			set(value) {
@@ -233,30 +275,36 @@ export default {
 	async mounted () {
 		let id = this.$route.params.id
 		// if article not found in store, fetch it
+		// console.log(this.article)
 		if(id){
 			let article = this.getArticle(id)
+			// console.log(article)
 			if(article) {
+				console.log('hitting this point')
 				// if article set article state to article found in articles array
 				this.setSingleArticle(article)
 			}
 			else {
 				// else fetch then set article state
+				console.log('fetching')
 				await this.fetchArticle(id)
 			}
 		}
 		else {
+			console.log('hitting article set single')
 			this.SET_SINGLE_ARTICLE({});
 		}
+		// console.log(this.article)
 		this.prepareArticle()
 		this.loaded = true
+		// console.log(this.article)
+		// console.log(this.tags)
 	},
 	methods: {
 		validate (btnType) {
 			if (this.$refs.form.validate()) {
 				/* if validation is approved */
-				// this.snackbar = true
-				this.validation[btnType] = 'success'
-				this.submit()
+				this.submit(btnType)
 			}
 			else {
 				this.validation[btnType] = 'error'
@@ -268,7 +316,7 @@ export default {
 		disableRealm (name) {
 			// console.log(this.realm)
 			// console.log(name.name)
-			if(name.name === this.realm)
+			if(!!name.name && name.name === this.realm)
 				return true
 		},
 		...mapMutations([
@@ -289,7 +337,23 @@ export default {
 				name: 'root'
 			})
 		},
-		async submit () {
+		previewPost () {
+			this.$router.push({
+				name: 'admin-post-preview',
+				params: {
+					article: {...this.article}
+				}
+			})
+		},
+		submitCallback(message, btnType, fail = false) {
+			this.snackText = message
+			this.snackbar = true
+			if(fail)
+				this.validation[btnType] = 'error'
+			else
+				this.validation[btnType] = 'success'
+		},
+		async submit (btnType) {
 			if (this.requestRunning) {
 				return
 			}
@@ -303,15 +367,31 @@ export default {
 					id: this.$route.params.id
 				}
 				await this.updateArticle(payload)
+					.then(response => {
+						this.submitCallback(response, btnType)
+						setTimeout(() => {
+							this.$router.push({
+								name: 'root'
+							})
+						}, 3000)
+					})
+					.catch(err => {
+						this.submitCallback(err.response.data.error, btnType, true)
+					})
 			} else {
 				await this.postArticle(new Article(this.article))
+					.then(response => {
+						this.submitCallback(response, btnType)
+					})
+					.catch(err => {
+						this.submitCallback(err.response.data.error, btnType, true)
+					})
 			}
 			this.validation.error = ''
 			setTimeout(() => {
-				this.$router.push({
-					name: 'root'
-				})
-			}, 500)
+				this.validation[btnType] = 'default'
+				this.validation.cancelDisabled = false
+			}, 3000)
 		}
 	}
 }

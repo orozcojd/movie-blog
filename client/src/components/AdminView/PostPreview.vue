@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 export default {
 	name: 'PostPreview',
 	props: {
@@ -56,6 +56,11 @@ export default {
 			type: Object,
 			required: true
 		}
+	},
+	computed: {
+		...mapState({
+			'articles': 'article'
+		})
 	},
 	data () {
 		return {

@@ -4,13 +4,8 @@ import types from './types'
 export default {
 
 	async addUser({commit}, payload) {
-		await Api().post('addUser', payload)
-			.then(res => {
-				return Promise.resolve(res.data)
-			})
-			.catch(err => {
-				return Promise.reject(err.response.data.error)
-			})
+		const response = (await Api().post('addUser', payload)).data
+		return response
 	},
 
 	/**
@@ -105,6 +100,8 @@ export default {
 	async postTags({commit}, payload) {
 		let tags = (await Api().post('tags', payload)).data
 		commit(types.ADD_TAGS, tags)
+		console.log(tags)
+		return tags
 	},
 	/**
 	 * Calls api to PUT array of tags - updating
@@ -243,8 +240,9 @@ export default {
 	 * @param {Object} payload 
 	 */
 	async updateArticle ({commit}, payload) {
-		let article = (await Api({}).put(`articles/${payload.id}`, payload.article)).data
+		const article = (await Api({}).put(`articles/${payload.id}`, payload.article)).data
 		commit(types.UPDATE_ARTICLE, article)
+		return article.message
 	},
 	/**
 	 * Calls api to POST new article and commits mutation to
@@ -254,8 +252,9 @@ export default {
 	 */
 	async postArticle ({commit}, payload) {
 		// console.log(payload)
-		let article = (await Api().post('article/', payload)).data
+		const article = (await Api().post('article/', payload)).data
 		commit(types.POST_ARTICLE, article)
+		return article
 	},
 	/**
 	 * Calls api to delete article by id passed in and commits

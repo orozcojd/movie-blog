@@ -1,13 +1,5 @@
-* {
-  .post-content &:focus{
-    outline: none
-	}
-}
 
-@media only screen and (max-width: 400px) {
-	// h1 {
-  //     font-size: 1.5rem !important;
-  //   }
+@media (max-width: 400px) {
 	.post-content {
 		padding-left: 15px !important;
 		padding-right: 15px !important;
@@ -32,6 +24,11 @@
 		// font-family: 'Abel', sans-serif;
 	}
 }
+a {
+		color: inherit !important;
+		text-decoration: none !important;
+}
+
 /* export to file */
 .post-title {
   font-family: 'Marcellus SC', serif;
@@ -49,4 +46,21 @@
 .post-body {
 	font-size: 2rem;
 	font-family: 'Abel', sans-serif;
+}
+.tag {
+	display: inline-block;
+}
+.tag::after {
+	content: ', ';
+	white-space: pre;
+}
+.tag:last-child::after {
+	content: '';
+}
+.tag-list::before {
+	content: 'Tags: ';
+	white-space: pre;
+}
+.tag-list {
+	padding-left: 0;
 }

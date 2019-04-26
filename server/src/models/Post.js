@@ -15,7 +15,11 @@ let articleSchema = new Schema({
 	},
 	realm: String,
 	tags: [String],
-	img: String,
+	img: {
+		type: String,
+		required: true
+	},
+	imgCred: String,
 	thumbnailDescription: String,
 	comments: [{body: String, date: Date, user: String}],
 	meta: {

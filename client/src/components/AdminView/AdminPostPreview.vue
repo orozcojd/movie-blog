@@ -16,13 +16,7 @@
         <div
           align="left"
         >
-          <a
-            href="#"
-            @click.prevent="navigateTo({
-              _id: article.realm,
-              name: articleRealm
-            })"
-          >
+          <a>
             <strong>
               {{ upperCaseString(articleRealm) }}
             </strong>
@@ -72,7 +66,7 @@
         />
         <strong>
           <ul
-            v-if="article.tags.length"
+            v-if="!!article.tags && article.tags.length"
             align="left"
             class="tag-list"
           >
@@ -81,20 +75,19 @@
               :key="index"
               class="tag"
             >
-              <a
-                @click.prevent="navigateTo({
-                  _id: tag,
-                  name: convertTagIdToName(tag)
-                })"
-              >{{ upperCaseString(convertTagIdToName(tag)) }}</a>
+              <a>{{ upperCaseString(convertTagIdToName(tag._id)) }}</a>
             </li>
           </ul>
         </strong>
       </v-flex>
     </v-layout>
-    <div
-      class="after-article"
-    />
+    <v-layout>
+      <v-btn
+        @click="goBack()"
+      >
+        Back
+      </v-btn>
+    </v-layout>
   </v-container>
 </template>
 
@@ -124,7 +117,7 @@ import {
 } from 'tiptap-extensions'
 
 export default {
-	name: 'Posts',
+	name: 'AdminPostPreview',
 	components: {
 		EditorContent
 	},
@@ -186,47 +179,44 @@ export default {
 			return date
 		},
 		articleRealm() {
-			return this.convertTagIdToName(this.article.realm)
+			console.log(this.article.realm)
+			return this.convertTagIdToName(this.article.realm._id)
 		}
 	},
-	async mounted () {
-		console.log('inside post')
+	async mounted() {
+		console.log(this.article)
 		await this.setContent()
 		this.loaded = true
 	},
 	methods: {
-		...mapMutations([
-			'PUSH_VIEWED',
-		]),
 		convertTagIdToName (id) {
-			return this.tags.find(tag => tag._id === id).name.trim()
+			if(id)
+				return this.tags.find(tag => tag._id === id).name.trim()
 		},
 		upperCaseString(str) {
-			let strArr = str.split('-')
-			let upperArr = []
-			for(let i = 0; i < strArr.length; i++) {
-				let str = strArr[i]
-				upperArr.push(str.charAt(0).toUpperCase() + str.slice(1))
+			if(str){
+				let strArr = str.split('-')
+				let upperArr = []
+				for(let i = 0; i < strArr.length; i++) {
+					let str = strArr[i]
+					upperArr.push(str.charAt(0).toUpperCase() + str.slice(1))
+				}
+				return upperArr.join(' ')
 			}
-			return upperArr.join(' ')
 		},
 		async setContent () {
 			await this.editor.clearContent(true)
 			await this.editor.setContent(this.article.body, true)
 		},
-		navigateTo (tag) {
-			this.$router.push({
-				name: 'tag-view',
-				params: {
-					tagName: tag.name,
-					id: tag._id
-				},
-			})
+		goBack () {
+			console.log('before going back..')
+			console.log(this.article)
+			this.$router.go(-1)
 		}
 	}
 }
 </script>
 
-<style lang="scss">
-@import url('../../assets/style/poststyle.scss');
+<style scoped>
+  @import url('../../assets/style/poststyle.scss');
 </style>
