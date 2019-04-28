@@ -1,8 +1,8 @@
 <template>
   <div>
+    <!--v-model="drawerRight" -->
     <v-navigation-drawer
-      v-model="drawerRight"
-      fixed
+      :value="true"
       right
       clipped
       app
@@ -35,8 +35,8 @@
           </v-list-tile>
         </v-list-group>
         <v-list-group
+          v-model="realmToggle"
           prepend-icon="account_circle"
-          value="true"
         >
           <template v-slot:activator>
             <v-list-tile>
@@ -59,6 +59,7 @@
         </v-list-group>
         <v-list-group
           v-if="viewedArticles.length"
+          class="contain-group"
           prepend-icon="account_circle"
         >
           <template v-slot:activator>
@@ -126,8 +127,9 @@ export default {
 	data() {
 		return {
 			drawerRight: false,
-			right: null,
-			account: [['Admin', 'goTo("/admin")'], ['Logout', 'logout']]
+			right: false,
+			account: [['Admin', 'goTo("/admin")'], ['Logout', 'logout']],
+			realmToggle: true
 		}
 	},
 	computed: {
@@ -187,3 +189,10 @@ export default {
 	}
 }
 </script>
+<style scoped>
+.contain-group {
+  max-height: 432px;
+  overflow: scroll;
+}
+</style>
+

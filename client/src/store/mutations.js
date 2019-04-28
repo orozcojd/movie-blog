@@ -219,6 +219,7 @@ export default {
 	 */
 	[types.ADD_TAGS] (state, payload) {
 		const tags = payload.tags
+		console.log(tags)
 		for(let i = 0; i < tags.length; i++) {
 			state.tags.push(tags[i])
 		}

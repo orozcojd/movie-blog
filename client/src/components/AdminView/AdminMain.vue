@@ -1,48 +1,26 @@
 <template>
   <v-container
+    v-if="loaded"
     fluid
   >
-    <h1>Add or Delete Tags</h1>
-    <v-layout
-      align-center
-      justify-center
+    <h1
+      align="left"
     >
+      Edit Tags
+    </h1>
+    <v-layout>
       <v-flex
         xs12
-        md4
+        md6
       >
-        <v-snackbar
-          v-model="snackbar"
-          :timeout="6000"
-          :top="true"
+        <v-alert
+          class="alert"
+          dismissible
+          :value="true"
+          type="info"
         >
-          {{ text }}
-          <v-btn
-            color="pink"
-            flat
-            @click="snackbar = false"
-          >
-            Close
-          </v-btn>
-        </v-snackbar>
-        <v-form
-          ref="addTagForm"
-          v-model="AddTagValid"
-          lazy-validation
-        >
-          <v-text-field 
-            v-model="newTag"
-            required
-            :rules="newTagRules"
-            :counter="35"
-            label="Enter New Tag Separated By Spaces"
-          />
-          <v-btn
-            @click="addTag"
-          >
-            Add To List
-          </v-btn>
-        </v-form>
+          {{ alertText }}
+        </v-alert>
       </v-flex>
     </v-layout>
     <v-layout
@@ -52,29 +30,50 @@
     >
       <v-flex
         xs12
-        md4
+        md6
+        class="mb-med"
       >
-        <div>
-          <h1>
-            Established Tags
-          </h1>
-          <!-- @input="remove(tag)" -->
-          <v-chip
-            v-for="(tag, index) in chipTags"
-            :key="index"
-            close
+        <h2 align="left">
+          Add or Delete Tags
+        </h2>
+        <div 
+          class="section"
+          align="left"
+        >
+          <v-form
+            ref="addTagForm"
+            v-model="AddTagValid"
+            lazy-validation
           >
-            {{ tag.name }}
-          </v-chip>
+            <v-text-field 
+              v-model="newTag"
+              required
+              :rules="newTagRules"
+              :counter="35"
+              label="Enter New Tag Separated By Spaces"
+              class="mb-sm"
+            />
+            <v-btn
+              @click="addTag"
+            >
+              Add To List
+            </v-btn>
+          </v-form>
         </div>
       </v-flex>
       <v-flex
         v-if="addedTags.length"
         xs12
-        md4
+        md6
+        class="mb-med"
       >
-        <div>
-          <h1>New Tags </h1>
+        <h2 align="left">
+          New Tags
+        </h2>
+        <div
+          class="section"
+          align="left"
+        >
           <v-chip
             v-for="(tag, index) in addedTags"
             :key="index"
@@ -86,12 +85,53 @@
         </div>
       </v-flex>
       <v-flex
-        v-if="removedTags.length"
-        md4
-        xs12 
+        xs12
+        md6
+        class="mb-med"
       >
-        <div>
-          <h1>Deleted Tags </h1>
+        <h2 align="left">
+          Established Tags
+        </h2>
+        <div 
+          class="section"
+          align="left"
+        >
+          <!-- @input="remove(tag)" -->
+          <v-chip
+            v-for="(tag, index) in chipTags"
+            :key="index"
+            close
+            @input="remove(tag)"
+          >
+            {{ tag.name }}
+          </v-chip>
+          <br><br>
+          <v-btn
+            to="/admin"
+          >
+            Cancel
+          </v-btn>
+          <v-btn
+            :color="addRemoveBtnType"
+            @click="addRemoveTags"
+          >
+            Add/Remove Tags
+          </v-btn>
+        </div>
+      </v-flex>
+      <v-flex
+        v-if="removedTags.length && !!user && user.permission === 1"
+        md6
+        xs12
+        class="mb-med"
+      >
+        <h2 align="left">
+          Deleted Tags
+        </h2>
+        <div 
+          class="section"
+          align="left"
+        >
           <v-chip
             v-for="(tag, index) in removedTags"
             :key="index"
@@ -105,30 +145,10 @@
         </div>
       </v-flex>
     </v-layout>
-    <v-layout
-      justify-center
-      row
-      wrap
-      class="mb-med"
-    >
-      <v-flex
-        xs12
-        md4
-      >
-        <v-btn
-          to="/admin"
-        >
-          Cancel
-        </v-btn>
-        <v-btn
-          :color="addRemoveBtnType"
-          @click="addRemoveTags"
-        >
-          Add/Remove Tags
-        </v-btn>
-      </v-flex>
-    </v-layout>
-    <h1>Edit Tag Names</h1>
+    <br><br>
+    <h2 align="left">
+      Edit Tag Names
+    </h2>
     <v-form
       ref="editNameForm"
       v-model="EditTagValid"
@@ -147,6 +167,9 @@
         >
           <v-card>
             <v-container>
+              <h2 align="left">
+                {{ tags[i].name }}
+              </h2>
               <v-text-field
                 :value="tags[i].name"
                 :rules="tagRules"
@@ -155,8 +178,9 @@
                 @input="updateTag($event, 'name', tag._id)"
               />
               <v-switch
+                v-if="!!user && user.permission === 1"
                 :input-value="tags[i].realm"
-                :label="`Use Tag as Realm: ${tags[i].realm}`"
+                label="Use Tag as Realm"
                 @change="updateTag($event, 'realm', tag._id)"
               />
               <v-text-field
@@ -170,30 +194,34 @@
           </v-card>
         </v-flex>
       </v-layout>
-      <v-layout
-        justify-center
-        row
-        wrap
-        class="mb-med"
-      >
-        <v-flex
-          xs12
-          md4
+      <div align="left">
+        <v-btn
+          to="/admin"
         >
-          <v-btn
-            to="/admin"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            :color="editNameBtnType"
-            @click="updateTagInfo"
-          >
-            Update Tag Names
-          </v-btn>
-        </v-flex>
-      </v-layout>
+          Cancel
+        </v-btn>
+        <v-btn
+          :color="editNameBtnType"
+          @click="updateTagInfo"
+        >
+          Update Tag Names
+        </v-btn>
+      </div>
     </v-form>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="6000"
+      :top="true"
+    >
+      {{ text }}
+      <v-btn
+        color="pink"
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -211,10 +239,12 @@ export default {
 			addedTags: [],
 			snackbar: false,
 			text: '',
+			loaded: false,
 			addRemoveBtnType: 'default',
 			editNameBtnType: 'default',
 			AddTagValid: true,
 			EditTagValid: true,
+			alertText: 'Use this page to create tags, edit tag names, and edit tag images',
 			/* validation rules */
 			tagRules: AdminMainValidation.tagRules,
 			newTagRules: AdminMainValidation.newTagRules,
@@ -223,7 +253,8 @@ export default {
 	},
 	computed: {
 		...mapState([
-			'tags'
+			'tags',
+			'user'
 		]),
 		chipTags: {
 			get() {
@@ -244,6 +275,7 @@ export default {
 	},
 	async mounted() {
 		await this.getTags()
+		this.loaded = true
 	},
 	methods: {
 		...mapMutations([
@@ -296,17 +328,29 @@ export default {
 			this.addedTags.splice(this.addedTags.indexOf(tag), 1)
 		},
 		reAddTag(tag) {
-			this.ADD_TAGS([tag])
+			console.log(tag)
+			this.ADD_TAGS({
+				tags: [tag]
+			})
 			this.removedTags.splice(this.removedTags.indexOf(tag), 1)
 		},
 
 		addRemoveTags() {
 			if(this.addedTags.length){
-				this.postTags(this.addedTags.map(name => ({name: name}))).then((response) => {
-					this.text= response.message
-					this.snackbar = true
-					this.addedTags = []
-				})
+				this.postTags(this.addedTags.map(name => ({name: name})))
+					.then((response) => {
+						this.text = response.message
+						// this.snackbar = true
+        
+						this.addRemoveBtnType = 'success'
+						this.addedTags = []
+					})
+					.catch(err => {
+						this.text = err.response.data.error
+						this.addRemoveBtnType = 'error'
+						// console.log(err.response.data.error)
+					})
+				this.snackbar = true
 			}
       
 			// delete tags was commented out - code unreachable
@@ -318,18 +362,30 @@ export default {
 				}
 				)
 			}
-			// toggle success on button
-			this.addRemoveBtnType = 'success'
 			setTimeout(() => {
 				this.addRemoveBtnType = 'default'
-			}, 1500)
+			}, 6000)
 		}
 	}
 }
 </script>
 
 <style scoped>
+  .alert {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+  }
+  .mb-sm {
+    margin-bottom: 1rem;
+  }
   .mb-med {
-    margin-bottom: 80px;
+    margin-bottom: 3rem;
+  }
+  h1 {
+    font-size: 4rem;
+    margin-bottom: 2.5rem;
+  }
+  .section {
+    padding: 1em;
   }
 </style>

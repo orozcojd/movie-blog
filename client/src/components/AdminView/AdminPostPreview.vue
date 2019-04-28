@@ -176,25 +176,26 @@ export default {
 					hour: 'numeric',
 					minute: 'numeric'
 				})
-			return date
+			return (this.article ? date : null)
 		},
 		articleRealm() {
-			console.log(this.article.realm)
-			return this.convertTagIdToName(this.article.realm._id)
+			// if(this.article.realm._id)
+			return (this.article ? this.convertTagIdToName(this.article) : null)
+			// return null
 		}
 	},
 	async mounted() {
-		console.log(this.article)
 		await this.setContent()
+		console.log(this.article)
 		this.loaded = true
 	},
 	methods: {
 		convertTagIdToName (id) {
-			if(id)
-				return this.tags.find(tag => tag._id === id).name.trim()
+			const foundTag = this.tags.find(tag => tag._id === id)
+			return (foundTag ? foundTag.name.trim() : null)
 		},
 		upperCaseString(str) {
-			if(str){
+			if(str !== null && str !== undefined){
 				let strArr = str.split('-')
 				let upperArr = []
 				for(let i = 0; i < strArr.length; i++) {
@@ -203,6 +204,7 @@ export default {
 				}
 				return upperArr.join(' ')
 			}
+			return null
 		},
 		async setContent () {
 			await this.editor.clearContent(true)

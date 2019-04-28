@@ -27,37 +27,31 @@
           color="black"
         >
         <br>
-        <div class="weekly-header">
-          <h2>Weekly Updates</h2>
-        </div>
-        <br>
-        <!-- <v-container fluid grid-list-md class="weekly-container">
-      <v-layout row fill-height>
-        <v-flex v-for="post in 10"
-          :key=post>
-          <weekly-post-view/>
-        </v-flex>
-      </v-layout>
-    </v-container> -->
-        <div class="weekly-header">
-          <h2>All posts</h2>
-        </div>
-        <br>
-        <v-container
-          fluid
-          grid-list-md
+        <h2
+          align="left"
         >
-          <v-layout
-            row
-            wrap
-          >
-            <display-articles 
-              :articles="filterArticles.slice(1)"
-            />
-          </v-layout>
-        </v-container>
+          Most Recent
+        </h2>
       </v-flex>
     </v-layout>
+    <timeline
+      :articles="filterArticles.slice(1)"
+    />
+    <br><br>
+    <h2
+      class="mb-sm"
+      align="left"
+    >
+      Weekly Updates
+    </h2>
+    <v-container
+      fluid
+      grid-list-md
+    >
+      <display-articles 
+        :articles="filterArticles.slice(1)"
+      />
+    </v-container>
   </v-container>
 </template>
 
@@ -65,6 +59,7 @@
 'use strict'
 import LatestPost from '@/components/Posts/LatestPost'
 import DisplayArticles from '@/components/Layouts/DisplayArticles'
+import Timeline from '@/components/Layouts/Timeline'
 
 import { mapActions, mapState } from 'vuex'
 
@@ -73,7 +68,8 @@ export default {
 	name: 'Posts',
 	components: {
 		LatestPost,
-		DisplayArticles
+		DisplayArticles,
+		Timeline
 	},
 	data () {
 		return {
@@ -111,7 +107,7 @@ export default {
 
 @media only screen and (max-width: 420px) {
     h1 {
-      font-size: 3.5rem !important;
+      font-size: 3rem !important;
     }
   }
   // h1 {
@@ -122,7 +118,7 @@ export default {
   }
   .main-title {
     font-family: 'Permanent Marker', cursive;
-    font-size: 5em;
+    font-size: 3rem !important;
     /* margin-bottom: 1em; */
     color: black;
   }
@@ -131,6 +127,9 @@ export default {
   }
   .mb-med {
     margin-bottom: 80px;
+  }
+  .mb-sm {
+    margin-bottom: 40px;
   }
   .weekly-container {
     overflow: scroll;
@@ -148,5 +147,8 @@ export default {
   }
   .post-preview {
     cursor: pointer;
+  }
+  h2{
+    font-size: 3rem;
   }
 </style>

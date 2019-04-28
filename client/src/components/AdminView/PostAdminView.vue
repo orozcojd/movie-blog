@@ -1,14 +1,18 @@
 <template>
   <v-container
     v-if="loaded"
+    fluid
   >
+    <h1 align="left">
+      Create your article.
+    </h1>
     <v-layout
       align-center
-      justify-center
+      justify-start
     >
       <v-flex
         xs12
-        md8
+        md10
       >
         <v-form
           ref="form"
@@ -72,31 +76,52 @@
             small-chips
             deletable-chips
           />
-          <tip-tap class="editor" />
+          <tip-tap 
+            align="left"
+            class="editor"
+          />
           <br><br>
-          <v-btn
-            :disabled="validation.cancelDisabled"
-            @click.prevent="cancel"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            :color="validation.draft"
-            @click.prevent="draft=true;validate('draft')"
-          >
-            Draft
-          </v-btn>
-          <v-btn
-            :color="validation.submit"
-            @click.prevent="draft=false; validate('submit')"
-          >
-            Submit
-          </v-btn>
-          <v-btn
-            @click="previewPost"
-          >
-            Preview
-          </v-btn>
+          <v-layout>
+            <v-flex
+              xs4
+            >
+              <div
+                align="left"
+              >
+                <v-btn
+                  :disabled="validation.cancelDisabled"
+                  @click.prevent="cancel"
+                >
+                  Cancel
+                </v-btn>
+              </div>
+            </v-flex>
+            <v-flex
+              xs4
+            >
+              <v-btn
+                :color="validation.draft"
+                @click.prevent="draft=true;validate('draft')"
+              >
+                Draft
+              </v-btn>
+              <v-btn
+                :color="validation.submit"
+                @click.prevent="draft=false; validate('submit')"
+              >
+                Submit
+              </v-btn>
+            </v-flex>
+            <v-flex>
+              <div align="right">
+                <v-btn
+                  @click="previewPost"
+                >
+                  Preview
+                </v-btn>
+              </div>
+            </v-flex>
+          </v-layout>
           <br>
         </v-form>
       </v-flex>
@@ -399,4 +424,8 @@ export default {
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Proza+Libre');
 @import url('../../assets/style/tiptap.scss');
+  h1 {
+    font-size: 4rem;
+    margin-bottom: 2.5rem;
+  }
 </style>

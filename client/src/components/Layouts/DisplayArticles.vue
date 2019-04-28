@@ -4,7 +4,7 @@
     wrap
   >
     <v-flex
-      v-for="article in articles"
+      v-for="article in articles.slice(5,)"
       :key="article.id"
       md4
       xs12

@@ -38,12 +38,17 @@ module.exports = {
 			}
 			res.send({
 				tags: tags,
-				message: 'Your new tags added!'
+				message: 'Your new tags were added!'
 			});
 		}
 		catch (err) {
+			let error = 'An error has occured trying to add tags';
+			console.log(err);
+			if(err.code === 11000) {
+				error = 'Tag already exists! Please check existing tag names.';
+			}
 			res.status(400).send({
-				error: 'An error has occured trying to add tags',
+				error: error,
 				details: err
 			});
 		}
