@@ -1,8 +1,7 @@
 <template>
   <div>
-    <!--v-model="drawerRight" -->
     <v-navigation-drawer
-      :value="true"
+      v-model="drawerRight"
       right
       clipped
       app

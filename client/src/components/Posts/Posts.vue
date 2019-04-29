@@ -18,9 +18,9 @@
         xs12
       >
         <latest-post
-          v-if="filterArticles.length"
+          v-if="articles.length"
           class="mb-med"
-          :article="filterArticles[0]"
+          :article="articles[0]"
         />
         <hr
           size="5"
@@ -35,7 +35,7 @@
       </v-flex>
     </v-layout>
     <timeline
-      :articles="filterArticles.slice(1)"
+      :articles="articles.slice(1)"
     />
     <br><br>
     <h2
@@ -49,7 +49,7 @@
       grid-list-md
     >
       <display-articles 
-        :articles="filterArticles.slice(1)"
+        :articles="articles.slice(6)"
       />
     </v-container>
   </v-container>
@@ -60,10 +60,7 @@
 import LatestPost from '@/components/Posts/LatestPost'
 import DisplayArticles from '@/components/Layouts/DisplayArticles'
 import Timeline from '@/components/Layouts/Timeline'
-
 import { mapActions, mapState } from 'vuex'
-
-// import WeeklyPostView from '@/components/Posts/WeeklyPostView'
 export default {
 	name: 'Posts',
 	components: {
@@ -79,19 +76,18 @@ export default {
 		...mapState([
 			'articles'
 		]),
-		filterArticles () {
-			return this.articles.filter(article => !article.draft)
-		}
 	},
 	async mounted () {
-		await this.getArticles()
-		// try {
-		// 	if (!this.articles.length) {
-		// 		await this.getArticles()
-		// 	}
-		// } catch (e) {
-		// 	// console.log(e)
-		// }
+		let options = {
+			params: {
+				params: {
+					// skip: 0,
+					limit: 15
+				},
+				extend: true
+			}
+		}
+		await this.getArticles(options)
 	},
 	methods: {
 		...mapActions([

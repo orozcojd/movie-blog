@@ -14,7 +14,7 @@
       >
         <v-img
           :src="article.img"
-          
+          :lazy-src="article.lazyImg"
           alt="latest-post-img" 
           max-height="600px"
         />

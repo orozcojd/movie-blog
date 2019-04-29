@@ -166,7 +166,7 @@ export default {
 	 * @param {String} id 
 	 */
 	async fetchArticle ({commit}, id) {
-		let article = (await Api().get(`articles/${id}`)).data
+		const article = (await Api().get(`articles/${id}`)).data
 		commit(types.FETCH_ARTICLE, article)
 	},
 	/**
@@ -174,9 +174,15 @@ export default {
 	 * set state articles array to retrieved articles
 	 * @param {commit} param0 
 	 */
-	async getArticles ({commit}) {
-		let articles = (await Api().get('articles')).data		
-		commit(types.FETCH_ARTICLES, articles)
+	async getArticles ({commit}, payload) {
+		console.log(payload)
+		const articles = (await Api().get('articles', payload.params)).data		
+		if(payload.params.extend === true) {
+			commit(types.EXTEND_ARTICLES, articles)
+		}
+		else {
+			commit(types.FETCH_ARTICLES, articles)
+		}
 	},
 	/**
 	 * Calls API to GET associated articles by tag, realms found in current

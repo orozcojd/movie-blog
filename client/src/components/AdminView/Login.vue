@@ -13,6 +13,7 @@
           <v-form>
             <v-text-field
               v-model="credentials.email"
+              autofocus
               label="Email"
               required
             />

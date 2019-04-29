@@ -6,15 +6,28 @@ const mongoose = require('mongoose');
 let Schema = mongoose.Schema;
 
 let articleSchema = new Schema({
-	title: String,
-	author: String,
+	title: {
+		type: String,
+		required: true
+	},
+	author: {
+		type: String,
+		required: true
+	},
 	body: String,
 	draft: {
 		type: Boolean,
 		default: false
 	},
-	realm: String,
+	realm: {
+		type: String,
+		required: true
+	},
 	tags: [String],
+	lazyImg: {
+		type: String,
+		required: true
+	},
 	img: {
 		type: String,
 		required: true

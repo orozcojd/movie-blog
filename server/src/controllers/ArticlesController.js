@@ -34,12 +34,17 @@ module.exports = {
    */
 	async index (req, res) {
 		try {
-			let options = req.body;
+			let options = {};
+			if(req.query.skip)
+				options.skip = parseInt(req.query.skip);
+			if(req.query.limit)
+				options.limit = parseInt(req.query.limit);
+			options.sort = {created_at: 'desc'};
 			console.log(options);
-			const articles = await Post
-				.find().lean()
-				// .limit(12)
-				.sort('-created_at');
+			let query = {};
+			query.draft = false;
+			const articles = await Post.find(query,{}, options).lean();
+				
 			res.send(articles);   
 		}
 		catch (err) {

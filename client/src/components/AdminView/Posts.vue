@@ -41,16 +41,16 @@ export default {
 		}
 	},
 	async mounted () {
-		/*
-      get articles from store
-    */
-		try {
-			if (!this.articles.length) {
-				await this.getArticles()
+		const options = {
+			params: {
+				params: {
+					// skip: 0,
+					// limit: 15
+				},
+				extend: true
 			}
-		} catch (e) {
-			console.log(e)
 		}
+		await this.getArticles()
 	},
 	methods: {
 		...mapActions([

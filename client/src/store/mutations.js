@@ -60,8 +60,10 @@ export default {
 	 * @param {object} payload 
 	 */
 	[types.FETCH_ARTICLES] (state, payload) {
-		console.log('inside')
 		state.articles = payload
+	},
+	[types.EXTEND_ARTICLES] (state, payload) {
+		state.articles.push(...payload)
 	},
 	/**
 	 * Sets the state tags object to payload object

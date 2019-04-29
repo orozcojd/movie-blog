@@ -21,6 +21,7 @@
         >
           <v-text-field
             v-model="title"
+            autofocus
             :rules="titleRules"
             :counter="90"
             label="Article Title"
@@ -37,20 +38,30 @@
             v-model="thumbnailDescription"
             :rules="descriptionRules"
             :counter="120"
-            label="Thumbnail Description"
+            label="Thumbnail description"
             required
           />
           <v-text-field
             v-model="img"
+            persistent-hint
+            hint="Enter the image URL from lensdump"
             :rules="imageRules"
-            label="Article Image"
+            label="Article image"
+            required 
+          />
+          <v-text-field
+            v-model="lazyImg"
+            persistent-hint
+            hint="Enter the medium image URL from lensdump"
+            :rules="imageRules"
+            label="Article medium image"
             required 
           />
           <v-text-field
             v-model="imgCred"
             :rules="descriptionRules"
             :counter="120"
-            label="Image Description"
+            label="Image description"
             required 
           />
           <v-autocomplete
@@ -71,7 +82,7 @@
             item-value="name"
             :item-disabled="disableRealm"
             multiple
-            label="Choose Tags"
+            label="Choose tags"
             return-object
             small-chips
             deletable-chips
@@ -219,6 +230,17 @@ export default {
 			set(value) {
 				this.UPDATE_ARTICLE_CONTENT({
 					type: 'thumbnailDescription',
+					value: value
+				})
+			}
+		},
+		lazyImg: {
+			get() {
+				return this.article.lazyImg
+			},
+			set(value) {
+				this.UPDATE_ARTICLE_CONTENT({
+					type: 'lazyImg',
 					value: value
 				})
 			}
