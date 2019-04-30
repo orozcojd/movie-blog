@@ -39,7 +39,6 @@ module.exports = {
 						});
 					}
 					else {
-						const token = user.generateToken();
 						res.status(200).send({
 							message: `User ${user.email} was created`
 						});
@@ -89,8 +88,7 @@ module.exports = {
 					});
 				}
 				else {
-					let token;
-					token = user.generateToken();
+					const token = user.generateToken();
 					res.status(200).send({
 						'token': token
 					});
@@ -111,9 +109,7 @@ module.exports = {
 	 */
 	login (req, res) {
 		// console.log('inside login');
-		passport.authenticate('local', (err, user, info) => {
-			// console.log('PASSPORT CALL');
-			let token;
+		passport.authenticate('local', (err, user, info) => {			
 			if (err) {
 				// console.log('ERROR IN LOGIN');
 				res.status(404).json(err);
@@ -121,7 +117,7 @@ module.exports = {
 			}
 			if (user) {
 				// console.log(user);
-				token = user.generateToken();
+				const token = user.generateToken();
 				res.status(200).send({
 					'token': token,
 					'user': user

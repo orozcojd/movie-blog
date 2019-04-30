@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const config = require('./config/config');
 const mongoose = require('mongoose');
 const passport = require('passport');
-
+const expressJWT = require('express-jwt');
 // require statements
 require('./models');
 require('./config/passport');
@@ -21,16 +21,6 @@ app.use(passport.initialize());
 
 require('./routes')(app);
 
-
-app.use((err, req, res, next) => {
-	/* 
-        catch error and send unauthorized response
-    */
-	if (err.name === 'UnauthorizedError') {
-		res.status(401);
-		res.json({'message' : err.name + ': ' + err.message});
-	}
-});
 mongoose.connect(config.db.database,{
 	useNewUrlParser: true 
 }

@@ -52,13 +52,13 @@ UserSchema.methods.comparePasswords = async function(password) {
 
 UserSchema.methods.generateToken = function() {
 	let expiry = new Date();
-	expiry.setDate(expiry.getDate() + 7);
-	// expiry.setTime(expiry.getTime() + (30 * 1000))
+	expiry.setDate(expiry.getDate() + 3);
 	return jwt.sign({
 		_id: this._id,
 		email: this.email,
 		exp: parseInt(expiry.getTime() / 1000)
-	},config.authentication.jwtSecret);
+	},
+	config.authentication.jwtSecret);
 };
 
 

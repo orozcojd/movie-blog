@@ -2,9 +2,10 @@
 
 const AuthenticationController = require('./controllers/AuthenticationController');
 const ArticlesController = require('./controllers/ArticlesController');
+const AdminArticleController = require('./controllers/AdminArticleController');
 const TagsController = require('./controllers/TagsController');
 
-// const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy');
+const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy');
 // const jwt = require('express-jwt');
 // const config = require('./config/config');
 
@@ -15,44 +16,53 @@ const TagsController = require('./controllers/TagsController');
 
 module.exports = (app) => {
 	
-	//delete
-	app.get('/users',
-		AuthenticationController.getUsers);
-	/* login */
-	app.post('/register',
-		// AuthenticationControllerPolicy.register,
-		AuthenticationController.register);
-	app.post('/login',  
-		AuthenticationController.login);
-	app.post('/addUser', 
-		AuthenticationController.addUser);
-	/* articles */
-	app.post('/article',
-		// auth,
-		ArticlesController.postArticle);
+
 	app.get('/articles',
-		// auth,
 		ArticlesController.index);
 	app.get('/tags',
 		TagsController.getTags);
-	app.post('/tags',
-		TagsController.addTags);
-	app.put('/tags',
-		TagsController.update);
-	app.delete('/tags',
-		TagsController.deleteTags);
 	app.get('/tag/:tagName',
 		ArticlesController.getArticlesByTag);
 	app.get('/infinite-articles',
 		ArticlesController.associatedArticles);
-	app.get('/article-preview', 
-		ArticlesController.previews);
 	app.get('/articles/:articleId',
 		ArticlesController.show),
+
+
+	/* Admin User Routes */
+
+	app.post('/register',
+		// AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationController.register);
+	app.get('/users',
+		AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationController.getUsers);
+	app.post('/login',  
+		AuthenticationController.login);
+	app.post('/addUser', 
+		AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationController.addUser);
+	/* articles */
+
+	/* Admin Tag Routes */
+	app.post('/tags',
+		AuthenticationControllerPolicy.authenticateToken,
+		TagsController.addTags);
+	app.put('/tags',
+		AuthenticationControllerPolicy.authenticateToken,
+		TagsController.update);
+	app.delete('/tags',
+		AuthenticationControllerPolicy.authenticateToken,
+		TagsController.deleteTags);
+
+	/* Admin Article Routes */
+	app.post('/article',
+		AuthenticationControllerPolicy.authenticateToken,
+		AdminArticleController.postArticle);
 	app.put('/articles/:articleId',
-		// auth,
-		ArticlesController.update);
+		AuthenticationControllerPolicy.authenticateToken,
+		AdminArticleController.update);
 	app.delete('/article/:articleId',
-		// auth,
-		ArticlesController.delete);
+		AuthenticationControllerPolicy.authenticateToken,
+		AdminArticleController.delete);
 };
