@@ -4,6 +4,7 @@ const config = require('../config/config');
 module.exports = {
 	authenticateToken(req, res, next) {
 		const token = (req) => {
+			console.log(req.headers.authorization);
 			if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer')
 				return req.headers.authorization.split(' ')[1];
 			else if (req.query && req.query.token)

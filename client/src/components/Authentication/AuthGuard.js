@@ -28,5 +28,8 @@ export default {
 				next()
 			}
 		}
+	},
+	getHeader() {
+		return `Bearer ${localStorage.getItem('unsolicited-session-token')}`
 	}
 }

@@ -98,9 +98,9 @@ export default {
 	 * @param {Array} payload 
 	 */
 	async postTags({commit}, payload) {
-		let tags = (await Api().post('tags', payload)).data
+		let tags = (await Api().post('tags', payload, {
+		})).data
 		commit(types.ADD_TAGS, tags)
-		console.log(tags)
 		return tags
 	},
 	/**

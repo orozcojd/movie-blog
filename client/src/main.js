@@ -13,7 +13,6 @@ import { sync } from 'vuex-router-sync'
 // import colors from 'vuetify/es5/util/colors'
 
 Vue.config.productionTip = false
-
 Vue.use(infiniteScroll)
 Vue.use(Vuetify, {
 	options:{
@@ -30,7 +29,6 @@ Vue.use(Vuetify, {
 		// success: '#8bc34a'
 	}
 })
-
 sync(store, router)
 
 new Vue({ // eslint-disable-line no-new

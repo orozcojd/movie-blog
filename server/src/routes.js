@@ -42,7 +42,10 @@ module.exports = (app) => {
 	app.post('/addUser', 
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.addUser);
-	/* articles */
+
+	/* Refresh Token */
+	app.post('/tokens',
+		AuthenticationController.refreshToken);
 
 	/* Admin Tag Routes */
 	app.post('/tags',

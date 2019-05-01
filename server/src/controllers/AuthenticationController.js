@@ -2,6 +2,8 @@
 let {User} = require('../models');
 const config = require('../config/config');
 const passport = require('passport');
+const randomToken = require('rand-token'); 
+let refreshTokens = [];
 // User.find().remove().exec();
 
 module.exports = {
@@ -118,14 +120,61 @@ module.exports = {
 			if (user) {
 				// console.log(user);
 				const token = user.generateToken();
+				const refreshToken = randomToken.uid(256);
+				console.log(user.email);
+				refreshTokens[refreshToken] = user.email;
 				res.status(200).send({
 					'token': token,
-					'user': user
+					'refreshToken': refreshToken
+					// 'user': user
 				});
 			} else {
 				// console.log('ANOTHER ERROR');
 				res.status(401).json(info);
 			}
 		})(req, res);
+	},
+
+	/**
+	 * Extracts email and refresh token from body and if valid: responds with new token
+	 * otherwise send 401
+	 * @param {Object} req 
+	 * @param {Object} res 
+	 */
+	async refreshToken (req, res) {
+		const email = req.body.email;
+		const refreshToken = req.body.refreshToken;
+		try {
+			if((refreshToken in refreshTokens) &&  refreshTokens[refreshToken] === email) {
+				await User.findOne({email: email}, (err, user)=>{
+					if(!user) {
+						res.status(401).send({error: err});
+					}
+					else {
+						const token = user.generateToken();
+						res.status(200).send({'token': 'JWT ' + token});
+					}
+				});
+			}
+			else {
+				res.status(401).send({error: 'Unauthorized!'});
+			}
+		} catch (err) {
+			res.status(401).send({
+				'error': 'Unexpected Error occurred!'
+			});
+		}
+	},
+	/**
+	 * Extracts refreshtoken from req and if found, deletes refreshtoken from global array
+	 * @param {Object} req 
+	 * @param {Object} res 
+	 */
+	rejectToken (req, res) {
+		const refreshToken = req.body.refreshToken;
+		if(refreshToken in refreshTokens) {
+			delete refreshTokens[refreshToken];
+		}
+		res.send(204);
 	}
 };
