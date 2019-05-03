@@ -17,9 +17,9 @@ export default {
 	login({commit, dispatch}, payload) {
 		return new Promise((resolve, reject) => {
 			commit(types.AUTH_REQUEST)
-			Api().post('login', payload).then(res => {
+			Api.ApiGeneral().post('login', payload).then(res => {
 				commit(types.AUTH_SUCCESS)
-				dispatch('setToken', res.data.token)
+				dispatch('setToken', res.data)
 				dispatch('setUser', res.data.user)
 				resolve()
 			}).catch(err => {
@@ -35,16 +35,29 @@ export default {
 	logOut({commit, dispatch}) {
 		return new Promise((resolve) => {
 			commit(types.AUTH_ERR)
-			dispatch('setToken', null)
+			const payload = {
+				refreshToken: localStorage.getItem('unsolicited-session-refresh-token')
+			}
+			dispatch('removeRefreshTkn', payload)
+			dispatch('setToken', {
+				token: null,
+				refreshToken: null
+			})
 			dispatch('setUser', null)
 			resolve()
 		})
 	},
-	
+	async refreshToken ({commit}, payload) {
+		const token = (await Api.ApiGeneral().post('/tokens', payload)).data
+		return token
+	},
+	// refreshRequestPending ({commit}) {
+	// 	commit(types.REFRESH_REQ_PENDING)
+	// },
 	/**
 	 * Commits mutation to set state token to param token
 	 * @param {commit} param0 
-	 * @param {String} token 
+	 * @param {Object} token 
 	 */
 	setToken ({commit}, token) {
 		commit(types.SET_TOKEN, token)
@@ -55,8 +68,9 @@ export default {
 	 */
 	getSetToken ({commit, dispatch}) {
 		const token = localStorage.getItem('unsolicited-session-token')
+		const refreshToken = localStorage.getItem('unsolicited-session-refresh-token')
 		dispatch('getSetUser')
-		commit(types.SET_TOKEN, token)
+		commit(types.SET_TOKEN, {token: token, refreshToken: refreshToken})
 	},
 	/**
 	 * Commits mutations to set user to param user
@@ -74,13 +88,16 @@ export default {
 		const user = JSON.parse(localStorage.getItem('unsolicited-user'))
 		commit(types.SET_USER, user)
 	},
+	async removeRefreshTkn ({commit}, refreshToken) {
+		await (Api.ApiAdmin().post('/tokens/removeRefresh', refreshToken))
+	},
 	/**
 	 * Calls api to GET all tags and commits muation to 
 	 * set state tags array to retrieved result
 	 * @param {commit} param0 
 	 */
 	async getTags ({commit}, options = {}) {
-		let tags = (await Api().get('tags', options)).data
+		let tags = (await Api.ApiGeneral().get('tags', options)).data
 		commit(types.FETCH_TAGS, tags)
 	},
 	/**
@@ -98,8 +115,8 @@ export default {
 	 * @param {Array} payload 
 	 */
 	async postTags({commit}, payload) {
-		let tags = (await Api().post('tags', payload, {
-		})).data
+		let tags = (await Api.ApiAdmin().post('tags', payload)).data
+		console.log(tags)
 		commit(types.ADD_TAGS, tags)
 		return tags
 	},
@@ -110,7 +127,7 @@ export default {
 	 * @param {Array} payload 
 	 */
 	async updateTags ({commit}, payload) {
-		let tags = (await Api().put('tags', payload)).data
+		let tags = (await Api.ApiAdmin().put('tags', payload)).data
 		console.log(tags)
 		commit(types.FETCH_TAGS, tags.tags)
 	},
@@ -121,19 +138,16 @@ export default {
 	 * @param {commit} param0 
 	 * @param {Array} payload 
 	 */
-	deleteTags ({commit}, payload) {
-		return new Promise(async (resolve, reject) => {
-			let params = {
-				data: payload
-			}
-			let deletedTags = (await Api().delete('tags', params)).data
-			resolve(deletedTags.deleteCount)
-			// await Api().delete('tags', params)
-			// commit(types.REMOVE_TAG, deletedTags)
-		}).catch(err => {
-			console.log(err)
-			reject(err)
-		})
+	async deleteTags ({commit}, payload) {
+
+		let params = {
+			data: payload
+		}
+		let deletedTags = await Api.ApiAdmin().delete('tags', params)
+		console.log(deletedTags)
+		commit(types.REMOVE_TAG, deletedTags.data)
+		return deletedTags.data.deleteCount
+
 	},
 	/**
 	 * Commits mutation to convert state article tags & realms
@@ -166,7 +180,7 @@ export default {
 	 * @param {String} id 
 	 */
 	async fetchArticle ({commit}, id) {
-		const article = (await Api().get(`articles/${id}`)).data
+		const article = (await Api.ApiGeneral().get(`articles/${id}`)).data
 		commit(types.FETCH_ARTICLE, article)
 	},
 	/**
@@ -176,7 +190,7 @@ export default {
 	 */
 	async getArticles ({commit}, payload) {
 		console.log(payload)
-		const articles = (await Api().get('articles', payload.params)).data		
+		const articles = (await Api.ApiGeneral().get('articles', payload.params)).data		
 		if(payload.params.extend === true) {
 			commit(types.EXTEND_ARTICLES, articles)
 		}
@@ -198,7 +212,7 @@ export default {
 				id: payload.article._id,
 				pageNo: payload.pageNo
 			}}
-		const nextArticles = (await Api().get('infinite-articles', params)).data
+		const nextArticles = (await Api.ApiGeneral().get('infinite-articles', params)).data
 		if(nextArticles.message.length)
 			commit(types.FETCH_NEXT_ARTICLES, nextArticles)
 		else {
@@ -226,7 +240,7 @@ export default {
 				...payload
 			}
 		}
-		const nextArticles = (await Api().get('infinite-articles', params)).data
+		const nextArticles = (await Api.ApiGeneral().get('infinite-articles', params)).data
 		commit(types.FETCH_UNRELATED_ARTICLES, nextArticles)
 	},
 	/**
@@ -236,7 +250,7 @@ export default {
 	 * @param {String} tag 
 	 */
 	async getArticlesByTag ({commit}, payload) {
-		let articles = (await Api().get(`/tag/${payload.query}`, payload.params)).data
+		let articles = (await Api.ApiGeneral().get(`/tag/${payload.query}`, payload.params)).data
 		commit(types.FETCH_BY_TAG, articles)
 	},
 	/**
@@ -246,7 +260,7 @@ export default {
 	 * @param {Object} payload 
 	 */
 	async updateArticle ({commit}, payload) {
-		const article = (await Api({}).put(`articles/${payload.id}`, payload.article)).data
+		const article = (await Api.ApiAdmin().put(`articles/${payload.id}`, payload.article)).data
 		commit(types.UPDATE_ARTICLE, article)
 		return article.message
 	},
@@ -258,7 +272,7 @@ export default {
 	 */
 	async postArticle ({commit}, payload) {
 		// console.log(payload)
-		const article = (await Api().post('article/', payload)).data
+		const article = (await Api.ApiAdmin().post('article/', payload)).data
 		commit(types.POST_ARTICLE, article)
 		return article
 	},
@@ -269,7 +283,7 @@ export default {
 	 * @param {String} payload 
 	 */
 	async deleteArticle ({commit}, payload) {
-		let deleteCount = (await Api().delete(`article/${payload}`, payload)).data
+		let deleteCount = (await Api.ApiAdmin().delete(`article/${payload}`, payload)).data
 		commit(types.DELETE_ARTICLE, deleteCount)
 	},
 	async resetNextArticles({commit}) {

@@ -6,8 +6,14 @@ export default {
 		}
 		return false
 	},
+	getRefreshReq: (state) => {
+		return state.token.getRefreshReq
+	},
 	getToken: (state) => {
-		return state.token
+		return state.token.token
+	},
+	getRefeshToken: (state) => {
+		return state.token.refreshToken
 	},
 	getUser: (state) => {
 		return state.user

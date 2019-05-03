@@ -46,7 +46,8 @@ module.exports = (app) => {
 	/* Refresh Token */
 	app.post('/tokens',
 		AuthenticationController.refreshToken);
-
+	app.post('/tokens/removeRefresh', 
+		AuthenticationController.rejectToken);
 	/* Admin Tag Routes */
 	app.post('/tags',
 		AuthenticationControllerPolicy.authenticateToken,

@@ -16,7 +16,7 @@ const app = express();
 // use statements
 app.use(morgan('combined'));
 app.use(bodyParser.json());
-app.use(cors());
+app.use(cors({credentials: true, origin: true}));
 app.use(passport.initialize());
 
 app.use((req, res, next) => {

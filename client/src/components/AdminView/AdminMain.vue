@@ -346,7 +346,12 @@ export default {
 						this.addedTags = []
 					})
 					.catch(err => {
-						this.text = err.response.data.error
+						if(err && !err.response) {
+							this.text = err
+						}
+						else {
+							this.text = err.response.data.error
+						}
 						this.addRemoveBtnType = 'error'
 						// console.log(err.response.data.error)
 					})

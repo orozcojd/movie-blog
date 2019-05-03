@@ -8,9 +8,12 @@ import store from '@/store/index'
 import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import infiniteScroll from 'vue-infinite-scroll'
-
+import InterceptorService from '@/services/InterceptorService'
 import { sync } from 'vuex-router-sync'
 // import colors from 'vuetify/es5/util/colors'
+
+// run interceptors
+InterceptorService()
 
 Vue.config.productionTip = false
 Vue.use(infiniteScroll)

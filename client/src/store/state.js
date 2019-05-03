@@ -1,12 +1,15 @@
 module.exports = () => ({
-	token: null,
+	token: {
+		token: null,
+		refreshToken: null,
+		reqPending: false
+	},
 	userStatus: null,
 	userTokenDetails: null,
 	user: null,
 	articles: [],
 	article: {},
 	infiniteArticles: [],
-	new: [],
 	viewedArticles: [],
 	tags: [],
 	tag: {},

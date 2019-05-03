@@ -121,12 +121,13 @@ module.exports = {
 				// console.log(user);
 				const token = user.generateToken();
 				const refreshToken = randomToken.uid(256);
-				console.log(user.email);
+				
 				refreshTokens[refreshToken] = user.email;
+				console.log(refreshTokens);
 				res.status(200).send({
 					'token': token,
-					'refreshToken': refreshToken
-					// 'user': user
+					'refreshToken': refreshToken,
+					'user': {_id: user._id, email: user.email, contributorName: user.contributorName, permission: user.permission}
 				});
 			} else {
 				// console.log('ANOTHER ERROR');
@@ -144,6 +145,7 @@ module.exports = {
 	async refreshToken (req, res) {
 		const email = req.body.email;
 		const refreshToken = req.body.refreshToken;
+		console.log(res.body);
 		try {
 			if((refreshToken in refreshTokens) &&  refreshTokens[refreshToken] === email) {
 				await User.findOne({email: email}, (err, user)=>{
@@ -152,7 +154,7 @@ module.exports = {
 					}
 					else {
 						const token = user.generateToken();
-						res.status(200).send({'token': 'JWT ' + token});
+						res.status(200).send({'token': token});
 					}
 				});
 			}
@@ -175,6 +177,7 @@ module.exports = {
 		if(refreshToken in refreshTokens) {
 			delete refreshTokens[refreshToken];
 		}
-		res.send(204);
+		console.log(refreshTokens);
+		res.sendStatus(204);
 	}
 };

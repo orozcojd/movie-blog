@@ -1,5 +1,6 @@
 import types from './types'
 import Vue from 'vue'
+import { stat } from 'fs';
 export default {
 	/**
 	 * Sets user status state to to loading
@@ -28,16 +29,25 @@ export default {
 	 * @param {Vuex state} state 
 	 * @param {String} token 
 	 */
-	[types.SET_TOKEN]: (state, token) => {
-		state.token = token
-		if (token) {
-			let payload = token.split('.')[1]
-			payload = window.atob(payload)
-			state.userTokenDetails = JSON.parse(payload)
-			localStorage.setItem('unsolicited-session-token', token)
+	[types.SET_TOKEN]: (state, payload) => {
+		state.token.token = payload.token
+		state.token.refreshToken = payload.refreshToken
+		if (state.token.token) {
+			try {
+				let payload = state.token.token.split('.')[1]
+				payload = window.atob(payload)
+				state.userTokenDetails = JSON.parse(payload)
+				localStorage.setItem('unsolicited-session-token', state.token.token)
+				localStorage.setItem('unsolicited-session-refresh-token', state.token.refreshToken)
+				console.log('after setting token in mutation')
+			} catch(err) {
+				localStorage.removeItem('unsolicited-session-token')
+				localStorage.removeItem('unsolicited-session-refresh-token')
+			}
 		} else {
 			state.userTokenDetails = null
-			window.localStorage.removeItem('unsolicited-session-token')
+			localStorage.removeItem('unsolicited-session-token')
+			localStorage.removeItem('unsolicited-session-refresh-token')
 		}
 	},
 	/**
@@ -53,6 +63,9 @@ export default {
 		else{ 
 			window.localStorage.removeItem('unsolicited-user')
 		}
+	},
+	[types.REFRESH_REQ_PENDING] (state) {
+		state.token.reqPending = true
 	},
 	/**
 	 * Sets articles array to payload
