@@ -208,20 +208,6 @@
         </v-btn>
       </div>
     </v-form>
-    <v-snackbar
-      v-model="snackbar"
-      :timeout="6000"
-      :top="true"
-    >
-      {{ text }}
-      <v-btn
-        color="pink"
-        flat
-        @click="snackbar = false"
-      >
-        Close
-      </v-btn>
-    </v-snackbar>
   </v-container>
 </template>
 
@@ -237,9 +223,8 @@ export default {
 			newTag: '',
 			removedTags: [],
 			addedTags: [],
-			snackbar: false,
-			text: '',
 			loaded: false,
+			snackText: '',
 			addRemoveBtnType: 'default',
 			editNameBtnType: 'default',
 			AddTagValid: true,
@@ -271,7 +256,8 @@ export default {
 			get() {
 				return this.ta
 			}
-		}
+		},
+
 	},
 	async mounted() {
 		await this.getTags()
@@ -288,7 +274,8 @@ export default {
 			'getTags',
 			'postTags',
 			'deleteTags',
-			'updateTags'
+			'updateTags',
+			'setSnackbar'
 		]),
 		updateTag(val, type, id) {
 			this.EDIT_TAG_VAL({
@@ -328,48 +315,57 @@ export default {
 			this.addedTags.splice(this.addedTags.indexOf(tag), 1)
 		},
 		reAddTag(tag) {
-			console.log(tag)
 			this.ADD_TAGS({
 				tags: [tag]
 			})
 			this.removedTags.splice(this.removedTags.indexOf(tag), 1)
 		},
 
-		addRemoveTags() {
+		async addRemoveTags() {
 			if(this.addedTags.length){
-				this.postTags(this.addedTags.map(name => ({name: name})))
+				await this.postTags(this.addedTags.map(name => ({name: name})))
 					.then((response) => {
-						this.text = response.message
+						
+						this.snackText = response.message
 						// this.snackbar = true
-        
 						this.addRemoveBtnType = 'success'
 						this.addedTags = []
 					})
 					.catch(err => {
 						if(err && !err.response) {
-							this.text = err
+							this.snackText = err
 						}
 						else {
-							this.text = err.response.data.error
+							this.snackText = err.response.data.error
 						}
 						this.addRemoveBtnType = 'error'
-						// console.log(err.response.data.error)
 					})
-				this.snackbar = true
+				this.setSnackbar({
+					type: 'text',
+					value: this.snackText,
+					show: true
+				})
 			}
-      
-			// delete tags was commented out - code unreachable
+			// if delete tags was commented out - this code is unreachable
 			if(this.removedTags.length) {
-				this.deleteTags(this.removedTags).then(tag => {
-					this.removedTags = []
-					this.text= "Deleted: " + tag.toString() + " tags"
-					this.snackbar = true
-				}
-				)
+				await this.deleteTags(this.removedTags)
+					.then(msg => {
+						this.addRemoveBtnType = 'success'
+						this.removedTags = []
+						this.snackText = "Deleted: " + msg.toString() + " tags"
+					})
+					.catch(err => {
+						this.snackText = err
+					})
+				this.setSnackbar({
+					type: 'text',
+					value: this.snackText,
+					show: true
+				})
 			}
 			setTimeout(() => {
 				this.addRemoveBtnType = 'default'
-			}, 6000)
+			}, 5000)
 		}
 	}
 }

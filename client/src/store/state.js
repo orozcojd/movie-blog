@@ -2,10 +2,8 @@ module.exports = () => ({
 	token: {
 		token: null,
 		refreshToken: null,
-		reqPending: false
+		tokenDetails: null
 	},
-	userStatus: null,
-	userTokenDetails: null,
 	user: null,
 	articles: [],
 	article: {},
@@ -25,10 +23,9 @@ module.exports = () => ({
 		pageNo: 1,
 		articleIds: [],
 	},
-	request: {
-		success: false,
-		error: false,
-		errorMsg: ''
-
+	snackbar: {
+		text: '',
+		timeout: 5000,
+		value: false
 	}
 })

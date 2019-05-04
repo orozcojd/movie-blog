@@ -16,14 +16,12 @@ export default {
 	 */
 	login({commit, dispatch}, payload) {
 		return new Promise((resolve, reject) => {
-			commit(types.AUTH_REQUEST)
 			Api.ApiGeneral().post('login', payload).then(res => {
-				commit(types.AUTH_SUCCESS)
 				dispatch('setToken', res.data)
 				dispatch('setUser', res.data.user)
 				resolve()
 			}).catch(err => {
-				commit(types.AUTH_ERR)
+				
 				reject(err)
 			})
 		})
@@ -34,7 +32,7 @@ export default {
 	 */
 	logOut({commit, dispatch}) {
 		return new Promise((resolve) => {
-			commit(types.AUTH_ERR)
+			
 			const payload = {
 				refreshToken: localStorage.getItem('unsolicited-session-refresh-token')
 			}
@@ -51,9 +49,6 @@ export default {
 		const token = (await Api.ApiGeneral().post('/tokens', payload)).data
 		return token
 	},
-	// refreshRequestPending ({commit}) {
-	// 	commit(types.REFRESH_REQ_PENDING)
-	// },
 	/**
 	 * Commits mutation to set state token to param token
 	 * @param {commit} param0 
@@ -116,7 +111,6 @@ export default {
 	 */
 	async postTags({commit}, payload) {
 		let tags = (await Api.ApiAdmin().post('tags', payload)).data
-		console.log(tags)
 		commit(types.ADD_TAGS, tags)
 		return tags
 	},
@@ -128,8 +122,8 @@ export default {
 	 */
 	async updateTags ({commit}, payload) {
 		let tags = (await Api.ApiAdmin().put('tags', payload)).data
-		console.log(tags)
 		commit(types.FETCH_TAGS, tags.tags)
+		return tags
 	},
 	/**
 	 * Calls api to DELETE array of tags 
@@ -144,7 +138,6 @@ export default {
 			data: payload
 		}
 		let deletedTags = await Api.ApiAdmin().delete('tags', params)
-		console.log(deletedTags)
 		commit(types.REMOVE_TAG, deletedTags.data)
 		return deletedTags.data.deleteCount
 
@@ -288,5 +281,8 @@ export default {
 	},
 	async resetNextArticles({commit}) {
 		commit(types.RESET_NEXT_ARTICLES)
+	},
+	setSnackbar({commit}, payload) {
+		commit(types.SET_SNACKBAR, payload)
 	}
 }

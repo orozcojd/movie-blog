@@ -1,28 +1,6 @@
 import types from './types'
 import Vue from 'vue'
-import { stat } from 'fs';
 export default {
-	/**
-	 * Sets user status state to to loading
-	 * @param {Vuex state} state 
-	 */
-	[types.AUTH_REQUEST]: (state) => {
-		state.userStatus = 'loading'
-	},
-	/**
-	 * Sets user status state to to success
-	 * @param {Vuex state} state 
-	 */
-	[types.AUTH_SUCCESS]: (state) => {
-		state.userStatus = 'success'
-	},
-	/**
-	 * Sets user status state to to error
-	 * @param {Vuex state} state 
-	 */
-	[types.AUTH_ERR]: (state) => {
-		state.userStatus = 'error'
-	},
 	/**
 	 * Sets state token to payload token
    * adds/removes token to/from local storage
@@ -30,22 +8,26 @@ export default {
 	 * @param {String} token 
 	 */
 	[types.SET_TOKEN]: (state, payload) => {
-		state.token.token = payload.token
-		state.token.refreshToken = payload.refreshToken
+		Vue.set(state.token, 'token', payload.token)
+		Vue.set(state.token, 'refreshToken', payload.refreshToken)
+		// state.token.token = payload.token
+		// state.token.refreshToken = payload.refreshToken
 		if (state.token.token) {
 			try {
 				let payload = state.token.token.split('.')[1]
 				payload = window.atob(payload)
-				state.userTokenDetails = JSON.parse(payload)
+
+				// Use set to keep reactivity
+				Vue.set(state.token, 'tokenDetails', JSON.parse(payload))
+
 				localStorage.setItem('unsolicited-session-token', state.token.token)
 				localStorage.setItem('unsolicited-session-refresh-token', state.token.refreshToken)
-				console.log('after setting token in mutation')
 			} catch(err) {
 				localStorage.removeItem('unsolicited-session-token')
 				localStorage.removeItem('unsolicited-session-refresh-token')
 			}
 		} else {
-			state.userTokenDetails = null
+			state.token = {}
 			localStorage.removeItem('unsolicited-session-token')
 			localStorage.removeItem('unsolicited-session-refresh-token')
 		}
@@ -63,9 +45,6 @@ export default {
 		else{ 
 			window.localStorage.removeItem('unsolicited-user')
 		}
-	},
-	[types.REFRESH_REQ_PENDING] (state) {
-		state.token.reqPending = true
 	},
 	/**
 	 * Sets articles array to payload
@@ -141,7 +120,6 @@ export default {
 	[types.NEW_ARTICLE] (state) {
 		// copy realm object
 		if(Object.keys(state.article).length === 0 && state.article.constructor === Object){
-			console.log(state.article)
 			return
 		}
 		else if(state.article.realm._id) {
@@ -234,7 +212,6 @@ export default {
 	 */
 	[types.ADD_TAGS] (state, payload) {
 		const tags = payload.tags
-		console.log(tags)
 		for(let i = 0; i < tags.length; i++) {
 			state.tags.push(tags[i])
 		}
@@ -292,6 +269,12 @@ export default {
 		let index = state.viewedArticles.findIndex(article => article.id === payload.id)
 		if (index == -1) {
 			state.viewedArticles.push(payload)
+		}
+	},
+	[types.SET_SNACKBAR] (state, payload) {
+		Vue.set(state.snackbar, payload.type, payload.value)
+		if(payload.show) {
+			Vue.set(state.snackbar, 'value', true)
 		}
 	}
 }

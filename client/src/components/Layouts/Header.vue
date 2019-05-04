@@ -112,10 +112,23 @@
           Sign Up
         </v-btn>
     </v-toolbar-items> -->
-
-
       <v-toolbar-side-icon @click.stop="drawerRight = !drawerRight" />
     </v-toolbar>
+    <v-snackbar
+      v-model="snackVal"
+      :timeout="snackbar.timeout"
+      :top="true"
+      :multi-line="true"
+    >
+      {{ snackbar.text }}
+      <v-btn
+        color="pink"
+        flat
+        @click="snackClose"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -136,13 +149,24 @@ export default {
 			'viewedArticles',
 			'user',
 			'token',
-			'tags'
+			'tags',
+			'snackbar'
 		]),
 		...mapGetters([
-			'getToken',
 			'isUserLoggedin',
 			'getUser'
 		]),
+		snackVal: {
+			get() {
+				return this.snackbar.value
+			},
+			set(val) {
+				this.setSnackbar({
+					type: 'value',
+					value: val
+				})
+			}
+		},
 		realms () {
 			return this.tags.filter(tag => tag.realm === true)
 		}
@@ -152,7 +176,6 @@ export default {
 			await this.getSetToken()		
 		}
 		await this.getTags()
-		console.log(this.user)
 	},
 	methods: {
 		...mapActions([
@@ -160,7 +183,8 @@ export default {
 			'getSetToken',
 			'setToken',
 			'setUser',
-			'logOut'
+			'logOut',
+			'setSnackbar'
 		]),
 		logout () {
 			this.logOut().then(() => {
@@ -177,6 +201,12 @@ export default {
 				name: name,
 				params: params,
 				// query: {page: 1}
+			})
+		},
+		snackClose() {
+			this.setSnackbar({
+				type: 'value',
+				value: false
 			})
 		}
 	}

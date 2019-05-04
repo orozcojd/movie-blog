@@ -159,7 +159,7 @@ module.exports = {
 				});
 			}
 			else {
-				res.status(401).send({error: 'Unauthorized!'});
+				res.status(401).send({error: 'Unauthorized! Please log in and try again.'});
 			}
 		} catch (err) {
 			res.status(401).send({
@@ -177,7 +177,6 @@ module.exports = {
 		if(refreshToken in refreshTokens) {
 			delete refreshTokens[refreshToken];
 		}
-		console.log(refreshTokens);
 		res.sendStatus(204);
 	}
 };
