@@ -239,7 +239,8 @@ export default {
 	computed: {
 		...mapState([
 			'tags',
-			'user'
+			'user',
+			'snackbar'
 		]),
 		chipTags: {
 			get() {
@@ -365,7 +366,7 @@ export default {
 			}
 			setTimeout(() => {
 				this.addRemoveBtnType = 'default'
-			}, 5000)
+			}, this.snackbar.timeout)
 		}
 	}
 }

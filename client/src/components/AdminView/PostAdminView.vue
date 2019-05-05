@@ -137,7 +137,7 @@
         </v-form>
       </v-flex>
     </v-layout>
-    <v-snackbar
+    <!-- <v-snackbar
       v-model="snackbar"
       :timeout="4000"
       :top="true"
@@ -151,7 +151,7 @@
       >
         Close
       </v-btn>
-    </v-snackbar>
+    </v-snackbar> -->
   </v-container>
 </template>
 
@@ -185,14 +185,15 @@ export default {
 				// error: '',
 				cancelDisabled: false,
 			},
-			snackbar: false,
-			snackText: ''
+			// snackbar: false,
+			// snackText: ''
 		}
 	},
 	computed: {
 		...mapState({
 			article:'article',
-			tagChoices: 'tags'
+			tagChoices: 'tags',
+			snackbar: 'snackbar'
 		}),
 
 		...mapGetters([
@@ -280,7 +281,6 @@ export default {
 		},
 		tags: {
 			get() {
-				console.log(this.article.tags)
 				return this.article.tags
 			},
 			set(value) {
@@ -333,19 +333,14 @@ export default {
 			}
 			else {
 				// else fetch then set article state
-				console.log('fetching')
 				await this.fetchArticle(id)
 			}
 		}
 		else {
-			console.log('hitting article set single')
 			this.SET_SINGLE_ARTICLE({});
 		}
-		// console.log(this.article)
 		this.prepareArticle()
 		this.loaded = true
-		// console.log(this.article)
-		// console.log(this.tags)
 	},
 	methods: {
 		validate (btnType) {
@@ -376,8 +371,8 @@ export default {
 			'postArticle',
 			'fetchArticle',
 			'setSingleArticle',
-			'getTags',
-			'prepareArticle'
+			'prepareArticle',
+			'setSnackbar'
 		]),
 		cancel () {
 			this.$router.push({
@@ -393,8 +388,11 @@ export default {
 			})
 		},
 		submitCallback(message, btnType, fail = false) {
-			this.snackText = message
-			this.snackbar = true
+			this.setSnackbar({
+				type: 'text',
+				value: message,
+				show: true
+			})
 			if(fail)
 				this.validation[btnType] = 'error'
 			else
@@ -420,7 +418,7 @@ export default {
 							this.$router.push({
 								name: 'root'
 							})
-						}, 3000)
+						}, this.snackbar.timeout)
 					})
 					.catch(err => {
 						this.submitCallback(err.response.data.error, btnType, true)
@@ -438,7 +436,7 @@ export default {
 			setTimeout(() => {
 				this.validation[btnType] = 'default'
 				this.validation.cancelDisabled = false
-			}, 3000)
+			}, this.snackbar.timeout)
 		}
 	}
 }

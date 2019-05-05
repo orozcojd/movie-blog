@@ -57,14 +57,14 @@ export default {
 			required: true
 		}
 	},
+	data () {
+		return {
+		}
+	},
 	computed: {
 		...mapState({
 			'articles': 'article'
 		})
-	},
-	data () {
-		return {
-		}
 	},
 	methods: {
 		...mapActions([

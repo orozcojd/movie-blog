@@ -58,12 +58,9 @@ export default {
 	},
 	methods: {
 		...mapActions([
-			'setToken',
-			'setUser',
 			'login'
 		]),
 		async submit () {
-			console.log('clicked')
 			this.login({
 				email: this.credentials.email,
 				password: this.credentials.password

@@ -59,21 +59,21 @@
             Submit
           </v-btn>
         </v-form>
-        <div
+        <!-- <div
           v-if="error"
           class="error"
         >
           {{ errorMsg }}
-        </div>
+        </div> -->
       </v-flex>
     </v-layout>
-    <v-snackbar
+    <!-- <v-snackbar
       v-model="snackbar"
       :multi-line="true"
       :top="true"
     >
       {{ snackText }}
-    </v-snackbar>
+    </v-snackbar> -->
   </v-container>
 </template>
 
@@ -98,15 +98,15 @@ export default {
 			userFieldsValid: true,
 			permissions: [{text:'Super User - 1', value:1}, {text:'Admin User - 2', value: 2}],
 			submitColor: 'default',
-			error: false,
+			// error: false,
 			errorMsg: '',
-			snackbar: false,
 			snackText: ''
 		}
 	},
 	computed: {
 		...mapState({
-			adminUser: 'user'
+			adminUser: 'user',
+			snackbar: 'snackbar'  
 		})
 	},
 	mounted() {
@@ -114,7 +114,8 @@ export default {
 	},
 	methods: {
 		...mapActions([
-			'addUser'
+			'addUser',
+			'setSnackbar'
 		]),
 		async submit () {
 			if (this.$refs.addUserForm.validate()) {
@@ -122,29 +123,32 @@ export default {
 					.then(() => {
 						this.submitColor = 'success'
 						this.snackText = `User ${this.user.email} was created.`
-						this.snackbar = true
 						setTimeout(() => {
 							this.$router.push({
 								name: 'admin-categories'
 							})
-						}, 4100)
+						}, this.snackbar.timeout)
 					})
 					.catch(err => {
-						this.error = true
-						this.errorMsg = err.response.data.error
+						if(err.response)
+							this.snackText = err.response.data.error
+						else
+							this.snackText = err
 						this.submitColor = 'error'
-						setTimeout(() => {
-							this.error = false
-						}, 3000)
+
 					})
+				this.setSnackbar({
+					type: 'text',
+					value: this.snackText,
+					show: true
+				})
 			}
 			else {
 				this.submitColor = 'error'
 			}
 			setTimeout(() => {
 				this.submitColor = 'default'
-				this.snackbar = false
-			}, 4000)
+			}, this.snackbar.timeout)
 		}
 	}
 }

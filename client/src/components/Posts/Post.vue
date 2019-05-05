@@ -186,11 +186,12 @@ export default {
 			return date
 		},
 		articleRealm() {
-			return this.convertTagIdToName(this.article.realm)
+			if(this.article.realm)
+				return this.convertTagIdToName(this.article.realm)
+			return null
 		}
 	},
 	async mounted () {
-		console.log('inside post')
 		await this.setContent()
 		this.loaded = true
 	},
@@ -199,9 +200,15 @@ export default {
 			'PUSH_VIEWED',
 		]),
 		convertTagIdToName (id) {
-			return this.tags.find(tag => tag._id === id).name.trim()
+			if(this.tags.length){
+				const tag = this.tags.find(tag => tag._id === id)
+				if(tag)
+					return tag.name.trim()
+			}
 		},
 		upperCaseString(str) {
+			if(!str)
+				return
 			let strArr = str.split('-')
 			let upperArr = []
 			for(let i = 0; i < strArr.length; i++) {

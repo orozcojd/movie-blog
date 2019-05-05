@@ -103,7 +103,6 @@ export default {
 		}
 	},
 	async mounted() {
-		this.loaded = true
 		const urlTag = this.$route.params.tagName
 		const page = this.$route.query.page
 		let payload = {
@@ -113,6 +112,7 @@ export default {
 				}
 			}
 		}
+		this.loaded = true
 		if(this.tag.name !== urlTag) {
 			let newTag = this.tags.find(tag => tag.name === urlTag)
 			if(!newTag) {
@@ -122,16 +122,15 @@ export default {
 			else {
 				this.setTag(newTag)
 				payload.query = newTag._id
-				this.getArticlesByTag(payload)
+				await this.getArticlesByTag(payload)
 			}
 		}
 		payload.query = this.tag._id
-		this.getArticlesByTag(payload)
+		await this.getArticlesByTag(payload)
 	},
 	methods: {
 		...mapActions([
 			'getArticlesByTag',
-			'getTags',
 			'setTag'
 		])
 	}

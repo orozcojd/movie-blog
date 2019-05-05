@@ -181,7 +181,6 @@ export default {
 		...mapActions([
 			'getTags',
 			'getSetToken',
-			'setToken',
 			'setUser',
 			'logOut',
 			'setSnackbar'

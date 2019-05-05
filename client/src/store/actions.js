@@ -4,7 +4,7 @@ import types from './types'
 export default {
 
 	async addUser({commit}, payload) {
-		const response = (await Api().post('addUser', payload)).data
+		const response = (await Api.ApiAdmin().post('addUser', payload)).data
 		return response
 	},
 
@@ -14,16 +14,13 @@ export default {
 	 * @param {commit, dispatch} param0 
 	 * @param {object} payload 
 	 */
-	login({commit, dispatch}, payload) {
-		return new Promise((resolve, reject) => {
-			Api.ApiGeneral().post('login', payload).then(res => {
-				dispatch('setToken', res.data)
-				dispatch('setUser', res.data.user)
-				resolve()
-			}).catch(err => {
-				
-				reject(err)
-			})
+	async login({commit, dispatch}, payload) {
+		await Api.ApiGeneral().post('login', payload).then(async (res) => {
+			await dispatch('setToken', res.data)
+			await dispatch('setUser', res.data.user)
+			return res
+		}).catch(err => {
+			return Promise.reject(err)
 		})
 	},
 	/**
@@ -32,7 +29,6 @@ export default {
 	 */
 	logOut({commit, dispatch}) {
 		return new Promise((resolve) => {
-			
 			const payload = {
 				refreshToken: localStorage.getItem('unsolicited-session-refresh-token')
 			}
@@ -94,6 +90,7 @@ export default {
 	async getTags ({commit}, options = {}) {
 		let tags = (await Api.ApiGeneral().get('tags', options)).data
 		commit(types.FETCH_TAGS, tags)
+		return tags
 	},
 	/**
 	 * Commits mutation to set state tag object to payload tag
@@ -133,13 +130,12 @@ export default {
 	 * @param {Array} payload 
 	 */
 	async deleteTags ({commit}, payload) {
-
 		let params = {
 			data: payload
 		}
-		let deletedTags = await Api.ApiAdmin().delete('tags', params)
-		commit(types.REMOVE_TAG, deletedTags.data)
-		return deletedTags.data.deleteCount
+		let deletedTags = (await Api.ApiAdmin().delete('tags', params)).data
+		commit(types.REMOVE_TAG, deletedTags)
+		return deletedTags.deleteCount
 
 	},
 	/**
@@ -175,6 +171,7 @@ export default {
 	async fetchArticle ({commit}, id) {
 		const article = (await Api.ApiGeneral().get(`articles/${id}`)).data
 		commit(types.FETCH_ARTICLE, article)
+		return article
 	},
 	/**
 	 * Calls api to GET articles and commits mutation to
@@ -182,7 +179,6 @@ export default {
 	 * @param {commit} param0 
 	 */
 	async getArticles ({commit}, payload) {
-		console.log(payload)
 		const articles = (await Api.ApiGeneral().get('articles', payload.params)).data		
 		if(payload.params.extend === true) {
 			commit(types.EXTEND_ARTICLES, articles)
@@ -190,6 +186,7 @@ export default {
 		else {
 			commit(types.FETCH_ARTICLES, articles)
 		}
+		return articles
 	},
 	/**
 	 * Calls API to GET associated articles by tag, realms found in current
@@ -211,6 +208,7 @@ export default {
 		else {
 			dispatch('setMaxRelated', true)
 		}
+		return nextArticles
 	},
 	/**
 	 * Commits mutation to toggle state variable to payload
@@ -235,6 +233,7 @@ export default {
 		}
 		const nextArticles = (await Api.ApiGeneral().get('infinite-articles', params)).data
 		commit(types.FETCH_UNRELATED_ARTICLES, nextArticles)
+		return nextArticles
 	},
 	/**
 	 * Calls api to GET articles with associated tags 
@@ -243,8 +242,9 @@ export default {
 	 * @param {String} tag 
 	 */
 	async getArticlesByTag ({commit}, payload) {
-		let articles = (await Api.ApiGeneral().get(`/tag/${payload.query}`, payload.params)).data
+		const articles = (await Api.ApiGeneral().get(`/tag/${payload.query}`, payload.params)).data
 		commit(types.FETCH_BY_TAG, articles)
+		return articles
 	},
 	/**
 	 * Calls api to update payload object article in db
@@ -264,7 +264,6 @@ export default {
 	 * @param {Object} payload 
 	 */
 	async postArticle ({commit}, payload) {
-		// console.log(payload)
 		const article = (await Api.ApiAdmin().post('article/', payload)).data
 		commit(types.POST_ARTICLE, article)
 		return article
@@ -278,6 +277,7 @@ export default {
 	async deleteArticle ({commit}, payload) {
 		let deleteCount = (await Api.ApiAdmin().delete(`article/${payload}`, payload)).data
 		commit(types.DELETE_ARTICLE, deleteCount)
+		return deleteCount
 	},
 	async resetNextArticles({commit}) {
 		commit(types.RESET_NEXT_ARTICLES)
