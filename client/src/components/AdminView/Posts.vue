@@ -11,14 +11,12 @@
 </template>
 
 <script>
-// import PostPreview from '@/components/AdminView/PostPreview'
 import DisplayArticles from '@/components/Layouts/DisplayArticles'
 import { mapActions, mapState } from 'vuex'
 
 export default {
 	name: 'AdminView',
 	components: {
-		// PostPreview,
 		DisplayArticles
 	},
 	props: {
@@ -34,27 +32,28 @@ export default {
 	},
 	computed: {
 		...mapState([
-			'articles'
+			'articles',
 		]),
 		filterArticles () {
 			return this.articles.filter(article => article.draft === this.drafts)
 		}
 	},
 	async mounted () {
+		// skip: 0,
+		// limit: 15
 		const options = {
 			params: {
 				params: {
-					// skip: 0,
-					// limit: 15
+					draft: this.drafts,
 				},
 				extend: false
 			}
 		}
-		await this.getArticles(options)
+		await this.getArticlesApi(options)
 	},
 	methods: {
 		...mapActions([
-			'getArticles'
+			'getArticlesApi'
 		])
 	}
 }

@@ -6,7 +6,7 @@ class Article {
 	 * Fills class with object attributes
 	 * @param {object} param0 
 	 */
-	fill ({ title = null, draft = null, author = null, body = null, imgCred = null, thumbnailDescription = null, lazyImg = null, img = null, realm = null, tags = null }) {
+	fill ({ title = null, draft = null, author = null, body = null, imgCred = null, thumbnailDescription = null, lazyImg = null, img = null, realm = null, tags = null, contributorId = null }) {
 		// this._id = _id
 		this.title = title
 		this.draft = draft
@@ -18,6 +18,7 @@ class Article {
 		this.lazyImg = lazyImg
 		this.realm = realm._id
 		this.tags = tags.map(tag => tag._id)
+		this.contributorId = contributorId
 	}
 }
 export default Article

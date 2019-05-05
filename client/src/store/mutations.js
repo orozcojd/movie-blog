@@ -54,6 +54,13 @@ export default {
 	[types.FETCH_ARTICLES] (state, payload) {
 		state.articles = payload
 	},
+
+	/**
+	 * Extends state articles array by spreading payload array
+	 * and pushing it
+	 * @param {Vuex state} state 
+	 * @param {Array} payload 
+	 */
 	[types.EXTEND_ARTICLES] (state, payload) {
 		state.articles.push(...payload)
 	},
@@ -88,6 +95,14 @@ export default {
 		state.infiniteArticles.push(payload)
 
 	},
+
+	/**
+	 * Array Spreads array and pushes into state infiniteArticles array
+	 * Increments state pageNo by one and adds Ids to vuex associated
+	 * articles array
+	 * @param {Vuex state} state 
+	 * @param {Array} payload 
+	 */
 	[types.FETCH_NEXT_ARTICLES] (state, payload) {
 		if(payload.message.length) {
 			state.infiniteArticles.push(...payload.message)
@@ -95,12 +110,22 @@ export default {
 			state.associatedArticles.articleIds.push(...(payload.message.map(article => article._id)))
 		}
 	},
+	/**
+	 * Spreads and pushes payload message to infiniteArticles
+	 * state array and increments assoc pageNo by 1
+	 * @param {Vuex state} state 
+	 * @param {Object} payload 
+	 */
 	[types.FETCH_UNRELATED_ARTICLES] (state, payload) {
 		if(payload.message.length) {
 			state.infiniteArticles.push(...payload.message)
 			state.unAssociatedArticles.pageNo +=1
 		}
 	},
+	/**
+	 * Resets all Vuex inifinite articles arrays
+	 * @param {Vuex state} state 
+	 */
 	[types.RESET_NEXT_ARTICLES] (state) {
 		state.infiniteArticles = []
 		state.associatedArticles = {
@@ -271,6 +296,12 @@ export default {
 			state.viewedArticles.push(payload)
 		}
 	},
+
+	/**
+	 * Sets vuex snackbar Object to payload values passed
+	 * @param {Vuex state} state 
+	 * @param {Object} payload 
+	 */
 	[types.SET_SNACKBAR] (state, payload) {
 		Vue.set(state.snackbar, payload.type, payload.value)
 		if(payload.show) {

@@ -58,10 +58,11 @@ export default {
 			}
 			else {
 				// Do something with response error
-				store.dispatch('logOut')
-				router.push({
-					name: 'admin-login'
-				})
+				// store.dispatch('logOut')
+				// router.push({
+				// 	name: 'admin-login'
+				// })
+				return Promise.reject(error)
 			}
 		})
 		return instance

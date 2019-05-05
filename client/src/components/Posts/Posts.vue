@@ -84,7 +84,7 @@ export default {
 					// skip: 0,
 					limit: 15
 				},
-				extend: true
+				extend: false
 			}
 		}
 		await this.getArticles(options)

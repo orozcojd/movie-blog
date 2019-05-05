@@ -1,8 +1,9 @@
 export default {
 	isUserLoggedin: (state) => {
-		let user = state.token.tokenDetails
-		if (user) {
-			return user.exp > Date.now() / 1000
+		const userToken = state.token.tokenDetails
+		const userDetail = state.user
+		if (!!userToken && !!userDetail) {
+			return userToken.exp > Date.now() / 1000
 		}
 		return false
 	},

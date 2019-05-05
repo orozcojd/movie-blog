@@ -31,6 +31,11 @@ module.exports = (app) => {
 
 	/* Admin User Routes */
 
+	app.get('/api/articles', 
+		AuthenticationControllerPolicy.authenticateToken,
+		AdminArticleController.index	
+	);
+
 	app.post('/register',
 		// AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.register);

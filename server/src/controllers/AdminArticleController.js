@@ -2,6 +2,34 @@ const {Post} = require('../models');
 
 module.exports = {
 	/**
+   * GET REQUEST
+   * Tets all posts and limits to 12 posts. send array of articles
+   * If no error -- otherwise sends 400 error 
+   * @param {Object} req 
+   * @param {Object} res 
+   */
+	async index (req, res) {
+		try {
+			let options = {};
+			if(req.query.skip)
+				options.skip = parseInt(req.query.skip);
+			if(req.query.limit)
+				options.limit = parseInt(req.query.limit);
+			options.sort = {created_at: 'desc'};
+			const query = {...req.query, contributorId: req.userId};
+			const articles = await Post.find(query,{}, options).lean();
+				
+			res.send(articles);   
+		}
+		catch (err) {
+			res.status(400).send({
+				error: 'An error has occured trying to get articles',
+				details: err
+			});
+		}
+	},
+
+	/**
    * POST REQUEST
    * creates Post article from schema and sends the returned
    * object if no error - otherwise returns 400 error 
@@ -31,15 +59,23 @@ module.exports = {
    */
 	async update (req, res) {
 		try {
-			const article = await Post.findByIdAndUpdate(
-				req.params.articleId,
+			const article = await Post.findOneAndUpdate(
+				{_id: req.params.articleId, contributorId: req.body.contributorId},
 				req.body,
 				{new: true}
 			);
-			res.send({
-				article: article,
-				message: 'Article was updated!'
-			});
+			if(article){
+				res.send({
+					article: article,
+					message: 'Article was updated!'
+				});
+			}
+			else {
+				res.status(403).send({
+					error: 'Unauthorized! You are not the original contributor to this article.',
+					// details: err
+				});
+			}
 		}
 		catch (err) {
 			res.status(400).send({

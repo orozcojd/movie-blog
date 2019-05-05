@@ -34,10 +34,14 @@ let articleSchema = new Schema({
 	},
 	imgCred: String,
 	thumbnailDescription: String,
+	contributorId: {
+		type: String,
+		required: true
+	},
 	comments: [{body: String, date: Date, user: String}],
 	meta: {
 		votes: Number,
 		favs: Number
-	},
+	}
 }, {timestamps: { createdAt: 'created_at'} });
 module.exports = mongoose.model('Blog', articleSchema);

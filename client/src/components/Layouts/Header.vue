@@ -187,6 +187,7 @@ export default {
 		]),
 		logout () {
 			this.logOut().then(() => {
+				console.log('after logged out')
 				this.$router.push({
 					name: 'root'
 				})

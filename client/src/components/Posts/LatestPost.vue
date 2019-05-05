@@ -45,9 +45,11 @@
               </p>
             </div>
           </v-card-title>
-          <p align="right">
-            {{ article.author }}
-          </p>
+          <v-card-title>
+            <p align="left">
+              {{ article.author }}
+            </p>
+          </v-card-title>
         </v-layout>
       </v-flex>
     </v-layout>

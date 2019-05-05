@@ -11,12 +11,9 @@ module.exports = {
 				return req.query.token;
 			return null;
 		};
-		console.log(token(req));
 		jwt.verify(token(req), config.authentication.jwtSecret, (err, decoded) => {
-			console.log(err);
 			if(decoded) {
-				console.log('decoded!!');
-				console.log(decoded);
+				req.userId = decoded._id;
 				next();
 			}
 			else {

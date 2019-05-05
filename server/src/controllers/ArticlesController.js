@@ -20,7 +20,6 @@ module.exports = {
 			if(req.query.limit)
 				options.limit = parseInt(req.query.limit);
 			options.sort = {created_at: 'desc'};
-			console.log(options);
 			let query = {};
 			query.draft = false;
 			const articles = await Post.find(query,{}, options).lean();

@@ -193,7 +193,8 @@ export default {
 		...mapState({
 			article:'article',
 			tagChoices: 'tags',
-			snackbar: 'snackbar'
+			snackbar: 'snackbar',
+			user: 'user'
 		}),
 
 		...mapGetters([
@@ -376,7 +377,7 @@ export default {
 		]),
 		cancel () {
 			this.$router.push({
-				name: 'root'
+				name: 'admin-categories'
 			})
 		},
 		previewPost () {
@@ -408,7 +409,7 @@ export default {
 			this.validation.cancelDisabled = true
 			if (this.$route.params.id) {
 				let payload = {
-					article: new Article(this.article),
+					article: new Article({...this.article, contributorId: this.user._id}),
 					id: this.$route.params.id
 				}
 				await this.updateArticle(payload)
@@ -416,12 +417,15 @@ export default {
 						this.submitCallback(response, btnType)
 						setTimeout(() => {
 							this.$router.push({
-								name: 'root'
+								name: 'admin-categories'
 							})
 						}, this.snackbar.timeout)
 					})
 					.catch(err => {
 						this.submitCallback(err.response.data.error, btnType, true)
+						this.$router.push({
+							name: 'admin-categories'
+						})
 					})
 			} else {
 				await this.postArticle(new Article(this.article))

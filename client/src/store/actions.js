@@ -3,6 +3,12 @@ import types from './types'
 
 export default {
 
+
+	/**
+	 * Calls API to post user detail data and returns reponse
+	 * @param {commit} param0 
+	 * @param {Object} payload 
+	 */
 	async addUser({commit}, payload) {
 		const response = (await Api.ApiAdmin().post('addUser', payload)).data
 		return response
@@ -16,6 +22,7 @@ export default {
 	 */
 	async login({commit, dispatch}, payload) {
 		await Api.ApiGeneral().post('login', payload).then(async (res) => {
+			console.log(res)
 			await dispatch('setToken', res.data)
 			await dispatch('setUser', res.data.user)
 			return res
@@ -60,8 +67,10 @@ export default {
 	getSetToken ({commit, dispatch}) {
 		const token = localStorage.getItem('unsolicited-session-token')
 		const refreshToken = localStorage.getItem('unsolicited-session-refresh-token')
-		dispatch('getSetUser')
-		commit(types.SET_TOKEN, {token: token, refreshToken: refreshToken})
+		if(refreshToken){
+			dispatch('getSetUser')
+			commit(types.SET_TOKEN, {token: token, refreshToken: refreshToken})
+		}
 	},
 	/**
 	 * Commits mutations to set user to param user
@@ -179,11 +188,28 @@ export default {
 	 * @param {commit} param0 
 	 */
 	async getArticles ({commit}, payload) {
-		const articles = (await Api.ApiGeneral().get('articles', payload.params)).data		
+		const articles = (await Api.ApiAdmin().get('/articles', payload.params)).data		
 		if(payload.params.extend === true) {
 			commit(types.EXTEND_ARTICLES, articles)
 		}
 		else {
+			commit(types.FETCH_ARTICLES, articles)
+		}
+		return articles
+	},
+	/**
+	 * Calls api to GET articles and commits mutation to
+	 * set state articles array to retrieved articles
+	 * @param {commit} param0 
+	 */
+	async getArticlesApi ({commit}, payload) {
+		const articles = (await Api.ApiAdmin().get('/api/articles', payload.params)).data		
+		if(payload.params.extend === true) {
+			commit(types.EXTEND_ARTICLES, articles)
+			console.log('extending')
+		}
+		else {
+			console.log('hre')
 			commit(types.FETCH_ARTICLES, articles)
 		}
 		return articles
@@ -282,6 +308,12 @@ export default {
 	async resetNextArticles({commit}) {
 		commit(types.RESET_NEXT_ARTICLES)
 	},
+
+	/**
+	 * Commits mutation to set vuex snackbar to value in payload
+	 * @param {commit} param0 
+	 * @param {Object} payload 
+	 */
 	setSnackbar({commit}, payload) {
 		commit(types.SET_SNACKBAR, payload)
 	}
