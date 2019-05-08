@@ -29,7 +29,7 @@
           />
           <v-text-field
             v-model="author"
-            :rules="authorRules"
+            :rules="contributorRules"
             :counter="30"
             label="Author"
             required
@@ -159,7 +159,7 @@
 import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import TipTap from '@/components/Tools/TipTap'
 import Article from '@/Model/Article'
-import PostValidation from '@/components/Tools/PostValidation'
+import FormValidation from '@/components/Tools/FormValidation'
 export default {
 
 	name: 'PostAdminView',
@@ -172,11 +172,11 @@ export default {
 			// tags: [],
 			valid: true,
 			/* validation rules */
-			titleRules: PostValidation.titleRules,
-			authorRules: PostValidation.authorRules,
-			descriptionRules: PostValidation.descriptionRules,
-			imageRules: PostValidation.imageRules,
-			realmRules: PostValidation.realmRules,
+			titleRules: FormValidation.titleRules,
+			contributorRules: FormValidation.contributorRules,
+			descriptionRules: FormValidation.descriptionRules,
+			imageRules: FormValidation.imageRules,
+			realmRules: FormValidation.realmRules,
 			loaded: false,
 			requestRunning: false,
 			validation: {

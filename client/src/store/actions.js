@@ -203,6 +203,7 @@ export default {
 	 * @param {commit} param0 
 	 */
 	async getArticlesApi ({commit}, payload) {
+		console.log('here')
 		const articles = (await Api.ApiAdmin().get('/api/articles', payload.params)).data		
 		if(payload.params.extend === true) {
 			commit(types.EXTEND_ARTICLES, articles)
@@ -290,6 +291,7 @@ export default {
 	 * @param {Object} payload 
 	 */
 	async postArticle ({commit}, payload) {
+		console.log('niside post')
 		const article = (await Api.ApiAdmin().post('article/', payload)).data
 		commit(types.POST_ARTICLE, article)
 		return article
@@ -305,10 +307,41 @@ export default {
 		commit(types.DELETE_ARTICLE, deleteCount)
 		return deleteCount
 	},
+	/**
+	 * 
+	 * @param {*} param0 
+	 */
 	async resetNextArticles({commit}) {
 		commit(types.RESET_NEXT_ARTICLES)
 	},
-
+	/**
+	 * 
+	 * @param {*} param0 
+	 * @param {*} id 
+	 */
+	async getContributorBio({commit}, id) {
+		const contributor = (await Api.ApiAdmin().get(`contributor/${id}`)).data
+		commit(types.SET_CONTRIBUTOR, contributor)
+		return contributor
+	},
+	/**
+	 * 
+	 * @param {*} param0 
+	 * @param {*} id 
+	 */
+	async updateContributorBio({commit}, payload) {
+		const response = (await Api.ApiAdmin().post(`contributor/${payload.id}`, payload)).data
+		commit(types.UPDATE_CONTRIBUTOR, response.contributor)
+		return response
+	},
+	/**
+	 * 
+	 * @param {*} param0 
+	 * @param {*} payload 
+	 */
+	editContributorVal({commit}, payload) {
+		commit(types.EDIT_CONTRIBUTOR_VAL, payload)
+	},
 	/**
 	 * Commits mutation to set vuex snackbar to value in payload
 	 * @param {commit} param0 

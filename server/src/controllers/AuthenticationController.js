@@ -1,12 +1,77 @@
 // controllers are used for declaring all the endpoints
 let {User} = require('../models');
+let {Contributor} = require('../models');
+const {Post} = require('../models');
+
 const config = require('../config/config');
 const passport = require('passport');
 const randomToken = require('rand-token'); 
 let refreshTokens = [];
-// User.find().remove().exec();
+// Contributor.find().remove().exec();
 
 module.exports = {
+	
+	async getContributor (req, res) {
+		const id = req.params.contributorId;
+		try {
+			const contributor = await Contributor.findOne({_id: id});
+			if(contributor) {
+				res.send(contributor);
+			}
+			else {
+				console.log('inside else');
+				res.status(404).send({
+					error: 'The resource is not found'
+				});
+			}
+		} catch (err) {
+			console.log(err);
+			res.status(400).send({
+				
+				error: 'Unexpected error has occurred'
+			});
+		}
+	},
+
+	async updateContributor (req, res) {
+		try {
+			// get contributor name - save it
+			const contributorId = req.params.contributorId;
+			let contributorName = await Contributor.findOne({_id: contributorId});
+			contributorName = contributorName.name;
+			let updateName = false;
+			if(req.body.name !== contributorName) {
+				updateName = true;
+			}
+			
+			const contributor = await Contributor.findOneAndUpdate(
+				{_id: contributorId},
+				req.body,
+				{new: true}
+			);
+			let updated;
+			if(updateName) {
+				updated = await Post.updateMany({contributorId: contributorId}, {
+					author: req.body.name
+				});
+			}
+			let message = 'Contributor information Updated! ';
+			if(updated) {
+				message += updated.nModified.toString() + ' Article(s) were updated reflecting name change.';
+			}
+			res.send({
+				contributor: contributor,
+				message: message
+			});
+
+		} catch(err) {
+			console.log(err);
+			res.status(400).send({
+				error: 'Unexpected error has occurred'
+			});
+		}
+
+	},
 	async getUsers (req, res) {
 		try {
 			const users = await User.find();
@@ -25,24 +90,41 @@ module.exports = {
 	 */
 	async addUser (req, res) {
 		try {
-			console.log(req.body);
+			// console.log(req.body);
+
+
+			
 			const realAdminUid = config.authentication.superUser;
 			const adminId = req.body.id;
 			const currUser = await User.findById(adminId);
 			if(currUser.permission === realAdminUid){
 				const pw = req.body.password;
-				let user = new User();
-				await user.createUser(req.body);
-				await user.hashPassword(pw);
-				user.save((err) => {
+				let contributor = new Contributor();
+				await contributor.createContributor({name: req.body.contributorName});
+				contributor.save(async (err, contrib) => {
 					if(err) {
 						res.status(400).send({
-							error: 'Email or contributor name already in use.'
+							error: 'Contributor name already in use.'
 						});
 					}
 					else {
-						res.status(200).send({
-							message: `User ${user.email} was created`
+						let user = new User();
+						const referenceId = contrib._id;
+						await user.createUser({...req.body, contributorId: referenceId});
+						await user.hashPassword(pw);
+						user.save((err, saved) => {
+							if(err) {
+								res.status(400).send({
+									error: 'Email or contributor name already in use.'
+								});
+							}
+							else {
+								res.status(200).send({
+									message: `User ${user.email} was created`,
+									user: saved,
+									contributor: contrib
+								});
+							}
 						});
 					}
 				});
@@ -54,7 +136,8 @@ module.exports = {
 			}
 		} catch (err) {
 			res.status(400).send({
-				error: 'Unexpected error has occurred'
+				error: 'Unexpected error has occurred',
+				details: err
 			});
 		}
 	},
@@ -67,32 +150,33 @@ module.exports = {
 	 */
 	async register (req, res) {
 		try {
-			console.log(req.body);
 			const pw = req.body.password;
-			// const permission = req.body.permission;
-			// const contributorName = req.body.contributorName;
-			// const email = req.body.email;
-			let user = new User();
-			await user.createUser(req.body);
-			// set user email
-			// user.email = email;
-			// user.permission = permission;
-			// user.contributorName = contributorName;
-
-			// hash password and set pw
-			await user.hashPassword(pw);
-			// let userJson = user.toJSON();
-			// console.log(userJson);
-			user.save((err) => {
+			let contributor = new Contributor();
+			await contributor.createContributor({name: req.body.contributorName});
+			contributor.save(async (err, contrib) => {
 				if(err) {
 					res.status(400).send({
-						error: 'Email already in use'
+						error: 'Contributor name already in use.'
 					});
 				}
 				else {
-					const token = user.generateToken();
-					res.status(200).send({
-						'token': token
+					let user = new User();
+					const referenceId = contrib._id;
+					await user.createUser({...req.body, contributorId: referenceId});
+					await user.hashPassword(pw);
+					user.save((err, saved) => {
+						if(err) {
+							res.status(400).send({
+								error: 'Email or contributor name already in use.'
+							});
+						}
+						else {
+							res.status(200).send({
+								message: `User ${user.email} was created`,
+								user: saved,
+								contributor: contrib
+							});
+						}
 					});
 				}
 			});
@@ -127,7 +211,7 @@ module.exports = {
 				res.status(200).send({
 					'token': token,
 					'refreshToken': refreshToken,
-					'user': {_id: user._id, email: user.email, contributorName: user.contributorName, permission: user.permission}
+					'user': {_id: user._id, email: user.email, contributorId: user.contributorId, permission: user.permission}
 				});
 			} else {
 				// console.log('ANOTHER ERROR');

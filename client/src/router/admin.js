@@ -8,7 +8,7 @@ import AdminCategories from '@/components/AdminView/AdminCategories'
 import AdminMain from '@/components/AdminView/AdminMain'
 import AddUser from '@/components/AdminView/AddUser'
 import AdminPostPreview from '@/components/AdminView/AdminPostPreview'
-
+import AboutContributor from '@/components/AdminView/AboutContributor'
 const adminRoutes = [
 	{
 		path: '/admin',
@@ -82,6 +82,13 @@ const adminRoutes = [
 				name: 'admin-post-preview',
 				props: true,
 				component: AdminPostPreview,
+				beforeEnter: AuthGuard.adminGuard()
+			},
+			{
+				path: 'about-contributor',
+				name: 'admin-about-contributor',
+				props: true,
+				component: AboutContributor,
 				beforeEnter: AuthGuard.adminGuard()
 			}
 		]

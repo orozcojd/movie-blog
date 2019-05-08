@@ -15,7 +15,7 @@ const UserSchema = new Schema({
 		type: Number,
 		default: 2
 	},
-	contributorName: {
+	contributorId: {
 		type: String,
 		required: true,
 		unique: true
@@ -25,7 +25,7 @@ const UserSchema = new Schema({
 UserSchema.methods.createUser = async function(user) {
 	this.email = user.email;
 	this.permission = user.permission;
-	this.contributorName = user.contributorName;
+	this.contributorId = user.contributorId;
 };
 
 UserSchema.methods.hashPassword = async function(password) {

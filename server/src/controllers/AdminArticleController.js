@@ -1,6 +1,7 @@
 const {Post} = require('../models');
 
 module.exports = {
+	
 	/**
    * GET REQUEST
    * Tets all posts and limits to 12 posts. send array of articles
@@ -16,8 +17,7 @@ module.exports = {
 			if(req.query.limit)
 				options.limit = parseInt(req.query.limit);
 			options.sort = {created_at: 'desc'};
-			const query = {...req.query, contributorId: req.userId};
-			const articles = await Post.find(query,{}, options).lean();
+			const articles = await Post.find(req.query,{}, options).lean();
 				
 			res.send(articles);   
 		}

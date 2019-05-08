@@ -80,8 +80,10 @@ export default {
 		permissionGranted() {
 			return !!this.user && this.user.permission === 1
 		}
-
 	},
+	mounted (){
+		console.log(this.user)
+	}
 }
 </script>
 

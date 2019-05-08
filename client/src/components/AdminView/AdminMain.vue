@@ -214,7 +214,7 @@
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 import AdminMainValidation from '@/components/Tools/AdminMainValidation'
-import PostValidation from '@/components/Tools/PostValidation'
+import FormValidation from '@/components/Tools/FormValidation'
 
 export default {
 	name: 'AdminEditMain',
@@ -233,7 +233,7 @@ export default {
 			/* validation rules */
 			tagRules: AdminMainValidation.tagRules,
 			newTagRules: AdminMainValidation.newTagRules,
-			imageRules: PostValidation.imageRules,
+			imageRules: FormValidation.imageRules,
 		}
 	},
 	computed: {

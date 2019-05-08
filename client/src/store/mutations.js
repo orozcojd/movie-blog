@@ -32,6 +32,15 @@ export default {
 			localStorage.removeItem('unsolicited-session-refresh-token')
 		}
 	},
+	[types.SET_CONTRIBUTOR] (state, contributor) {
+		state.contributor = contributor
+	},
+	[types.EDIT_CONTRIBUTOR_VAL] (state, payload) {
+		Vue.set(state.contributor, payload.type, payload.val)
+	},
+	[types.UPDATE_CONTRIBUTOR] (state, payload) {
+		state.contributor = payload
+	},
 	/**
 	 * sets user to string payload
 	 * @param {Vuex state} state 

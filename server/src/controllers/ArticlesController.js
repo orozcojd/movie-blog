@@ -23,7 +23,7 @@ module.exports = {
 			let query = {};
 			query.draft = false;
 			const articles = await Post.find(query,{}, options).lean();
-				
+			
 			res.send(articles);   
 		}
 		catch (err) {

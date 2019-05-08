@@ -5,6 +5,7 @@ module.exports = () => ({
 		tokenDetails: null
 	},
 	user: null,
+	contributor: {},
 	articles: [],
 	article: {},
 	infiniteArticles: [],

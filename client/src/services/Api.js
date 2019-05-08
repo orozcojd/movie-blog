@@ -22,6 +22,7 @@ export default {
 		instance.interceptors.response.use(response => {
 			return response;
 		}, async (error) => {
+			console.log(error)
 			const originalRequest = error.config;
 			let refreshTken = store.getters.getRefeshToken
 			let user = store.getters.getUser

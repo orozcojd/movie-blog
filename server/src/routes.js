@@ -48,11 +48,18 @@ module.exports = (app) => {
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.addUser);
 
+	app.post('/contributor/:contributorId', 
+		AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationController.updateContributor);
+	app.get('/contributor/:contributorId',
+		AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationController.getContributor);
 	/* Refresh Token */
 	app.post('/tokens',
 		AuthenticationController.refreshToken);
 	app.post('/tokens/removeRefresh', 
 		AuthenticationController.rejectToken);
+		
 	/* Admin Tag Routes */
 	app.post('/tags',
 		AuthenticationControllerPolicy.authenticateToken,

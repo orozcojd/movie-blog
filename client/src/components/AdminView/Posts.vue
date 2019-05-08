@@ -33,6 +33,7 @@ export default {
 	computed: {
 		...mapState([
 			'articles',
+			'user'
 		]),
 		filterArticles () {
 			return this.articles.filter(article => article.draft === this.drafts)
@@ -45,8 +46,9 @@ export default {
 			params: {
 				params: {
 					draft: this.drafts,
+					contributorId: this.user.contributorId
 				},
-				extend: false
+				extend: false,
 			}
 		}
 		await this.getArticlesApi(options)

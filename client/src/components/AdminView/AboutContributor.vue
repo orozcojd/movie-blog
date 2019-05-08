@@ -1,0 +1,195 @@
+<template>
+  <v-container>
+    <h1 align="left">
+      About You
+    </h1>
+    <v-layout
+      row
+      wrap
+    >
+      <v-flex
+        xs12
+        md8
+      >
+        <v-form
+          ref="form"
+          v-model="valid"
+          lazy-validation
+        >
+          <v-text-field
+            v-model="name"
+            autofocus
+            :rules="contributorRules"
+            :counter="30"
+            label="Contributor Name"
+            required
+          />
+          <v-text-field
+            v-model="profileImg"
+            :rules="imageRules"
+            label="Profile Image"
+          />
+          <v-textarea
+            v-model="bio"
+            :rules="bioRules"
+            label="Describe yourself"
+            :counter="800"
+            auto-grow
+          />
+          <v-text-field
+            v-model="twitterLink"
+            label="Twitter profile link"
+          />
+          <v-text-field
+            v-model="igLink"
+            label="Instagram profile link"
+          />
+          <div
+            align="left"
+          >
+            <v-btn
+              :color="submitColor"
+              @click="validate"
+            >
+              Submit
+            </v-btn>
+          </div>
+        </v-form>
+      </v-flex>
+    </v-layout>
+  </v-container>
+</template>
+
+<script>
+import FormValidation from '@/components/Tools/FormValidation'
+import { mapActions, mapState } from 'vuex'
+import Contributor from '@/Model/Contributor'
+
+export default {
+	name: 'AboutContributor',
+	data () {
+		return {
+			snackText: '',
+			valid: true,
+			submitColor: 'default',
+			contributorRules: FormValidation.contributorRules,
+			imageRules: FormValidation.imageRules,
+			bioRules: FormValidation.bioRules
+		}
+	},
+	computed: {
+		...mapState([
+			'user',
+			'snackbar',
+			'contributor'
+		]),
+		name: {
+			get() {
+				return this.contributor.name
+			},
+			set(val) {
+				this.editContributorVal({
+					type: 'name',
+					val: val
+				})
+			}
+		},
+		profileImg: {
+			get() {
+				return this.contributor.img
+			},
+			set(val) {
+				this.editContributorVal({
+					type: 'img',
+					val: val
+				})
+			},
+		},
+		bio: {
+			get() {
+				return this.contributor.bio
+			},
+			set(val) {
+				this.editContributorVal({
+					type: 'bio',
+					val: val
+				})
+			}
+		},
+		twitterLink: {
+			get() {
+				return this.contributor.twitterLink
+			},
+			set(val) {
+				this.editContributorVal({
+					type: 'twitter',
+					val: val
+				})
+			}
+		},
+		igLink: {
+			get() {
+				return this.contributor.igLink
+			},
+			set(val) {
+				this.editContributorVal({
+					type: 'instagram',
+					val: val
+				})
+			}
+		}
+    
+	},
+	async mounted() {
+		await this.getContributorBio(this.user.contributorId)
+	},
+	methods: {
+		...mapActions([
+			'updateContributorBio',
+			'getContributorBio',
+			'editContributorVal',
+			'setSnackbar'
+		]),
+		validate (){
+			if (this.$refs.form.validate()) {
+				/* if validation is approved */
+				this.submit()
+			}
+			else {
+				this.submitColor = 'error'
+				setTimeout(() => {
+					this.submitColor = 'undefined'
+				}, 2000)				
+			}
+		},
+		async submit (){
+			const contributor = new Contributor(this.contributor)
+			const payload = {...contributor, userId: this.user._id, id: this.contributor._id}
+			await this.updateContributorBio(payload)
+				.then(response => {
+					this.submitColor = 'success'
+					this.snackText = response.message
+				})
+				.catch(err => {
+					this.submitColor = 'error'
+					this.snackText = err
+				})
+			this.setSnackbar({
+				type: 'text',
+				value: this.snackText,
+				show: true
+			})
+			setTimeout(() => {
+				this.submitColor = 'undefined'
+			}, this.snackbar.timeout)	
+		}
+	}
+}
+</script>
+
+<style scoped>
+  h1 {
+    font-size: 4rem;
+    margin-bottom: 2.5rem;
+  }
+</style>
