@@ -1,9 +1,11 @@
 const {Post} = require('../models');
 let {Contributor} = require('../models');
+let {User} = require('../models');
+
+const helpers = require('../helpers/Auth');
 
 
 module.exports = {
-	
 	/**
    * GET REQUEST
    * Tets all posts and limits to 12 posts. send array of articles
@@ -63,6 +65,14 @@ module.exports = {
    */
 	async update (req, res) {
 		try {
+
+			if(!await helpers.authenticateRequest(req)) {
+				res.status(403).send({
+					message: 'You are unauthorized to make changes to this account!'
+				});
+				return;
+			}
+
 			const contributor = await Contributor.findOne({
 				_id: req.body.contributorId
 			}).lean();
@@ -81,8 +91,8 @@ module.exports = {
 				});
 			}
 			else {
-				res.status(403).send({
-					error: 'Unauthorized! You are not the original contributor to this article.',
+				res.status(404).send({
+					error: 'Oops! The article you are trying to update does not exist.',
 					// details: err
 				});
 			}
@@ -103,6 +113,13 @@ module.exports = {
    */
 	async delete (req, res) {
 		try {
+			if(!await helpers.authenticateRequest(req)) {
+				res.status(403).send({
+					message: 'You are unauthorized to make changes to this account!'
+				});
+				return;
+			}
+			
 			const deleteCount = await Post.deleteOne({
 				_id: req.params.articleId
 			});
@@ -118,9 +135,13 @@ module.exports = {
 			});
 		}
 	},
+	/**
+	 * Finds all contributors and returns the array in the response
+	 * @param {Object} req 
+	 * @param {Object} res 
+	 */
 	async contributors(req, res) {
 		try {
-
 			const contributors = await Contributor.find().lean();
 			res.send(contributors);
 		} catch (err) {

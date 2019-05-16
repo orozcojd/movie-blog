@@ -5,15 +5,22 @@ const {Post} = require('../models');
 
 const config = require('../config/config');
 const passport = require('passport');
-const randomToken = require('rand-token'); 
+const randomToken = require('rand-token');
+const helpers = require('../helpers/Auth');
 let refreshTokens = [];
 // Post.find().remove().exec();
 // User.find({
 // }).remove().exec();
 
-
 module.exports = {
 	
+	/**
+	 * GET REQUEST
+	 * Given the contributor id in the req params, returns the contributor model
+	 * if found otherwise a 404 response
+	 * @param {Object} req 
+	 * @param {Object} res 
+	 */
 	async getContributor (req, res) {
 		const id = req.params.contributorId;
 		try {
@@ -36,10 +43,23 @@ module.exports = {
 		}
 	},
 
+	/**
+	 * PUT REQUEST
+	 * Updates the contributor info in the db and returns the updated Model
+	 * @param {Object} req 
+	 * @param {Object} res 
+	 */
 	async updateContributor (req, res) {
 		try {
 			// get contributor name - save it
 			const contributorId = req.params.contributorId;
+			
+			if(!await helpers.authenticateRequest(req)) {
+				res.status(403).send({
+					message: 'You are unauthorized to make changes to this account!'
+				});
+				return;
+			}
 			let contributorName = await Contributor.findOne({_id: contributorId});
 			contributorName = contributorName.name;
 			let updateName = false;
@@ -75,6 +95,12 @@ module.exports = {
 		}
 
 	},
+	/**
+	 * GET REQUEST
+	 * Returns all users found in the database
+	 * @param {Object} req 
+	 * @param {Object} res 
+	 */
 	async getUsers (req, res) {
 		try {
 			const users = await User.find();
@@ -86,6 +112,7 @@ module.exports = {
 		}
 	},
 	/**
+	 * POST REQUEST
 	 * Adds a new user to db if req contains id of super user 
 	 * and unique fields are unique -- otherwise responds with 400 error
 	 * @param {Object} req 
@@ -93,13 +120,18 @@ module.exports = {
 	 */
 	async addUser (req, res) {
 		try {
-			// console.log(req.body);
-
-
+			// prevents unauthorized user from making changes
+			// const contributorId = req.body.contributorId;
+			// const verifyUser = await User.findById(req.userId);
 			
+			if(!await helpers.authenticateTokenUser(req)) {
+				res.status(403).send({
+					message: 'You are unauthorized to make changes to this account!'
+				});
+				return;
+			}
 			const realAdminUid = config.authentication.superUser;
-			const adminId = req.body.id;
-			const currUser = await User.findById(adminId);
+			const currUser = await User.findById(req.userId);
 			if(currUser.permission === realAdminUid){
 				const pw = req.body.password;
 				let contributor = new Contributor();
@@ -148,6 +180,7 @@ module.exports = {
 	},
 
 	/**
+	 * POST REQUEST
 	 * Registers new user by hasing REQ password and saving 
 	 * user data to db returning token and user
 	 * @param {Object} req 
@@ -192,6 +225,7 @@ module.exports = {
 		}
 	},
 	/**
+	 * POST REQUEST
 	 * Validates user by comparing hash of user plaintext pw
 	 * to hash stored in db returning token and user details if
 	 * valid
@@ -226,6 +260,7 @@ module.exports = {
 	},
 
 	/**
+	 * POST REQUEST
 	 * Extracts email and refresh token from body and if valid: responds with new token
 	 * otherwise send 401
 	 * @param {Object} req 
@@ -257,7 +292,7 @@ module.exports = {
 			});
 		}
 	},
-	/**
+	/** POST REQUEST
 	 * Extracts refreshtoken from req and if found, deletes refreshtoken from global array
 	 * @param {Object} req 
 	 * @param {Object} res 

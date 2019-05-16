@@ -13,25 +13,41 @@
         :key="index"
         d-flex
         xs12
-        md6
+        md3
       >
-        <admin-category-tile
-          :category="category"
-        />
+        <v-card>
+          <v-card-title primary-title>
+            <div>
+              <h3 class="headline mb-0">
+                {{ category.title }}
+              </h3>
+            </div>
+          </v-card-title>
+          <v-card-actions>
+            <v-btn
+              flat
+              color="orange"
+              :ripple="false"
+              :to="category.to"
+            >
+              View
+            </v-btn>
+          </v-card-actions>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-import AdminCategoryTile from './AdminCategoryTile'
+// import AdminCategoryTile from './AdminCategoryTile'
 import { mapState } from 'vuex'
 
 export default {
 	name: 'AdminCategories',
-	components: {
-		AdminCategoryTile
-	},
+	// components: {
+	// 	AdminCategoryTile
+	// },
 	data () {
 		return {
 			categories: [
@@ -66,10 +82,16 @@ export default {
 					granted: () => { return true }
 				},
 				{
+					title: 'Edit Admin Users',
+					to: {name: 'admin-edit-users'},
+					granted: () => {return this.permissionGranted}
+				},
+				{
 					title: 'Add Admin User',
 					to: {name: 'admin-add-user'},
 					granted: () => {return this.permissionGranted}
 				},
+
 				{
 					title: 'Edit Tags',
 					to: {name: 'admin-edit-main'},

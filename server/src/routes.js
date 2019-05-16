@@ -49,7 +49,7 @@ module.exports = (app) => {
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.addUser);
 
-	app.post('/contributor/:contributorId', 
+	app.put('/contributor/:contributorId', 
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.updateContributor);
 	app.get('/contributor/:contributorId',

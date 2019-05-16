@@ -30,7 +30,6 @@
           <v-text-field
             v-model="author"
             :rules="contributorRules"
-            :counter="30"
             disabled
             label="Contributor"
             required
@@ -342,7 +341,7 @@ export default {
 			}
 		},
 		disableRealm (name) {
-			if(!!name.name && name._id === this.realm._id)
+			if(!!name.name && !!this.realm && name._id === this.realm._id)
 				return true
 		},
 		...mapMutations([

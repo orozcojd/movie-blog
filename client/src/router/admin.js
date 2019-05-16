@@ -9,6 +9,8 @@ import AdminMain from '@/components/AdminView/AdminMain'
 import AddUser from '@/components/AdminView/AddUser'
 import AdminPostPreview from '@/components/AdminView/AdminPostPreview'
 import AboutContributor from '@/components/AdminView/AboutContributor'
+import EditUsers from '@/components/AdminView/EditUsers'
+
 const adminRoutes = [
 	{
 		path: '/admin',
@@ -24,6 +26,12 @@ const adminRoutes = [
 				path: 'add-user',
 				name: 'admin-add-user',
 				component: AddUser,
+				beforeEnter: AuthGuard.adminGuard()
+			},
+			{
+				path: 'edit-users',
+				name: 'admin-edit-users',
+				component: EditUsers,
 				beforeEnter: AuthGuard.adminGuard()
 			},
 			{

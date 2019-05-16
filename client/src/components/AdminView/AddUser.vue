@@ -59,21 +59,8 @@
             Submit
           </v-btn>
         </v-form>
-        <!-- <div
-          v-if="error"
-          class="error"
-        >
-          {{ errorMsg }}
-        </div> -->
       </v-flex>
     </v-layout>
-    <!-- <v-snackbar
-      v-model="snackbar"
-      :multi-line="true"
-      :top="true"
-    >
-      {{ snackText }}
-    </v-snackbar> -->
   </v-container>
 </template>
 

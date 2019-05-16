@@ -65,6 +65,7 @@ export default {
 	 * @param {commit} param0 
 	 */
 	getSetToken ({commit, dispatch}) {
+		console.log('getting setting token')
 		const token = localStorage.getItem('unsolicited-session-token')
 		const refreshToken = localStorage.getItem('unsolicited-session-refresh-token')
 		if(refreshToken){

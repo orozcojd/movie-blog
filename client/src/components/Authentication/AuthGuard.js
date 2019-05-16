@@ -7,10 +7,14 @@ export default {
 			otherwise redirect to main page
 		*/
 		return (to, from, next) => {
+			if(!store.getters.isUserLoggedin) {
+				store.dispatch('getSetToken')
+			}
 			if(store.getters.isUserLoggedin) {
 				next()
 			}
 			else {
+				console.log('not logged in!')
 				next('/')
 			}
 		}
