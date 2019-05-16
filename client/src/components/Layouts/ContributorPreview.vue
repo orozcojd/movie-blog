@@ -49,6 +49,10 @@
         />
       </v-flex>
     </v-layout>
+    <v-pagination
+      v-model="pageNo"
+      :length="pages"
+    />
   </v-container>
 </template>
 
@@ -68,18 +72,45 @@ export default {
 	computed: {
 		...mapState([
 			'contributor',
-			'articles'
+			'articles',
+			'pages',
+			'page'
 		]),
 		twitter() {
 			return `https://www.twitter.com/${this.contributor.twitter}`
 		},
 		instagram() {
 			return `https://www.twitter.com/${this.contributor.twitter}`
+		},
+		pageNo: {
+			get() {
+				return this.page
+			},
+			set(val) {
+				this.$router.push({name: 'about-contributor',
+					params: {
+						id: this.contributor._id,
+						contributor: this.contributor.name.toLowerCase().split(' ').join('-')
+					}, 
+					query: {
+						page: val
+					}
+				})
+			}
 		}
 	},
 	async mounted() {
 		await this.getContributorBio(this.$route.params.id)
-		await this.getArticleByContributor(this.contributor._id)
+		const page = this.$route.query.page
+		let payload = {
+			params: {
+				params: {
+					page: page
+				}
+			}
+		}
+		payload.query = this.contributor._id
+		await this.getArticleByContributor(payload)
 	},
 	methods: {
 		...mapActions([

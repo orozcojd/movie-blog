@@ -25,7 +25,7 @@ const postRoutes = [
 	},
 	{
 		path: '/contributor/:contributor/:id',
-		name: 'about-contributors',
+		name: 'about-contributor',
 		component: ContributorView,
 		// props: true
 	},

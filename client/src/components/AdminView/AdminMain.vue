@@ -175,6 +175,7 @@
                 :rules="tagRules"
                 :counter="35"
                 label="Tag Name"
+                :disabled="disabled && tags[i].realm"
                 @input="updateTag($event, 'name', tag._id)"
               />
               <v-switch
@@ -188,6 +189,7 @@
                 :value="tags[i].img"
                 :rules="imageRules"
                 label="Realm Image"
+                :disabled="disabled && tags[i].realm"
                 @input="updateTag($event, 'img', tag._id)"
               />
             </v-container>
@@ -237,6 +239,9 @@ export default {
 		}
 	},
 	computed: {
+		disabled() {
+			return !(!!this.user && this.user.permission === 1)
+		},
 		...mapState([
 			'tags',
 			'user',

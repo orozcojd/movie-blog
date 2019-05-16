@@ -182,9 +182,10 @@ export default {
 		commit(types.FETCH_ARTICLE, article)
 		return article
 	},
-	async getArticleByContributor({commit}, id) {
-		const articles = (await Api.ApiGeneral().get(`articlesByContributor/${id}`)).data
-		commit(types.FETCH_ARTICLES, articles)
+	async getArticleByContributor({commit}, payload) {
+		// console.log(payload.page)
+		const articles = (await Api.ApiGeneral().get(`articlesByContributor/${payload.query}`, payload.params)).data
+		commit(types.FETCH_BY_CONTRIBUTOR, articles)
 		return articles
 	},
 	/**

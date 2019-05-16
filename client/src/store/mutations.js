@@ -94,6 +94,14 @@ export default {
 			state.page = payload.pageNo
 		}
 	},
+	[types.FETCH_BY_CONTRIBUTOR] (state, payload) {
+		state.articles = payload.message
+		state.pages = payload.pages
+		console.log(payload)
+		if(payload.pageNo) {
+			state.page = payload.pageNo
+		}
+	},
 	/**
 	 * Sets article object in store to array of articles
 	 * @param {Vuex state} state 

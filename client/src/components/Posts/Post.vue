@@ -41,7 +41,7 @@
             align="left"
             class="mb-small pointer"
             @click="$router.push({
-              name: 'about-contributors',
+              name: 'about-contributor',
               params: {
                 id: article.contributorId,
                 contributor: article.author.toLowerCase().split(' ').join('-')

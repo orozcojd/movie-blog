@@ -44,6 +44,7 @@ module.exports = {
 	async articlesByTag (req, res) {
 		try {
 			const size = 12;
+			console.log(req.query);
 			let pageNo = parseInt(req.query.page);
 			let query = {};
 			if(pageNo <= 0 || isNaN(pageNo)) {
@@ -54,12 +55,12 @@ module.exports = {
 			query.skip = size * (pageNo - 1);
 			query.limit = size;
 			query.sort = {created_at: 'desc'};
-			const article = await Post
+			const articles = await Post
 				.find({
 					$or: [{tags: req.params.tagName},{realm: req.params.tagName}]
 				}, {}, query).lean();
 			const response = {
-				'message': article,
+				'message': articles,
 				'pages': Math.ceil(count/size),
 				'pageNo': pageNo
 
@@ -75,17 +76,33 @@ module.exports = {
 	},
 	async articlesByContributor(req, res) {
 		try {
+			const size = 12;
+			let pageNo = parseInt(req.query.page);
+			console.log(req.query);
+			// console.log(req.params);
+			let query = {};
+			if(pageNo <= 0 || isNaN(pageNo)) {
+				// set pageNo to 1 if invalid
+				pageNo = 1;
+			}
+			let count = await Post.countDocuments({contributorId: req.params.contributorId});
+			query.skip = size * (pageNo - 1);
+			query.limit = size;
+			query.sort = {created_at: 'desc'};
+
 			const articles = await Post.find({
 				contributorId: req.params.contributorId
-			}).lean();
-			if(!articles.length) {
-				res.status(404).send({
-					message: 'No articles have been posted yet by this contributor.'
-				});
-			}
-			else {
-				res.send(articles);
-			}
+			}, {}, query).lean();
+
+			const response = {
+				'message': articles,
+				'pages': Math.ceil(count/size),
+				'pageNo': pageNo
+
+			};
+
+			res.send(response);
+
 		} catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get associated articles',
