@@ -8,6 +8,9 @@ const passport = require('passport');
 const randomToken = require('rand-token'); 
 let refreshTokens = [];
 // Post.find().remove().exec();
+// User.find({
+// }).remove().exec();
+
 
 module.exports = {
 	
@@ -104,8 +107,10 @@ module.exports = {
 				contributor.save(async (err, contrib) => {
 					if(err) {
 						res.status(400).send({
-							error: 'Contributor name already in use.'
+							error: err,
+							details: err
 						});
+						console.log(err);
 					}
 					else {
 						let user = new User();

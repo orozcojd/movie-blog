@@ -31,26 +31,44 @@
         />
       </v-layout>
     </p>
+    <v-layout
+      v-if="articles.length"
+      row
+      wrap
+    >
+      <v-flex
+        v-for="article in articles"
+        :key="article.id"
+        md4
+        xs12
+      >
+        <post-preview
+          class="post-preview"
+          :article="article"
+          to="article-view" 
+        />
+      </v-flex>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import PostPreview from '@/components/Posts/PostPreview'
+
 export default {
 	name: 'ContributorView',
-	// props: {
-	// 	id: {
-	// 		type: String,
-	// 		required: true
-	// 	}
-	// },
+	components: {
+		PostPreview
+	},
 	data () {
 		return {
 		}
 	},
 	computed: {
 		...mapState([
-			'contributor'
+			'contributor',
+			'articles'
 		]),
 		twitter() {
 			return `https://www.twitter.com/${this.contributor.twitter}`
@@ -61,11 +79,12 @@ export default {
 	},
 	async mounted() {
 		await this.getContributorBio(this.$route.params.id)
-		console.log(this.contributor)
+		await this.getArticleByContributor(this.contributor._id)
 	},
 	methods: {
 		...mapActions([
-			'getContributorBio'
+			'getContributorBio',
+			'getArticleByContributor'
 		])
 	}
 }

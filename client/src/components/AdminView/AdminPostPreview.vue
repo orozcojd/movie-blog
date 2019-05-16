@@ -121,16 +121,9 @@ export default {
 	components: {
 		EditorContent
 	},
-	props: {
-		// article: {
-		// 	type: Object,
-		// 	required: true
-		// }
-	},
 	data () {
 		return {
 			loaded: false,
-			// article: {},
 			editor: new Editor({
 				extensions: [
 					new Image(),
@@ -180,9 +173,7 @@ export default {
 			return (this.article ? date : null)
 		},
 		articleRealm() {
-			// if(this.article.realm._id)
 			return (this.article ? this.convertTagIdToName(this.article) : null)
-			// return null
 		}
 	},
 	async mounted() {
@@ -217,8 +208,6 @@ export default {
 			await this.editor.setContent(this.article.body, true)
 		},
 		goBack () {
-			console.log('before going back..')
-			console.log(this.article)
 			this.$router.go(-1)
 		}
 	}

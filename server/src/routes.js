@@ -22,12 +22,13 @@ module.exports = (app) => {
 	app.get('/tags',
 		TagsController.getTags);
 	app.get('/tag/:tagName',
-		ArticlesController.getArticlesByTag);
+		ArticlesController.articlesByTag);
 	app.get('/infinite-articles',
 		ArticlesController.associatedArticles);
 	app.get('/articles/:articleId',
-		ArticlesController.show),
-
+		ArticlesController.articlesById),
+	app.get('/articlesByContributor/:contributorId',
+		ArticlesController.articlesByContributor);
 
 	/* Admin User Routes */
 
@@ -81,4 +82,6 @@ module.exports = (app) => {
 	app.delete('/article/:articleId',
 		AuthenticationControllerPolicy.authenticateToken,
 		AdminArticleController.delete);
+	app.get('/contributors',
+		AdminArticleController.contributors);
 };

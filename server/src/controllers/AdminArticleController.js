@@ -117,5 +117,18 @@ module.exports = {
 				details: err
 			});
 		}
+	},
+	async contributors(req, res) {
+		try {
+
+			const contributors = await Contributor.find().lean();
+			res.send(contributors);
+		} catch (err) {
+			res.status(400).send({
+				error: 'An error has occured trying to get contributors',
+				details: err
+			});
+		}
+
 	}
 };

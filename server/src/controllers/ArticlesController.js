@@ -41,7 +41,7 @@ module.exports = {
    * @param {Object} req 
    * @param {Object} res 
    */
-	async getArticlesByTag (req, res) {
+	async articlesByTag (req, res) {
 		try {
 			const size = 12;
 			let pageNo = parseInt(req.query.page);
@@ -69,6 +69,26 @@ module.exports = {
 		catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get article tag',
+				details: err
+			});
+		}
+	},
+	async articlesByContributor(req, res) {
+		try {
+			const articles = await Post.find({
+				contributorId: req.params.contributorId
+			}).lean();
+			if(!articles.length) {
+				res.status(404).send({
+					message: 'No articles have been posted yet by this contributor.'
+				});
+			}
+			else {
+				res.send(articles);
+			}
+		} catch (err) {
+			res.status(400).send({
+				error: 'An error has occured trying to get associated articles',
 				details: err
 			});
 		}
@@ -147,7 +167,7 @@ module.exports = {
    * @param {Object} req 
    * @param {Object} res 
    */
-	async show (req, res) {
+	async articlesById (req, res) {
 		try {
 			const article = await Post.findById(req.params.articleId).lean();
 			res.send(article);

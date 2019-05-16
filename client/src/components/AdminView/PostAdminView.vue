@@ -368,7 +368,7 @@ export default {
 			this.$router.push({
 				name: 'admin-post-preview',
 				params: {
-					article: {...this.article}
+					article: this.article
 				}
 			})
 		},
@@ -414,17 +414,11 @@ export default {
 				contributorId:this.user.contributorId})
 					.then(response => {
 						this.submitCallback(response, btnType)
-						// timeout = this.snackbar.timeout
 					})
 					.catch(err => {
 						this.submitCallback(err.response.data.error, btnType, true)
 					})
 			}
-			// this.validation.error = ''
-			// setTimeout(() => {
-			// 	this.validation[btnType] = 'default'
-			// 	this.validation.cancelDisabled = false
-			// }, this.snackbar.timeout)
 		}
 	}
 }

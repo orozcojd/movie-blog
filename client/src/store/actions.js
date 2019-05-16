@@ -183,7 +183,9 @@ export default {
 		return article
 	},
 	async getArticleByContributor({commit}, id) {
-		const articles = (await Api.ApiGeneral().get())
+		const articles = (await Api.ApiGeneral().get(`articlesByContributor/${id}`)).data
+		commit(types.FETCH_ARTICLES, articles)
+		return articles
 	},
 	/**
 	 * Calls api to GET articles and commits mutation to
