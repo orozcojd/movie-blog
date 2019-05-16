@@ -34,13 +34,21 @@
         >
           {{ article.title }}
         </h1>
+				
         <br>
         <strong>
           <div
             align="left"
-            class="mb-small"
+            class="mb-small pointer"
+            @click="$router.push({
+              name: 'about-contributors',
+              params: {
+                id: article.contributorId,
+                contributor: article.author.toLowerCase().split(' ').join('-')
+              }},
+            )"
           >
-            <span>Author: </span>
+            <!-- <span>Author: </span> -->
             {{ article.author }}
           </div>
           <div
@@ -236,4 +244,7 @@ export default {
 
 <style lang="scss">
 @import url('../../assets/style/poststyle.scss');
+.pointer {
+	cursor: pointer;
+}
 </style>

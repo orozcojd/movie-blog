@@ -92,7 +92,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import ParagraphAlignmentNode from '@/components/Tools/ParagraphAlignment'
 import Iframe from '@/components/Tools/Iframe'
 import { Editor, EditorContent} from 'tiptap'
@@ -122,10 +122,10 @@ export default {
 		EditorContent
 	},
 	props: {
-		article: {
-			type: Object,
-			required: true
-		}
+		// article: {
+		// 	type: Object,
+		// 	required: true
+		// }
 	},
 	data () {
 		return {
@@ -165,6 +165,7 @@ export default {
 	computed: {
 		...mapState([
 			'tags',
+			'article'
 		]),
 		articleDate() {
 			let date = new Date(this.article.updatedAt).toLocaleString('en-us', 
@@ -185,11 +186,16 @@ export default {
 		}
 	},
 	async mounted() {
+		if(Object.keys(this.article).length === 0 && this.article.constructor === Object) {
+			await this.fetchArticle(this.$route.params.id)
+		}
 		await this.setContent()
-		console.log(this.article)
 		this.loaded = true
 	},
 	methods: {
+		...mapActions([
+			'fetchArticle'
+		]),
 		convertTagIdToName (id) {
 			const foundTag = this.tags.find(tag => tag._id === id)
 			return (foundTag ? foundTag.name.trim() : null)

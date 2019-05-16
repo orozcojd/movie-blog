@@ -26,7 +26,7 @@ module.exports = () => ({
 	},
 	snackbar: {
 		text: '',
-		timeout: 5000,
+		timeout: 4000,
 		value: false
 	}
 })

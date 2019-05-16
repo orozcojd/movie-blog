@@ -3,6 +3,7 @@ import PostView from '@/components/Posts/PostView'
 import TagView from '@/components/Posts/TagView'
 import NotFound from '@/components/Layouts/NotFound'
 import ArticleGuard from '@/components/RouterGuards/ArticleGuards'
+import ContributorView from '@/components/Layouts/ContributorPreview'
 
 const postRoutes = [
 	{
@@ -21,6 +22,12 @@ const postRoutes = [
 		component: TagView,
 		beforeEnter: ArticleGuard.tagViewGuard(),
 		props: true
+	},
+	{
+		path: '/contributor/:contributor/:id',
+		name: 'about-contributors',
+		component: ContributorView,
+		// props: true
 	},
 	{
 		path: '*',

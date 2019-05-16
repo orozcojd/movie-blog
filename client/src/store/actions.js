@@ -182,6 +182,9 @@ export default {
 		commit(types.FETCH_ARTICLE, article)
 		return article
 	},
+	async getArticleByContributor({commit}, id) {
+		const articles = (await Api.ApiGeneral().get())
+	},
 	/**
 	 * Calls api to GET articles and commits mutation to
 	 * set state articles array to retrieved articles
@@ -203,7 +206,6 @@ export default {
 	 * @param {commit} param0 
 	 */
 	async getArticlesApi ({commit}, payload) {
-		console.log('here')
 		const articles = (await Api.ApiAdmin().get('/api/articles', payload.params)).data		
 		if(payload.params.extend === true) {
 			commit(types.EXTEND_ARTICLES, articles)
@@ -291,10 +293,9 @@ export default {
 	 * @param {Object} payload 
 	 */
 	async postArticle ({commit}, payload) {
-		console.log('niside post')
 		const article = (await Api.ApiAdmin().post('article/', payload)).data
 		commit(types.POST_ARTICLE, article)
-		return article
+		return article.message
 	},
 	/**
 	 * Calls api to delete article by id passed in and commits

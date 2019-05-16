@@ -40,6 +40,7 @@ export default {
 		}
 	},
 	async mounted () {
+		console.log(this.user.contributorId)
 		// skip: 0,
 		// limit: 15
 		const options = {

@@ -258,7 +258,18 @@ export default {
 				return this.ta
 			}
 		},
+		snackVal() {
+			return this.snackbar.value
+		}
 
+	},
+	watch: {
+		snackVal(val, prev) {
+			if(val === false && prev === true) {
+				this.submitColor = 'undefined'
+				this.$router.push({name: 'admin-categories'})
+			}
+		}
 	},
 	async mounted() {
 		await this.getTags()
@@ -300,8 +311,8 @@ export default {
 		},    
 		addTag() {
 			if (this.$refs.addTagForm.validate()) {
-				let tag = this.newTag.trim()
-				tag = tag.split(' ').join('-')
+				let tag = this.newTag.trim().toLowerCase()
+				// tag = tag.split(' ').join('-')
 				this.addedTags.push(tag)
 				this.newTag = ''
 				this.AddTagValid = true
@@ -364,9 +375,9 @@ export default {
 					show: true
 				})
 			}
-			setTimeout(() => {
-				this.addRemoveBtnType = 'default'
-			}, this.snackbar.timeout)
+			// setTimeout(() => {
+			// 	this.addRemoveBtnType = 'default'
+			// }, this.snackbar.timeout)
 		}
 	}
 }

@@ -137,8 +137,19 @@ export default {
 					val: val
 				})
 			}
+		},
+		snackVal() {
+			return this.snackbar.value
 		}
     
+	},
+	watch: {
+		snackVal(val, prev) {
+			if(val === false && prev === true) {
+				this.submitColor = 'undefined'
+				this.$router.push({name: 'admin-categories'})
+			}
+		}
 	},
 	async mounted() {
 		await this.getContributorBio(this.user.contributorId)
@@ -179,9 +190,6 @@ export default {
 				value: this.snackText,
 				show: true
 			})
-			setTimeout(() => {
-				this.submitColor = 'undefined'
-			}, this.snackbar.timeout)	
 		}
 	}
 }

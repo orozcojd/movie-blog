@@ -31,7 +31,8 @@
             v-model="author"
             :rules="contributorRules"
             :counter="30"
-            label="Author"
+            disabled
+            label="Contributor"
             required
           />
           <v-text-field
@@ -137,21 +138,6 @@
         </v-form>
       </v-flex>
     </v-layout>
-    <!-- <v-snackbar
-      v-model="snackbar"
-      :timeout="4000"
-      :top="true"
-      :multi-line="true"
-    >
-      {{ snackText }}
-      <v-btn
-        color="pink"
-        flat
-        @click="snackbar = false"
-      >
-        Close
-      </v-btn>
-    </v-snackbar> -->
   </v-container>
 </template>
 
@@ -169,7 +155,6 @@ export default {
 	data () {
 		return {
 			isEditing: true,
-			// tags: [],
 			valid: true,
 			/* validation rules */
 			titleRules: FormValidation.titleRules,
@@ -182,11 +167,8 @@ export default {
 			validation: {
 				draft: 'undefined',
 				submit: 'undefined',
-				// error: '',
 				cancelDisabled: false,
 			},
-			// snackbar: false,
-			// snackText: ''
 		}
 	},
 	computed: {
@@ -194,7 +176,8 @@ export default {
 			article:'article',
 			tagChoices: 'tags',
 			snackbar: 'snackbar',
-			user: 'user'
+			user: 'user',
+			contributor: 'contributor'
 		}),
 
 		...mapGetters([
@@ -216,13 +199,7 @@ export default {
 		},
 		author: {
 			get() {
-				return this.article.author
-			},
-			set(value) {
-				this.UPDATE_ARTICLE_CONTENT({
-					type: 'author',
-					value: value
-				})
+				return this.contributor.name
 			}
 		},
 		thumbnailDescription: {
@@ -301,6 +278,9 @@ export default {
 					value: value
 				})
 			}
+		},
+		snackVal() {
+			return this.snackbar.value
 		}
 		/* 
 			end mapping state.article attributes to vuex mutations
@@ -313,22 +293,26 @@ export default {
 				remove from tag array 
 			*/
 			if(val && this.tags && this.tags.length) {
-				let index = this.tags.findIndex(tag => tag == val)
+				let index = this.tags.findIndex(tag => tag._id === val._id)
 				if(index > -1){
 					this.REMOVE_POST_TAG(index)
 				}
+			}
+		},
+		snackVal(val, prev) {
+			if(val === false && prev === true) {
+				this.submitColor = 'undefined'
+				this.$router.push({name: 'admin-categories'})
 			}
 		}
 	},
 	async mounted () {
 		let id = this.$route.params.id
 		// if article not found in store, fetch it
-		// console.log(this.article)
 		if(id){
 			let article = this.getArticle(id)
 			// console.log(article)
 			if(article) {
-				console.log('hitting this point')
 				// if article set article state to article found in articles array
 				this.setSingleArticle(article)
 			}
@@ -341,6 +325,7 @@ export default {
 			this.SET_SINGLE_ARTICLE({});
 		}
 		this.prepareArticle()
+		await this.getContributorBio(this.user.contributorId)
 		this.loaded = true
 	},
 	methods: {
@@ -357,9 +342,7 @@ export default {
 			}
 		},
 		disableRealm (name) {
-			// console.log(this.realm)
-			// console.log(name.name)
-			if(!!name.name && name.name === this.realm)
+			if(!!name.name && name._id === this.realm._id)
 				return true
 		},
 		...mapMutations([
@@ -373,7 +356,8 @@ export default {
 			'fetchArticle',
 			'setSingleArticle',
 			'prepareArticle',
-			'setSnackbar'
+			'setSnackbar',
+			'getContributorBio'
 		]),
 		cancel () {
 			this.$router.push({
@@ -409,17 +393,12 @@ export default {
 			this.validation.cancelDisabled = true
 			if (this.$route.params.id) {
 				let payload = {
-					article: new Article({...this.article, contributorId: this.user._id}),
+					article: new Article(this.article),
 					id: this.$route.params.id
 				}
 				await this.updateArticle(payload)
 					.then(response => {
 						this.submitCallback(response, btnType)
-						setTimeout(() => {
-							this.$router.push({
-								name: 'admin-categories'
-							})
-						}, this.snackbar.timeout)
 					})
 					.catch(err => {
 						this.submitCallback(err.response.data.error, btnType, true)
@@ -428,19 +407,24 @@ export default {
 						})
 					})
 			} else {
-				await this.postArticle(new Article(this.article))
+				await this.postArticle({...new Article({
+					...this.article,
+					author: this.contributor.name
+				}),
+				contributorId:this.user.contributorId})
 					.then(response => {
 						this.submitCallback(response, btnType)
+						// timeout = this.snackbar.timeout
 					})
 					.catch(err => {
 						this.submitCallback(err.response.data.error, btnType, true)
 					})
 			}
-			this.validation.error = ''
-			setTimeout(() => {
-				this.validation[btnType] = 'default'
-				this.validation.cancelDisabled = false
-			}, this.snackbar.timeout)
+			// this.validation.error = ''
+			// setTimeout(() => {
+			// 	this.validation[btnType] = 'default'
+			// 	this.validation.cancelDisabled = false
+			// }, this.snackbar.timeout)
 		}
 	}
 }
@@ -450,6 +434,6 @@ export default {
 @import url('../../assets/style/tiptap.scss');
   h1 {
     font-size: 4rem;
-    margin-bottom: 2.5rem;
+    // margin-bottom: 2.5rem;
   }
 </style>

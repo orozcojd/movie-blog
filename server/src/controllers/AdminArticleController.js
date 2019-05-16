@@ -1,4 +1,6 @@
 const {Post} = require('../models');
+let {Contributor} = require('../models');
+
 
 module.exports = {
 	
@@ -11,6 +13,7 @@ module.exports = {
    */
 	async index (req, res) {
 		try {
+			console.log(req.query);
 			let options = {};
 			if(req.query.skip)
 				options.skip = parseInt(req.query.skip);
@@ -40,7 +43,8 @@ module.exports = {
 		try {
 			const article = await Post.create(req.body);
 			res.send({
-				article: article
+				article: article,
+				message: 'Article was created!'
 			});
 		}
 		catch (err) {
@@ -59,8 +63,14 @@ module.exports = {
    */
 	async update (req, res) {
 		try {
+			const contributor = await Contributor.findOne({
+				_id: req.body.contributorId
+			}).lean();
+			if(contributor) {
+				req.body.author = contributor.name;
+			}
 			const article = await Post.findOneAndUpdate(
-				{_id: req.params.articleId, contributorId: req.body.contributorId},
+				{contributorId: req.body.contributorId, _id: req.params.articleId},
 				req.body,
 				{new: true}
 			);

@@ -7,7 +7,7 @@ const config = require('../config/config');
 const passport = require('passport');
 const randomToken = require('rand-token'); 
 let refreshTokens = [];
-// Contributor.find().remove().exec();
+// Post.find().remove().exec();
 
 module.exports = {
 	
@@ -230,6 +230,7 @@ module.exports = {
 		const email = req.body.email;
 		const refreshToken = req.body.refreshToken;
 		console.log(res.body);
+		console.log(refreshTokens);
 		try {
 			if((refreshToken in refreshTokens) &&  refreshTokens[refreshToken] === email) {
 				await User.findOne({email: email}, (err, user)=>{

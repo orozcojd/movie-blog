@@ -50,7 +50,9 @@
               tagName: realm.name,
             })"
           >
-            <v-list-tile-title v-text="realm.name.split('-').join(' ')" />
+            <v-list-tile-title
+              v-text="titleCase(realm.name)"
+            />
             <v-list-tile-action>
               <v-icon>home</v-icon>
             </v-list-tile-action>
@@ -165,7 +167,7 @@ export default {
 					type: 'value',
 					value: val
 				})
-			}
+			},
 		},
 		realms () {
 			return this.tags.filter(tag => tag.realm === true)
@@ -185,9 +187,15 @@ export default {
 			'logOut',
 			'setSnackbar'
 		]),
+		titleCase(word) {
+			let title = word.toLowerCase().split(' ')
+			for(let i = 0; i < title.length; i++) {
+				title[i] = title[i].charAt(0).toUpperCase() + title[i].slice(1)
+			}
+			return title.join(' ')
+		},
 		logout () {
 			this.logOut().then(() => {
-				console.log('after logged out')
 				this.$router.push({
 					name: 'root'
 				})

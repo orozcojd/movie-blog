@@ -78,7 +78,7 @@ const adminRoutes = [
 				beforeEnter: AuthGuard.adminGuard()
 			},
 			{
-				path: 'preview-post',
+				path: 'preview-post/:id',
 				name: 'admin-post-preview',
 				props: true,
 				component: AdminPostPreview,

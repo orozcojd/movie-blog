@@ -56,6 +56,16 @@ export default {
 					granted: () => { return true }
 				},
 				{
+					title: 'Edit Contributor Details',
+					to: {
+						name: 'admin-about-contributor',
+						params: {
+							drafts: true
+						}
+					},
+					granted: () => { return true }
+				},
+				{
 					title: 'Add Admin User',
 					to: {name: 'admin-add-user'},
 					granted: () => {return this.permissionGranted}
