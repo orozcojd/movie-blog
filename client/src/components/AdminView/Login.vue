@@ -1,5 +1,8 @@
 <template>
   <v-container fluid>
+    <vue-headful
+      title="Unsolicited.mp3 - Login"
+    />
     <h1>Login</h1>
     <v-layout
       align-center

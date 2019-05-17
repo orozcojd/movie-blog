@@ -3,6 +3,9 @@
     v-if="loaded"
     fluid
   >
+    <vue-headful
+      :title="headTitle"
+    />
     <h1 align="left">
       Create your article.
     </h1>
@@ -178,10 +181,12 @@ export default {
 			user: 'user',
 			contributor: 'contributor'
 		}),
-
 		...mapGetters([
 			'getArticle'		
 		]),
+		headTitle() {
+			return this.article.title ? `Admin Edit - ${this.article.title}` : 'Admin Create Article - Unsolocited.mp3'
+		},
 		/* 
 			mapping state.article attributes to vuex mutations
 		*/

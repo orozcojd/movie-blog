@@ -3,6 +3,9 @@
     fluid
     grid-list-lg
   >
+    <vue-headful
+      title="Admin Main - Unsolicited.mp3"
+    />
     <v-layout
       row
       wrap

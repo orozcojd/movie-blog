@@ -10,6 +10,10 @@ import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import infiniteScroll from 'vue-infinite-scroll'
 import InterceptorService from '@/services/InterceptorService'
 import { sync } from 'vuex-router-sync'
+import vueHeadful from 'vue-headful';
+Vue.component('vue-headful', vueHeadful);
+
+
 // import colors from 'vuetify/es5/util/colors'
 
 // run interceptors

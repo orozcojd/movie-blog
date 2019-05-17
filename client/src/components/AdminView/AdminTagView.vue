@@ -3,6 +3,9 @@
     v-if="loaded"
     fluid
   >
+    <vue-headful
+      title="Admin Edit Tags - Unsolicited.mp3"
+    />
     <h1
       align="left"
     >
@@ -219,7 +222,7 @@ import AdminMainValidation from '@/components/Tools/AdminMainValidation'
 import FormValidation from '@/components/Tools/FormValidation'
 
 export default {
-	name: 'AdminEditMain',
+	name: 'AdminEditTags',
 	data () {
 		return {
 			newTag: '',

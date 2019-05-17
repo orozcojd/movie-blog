@@ -3,6 +3,9 @@
     fluid
     grid-list-md
   >
+    <vue-headful
+      :title="headTitle"
+    />
     <display-articles 
       :articles="filterArticles"
       :admin="true"
@@ -37,12 +40,15 @@ export default {
 		]),
 		filterArticles () {
 			return this.articles.filter(article => article.draft === this.drafts)
+		},
+		headTitle() {
+			let type = 'Posts'
+			if(this.drafts)
+				type = 'Drafts'
+			return `Admin View ${type} - Unsolicited.mp3`
 		}
 	},
 	async mounted () {
-		console.log(this.user.contributorId)
-		// skip: 0,
-		// limit: 15
 		const options = {
 			params: {
 				params: {

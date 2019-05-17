@@ -4,6 +4,10 @@
     class="post-content"
     fluid
   >
+    <vue-headful
+      :title="article.title"
+      :description="article.description"
+    />
     <v-layout
       align-center
       justify-center

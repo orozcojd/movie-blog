@@ -1,5 +1,9 @@
 <template>
   <v-container fluid>
+    <vue-headful
+      title="Unsolicited.mp3"
+      description="Description from vue-headful"
+    />
     <v-layout
       class="main-title"
       justify-center

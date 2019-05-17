@@ -2,6 +2,9 @@
   <v-container
     fluid
   >
+    <vue-headful
+      :title="headTitle"
+    />
     <v-layout>
       <v-flex>
         <h1>
@@ -20,7 +23,9 @@ export default {
 		}
 	},
 	computed: {
-
+		headTitle() {
+			return 'Page Not Found - Unsolicited.mp3'
+		}
 	},
 	mounted() {
 		

@@ -1,5 +1,8 @@
 <template>
   <v-container fluid>
+    <vue-headful
+      :title="headTitle"
+    />
     <h1 align="center">
       Fill out the following fields to add a user.
     </h1>
@@ -83,9 +86,8 @@ export default {
 			permissionRules: AdminValidation.permissionRules,
 			passwordRules: AdminValidation.passwordRules,
 			userFieldsValid: true,
-			permissions: [{text:'Super User - 1', value:1}, {text:'Admin User - 2', value: 2}],
+			permissions: [{text:'Administrator', value:1}, {text:'Contributor', value: 2}],
 			submitColor: 'default',
-			// error: false,
 			errorMsg: '',
 			snackText: ''
 		}
@@ -94,7 +96,10 @@ export default {
 		...mapState({
 			adminUser: 'user',
 			snackbar: 'snackbar'  
-		})
+		}),
+		headTitle() {
+			return 'Admin Add User - Unsolicited.mp3'
+		}
 	},
 	mounted() {
 		this.user.id = this.adminUser._id

@@ -11,7 +11,7 @@ module.exports = {
 	async authenticateRequest (req) {
 		const contributorId = req.body.contributorId;
 		const verifyUser = await User.findById(req.userId);
-		if(verifyUser && verifyUser.contributorId !== contributorId) {
+		if((verifyUser && verifyUser.contributorId !== contributorId) && (req.id && req.id !== verifyUser.contributorId)) {
 			return false;
 		}
 		return true;

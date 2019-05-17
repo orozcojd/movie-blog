@@ -5,7 +5,7 @@ import PostAdminView from '@/components/AdminView/PostAdminView'
 import AdminPosts from '@/components/AdminView/Posts'
 import Index from '@/components/AdminView/Index'
 import AdminCategories from '@/components/AdminView/AdminCategories'
-import AdminMain from '@/components/AdminView/AdminMain'
+import AdminTagView from '@/components/AdminView/AdminTagView'
 import AddUser from '@/components/AdminView/AddUser'
 import AdminPostPreview from '@/components/AdminView/AdminPostPreview'
 import AboutContributor from '@/components/AdminView/AboutContributor'
@@ -82,7 +82,7 @@ const adminRoutes = [
 			{
 				path: 'edit-main',
 				name: 'admin-edit-main',
-				component: AdminMain,
+				component: AdminTagView,
 				beforeEnter: AuthGuard.adminGuard()
 			},
 			{

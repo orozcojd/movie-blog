@@ -4,6 +4,9 @@
     class="post-content"
     fluid
   >
+    <vue-headful
+      :title="headTitle"
+    />
     <v-layout
       align-center
       justify-center
@@ -92,7 +95,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import ParagraphAlignmentNode from '@/components/Tools/ParagraphAlignment'
 import Iframe from '@/components/Tools/Iframe'
 import { Editor, EditorContent} from 'tiptap'
@@ -160,6 +163,9 @@ export default {
 			'tags',
 			'article'
 		]),
+		headTitle() {
+			return this.article.title ? `Admin Preview - ${this.article.title}` : 'Admin Create Article - Unsolocited.mp3'
+		},
 		articleDate() {
 			let date = new Date(this.article.updatedAt).toLocaleString('en-us', 
 				{ 

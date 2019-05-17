@@ -1,5 +1,8 @@
 <template>
   <v-container>
+    <vue-headful
+      :title="headTitle"
+    />
     <h1 align="left">
       {{ contributor.name }}
     </h1>
@@ -76,6 +79,9 @@ export default {
 			'pages',
 			'page'
 		]),
+		headTitle() {
+			return `${this.contributor.name} - Unsolicited.mp3`
+		},
 		twitter() {
 			return `https://www.twitter.com/${this.contributor.twitter}`
 		},

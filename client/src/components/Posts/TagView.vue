@@ -4,6 +4,10 @@
     fluid
     grid-list-md
   >
+    <vue-headful
+      :title="headTitle"
+      :description="tag.name"
+    />
     <!-- <v-parallax 
       v-if="tag.img"
       :src="tag.img"
@@ -90,6 +94,9 @@ export default {
 			'pages',
 			'page'
 		]),
+		headTitle() {
+			return `${this.tag.name} - Unsolicited.mp3`
+		},
 		tagName() {
 			return this.tag.name.split('-').join(' ')
 		},

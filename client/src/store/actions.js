@@ -335,7 +335,7 @@ export default {
 	 * @param {*} id 
 	 */
 	async updateContributorBio({commit}, payload) {
-		const response = (await Api.ApiAdmin().post(`contributor/${payload.id}`, payload)).data
+		const response = (await Api.ApiAdmin().put(`contributor/${payload.id}`, payload)).data
 		commit(types.UPDATE_CONTRIBUTOR, response.contributor)
 		return response
 	},

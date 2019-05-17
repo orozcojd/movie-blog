@@ -1,5 +1,8 @@
 <template>
   <div>
+    <vue-headful
+      title="Admin Edit Users - Unsolicited.mp3"
+    />
     hello
   </div>
 </template>

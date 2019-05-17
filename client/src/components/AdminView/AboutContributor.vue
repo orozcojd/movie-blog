@@ -1,5 +1,8 @@
 <template>
   <v-container>
+    <vue-headful
+      :title="headTitle"
+    />
     <h1 align="left">
       About You
     </h1>
@@ -83,6 +86,9 @@ export default {
 			'snackbar',
 			'contributor'
 		]),
+		headTitle() {
+			return `Admin - About ${this.contributor.name} `
+		},
 		name: {
 			get() {
 				return this.contributor.name
@@ -118,7 +124,7 @@ export default {
 		},
 		twitterLink: {
 			get() {
-				return this.contributor.twitterLink
+				return this.contributor.twitter
 			},
 			set(val) {
 				this.editContributorVal({
@@ -129,7 +135,7 @@ export default {
 		},
 		igLink: {
 			get() {
-				return this.contributor.igLink
+				return this.contributor.instagram
 			},
 			set(val) {
 				this.editContributorVal({
