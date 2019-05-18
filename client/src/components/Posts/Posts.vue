@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <vue-headful
-      title="Unsolicited.mp3"
+      :title="siteTitle"
       description="Description from vue-headful"
     />
     <v-layout
@@ -10,9 +10,8 @@
     >
       <v-flex
         xs12
-        md12
       >
-        <h1>Unsolicited.mp3</h1>
+        <h1>{{ siteTitle }}</h1>
       </v-flex>
     </v-layout>
     <v-layout
@@ -20,24 +19,25 @@
     >
       <v-flex
         xs12
+        sm11
       >
         <latest-post
           v-if="articles.length"
           class="mb-med"
           :article="articles[0]"
         />
-        <hr
-          size="5"
-          color="black"
-        >
-        <br>
-        <h2
-          align="left"
-        >
-          Most Recent
-        </h2>
       </v-flex>
     </v-layout>
+    <hr
+      size="5"
+      color="black"
+    >
+    <br>
+    <h2
+      align="left"
+    >
+      Most Recent
+    </h2>
     <timeline
       :articles="articles.slice(1)"
     />
@@ -64,7 +64,7 @@
 import LatestPost from '@/components/Posts/LatestPost'
 import DisplayArticles from '@/components/Layouts/DisplayArticles'
 import Timeline from '@/components/Layouts/Timeline'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 export default {
 	name: 'Posts',
 	components: {
@@ -80,6 +80,9 @@ export default {
 		...mapState([
 			'articles'
 		]),
+		...mapGetters([
+			'siteTitle'
+		])
 	},
 	async mounted () {
 		let options = {
@@ -104,12 +107,48 @@ export default {
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
 // @import url('../../assets/style/tiptap.scss');
-
-@media only screen and (max-width: 420px) {
-    h1 {
-      font-size: 3rem !important;
-    }
-  }
+// Large devices (desktops, less than 1200px)
+  // @media (min-width: 10em) {
+  //   h1 {
+  //     font-size: 0.5em !important;
+  //   }
+  // }
+  // @media (min-width: 25em) {
+  //   h1 {
+  //     font-size: 1em !important;
+  //   }
+  // }
+  // @media (min-width: 40em) {
+  //   h1 {
+  //     font-size: 1.7em !important;
+  //   }
+  // }
+  // @media (min-width: 50em) {
+  //   h1 {
+  //     font-size: 2em !important;
+  //   }
+  // }
+  // @media (min-width: 75em) {
+  //   h1 {
+  //     font-size: 2.5em !important;
+  //   }
+  // }
+  // @media (min-width: 100em) {
+  //   h1 {
+  //     font-size: 3em !important;
+  //   }
+  // }
+  // @media (min-width: 115em) {
+  //   h1 {
+  //     font-size: 4em !important;
+  //   }
+  // }
+  // @media (min-width: 145em) {
+  //   // * {font-size: 1.4em;}
+  //   h1 {
+  //     font-size: 4.6em !important;
+  //   }
+  // }
   // h1 {
   //     font-size: 6.75rem !important;
   //   }

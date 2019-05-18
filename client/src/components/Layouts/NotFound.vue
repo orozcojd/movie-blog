@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
 	name: 'NotFound',
 	data () {
@@ -23,8 +24,11 @@ export default {
 		}
 	},
 	computed: {
+		...mapGetters([
+			'siteTitle'
+		]),
 		headTitle() {
-			return 'Page Not Found - Unsolicited.mp3'
+			return `Page Not Found - ${this.siteTitle}`
 		}
 	},
 	mounted() {

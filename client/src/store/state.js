@@ -28,5 +28,9 @@ module.exports = () => ({
 		text: '',
 		timeout: 4000,
 		value: false
+	},
+	strings: {
+		title: 'Unsolicited.mp3',
+		
 	}
 })

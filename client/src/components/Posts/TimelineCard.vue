@@ -11,14 +11,13 @@
         align="left"
         style="width:100%;"
       >
-        <h3
+        <h2
           style="margin-bottom:10px"
-          class="headline"
         >
           {{ article.title }}
-        </h3>
+        </h2>
         <div
-          style="height:70px;overflow:scroll"
+          class="card-description"
         >
           {{ article.thumbnailDescription }}
         </div>
@@ -58,5 +57,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .card-description {
+    font-size: 1.2rem;
+  }
 </style>

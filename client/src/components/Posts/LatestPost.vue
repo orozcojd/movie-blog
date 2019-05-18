@@ -34,22 +34,25 @@
           <v-card-title primary-title>
             <div>
               <h3
-                class="headline"
+                class="card-header"
                 align="left"
               >
                 {{ article.title }}
               </h3>
               <br>
-              <p align="left">
+              <p 
+                class="card-description"
+                align="left"
+              >
                 {{ article.thumbnailDescription }}
               </p>
             </div>
           </v-card-title>
-          <v-card-title>
-            <p align="left">
+          <v-card-text>
+            <div align="left">
               {{ article.author }}
-            </p>
-          </v-card-title>
+            </div>
+          </v-card-text>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -86,9 +89,12 @@ export default {
 .header {
   margin: 10px;
 }
-.header-text {
-  font-size: 150%;
+.card-description {
+  font-size: 16px;
 }
+/* .card-header {
+  font-size: 2em;
+} */
 .point-cursor {
   cursor: pointer;
 }

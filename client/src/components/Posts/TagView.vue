@@ -72,7 +72,7 @@
 <script>
 import PostPreview from '@/components/Posts/PostPreview'
 
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   
@@ -94,8 +94,11 @@ export default {
 			'pages',
 			'page'
 		]),
+		...mapGetters([
+			'siteTitle'
+		]),
 		headTitle() {
-			return `${this.tag.name} - Unsolicited.mp3`
+			return `${this.tag.name} - ${this.siteTitle}`
 		},
 		tagName() {
 			return this.tag.name.split('-').join(' ')

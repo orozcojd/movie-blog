@@ -33,7 +33,23 @@
             </v-list-tile-action>
           </v-list-tile>
         </v-list-group>
-        <v-list-group
+        <v-list-tile
+          v-for="(realm, i) in realms"
+          :key="i"
+          class="realm-title"
+          @click="navigateTo('tag-view', { 
+            id: realm.ref_id,
+            tagName: realm.name,
+          })"
+        >
+          <v-list-tile-title
+            v-text="titleCase(realm.name)"
+          />
+          <!-- <v-list-tile-action>
+            <v-icon>home</v-icon>
+          </v-list-tile-action> -->
+        </v-list-tile>
+        <!-- <v-list-group
           v-model="realmToggle"
           prepend-icon="account_circle"
         >
@@ -57,7 +73,7 @@
               <v-icon>home</v-icon>
             </v-list-tile-action>
           </v-list-tile>
-        </v-list-group>
+        </v-list-group> -->
         <v-list-group
           v-if="viewedArticles.length"
           class="contain-group"
@@ -224,6 +240,9 @@ export default {
 .contain-group {
   max-height: 432px;
   overflow: scroll;
+}
+.realm-title {
+  font-size: 1.6rem !important;
 }
 </style>
 

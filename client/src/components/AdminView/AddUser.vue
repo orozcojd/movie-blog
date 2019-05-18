@@ -69,7 +69,7 @@
 
 <script>
 import AdminValidation from '@/components/Tools/AdminMainValidation'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 export default {
 	name: 'AdminAddUser',
 	data () {
@@ -97,8 +97,11 @@ export default {
 			adminUser: 'user',
 			snackbar: 'snackbar'  
 		}),
+		...mapGetters([
+			'siteTitle'
+		]),
 		headTitle() {
-			return 'Admin Add User - Unsolicited.mp3'
+			return `Admin Add User - ${this.siteTitle}`
 		}
 	},
 	mounted() {

@@ -4,7 +4,7 @@
     fluid
   >
     <vue-headful
-      title="Admin Edit Tags - Unsolicited.mp3"
+      :title="headTitle"
     />
     <h1
       align="left"
@@ -217,7 +217,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import AdminMainValidation from '@/components/Tools/AdminMainValidation'
 import FormValidation from '@/components/Tools/FormValidation'
 
@@ -250,6 +250,12 @@ export default {
 			'user',
 			'snackbar'
 		]),
+		...mapGetters([
+			'siteTitle'
+		]),
+		headTitle() {
+			return `Admin Edit Tags - ${this.siteTitle}}`
+		},
 		chipTags: {
 			get() {
 				return this.tags.map(tag => ({...tag, chip:true}))

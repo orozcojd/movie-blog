@@ -4,7 +4,7 @@
     grid-list-lg
   >
     <vue-headful
-      title="Admin Main - Unsolicited.mp3"
+      :title="headTitle"
     />
     <v-layout
       row
@@ -44,7 +44,7 @@
 
 <script>
 // import AdminCategoryTile from './AdminCategoryTile'
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'AdminCategories',
@@ -107,6 +107,12 @@ export default {
 		...mapState([
 			'user'
 		]),
+		...mapGetters([
+			'siteTitle'
+		]),
+		headTitle() {
+			return `Admin Main - ${this.siteTitle}`
+		},
 		viewableCategories () {
 			return this.categories.filter((category) => {
 				return category.granted && category.granted()
@@ -115,9 +121,6 @@ export default {
 		permissionGranted() {
 			return !!this.user && this.user.permission === 1
 		}
-	},
-	mounted (){
-		console.log(this.user)
 	}
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <vue-headful
-      title="Unsolicited.mp3 - Login"
+      :title="headTitle"
     />
     <h1>Login</h1>
     <v-layout
@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 export default {
 	name: 'Login',
 	data () {
@@ -63,6 +63,12 @@ export default {
 		...mapActions([
 			'login'
 		]),
+		...mapGetters([
+			'siteTitle'
+		]),
+		headTitle() {
+			return `${this.siteTitle} - Login`
+		},
 		async submit () {
 			this.login({
 				email: this.credentials.email,

@@ -2,8 +2,6 @@
   <v-card
     :hover="true"
     raised
-    
-    
     @click="navigateTo(article._id)"
   >
     <v-img

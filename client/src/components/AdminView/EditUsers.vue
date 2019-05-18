@@ -1,13 +1,14 @@
 <template>
   <div>
     <vue-headful
-      title="Admin Edit Users - Unsolicited.mp3"
+      :title="headTitle"
     />
     hello
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
 	name: 'EditUsers',
 	data () {
@@ -15,7 +16,12 @@ export default {
 		}
 	},
 	computed: {
-
+		...mapGetters([
+			'siteTitle'
+		]),
+		headTitle() {
+			return `Admin Edit Users - ${this.siteTitle}}`
+		},
 	},
 	mounted() {
 		

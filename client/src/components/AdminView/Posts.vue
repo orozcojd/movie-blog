@@ -15,7 +15,7 @@
 
 <script>
 import DisplayArticles from '@/components/Layouts/DisplayArticles'
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'AdminView',
@@ -38,6 +38,9 @@ export default {
 			'articles',
 			'user'
 		]),
+		...mapGetters([
+			'siteTitle'
+		]),
 		filterArticles () {
 			return this.articles.filter(article => article.draft === this.drafts)
 		},
@@ -45,7 +48,7 @@ export default {
 			let type = 'Posts'
 			if(this.drafts)
 				type = 'Drafts'
-			return `Admin View ${type} - Unsolicited.mp3`
+			return `Admin View ${type} - ${this.siteTitle}`
 		}
 	},
 	async mounted () {

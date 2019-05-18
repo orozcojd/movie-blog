@@ -20,7 +20,7 @@
         :href="twitter"
         target="_"
       >
-        twitter
+        Twitter
       </a>
       <br>
       <a
@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters } from 'vuex'
 import PostPreview from '@/components/Posts/PostPreview'
 
 export default {
@@ -79,8 +79,11 @@ export default {
 			'pages',
 			'page'
 		]),
+		...mapGetters([
+			'siteTitle'
+		]),
 		headTitle() {
-			return `${this.contributor.name} - Unsolicited.mp3`
+			return `${this.contributor.name} - ${this.siteTitle}`
 		},
 		twitter() {
 			return `https://www.twitter.com/${this.contributor.twitter}`
