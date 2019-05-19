@@ -48,11 +48,11 @@
               </p>
             </div>
           </v-card-title>
-          <v-card-text>
+          <!-- <v-card-text>
             <div align="left">
               {{ article.author }}
             </div>
-          </v-card-text>
+          </v-card-text> -->
         </v-layout>
       </v-flex>
     </v-layout>

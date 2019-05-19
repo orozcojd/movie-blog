@@ -1,10 +1,13 @@
 <template>
-  <v-container fluid>
+  <v-container
+    fluid
+    class="content"
+  >
     <vue-headful
       :title="siteTitle"
       description="Description from vue-headful"
     />
-    <v-layout
+    <!-- <v-layout
       class="main-title"
       justify-center
     >
@@ -13,7 +16,7 @@
       >
         <h1>{{ siteTitle }}</h1>
       </v-flex>
-    </v-layout>
+    </v-layout> -->
     <v-layout
       justify-center
     >
@@ -152,6 +155,9 @@ export default {
   // h1 {
   //     font-size: 6.75rem !important;
   //   }
+  .content {
+    max-width: 1920px
+  }
   .container {
     padding-top: 0 !important;
   }

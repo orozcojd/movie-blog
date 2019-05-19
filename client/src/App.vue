@@ -7,6 +7,7 @@
         <router-view
           :key="$route.fullPath"
         />
+        <Footer />
       </v-content>
     </v-app>
   </div>
@@ -14,10 +15,12 @@
 
 <script>
 import Header from '@/components/Layouts/Header.vue'
+import Footer from '@/components/Layouts/Footer.vue'
 export default {
 	name: 'App',
 	components: {
-		Header
+		Header,
+		Footer
 	},
 	mounted () {
 	},

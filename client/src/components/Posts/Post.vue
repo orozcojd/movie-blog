@@ -14,7 +14,6 @@
         sm9
         xl6
         offset-md1
-        style="background-color:gray"
       >
         <v-layout>
           <v-flex
@@ -71,18 +70,12 @@
             </strong>
             <div
               align="left"
-              class="light-contrast"
             >
               <v-img
                 id="post-img"
                 :src="article.img"
                 max-height="600"
               />
-              <label
-                for="post-img"
-              >
-                {{ article.imgCred }}
-              </label>
             </div>
             <br>
           </v-flex>
@@ -93,6 +86,16 @@
             sm8
             offset-md1
           >
+            <div
+              class="light-contrast mb-med pull-up"
+              align="left"
+            >
+              <label
+                for="post-img"
+              >
+                {{ article.imgCred }}
+              </label>
+            </div>
             <editor-content
               class="post-body"
               :editor="editor"
@@ -266,6 +269,10 @@ export default {
 
 <style lang="scss">
 @import url('../../assets/style/poststyle.scss');
+
+.after-article {
+	margin-bottom: 5em;
+}
 .pointer {
 	cursor: pointer;
 }
@@ -274,5 +281,8 @@ export default {
 }
 .ProseMirror-focused {
 	outline: none !important;
+}
+.pull-up {
+	margin-top: -1em;
 }
 </style>

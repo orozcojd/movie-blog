@@ -1,37 +1,45 @@
 <template>
-  <v-layout
-    row
-    wrap
+  <v-container
+    fluid
+    grid-list-xl
   >
-    <v-flex
-      v-for="article in articles"
-      :key="article.id"
-      md4
-      xs12
+    <v-layout
+      row
+      wrap
     >
-      <admin-post-preview
-        v-if="admin"
-        class="post-preview"
-        :article="article"
-        to="article-view" 
-      />
-      <post-preview
-        v-else
-        class="post-preview"
-        :article="article"
-      />
-    </v-flex>
-  </v-layout>
+      <v-flex
+        v-for="article in articles"
+        :key="article.id"
+        md4
+        xs12
+      >
+        <admin-post-preview
+          v-if="admin"
+          class="post-preview"
+          :article="article"
+          to="article-view" 
+        />
+        <weekly-posts
+          v-else
+          class="post-preview"
+          :article="article"
+        />
+      </v-flex>
+    </v-layout>
+  </v-container>
 </template>
 
 <script>
 import AdminPostPreview from '@/components/AdminView/PostPreview'
 import PostPreview from '@/components/Posts/PostPreview'
+import WeeklyPosts from '@/components/Posts/WeeklyPosts'
+
 export default {
 	name: 'DisplayArticles',
 	components: {
 		AdminPostPreview,
-		PostPreview
+		PostPreview,
+		WeeklyPosts
 	},
 	props: {
 		articles: {

@@ -108,7 +108,7 @@ export default {
 
 <style scoped>
 .date-text{
-	font-size: 2rem;
+	font-size: 1.5rem;
 }
 	.hover-grow{
 		transition: all .3s ease-in-out;

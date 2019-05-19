@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-resize.quiet="onResize">
     <v-navigation-drawer
       v-model="drawerRight"
       right
@@ -34,7 +34,7 @@
           </v-list-tile>
         </v-list-group>
         <v-list-tile
-          v-for="(realm, i) in realms"
+          v-for="(realm, i) in sideNavRealms"
           :key="i"
           class="realm-title"
           @click="navigateTo('tag-view', { 
@@ -45,37 +45,10 @@
           <v-list-tile-title
             v-text="titleCase(realm.name)"
           />
-          <!-- <v-list-tile-action>
-            <v-icon>home</v-icon>
-          </v-list-tile-action> -->
         </v-list-tile>
-        <!-- <v-list-group
-          v-model="realmToggle"
-          prepend-icon="account_circle"
-        >
-          <template v-slot:activator>
-            <v-list-tile>
-              <v-list-tile-title>Realms</v-list-tile-title>
-            </v-list-tile>
-          </template>
-          <v-list-tile
-            v-for="(realm, i) in realms"
-            :key="i"
-            @click="navigateTo('tag-view', { 
-              id: realm.ref_id,
-              tagName: realm.name,
-            })"
-          >
-            <v-list-tile-title
-              v-text="titleCase(realm.name)"
-            />
-            <v-list-tile-action>
-              <v-icon>home</v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-        </v-list-group> -->
         <v-list-group
           v-if="viewedArticles.length"
+          value="true"
           class="contain-group"
           prepend-icon="account_circle"
         >
@@ -107,14 +80,28 @@
     <v-toolbar
       fixed
       app
-      dense
       :scroll-off-screen="!drawerRight"
       clipped-right
     >
-      <v-toolbar-side-icon to="/">
-        <v-icon>home</v-icon>
-      </v-toolbar-side-icon>
-      <v-toolbar-title>Movie Reviewer</v-toolbar-title>
+      <div
+        class="main-title"
+        @click="$router.push('/')"
+      >
+        {{ siteTitle }}
+      </div>
+      <v-toolbar-items v-if="!toggleDown">
+        <v-btn
+          v-for="(realm, i) in realms.slice(0,5)"
+          :key="i"
+          depressed
+          @click="navigateTo('tag-view', { 
+            id: realm.ref_id,
+            tagName: realm.name,
+          })"
+        >
+          {{ realm.name }}
+        </v-btn>
+      </v-toolbar-items>
       <v-spacer />
       <!--
         <v-btn
@@ -159,7 +146,12 @@ export default {
 			drawerRight: false,
 			right: false,
 			account: [['Admin', 'goTo("/admin")'], ['Logout', 'logout']],
-			realmToggle: true
+			realmToggle: true,
+			windowSize: {
+				x: 0,
+				y: 0
+			},
+			toggleDown: false
 		}
 	},
 	computed: {
@@ -172,7 +164,8 @@ export default {
 		]),
 		...mapGetters([
 			'isUserLoggedin',
-			'getUser'
+			'getUser',
+			'siteTitle'
 		]),
 		snackVal: {
 			get() {
@@ -187,6 +180,14 @@ export default {
 		},
 		realms () {
 			return this.tags.filter(tag => tag.realm === true)
+		},
+		sideNavRealms() {
+			if(this.toggleDown) {
+				return this.realms
+			}
+			else {
+				return this.realms.slice(5)
+			}
 		}
 	},
 	async mounted () {
@@ -194,6 +195,7 @@ export default {
 			await this.getSetToken()		
 		}
 		await this.getTags()
+		this.onResize()
 	},
 	methods: {
 		...mapActions([
@@ -203,6 +205,15 @@ export default {
 			'logOut',
 			'setSnackbar'
 		]),
+		onResize () {
+			this.windowSize = { x: window.innerWidth, y: window.innerHeight }
+			if(this.windowSize.x <= 835) {
+				this.toggleDown = true
+			}
+			else {
+				this.toggleDown = false
+			}
+		},
 		titleCase(word) {
 			let title = word.toLowerCase().split(' ')
 			for(let i = 0; i < title.length; i++) {
@@ -236,7 +247,17 @@ export default {
 	}
 }
 </script>
-<style scoped>
+
+<style lang="scss" scoped>
+@import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
+ .main-title {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 2rem !important;
+    margin-right: 1em; 
+    cursor:pointer;
+    color: black;
+  }
+
 .contain-group {
   max-height: 432px;
   overflow: scroll;
