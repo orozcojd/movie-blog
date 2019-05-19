@@ -8,121 +8,123 @@
       :title="article.title"
       :description="article.description"
     />
-    <v-layout>
+    <v-layout justify-center>
       <v-flex
         xs12
         sm9
         xl6
         offset-md1
       >
-        <v-layout>
-          <v-flex
-            xs12
-            sm10
-            offset-md1
-          >
-            <div
-              align="left"
-            >
-              <!-- <v-chip> -->
-              <a
-                href="#"
-                @click.prevent="navigateTo({
-                  _id: article.realm,
-                  name: articleRealm
-                })"
+        <v-card class="post-card">
+          <v-card-text>
+            <v-layout justify-start>
+              <v-flex
+                xs12
+                sm10
               >
-                <strong>
-                  {{ upperCaseString(articleRealm) }}
-                </strong>
-              </a>
-              <!-- </v-chip> -->
-            </div>
-            <h1
-              class="post-title"
-              align="left"
-            >
-              {{ article.title }}
-            </h1>
-				
-            <br>
-            <strong>
-              <div
-                align="left"
-                class="mb-small pointer"
-                @click="$router.push({
-                  name: 'about-contributor',
-                  params: {
-                    id: article.contributorId,
-                    contributor: article.author.toLowerCase().split(' ').join('-')
-                  }},
-                )"
-              >
-                <!-- <span>Author: </span> -->
-                {{ article.author }}
-              </div>
-              <div
-                align="left"
-                class="mb-med light-contrast"
-              >
-                {{ articleDate }}
-              </div>
-            </strong>
-            <div
-              align="left"
-            >
-              <v-img
-                id="post-img"
-                :src="article.img"
-                max-height="600"
-              />
-            </div>
-            <br>
-          </v-flex>
-        </v-layout>
-        <v-layout>
-          <v-flex
-            xs12
-            sm8
-            offset-md1
-          >
-            <div
-              class="light-contrast mb-med pull-up"
-              align="left"
-            >
-              <label
-                for="post-img"
-              >
-                {{ article.imgCred }}
-              </label>
-            </div>
-            <editor-content
-              class="post-body"
-              :editor="editor"
-              align="left"
-            />
-            <strong>
-              <ul
-                v-if="article.tags.length"
-                align="left"
-                class="tag-list"
-              >
-                <li
-                  v-for="(tag, index) in article.tags"
-                  :key="index"
-                  class="tag"
+                <div
+                  align="left"
                 >
+                  <!-- <v-chip> -->
                   <a
+                    href="#"
                     @click.prevent="navigateTo({
-                      _id: tag,
-                      name: convertTagIdToName(tag)
+                      _id: article.realm,
+                      name: articleRealm
                     })"
-                  >{{ upperCaseString(convertTagIdToName(tag)) }}</a>
-                </li>
-              </ul>
-            </strong>
-          </v-flex>
-        </v-layout>
+                  >
+                    <strong>
+                      {{ upperCaseString(articleRealm) }}
+                    </strong>
+                  </a>
+                  <!-- </v-chip> -->
+                </div>
+                <h1
+                  class="post-title"
+                  align="left"
+                >
+                  {{ article.title }}
+                </h1>
+				
+                <br>
+                <strong>
+                  <div
+                    align="left"
+                    class="mb-small pointer"
+                    @click="$router.push({
+                      name: 'about-contributor',
+                      params: {
+                        id: article.contributorId,
+                        contributor: article.author.toLowerCase().split(' ').join('-')
+                      }},
+                    )"
+                  >
+                    <!-- <span>Author: </span> -->
+                    {{ article.author }}
+                  </div>
+                  <div
+                    align="left"
+                    class="mb-med light-contrast"
+                  >
+                    {{ articleDate }}
+                  </div>
+                </strong>
+                <div
+                  align="left"
+                >
+                  <v-img
+                    id="post-img"
+                    :src="article.img"
+                    max-height="600"
+                  />
+                </div>
+                <br>
+              </v-flex>
+            </v-layout>
+            <v-layout justify-start>
+              <v-flex
+                xs12
+                sm9
+              >
+                <div
+                  class="light-contrast mb-med pull-up"
+                  align="left"
+                >
+                  <label
+                    for="post-img"
+                  >
+                    {{ article.imgCred }}
+                  </label>
+                </div>
+                <editor-content
+                  class="post-body"
+                  :editor="editor"
+                  align="left"
+                />
+                <strong>
+                  <ul
+                    v-if="article.tags.length"
+                    align="left"
+                    class="tag-list"
+                  >
+                    <li
+                      v-for="(tag, index) in article.tags"
+                      :key="index"
+                      class="tag"
+                    >
+                      <a
+                        @click.prevent="navigateTo({
+                          _id: tag,
+                          name: convertTagIdToName(tag)
+                        })"
+                      >{{ upperCaseString(convertTagIdToName(tag)) }}</a>
+                    </li>
+                  </ul>
+                </strong>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+        </v-card>
       </v-flex>
     </v-layout>
     <div
@@ -284,5 +286,8 @@ export default {
 }
 .pull-up {
 	margin-top: -1em;
+}
+.post-card {
+	padding: 1em 0 2em 4em;
 }
 </style>

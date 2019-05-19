@@ -8,49 +8,32 @@
       :title="headTitle"
       :description="tag.name"
     />
-    <!-- <v-parallax 
-      v-if="tag.img"
-      :src="tag.img"
-      class="mb-lg"
-    >
-      <v-layout
-        align-center
-      >
-        <v-flex md12>
-          <h1>{{ tagName }}</h1>
-        </v-flex>
-      </v-layout>
-    </v-parallax> -->
     <v-layout
       v-if="tag.img"
     >
       <v-img 
+        lazy-src=""
         :src="tag.img"
         aspect-ratio="2"
-      />
-    </v-layout>
-    <v-layout
-      row
-      wrap
-    />
-    <v-layout
-      v-if="articles.length"
-      row
-      wrap
-    >
-      <v-flex
-        v-for="article in articles"
-        :key="article.id"
-        md4
-        xs12
+        gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
       >
-        <post-preview
-          class="post-preview"
-          :article="article"
-          to="article-view" 
-        />
-      </v-flex>
+        <v-container fill-height>
+          <v-layout align-center>
+            <v-flex
+              row
+              wrap
+              class="realm-title"
+            >
+              <h1>{{ tag.name }}</h1>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-img>
     </v-layout>
+    <display-articles 
+      v-if="articles.length"
+      :articles="articles.slice(6)"
+    />
     <v-layout
       v-else
       justify-center
@@ -70,15 +53,14 @@
 </template>
 
 <script>
-import PostPreview from '@/components/Posts/PostPreview'
-
+import DisplayArticles from '@/components/Layouts/DisplayArticles'
 import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   
 	name: 'TagView',
 	components: {
-		PostPreview
+		DisplayArticles
 	},
 	data () {
 		return {
@@ -148,10 +130,15 @@ export default {
 </script>
 
 <style scoped>
+
 	.h1 {
 		font-size: 4em !important;
 	}
 	.mb-lg {
 		margin-bottom: 5em;
+	}
+	.realm-title {
+		color: whitesmoke;
+		font-size: 4rem;
 	}
 </style>

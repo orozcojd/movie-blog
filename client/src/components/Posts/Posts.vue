@@ -51,14 +51,10 @@
     >
       Weekly Updates
     </h2>
-    <v-container
-      fluid
-      grid-list-md
-    >
-      <display-articles 
-        :articles="articles.slice(6)"
-      />
-    </v-container>
+
+    <display-articles 
+      :articles="articles.slice(6)"
+    />
   </v-container>
 </template>
 

@@ -19,7 +19,7 @@
           :article="article"
           to="article-view" 
         />
-        <weekly-posts
+        <post-preview
           v-else
           class="post-preview"
           :article="article"
@@ -32,14 +32,12 @@
 <script>
 import AdminPostPreview from '@/components/AdminView/PostPreview'
 import PostPreview from '@/components/Posts/PostPreview'
-import WeeklyPosts from '@/components/Posts/WeeklyPosts'
 
 export default {
 	name: 'DisplayArticles',
 	components: {
 		AdminPostPreview,
 		PostPreview,
-		WeeklyPosts
 	},
 	props: {
 		articles: {
