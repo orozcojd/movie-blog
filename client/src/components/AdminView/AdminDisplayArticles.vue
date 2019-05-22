@@ -1,7 +1,7 @@
 <template>
   <v-container
     fluid
-    grid-list-xl
+    grid-list-md
   >
     <v-layout
       row
@@ -13,9 +13,10 @@
         md4
         xs12
       >
-        <post-preview
+        <admin-post-preview
           class="post-preview"
           :article="article"
+          to="article-view" 
         />
       </v-flex>
     </v-layout>
@@ -23,19 +24,23 @@
 </template>
 
 <script>
-import PostPreview from '@/components/Posts/PostPreview'
+import AdminPostPreview from '@/components/AdminView/PostPreview'
 
 export default {
 	name: 'DisplayArticles',
 	components: {
-		PostPreview,
+		AdminPostPreview,
 	},
 	props: {
 		articles: {
 			type: Array,
 			required: true
+		},
+		admin: {
+			type: Boolean,
+			default: false
 		}
-	},
+	}
 }
 </script>
 

@@ -55,7 +55,7 @@
           <v-text-field
             v-model="lazyImg"
             persistent-hint
-            hint="Enter the medium image URL from lensdump"
+            hint="Enter the medium size image URL from lensdump"
             :rules="imageRules"
             label="Article medium image"
             required 
@@ -311,19 +311,20 @@ export default {
 		}
 	},
 	async mounted () {
+		// console.log(this.article)
 		let id = this.$route.params.id
 		// if article not found in store, fetch it
 		if(id){
-			let article = this.getArticle(id)
-			// console.log(article)
-			if(article) {
+			if(Object.keys(this.article).length === 0 && this.article.constructor === Object) {
 				// if article set article state to article found in articles array
-				this.setSingleArticle(article)
-			}
-			else {
-				// else fetch then set article state
+				// this.setSingleArticle(this.article)
+				// console.log('setting article')
 				await this.fetchArticle(id)
 			}
+			// else {
+			// 	// else fetch then set article state
+			// 	await this.fetchArticle(id)
+			// }
 		}
 		else {
 			this.SET_SINGLE_ARTICLE({});
@@ -431,7 +432,7 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=Proza+Libre');
 @import url('../../assets/style/tiptap.scss');
   h1 {
-    font-size: 4rem;
+    // font-size: 4rem;
     // margin-bottom: 2.5rem;
   }
 </style>

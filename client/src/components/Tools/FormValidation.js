@@ -18,8 +18,8 @@ export default {
 	imageRules: 
 		[
 			// v => !!v || 'Image is required',
-			v => (v && (v.endsWith(".jpg") || v.endsWith("jpeg") || v.endsWith(".bmp")
-		|| v.endsWith(".gif") || v.endsWith(".png"))) || 'Must be a valid image format'
+			v => (!v|| (v && (v.endsWith(".jpg") || v.endsWith("jpeg") || v.endsWith(".bmp")
+		|| v.endsWith(".gif") || v.endsWith(".png")))) || 'Must be a valid image format'
 		],
 	realmRules: 
 		[

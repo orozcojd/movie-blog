@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 	next();
 });
 require('./routes')(app);
-mongoose.connect(config.db.database,{
+mongoose.connect(config.db.database, {
 	useNewUrlParser: true 
 }
 );

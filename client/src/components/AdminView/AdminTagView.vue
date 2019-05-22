@@ -187,14 +187,24 @@
                 label="Use Tag as Realm"
                 @change="updateTag($event, 'realm', tag._id)"
               />
-              <v-text-field
-                v-if="tags[i].realm"
-                :value="tags[i].img"
-                :rules="imageRules"
-                label="Realm Image"
-                :disabled="disabled && tags[i].realm"
-                @input="updateTag($event, 'img', tag._id)"
-              />
+              <div v-if="tags[i].realm">
+                <v-text-field
+                  :value="tags[i].img"
+                  :rules="imageRules"
+                  label="Realm Image"
+                  hint="Enter the image URL from lensdump"
+                  :disabled="disabled && tags[i].realm"
+                  @input="updateTag($event, 'img', tag._id)"
+                />
+                <v-text-field
+                  :rules="imageRules"
+                  :value="tags[i].lazyImg"
+                  label="Realm Medium Image"
+                  hint="Enter the medium size image URL from lensdump"
+                  :disabled="disabled && tags[i].realm"
+                  @input="updateTag($event, 'lazyImg', tag._id)"
+                />
+              </div>
             </v-container>
           </v-card>
         </v-flex>

@@ -11,7 +11,7 @@
     <v-layout justify-center>
       <v-flex
         xs12
-        sm9
+        sm10
         xl6
         offset-md1
       >
@@ -25,7 +25,6 @@
                 <div
                   align="left"
                 >
-                  <!-- <v-chip> -->
                   <a
                     href="#"
                     @click.prevent="navigateTo({
@@ -37,7 +36,6 @@
                       {{ upperCaseString(articleRealm) }}
                     </strong>
                   </a>
-                  <!-- </v-chip> -->
                 </div>
                 <h1
                   class="post-title"
@@ -50,17 +48,19 @@
                 <strong>
                   <div
                     align="left"
-                    class="mb-small pointer"
-                    @click="$router.push({
-                      name: 'about-contributor',
-                      params: {
-                        id: article.contributorId,
-                        contributor: article.author.toLowerCase().split(' ').join('-')
-                      }},
-                    )"
+                    class="mb-small"
                   >
-                    <!-- <span>Author: </span> -->
-                    {{ article.author }}
+                    <a
+                      @click="$router.push({
+                        name: 'about-contributor',
+                        params: {
+                          id: article.contributorId,
+                          contributor: article.author.toLowerCase().split(' ').join('-')
+                        }},
+                      )"
+                    >
+                      {{ article.author }}
+                    </a>
                   </div>
                   <div
                     align="left"
@@ -84,7 +84,9 @@
             <v-layout justify-start>
               <v-flex
                 xs12
-                sm9
+                sm10
+                md9
+                lg8
               >
                 <div
                   class="light-contrast mb-med pull-up"
@@ -269,25 +271,16 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped>
 @import url('../../assets/style/poststyle.scss');
-
-.after-article {
-	margin-bottom: 5em;
-}
-.pointer {
-	cursor: pointer;
-}
-.light-contrast {
-	color: #767676
-}
+</style>
+<style>
+@import url('../../assets/style/tiptap.scss');
 .ProseMirror-focused {
 	outline: none !important;
 }
-.pull-up {
-	margin-top: -1em;
-}
-.post-card {
-	padding: 1em 0 2em 4em;
+.post-body img {
+  width: 100%;
+  height: auto;
 }
 </style>

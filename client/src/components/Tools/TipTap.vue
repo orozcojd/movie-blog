@@ -1,179 +1,194 @@
 <template>
   <div class="tiptap-editor">
     <!-- Add Links -->
-    <editor-menu-bubble
-      class="menububble"
-      :editor="editor"
-      @hide="hideLinkMenu"
-    >
-      <div
-        slot-scope="{ commands, isActive, getMarkAttrs, menu }"
-        class="menububble"
-        :class="{ 'is-active': menu.isActive }"
-        :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`"
-      >
-        <form
-          v-if="linkMenuIsActive"
-          class="menububble__form"
-          @submit.prevent="setLinkUrl(commands.link, linkUrl)"
-        >
-          <input
-            ref="linkInput"
-            v-model="linkUrl"
-            class="menububble__input"
-            type="text"
-            placeholder="https://"
-            @keydown.esc="hideLinkMenu"
-          >
-          <button
-            class="menububble__button"
-            type="button"
-            @click="setLinkUrl(commands.link, null)"
-          >
-            <v-icon>remove_circle_outline</v-icon>
-          </button>
-        </form>
-        <template v-else>
-          <button
-            class="menububble__button"
-            :class="{ 'is-active': isActive.link() }"
-            @click="showLinkMenu(getMarkAttrs('link'))"
-          >
-            <span>{{ isActive.link() ? 'Update Link' : 'Add Link' }}</span>
-            <v-icon>insert_link</v-icon>
-          </button>
-        </template>
-      </div>
-    </editor-menu-bubble>
+    
     <!-- End add Links -->
-    <editor-menu-bar :editor="editor">
-      <div slot-scope="{ commands, isActive }">
-        <button
-          @click.prevent="showImagePrompt(commands.image)"
+    <v-layout row>
+      <v-flex xs11>
+        <editor-content
+          id="content"
+          class="editor__content"
+          :editor="editor"
+        />
+      </v-flex>
+      <v-flex
+        xs1
+        class="sticky"
+      >
+        <editor-menu-bubble
+          class="menububble"
+          :editor="editor"
+          @hide="hideLinkMenu"
         >
-          <v-icon>add_photo_alternate</v-icon>
-        </button>
-        <button
-          style="font-size: 18px"
-          :class="{ 'highlight': isActive.heading({ level: 1 }) }"
-          @click.prevent="commands.heading({ level: 1 })"
-        >
-          <strong>H1</strong>
-        </button>
-        <button
-          style="font-size: 18px"
-          :class="{ 'highlight': isActive.heading({ level: 2 }) }"
-          @click.prevent="commands.heading({ level: 2 })"
-        >
-          <strong>H2</strong>
-        </button>
-        <button
-          style="font-size: 18px"
-          :class="{ 'highlight': isActive.heading({ level: 3 }) }"
-          @click.prevent="commands.heading({ level: 3 })"
-        >
-          <strong>H3</strong>
-        </button>        
-        <button
-          :class="{ 'highlight': isActive.bold() }"
-          @click.prevent="commands.bold"
-        >
-          <v-icon>format_bold</v-icon>
-        </button>
-        <!-- <button
+          <div
+            slot-scope="{ commands, isActive, getMarkAttrs, menu }"
+            class="menububble"
+            :class="{ 'is-active': menu.isActive }"
+            :style="`left: ${menu.left}px; bottom: ${menu.bottom}px;`"
+          >
+            <form
+              v-if="linkMenuIsActive"
+              class="menububble__form"
+              @submit.prevent="setLinkUrl(commands.link, linkUrl)"
+            >
+              <input
+                ref="linkInput"
+                v-model="linkUrl"
+                class="menububble__input"
+                type="text"
+                placeholder="https://"
+                @keydown.esc="hideLinkMenu"
+              >
+              <button
+                class="menububble__button"
+                type="button"
+                @click="setLinkUrl(commands.link, null)"
+              >
+                <v-icon>remove_circle_outline</v-icon>
+              </button>
+            </form>
+            <template v-else>
+              <button
+                class="menububble__button"
+                :class="{ 'is-active': isActive.link() }"
+                @click="showLinkMenu(getMarkAttrs('link'))"
+              >
+                <span>{{ isActive.link() ? 'Update Link' : 'Add Link' }}</span>
+                <v-icon>insert_link</v-icon>
+              </button>
+            </template>
+          </div>
+        </editor-menu-bubble>
+        <editor-menu-bar :editor="editor">
+          <div slot-scope="{ commands, isActive }">
+            <v-layout column>
+              <button
+                @click.prevent="showImagePrompt(commands.image)"
+              >
+                <v-icon>add_photo_alternate</v-icon>
+              </button>
+              <button
+                style="font-size: 18px"
+                :class="{ 'highlight': isActive.heading({ level: 1 }) }"
+                @click.prevent="commands.heading({ level: 1 })"
+              >
+                <strong>H1</strong>
+              </button>
+              <button
+                style="font-size: 18px"
+                :class="{ 'highlight': isActive.heading({ level: 2 }) }"
+                @click.prevent="commands.heading({ level: 2 })"
+              >
+                <strong>H2</strong>
+              </button>
+              <button
+                style="font-size: 18px"
+                :class="{ 'highlight': isActive.heading({ level: 3 }) }"
+                @click.prevent="commands.heading({ level: 3 })"
+              >
+                <strong>H3</strong>
+              </button>        
+              <button
+                :class="{ 'highlight': isActive.bold() }"
+                @click.prevent="commands.bold"
+              >
+                <v-icon>format_bold</v-icon>
+              </button>
+              <!-- <button
           :class="{ 'highlight': isActive.fontincrease() }"
           @click="commands.fontincrease"
         >
           <v-icon>format_size</v-icon>
         </button>         -->
-        <button
-          :class="{ 'highlight': isActive.italic() }"
-          @click.prevent="commands.italic"
-        >
-          <v-icon>format_italic</v-icon>
-        </button>
-        <button
-          :class="{ 'highlight': isActive.strike() }"
-          @click.prevent="commands.strike"
-        >
-          <v-icon>strikethrough_s</v-icon>
-        </button>
-        <button
-          :class="{ 'highlight': isActive.underline() }"
-          @click.prevent="commands.underline"
-        >
-          <v-icon>format_underline</v-icon>
-        </button>
-        <button
-          :class="{ 'highlight': isActive.paragraph({ textAlign: 'left' }) }"
-          @click.prevent="commands.paragraph({ textAlign: 'left' })"
-        >
-          <v-icon>format_align_left</v-icon>
-        </button>
-        <button
-          :class="{ 'highlight': isActive.paragraph({ textAlign: 'center' }) }"
-          @click.prevent="commands.paragraph({ textAlign: 'center' })"
-        >
-          <v-icon>format_align_center</v-icon>
-        </button>
-        <button
-          :class="{ 'highlight': isActive.paragraph({ textAlign: 'right' }) }"
-          @click.prevent="commands.paragraph({ textAlign: 'right' })"
-        >
-          <v-icon>format_align_right</v-icon>
-        </button>
-        <button
-          :class="{ 'highlight': isActive.bullet_list() }"
-          @click.prevent="commands.bullet_list"
-        >
-          <v-icon>format_list_bulleted</v-icon>
-        </button>
-        <button
-          :class="{ 'highlight': isActive.ordered_list() }"
-          @click.prevent="commands.ordered_list"
-        >
-          <v-icon>format_list_numbered</v-icon>
-        </button>
+              <button
+                :class="{ 'highlight': isActive.italic() }"
+                @click.prevent="commands.italic"
+              >
+                <v-icon>format_italic</v-icon>
+              </button>
+              <button
+                :class="{ 'highlight': isActive.strike() }"
+                @click.prevent="commands.strike"
+              >
+                <v-icon>strikethrough_s</v-icon>
+              </button>
+              <button
+                :class="{ 'highlight': isActive.underline() }"
+                @click.prevent="commands.underline"
+              >
+                <v-icon>format_underline</v-icon>
+              </button>
+              <button
+                :class="{ 'highlight': isActive.paragraph({ textAlign: 'left' }) }"
+                @click.prevent="commands.paragraph({ textAlign: 'left' })"
+              >
+                <v-icon>format_align_left</v-icon>
+              </button>
+              <!-- <button
+                :class="{ 'highlight': isActive.paragraph({ textAlign: 'center' }) }"
+                @click.prevent="commands.paragraph({ textAlign: 'center' })"
+              >
+                <v-icon>format_align_center</v-icon>
+              </button>
+              <button
+                :class="{ 'highlight': isActive.paragraph({ textAlign: 'right' }) }"
+                @click.prevent="commands.paragraph({ textAlign: 'right' })"
+              >
+                <v-icon>format_align_right</v-icon>
+              </button> -->
+              <button
+                :class="{ 'highlight': isActive.bullet_list() }"
+                @click.prevent="commands.bullet_list"
+              >
+                <v-icon>format_list_bulleted</v-icon>
+              </button>
+              <button
+                :class="{ 'highlight': isActive.ordered_list() }"
+                @click.prevent="commands.ordered_list"
+              >
+                <v-icon>format_list_numbered</v-icon>
+              </button>
 
-        <button
-          :class="{ 'highlight': isActive.todo_list() }"
-          @click.prevent="commands.todo_list"
-        >
-          <v-icon>list_alt</v-icon>
-        </button>
-        <button
-          :class="{ 'highlight': isActive.blockquote() }"
-          @click.prevent="commands.blockquote"
-        >
-          <v-icon>format_quote</v-icon>
-        </button>
-        <!-- <button
+              <button
+                :class="{ 'highlight': isActive.todo_list() }"
+                @click.prevent="commands.todo_list"
+              >
+                <v-icon>list_alt</v-icon>
+              </button>
+              <button
+                :class="{ 'highlight': isActive.blockquote() }"
+                @click.prevent="commands.blockquote"
+              >
+                <v-icon>format_quote</v-icon>
+              </button>
+              <!-- <button
           :class="{ 'is-active': isActive.link() }"
           @click="showLinkMenu(getMarkAttrs('link'))"
         >
           <span>{{ isActive.link() ? 'Update Link' : 'Add Link' }}</span>
           <v-icon>insert_link</v-icon>
         </button> -->
-        <button
-          style="font-size: 18px"
-          @click.prevent="commands.undo"
-        >
-          <v-icon>undo</v-icon>
-        </button>
-        <button
-          style="font-size: 18px"
-          @click.prevent="commands.redo"
-        >
-          <v-icon>redo</v-icon>
-        </button>                                       
-      </div>
-    </editor-menu-bar>
-    <br>
-    <br>
-    <editor-content
-      class="editor__content"
-      :editor="editor"
-    />
+              <button
+                style="font-size: 18px"
+                @click.prevent="commands.undo"
+              >
+                <v-icon>undo</v-icon>
+              </button>
+              <button
+                style="font-size: 18px"
+                @click.prevent="commands.redo"
+              >
+                <v-icon>redo</v-icon>
+              </button>
+            </v-layout>                                      
+          </div>
+        </editor-menu-bar>
+        <br>
+        <br>
+      </v-flex>
+    </v-layout>
+    
+    
     <hr>
   </div>
 </template>
@@ -304,13 +319,32 @@ export default {
 			command({ href: url })
 			this.hideLinkMenu()
 			this.editor.focus()
-		},
-	},
+		}
+	}
+	// watch: {
+	// 	body(val) {
+	// 		let atags = document.getElementById('content').getElementsByTagName('a')
+	// 		for(let i = 0; i < atags.length; i++) {
+	// 			if(!atags[i].target) {
+	// 				atags[i].target="_blank"
+	// 			}
+	// 		}
+	// 	}
+	// }
 }
 </script>
 
 <style lang="scss">
-
+.sticky {
+  align-self: flex-start;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 10px;
+    float: right
+}
+.img {
+  width: device-width;
+}
 // .editor__content {
 //   margin-bottom: 0;
 // }

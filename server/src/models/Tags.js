@@ -12,6 +12,10 @@ let tagSchema = new Schema({
 		type: String,
 		default: null
 	},
+	lazyImg: {
+		type: String,
+		default: null
+	},
 	realm: {
 		type: Boolean,
 		default: false

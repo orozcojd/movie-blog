@@ -65,6 +65,7 @@ module.exports = {
 	async update (req, res) {
 		try {
 			let tags = req.body;
+			console.log(req.body);
 			let updated = [];
 			for(let i = 0; i< tags.length; i++) {
 				let tag = tags[i];

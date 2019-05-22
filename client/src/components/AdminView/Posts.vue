@@ -1,26 +1,23 @@
 <template>
-  <v-container
-    fluid
-    grid-list-md
-  >
+  <div>
     <vue-headful
       :title="headTitle"
     />
-    <display-articles 
+    <admin-display-articles 
       :articles="filterArticles"
       :admin="true"
     />
-  </v-container>
+  </div>
 </template>
 
 <script>
-import DisplayArticles from '@/components/Layouts/DisplayArticles'
+import AdminDisplayArticles from '@/components/AdminView/AdminDisplayArticles'
 import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'AdminView',
 	components: {
-		DisplayArticles
+		AdminDisplayArticles
 	},
 	props: {
 		drafts: {

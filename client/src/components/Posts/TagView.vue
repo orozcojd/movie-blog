@@ -2,7 +2,6 @@
   <v-container
     v-if="loaded"
     fluid
-    grid-list-md
   >
     <vue-headful
       :title="headTitle"
@@ -10,12 +9,13 @@
     />
     <v-layout
       v-if="tag.img"
+      class="img-placeholder"
     >
       <v-img 
-        lazy-src=""
+        :lazy-src="tag.lazyImg"
         :src="tag.img"
         aspect-ratio="2"
-        gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.7)"
+        :alt="tag.name"
       >
         <v-container fill-height>
           <v-layout align-center>
@@ -30,6 +30,7 @@
         </v-container>
       </v-img>
     </v-layout>
+    {{ srcset }}
     <display-articles 
       v-if="articles.length"
       :articles="articles.slice(6)"
@@ -141,4 +142,7 @@ export default {
 		color: whitesmoke;
 		font-size: 4rem;
 	}
+	/* .img-placeholder {
+		height: 700px;
+	} */
 </style>

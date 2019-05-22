@@ -7,81 +7,98 @@
     <vue-headful
       :title="headTitle"
     />
-    <v-layout
-      align-center
-      justify-center
-      class="article-layout"
-    >
+    <v-layout justify-center>
       <v-flex
         xs12
-        md11
+        sm10
+        xl6
+        offset-md1
       >
-        <div
-          align="left"
-        >
-          <a>
-            <strong>
-              {{ upperCaseString(articleRealm) }}
-            </strong>
-          </a>
-        </div>
-        <h1
-          class="post-title"
-          align="left"
-        >
-          {{ article.title }}
-        </h1>
-        <br>
-        <strong>
-          <div
-            align="left"
-            class="mb-small"
-          >
-            <span>Author: </span>
-            {{ article.author }}
-          </div>
-          <div
-            align="left"
-            class="mb-med"
-          >
-            {{ articleDate }}
-          </div>
-        </strong>
-        <div
-          align="left"
-        >
-          <v-img
-            id="post-img"
-            :src="article.img"
-            max-height="600"
-          />
-          <label
-            for="post-img"
-          >
-            {{ article.imgCred }}
-          </label>
-        </div>
-        <br>
-        <editor-content
-          class="post-body"
-          :editor="editor"
-          align="left"
-        />
-        <strong>
-          <ul
-            v-if="!!article.tags && article.tags.length"
-            align="left"
-            class="tag-list"
-          >
-            <li
-              v-for="(tag, index) in article.tags"
-              :key="index"
-              class="tag"
-            >
-              <a>{{ upperCaseString(convertTagIdToName(tag._id)) }}</a>
-            </li>
-          </ul>
-        </strong>
+        <v-card class="post-card">
+          <v-card-text>
+            <v-layout justify-start>
+              <v-flex
+                xs12
+                sm10
+              >
+                <div
+                  align="left"
+                >
+                  <a>
+                    <strong>
+                      {{ upperCaseString(articleRealm) }}
+                    </strong>
+                  </a>
+                </div>
+                <h1
+                  class="post-title"
+                  align="left"
+                >
+                  {{ article.title }}
+                </h1>
+                <br>
+                <strong>
+                  <div
+                    align="left"
+                    class="mb-small"
+                  >
+                    <span>Author: </span>
+                    {{ article.author }}
+                  </div>
+                  <div
+                    align="left"
+                    class="mb-med"
+                  >
+                    {{ articleDate }}
+                  </div>
+                </strong>
+                <div
+                  align="left"
+                >
+                  <v-img
+                    id="post-img"
+                    :src="article.img"
+                    max-height="600"
+                  />
+                  <label
+                    for="post-img"
+                  >
+                    {{ article.imgCred }}
+                  </label>
+                </div>
+              </v-flex>
+            </v-layout>
+            <v-layout justify-start>
+              <v-flex
+                xs12
+                sm10
+                md9
+                lg8
+              >
+                <editor-content
+                  class="post-body"
+                  :editor="editor"
+                  align="left"
+                />
+                <strong>
+                  <ul
+                    v-if="!!article.tags && article.tags.length"
+                    align="left"
+                    class="tag-list"
+                  >
+                    <li
+                      v-for="(tag, index) in article.tags"
+                      :key="index"
+                      class="tag"
+                    >
+                      <a>{{ displayTag(tag) }}</a>
+                    </li>
+                  </ul>
+                </strong>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+        </v-card>
       </v-flex>
     </v-layout>
     <v-layout>
@@ -193,6 +210,9 @@ export default {
 		...mapActions([
 			'fetchArticle'
 		]),
+		displayTag(tag) {
+			return tag._id ? this.upperCaseString(this.convertTagIdToName(tag._id)) : this.upperCaseString(this.convertTagIdToName(tag))
+		},
 		convertTagIdToName (id) {
 			const foundTag = this.tags.find(tag => tag._id === id)
 			return (foundTag ? foundTag.name.trim() : null)
@@ -214,12 +234,14 @@ export default {
 			await this.editor.setContent(this.article.body, true)
 		},
 		goBack () {
-			this.$router.go(-1)
+			this.$router.push({name: 'admin-edit-post'})
+			console.log(this.article)
 		}
 	}
 }
 </script>
 
-<style scoped>
-  @import url('../../assets/style/poststyle.scss');
+<style>
+	@import url('../../assets/style/poststyle.scss');
+	@import url('../../assets/style/tiptap.scss');
 </style>

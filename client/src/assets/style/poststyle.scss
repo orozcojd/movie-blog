@@ -15,7 +15,7 @@ a {
 /* export to file */
 .post-title {
 font-family: 'Marcellus SC', serif;
-font-size: 2.75rem;
+font-size: 1.75rem;
 }
 .mb-small {
 margin-bottom: .5em;
@@ -46,4 +46,22 @@ white-space: pre;
 }
 .tag-list {
 padding-left: 0;
+}
+.after-article {
+	margin-bottom: 5em;
+}
+
+.light-contrast {
+	color: #767676
+}
+.pull-up {
+	margin-top: -1em;
+}
+.post-card {
+	padding: 1em 0 2em 4em;
+}
+@media (max-width: 700px) {
+  .post-card {
+    padding: 1em 0 0.5em .5em;
+  }
 }
