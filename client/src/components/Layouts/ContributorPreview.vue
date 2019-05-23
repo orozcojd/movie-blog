@@ -15,8 +15,6 @@
         md4
       >
         <v-img
-          aspect-ratio="1"
-          contain
           :src="contributor.img"
           max-width="400"
           max-height="400"
@@ -29,8 +27,8 @@
             target="_"
           >
             <twitter 
-              width="50"
-              height="50"
+              width="40"
+              height="40"
             />
           </a>
           <a
@@ -46,15 +44,16 @@
             target="_"
           >
             <instagram
-              width="40"
-              height="40"
+              width="30"
+              height="30"
             />
           </a>
         </div>
       </v-flex>
       <v-flex
         xs12
-        md8
+        md7
+        offset-md1
       >
         <p
           v-for="(p, i) in bio"
@@ -183,19 +182,23 @@ export default {
 
 <style scoped>
 .inline-social {
-	display: flex;
-	justify-content: start;
-	align-items: center;
+  display: flex;
+  justify-content: start;
+  align-items: center;
 }
-.inline-social svg{
-	margin: 1rem;
-	display: inline
+.inline-social svg {
+  margin: 1rem;
+  display: inline-block;
 }
-	.margin-lg {
-		margin: 8px
-	}
-  h1 {
-    font-size: 3rem;
-    margin-bottom: 2.5rem;
-  }
+.inline-social a {
+  line-height:0;
+  font-size: 0;
+}
+.margin-lg {
+  margin: 8px
+}
+h1 {
+  font-size: 3rem;
+  margin-bottom: 2.5rem;
+}
 </style>
