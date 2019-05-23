@@ -30,10 +30,7 @@ blockquote::after{
     background-color:pink;
     border-radius: 5px;
   }
-/* Limits image size to 400px */
-img {
-  height: 400px
-}
+
 /* To do List */
 ul[data-type="todo_list"] {
   padding-left: 0;

@@ -36,16 +36,23 @@
             v-model="bio"
             :rules="bioRules"
             label="Describe yourself"
-            :counter="800"
+            :counter="1600"
             auto-grow
           />
           <v-text-field
             v-model="twitterLink"
-            label="Twitter profile link"
+            label="Twitter profile username"
+            hint="e.g. www.twitter.com/username"
           />
           <v-text-field
             v-model="igLink"
-            label="Instagram profile link"
+            label="Instagram profile username"
+            hint="e.g. www.instagram.com/username"
+          />
+          <v-text-field
+            v-model="fbLink"
+            label="Facebook profile username"
+            hint="e.g. www.facebook.com/username"
           />
           <div
             align="left"
@@ -140,6 +147,17 @@ export default {
 			set(val) {
 				this.editContributorVal({
 					type: 'instagram',
+					val: val
+				})
+			}
+		},
+		fbLink: {
+			get() {
+				return this.contributor.facebook
+			},
+			set(val) {
+				this.editContributorVal({
+					type: 'facebook',
 					val: val
 				})
 			}

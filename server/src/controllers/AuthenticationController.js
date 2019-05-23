@@ -66,7 +66,6 @@ module.exports = {
 			if(req.body.name !== contributorName) {
 				updateName = true;
 			}
-			
 			const contributor = await Contributor.findOneAndUpdate(
 				{_id: contributorId},
 				req.body,

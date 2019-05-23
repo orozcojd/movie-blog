@@ -10,8 +10,18 @@ const ContributorSchema = new Schema({
 	},
 	img: String,
 	bio: String,
-	twitter: String,
-	instagram: String
+	twitter: {
+		type: String,
+		default: null
+	},
+	instagram: {
+		type: String,
+		default: null
+	},
+	facebook: {
+		type: String,
+		default: null
+	}
 });
 
 ContributorSchema.methods.createContributor = async function(contributor) {

@@ -28,6 +28,6 @@ export default {
 		],
 	bioRules: 
 		[
-			v => (!v || v.length <= 800 || 'Bio must be less than 800 characters')
+			v => (!v || v.length <= 1600 || 'Bio must be less than 800 characters')
 		]
 }
