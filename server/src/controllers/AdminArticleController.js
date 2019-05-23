@@ -15,7 +15,6 @@ module.exports = {
    */
 	async index (req, res) {
 		try {
-			console.log(req.query);
 			let options = {};
 			if(req.query.skip)
 				options.skip = parseInt(req.query.skip);
@@ -23,7 +22,6 @@ module.exports = {
 				options.limit = parseInt(req.query.limit);
 			options.sort = {created_at: 'desc'};
 			const articles = await Post.find(req.query,{}, options).lean();
-				
 			res.send(articles);   
 		}
 		catch (err) {
@@ -32,6 +30,24 @@ module.exports = {
 				details: err
 			});
 		}
+	},
+	/**
+	 * GET REQUEST
+	 * If user requesting article for edit is contributor, then sends article
+	 * otherwise sends 403 error.
+	 * @param {Object} req 
+	 * @param {Object} res 
+	 */
+	async fetchArticle(req, res) {
+		const verifyUser = await User.findById(req.userId);
+		const article = await Post.findById(req.params.articleId).lean();
+		if(verifyUser.contributorId !== article.contributorId) {
+			res.status(403).send({
+				error: 'You are unauthorized to make changes to this account!'
+			});
+			return; 
+		}
+		res.status(200).send(article);
 	},
 
 	/**
@@ -68,7 +84,7 @@ module.exports = {
 
 			if(!await helpers.authenticateRequest(req)) {
 				res.status(403).send({
-					message: 'You are unauthorized to make changes to this account!'
+					error: 'You are unauthorized to make changes to this account!'
 				});
 				return;
 			}

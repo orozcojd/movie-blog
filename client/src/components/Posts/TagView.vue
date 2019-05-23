@@ -30,7 +30,6 @@
         </v-container>
       </v-img>
     </v-layout>
-    {{ srcset }}
     <display-articles 
       v-if="articles.length"
       :articles="articles.slice(6)"

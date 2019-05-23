@@ -315,16 +315,20 @@ export default {
 		let id = this.$route.params.id
 		// if article not found in store, fetch it
 		if(id){
-			if(Object.keys(this.article).length === 0 && this.article.constructor === Object) {
+			if((Object.keys(this.article).length === 0 && this.article.constructor === Object) || this.article._id !== id) {
 				// if article set article state to article found in articles array
 				// this.setSingleArticle(this.article)
-				// console.log('setting article')
-				await this.fetchArticle(id)
+				await this.fetchArticleApi(id).catch(err => {
+					this.setSnackbar({
+						type: 'text',
+						value: err.response.data.error,
+						show: true
+					})
+					this.$router.push({
+						name: 'admin-categories'
+					})
+				})
 			}
-			// else {
-			// 	// else fetch then set article state
-			// 	await this.fetchArticle(id)
-			// }
 		}
 		else {
 			this.SET_SINGLE_ARTICLE({});
@@ -358,7 +362,7 @@ export default {
 		...mapActions([
 			'updateArticle',
 			'postArticle',
-			'fetchArticle',
+			'fetchArticleApi',
 			'setSingleArticle',
 			'prepareArticle',
 			'setSnackbar',

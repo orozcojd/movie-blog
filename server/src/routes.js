@@ -32,10 +32,6 @@ module.exports = (app) => {
 
 	/* Admin User Routes */
 
-	app.get('/api/articles', 
-		AuthenticationControllerPolicy.authenticateToken,
-		AdminArticleController.index	
-	);
 
 	app.post('/register',
 		// AuthenticationControllerPolicy.authenticateToken,
@@ -73,6 +69,13 @@ module.exports = (app) => {
 		TagsController.deleteTags);
 
 	/* Admin Article Routes */
+	app.get('/api/articles', 
+		AuthenticationControllerPolicy.authenticateToken,
+		AdminArticleController.index	
+	);
+	app.get('/api/article/:articleId', 
+		AuthenticationControllerPolicy.authenticateToken,
+		AdminArticleController.fetchArticle );
 	app.post('/article',
 		AuthenticationControllerPolicy.authenticateToken,
 		AdminArticleController.postArticle);

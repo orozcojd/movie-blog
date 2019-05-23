@@ -189,6 +189,13 @@ export default {
 		commit(types.FETCH_BY_CONTRIBUTOR, articles)
 		return articles
 	},
+	
+	async fetchArticleApi ({commit}, id) {
+		const article = (await Api.ApiAdmin().get(`/api/article/${id}`)).data
+		commit(types.FETCH_ARTICLE, article)
+		return article
+	},
+
 	/**
 	 * Calls api to GET articles and commits mutation to
 	 * set state articles array to retrieved articles

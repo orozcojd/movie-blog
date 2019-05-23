@@ -5,6 +5,7 @@
         <Header />
         <!-- <h1>My Header</h1> -->
         <router-view
+          id="route-content"
           :key="$route.fullPath"
         />
         <Footer />
@@ -31,6 +32,9 @@ export default {
 </script>
 
 <style>
+#route-content {
+  min-height: 100vh;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
