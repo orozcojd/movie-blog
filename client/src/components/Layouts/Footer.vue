@@ -1,24 +1,56 @@
 <template>
   <v-footer
+    id="footer"
     dark
     height="auto"
   >
-    <v-card
-      flat
-      tile
-      class="indigo lighten-1 white--text text-xs-center"
-      style="padding: 4em"
+    <v-layout
+      row
+      wrap
     >
-      <v-card-text class="white--text">
-        Phasellus feugiat arcu sapien, et iaculis ipsum elementum sit amet. Mauris cursus commodo interdum. Praesent ut risus eget metus luctus accumsan id ultrices nunc. Sed at orci sed massa consectetur dignissim a sit amet dui. Duis commodo vitae velit et faucibus. Morbi vehicula lacinia malesuada. Nulla placerat augue vel ipsum ultrices, cursus iaculis dui sollicitudin. Vestibulum eu ipsum vel diam elementum tempor vel ut orci. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-      </v-card-text>
+      <v-flex xs12>
+        <v-card
+          flat
+          tile
+          class="indigo lighten-1 white--text text-xs-center"
+        >
+          <v-card-text class="main-title">
+            <!-- <v-btn
+              v-for="icon in icons"
+              :key="icon"
+              class="mx-3 white--text"
+              icon
+            >
+              <v-icon size="24px">
+                {{ icon }}
+              </v-icon>
+            </v-btn> -->
+            <strong>{{ siteTitle }}</strong>
+          </v-card-text>
+          <v-card-text class="footer-links">
+            <v-btn
+              v-for="(link, i) in footerLinks"
+              :key="i"
+              color="white"
+              flat
+              round
+              @click="$router.push(
+                link.to
+              )"
+            >
+              {{ link.name }}
+            </v-btn>
+          </v-card-text>
+          <v-divider />
 
-      <!-- <v-divider /> -->
-
-      <v-card-text class="white--text">
-        &copy;2019 — <strong>{{ siteTitle }}</strong>
-      </v-card-text>
-    </v-card>
+          <v-card-text class="white--text">
+            <div>
+              &copy;2019
+            </div>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </v-footer>
 </template>
 
@@ -34,9 +66,9 @@ export default {
 			'fab fa-instagram'
 		],
 		footerLinks: [
-			'About Us',
-			'',
-      
+			{name: 'About Us', to: {name: 'about'}},
+			// {name: 'Copyright Policy', to: {name: 'copy-right'}},
+			{name: 'Contact Us', to: {name: 'contact'}},
 		]
 	}),
 	computed: {
@@ -48,5 +80,25 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
 
+ .main-title {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 2rem ;
+    margin-right: 1rem; 
+    color: inherit;
+  }
+  /* #footer {
+    font-size: 1.6rem;
+  } */
+  .footer-links a {
+    color: inherit; 
+    text-decoration: none;
+    margin: 0 2rem;
+  }
+  /* @media(min-width: 250px) {
+  html {
+    font-size: 12px;
+  }
+} */
 </style>

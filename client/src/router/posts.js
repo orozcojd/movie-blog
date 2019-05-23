@@ -4,7 +4,8 @@ import TagView from '@/components/Posts/TagView'
 import NotFound from '@/components/Layouts/NotFound'
 import ArticleGuard from '@/components/RouterGuards/ArticleGuards'
 import ContributorView from '@/components/Layouts/ContributorPreview'
-
+import AboutView from '@/components/Footer/About'
+import ConactView from '@/components/Footer/Contact'
 const postRoutes = [
 	{
 		path: '/',
@@ -30,11 +31,20 @@ const postRoutes = [
 		// props: true
 	},
 	{
+		path: '/about',
+		name: 'about',
+		component: AboutView
+	},
+	{
+		path: '/contact',
+		name: 'contact',
+		component: ConactView
+	},
+	{
 		path: '*',
 		name: 'not-found',
 		component: NotFound
 	},
 
 ]
-
 export default postRoutes

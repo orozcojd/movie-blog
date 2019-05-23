@@ -44,10 +44,12 @@ module.exports = (app) => {
 	app.post('/addUser', 
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.addUser);
-
 	app.put('/contributor/:contributorId', 
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.updateContributor);
+	app.get('/api/contribuor-name',
+		AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationController.loggedInUser);
 	app.get('/contributor/:contributorId',
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.getContributor);

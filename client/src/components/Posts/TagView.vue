@@ -45,10 +45,13 @@
         <h1>Articles will be coming soon!</h1>
       </v-flex>
     </v-layout>
-    <v-pagination
-      v-model="pageNo"
-      :length="pages"
-    />
+    <v-layout justify-center>
+      <v-pagination
+        v-model="pageNo"
+      
+        :length="pages"
+      />
+    </v-layout>
   </v-container>
 </template>
 

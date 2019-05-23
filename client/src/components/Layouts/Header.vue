@@ -7,13 +7,24 @@
       app
     >
       <v-list>
+        <div v-if="hideNavTitle">
+          <v-list-tile
+          
+            @click="drawerRight = !drawerRight"
+          >
+            <v-list-tile-action align="right">
+              <v-icon>clear</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+          <v-divider />
+        </div>
         <v-list-group
           v-if="isUserLoggedin"
           prepend-icon="account_circle"
         >
           <template v-slot:activator>
             <v-list-tile>
-              <v-list-tile-title v-text="user.contributorName" />
+              <v-list-tile-title v-text="contributor.name" />
             </v-list-tile>
           </template>
           <v-list-tile
@@ -84,6 +95,7 @@
       clipped-right
     >
       <div
+        v-if="!hideNavTitle"
         class="main-title"
         @click="$router.push('/')"
       >
@@ -151,7 +163,8 @@ export default {
 				x: 0,
 				y: 0
 			},
-			toggleDown: false
+			toggleDown: false,
+			hideNavTitle: false
 		}
 	},
 	computed: {
@@ -160,7 +173,8 @@ export default {
 			'user',
 			'token',
 			'tags',
-			'snackbar'
+			'snackbar',
+			'contributor'
 		]),
 		...mapGetters([
 			'isUserLoggedin',
@@ -196,6 +210,7 @@ export default {
 		}
 		await this.getTags()
 		this.onResize()
+		console.log(this.user)
 	},
 	methods: {
 		...mapActions([
@@ -203,15 +218,23 @@ export default {
 			'getSetToken',
 			'setUser',
 			'logOut',
-			'setSnackbar'
+			'setSnackbar',
+			
 		]),
 		onResize () {
 			this.windowSize = { x: window.innerWidth, y: window.innerHeight }
 			if(this.windowSize.x <= 835) {
 				this.toggleDown = true
+				if(this.windowSize.x <= 300) {
+					this.hideNavTitle = true
+				}
+				else {
+					this.hideNavTitle = false
+				}
 			}
 			else {
 				this.toggleDown = false
+				
 			}
 		},
 		titleCase(word) {
@@ -264,6 +287,33 @@ export default {
 }
 .realm-title {
   font-size: 1.6rem !important;
+}
+</style>
+
+<style>
+
+@media all and (min-width: 960px) {
+    html, body{
+        font-size: 18px !important;
+    }
+}
+ 
+@media all and (max-width: 959px) and (min-width: 600px) {
+    html, body{
+        font-size: 16px !important;
+    }
+}
+ 
+@media all and (max-width: 599px) and (min-width: 320px) {
+    html, body{
+        font-size: 12px !important;
+    }
+ 
+}
+@media all and (max-width: 320px) {
+    html, body{
+        font-size: 8px !important;
+    }
 }
 </style>
 

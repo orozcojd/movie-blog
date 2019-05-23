@@ -3,7 +3,6 @@ import types from './types'
 
 export default {
 
-
 	/**
 	 * Calls API to post user detail data and returns reponse
 	 * @param {commit} param0 
@@ -48,6 +47,12 @@ export default {
 			resolve()
 		})
 	},
+	/**
+	 * POST
+	 * Calls api to request for new token given a refresh token
+	 * @param {commit} param0 
+	 * @param {Object} payload 
+	 */
 	async refreshToken ({commit}, payload) {
 		const token = (await Api.ApiGeneral().post('/tokens', payload)).data
 		return token
@@ -70,6 +75,7 @@ export default {
 		const refreshToken = localStorage.getItem('unsolicited-session-refresh-token')
 		if(refreshToken){
 			dispatch('getSetUser')
+			dispatch('contributorName')
 			commit(types.SET_TOKEN, {token: token, refreshToken: refreshToken})
 		}
 	},
@@ -89,11 +95,18 @@ export default {
 		const user = JSON.parse(localStorage.getItem('unsolicited-user'))
 		commit(types.SET_USER, user)
 	},
+	/**
+	 * POST
+	 * Calls api to remove refresh token from backend
+	 * @param {commit} param0 
+	 * @param {Object} refreshToken 
+	 */
 	async removeRefreshTkn ({commit}, refreshToken) {
 		await (Api.ApiAdmin().post('/tokens/removeRefresh', refreshToken))
 	},
 	/**
-	 * Calls api to GET all tags and commits muation to 
+	 * GET
+	 * Calls api to get all tags and commits muation to 
 	 * set state tags array to retrieved result
 	 * @param {commit} param0 
 	 */
@@ -111,7 +124,8 @@ export default {
 		commit(types.SET_TAG, payload)
 	},
 	/**
-	 * Calls api to POST array of tags 
+	 * POST
+	 * Calls api to post array of tags 
 	 * TODO: Commit mutation to set state tagd array to retrieved result
 	 * @param {commit} param0 
 	 * @param {Array} payload 
@@ -122,7 +136,8 @@ export default {
 		return tags
 	},
 	/**
-	 * Calls api to PUT array of tags - updating
+	 * PUT
+	 * Calls api to put array of tags - updating
 	 * names of tags in db and commiting to Vuex store
 	 * @param {commit} param0 
 	 * @param {Array} payload 
@@ -133,7 +148,8 @@ export default {
 		return tags
 	},
 	/**
-	 * Calls api to DELETE array of tags 
+	 * DELETE
+	 * Calls api to delete array of tags 
 	 * Vuex mutation called within component 
 	 * to delete tags from state
 	 * @param {commit} param0 
@@ -173,7 +189,8 @@ export default {
 		commit(types.SET_SINGLE_ARTICLE, article)
 	},
 	/**
-	 * Calls api to GET article by id and commits mutation 
+	 * GET
+	 * Calls api to get article by id and commits mutation 
 	 * to set state article to article retrieved
 	 * @param {commit} param0 
 	 * @param {String} id 
@@ -183,13 +200,26 @@ export default {
 		commit(types.FETCH_ARTICLE, article)
 		return article
 	},
+	/**
+	 * GET
+	 * Calls api to get all related articles by contributor name and commits mutation
+	 * to update articles in store.
+	 * @param {commit} param0 
+	 * @param {Object} payload 
+	 */
 	async getArticleByContributor({commit}, payload) {
 		// console.log(payload.page)
 		const articles = (await Api.ApiGeneral().get(`articlesByContributor/${payload.query}`, payload.params)).data
 		commit(types.FETCH_BY_CONTRIBUTOR, articles)
 		return articles
 	},
-	
+	/**
+	 * GET
+	 * Calls api to get article if current logged in user is contributor
+	 * to the article. Commits mutation to set article object in store
+	 * @param {commit} param0 
+	 * @param {String} id 
+	 */
 	async fetchArticleApi ({commit}, id) {
 		const article = (await Api.ApiAdmin().get(`/api/article/${id}`)).data
 		commit(types.FETCH_ARTICLE, article)
@@ -197,7 +227,8 @@ export default {
 	},
 
 	/**
-	 * Calls api to GET articles and commits mutation to
+	 * GET
+	 * Calls api to get articles and commits mutation to
 	 * set state articles array to retrieved articles
 	 * @param {commit} param0 
 	 */
@@ -212,7 +243,8 @@ export default {
 		return articles
 	},
 	/**
-	 * Calls api to GET articles and commits mutation to
+	 * GET
+	 * Calls api to get articles and commits mutation to
 	 * set state articles array to retrieved articles
 	 * @param {commit} param0 
 	 */
@@ -229,7 +261,8 @@ export default {
 		return articles
 	},
 	/**
-	 * Calls API to GET associated articles by tag, realms found in current
+	 * GET
+	 * Calls API to get associated articles by tag, realms found in current
 	 * article and commits payload to store
 	 * @param {commit} param0 
 	 * @param {Object} payload 
@@ -259,6 +292,7 @@ export default {
 		commit(types.MAX_RELATED_REACHED, payload)
 	},
 	/**
+	 * GET
 	 * Calls API to GET unrelated articles sorted by 
 	 * created_at field and commits to store
 	 * @param {commit} param0 
@@ -276,6 +310,7 @@ export default {
 		return nextArticles
 	},
 	/**
+	 * GET
 	 * Calls api to GET articles with associated tags 
 	 * from tag param and commits mutation to set state articles array
 	 * @param {commit} param0 
@@ -287,6 +322,7 @@ export default {
 		return articles
 	},
 	/**
+	 * PUT
 	 * Calls api to update payload object article in db
 	 * and commits mutation
 	 * @param {commit} param0 
@@ -298,6 +334,7 @@ export default {
 		return article.message
 	},
 	/**
+	 * POST
 	 * Calls api to POST new article and commits mutation to
 	 * add new article to front of state array
 	 * @param {commit} param0 
@@ -309,6 +346,7 @@ export default {
 		return article.message
 	},
 	/**
+	 * DELETE
 	 * Calls api to delete article by id passed in and commits
 	 * mutation to remove from state array by returned index value
 	 * @param {commit} param0 
@@ -320,16 +358,27 @@ export default {
 		return deleteCount
 	},
 	/**
-	 * 
-	 * @param {*} param0 
+	 * Commits mutation to reset infinite scroll objects
+	 * @param {commit} param0 
 	 */
 	async resetNextArticles({commit}) {
 		commit(types.RESET_NEXT_ARTICLES)
 	},
 	/**
-	 * 
-	 * @param {*} param0 
-	 * @param {*} id 
+	 * GET
+	 * Calls api to get the current logged in user's name and commits mutation
+	 * @param {commit} param0 
+	 */
+	async contributorName({commit}) {
+		const name = (await Api.ApiAdmin().get('/api/contribuor-name')).data
+		commit(types.SET_CONTRIBUTOR, name)
+	},
+	/**
+	 * GET
+	 * Calls api get contributor bio of id passed in. Commits mutation to set
+	 * contributor
+	 * @param {commit} param0 
+	 * @param {String} id 
 	 */
 	async getContributorBio({commit}, id) {
 		const contributor = (await Api.ApiAdmin().get(`contributor/${id}`)).data
@@ -337,20 +386,21 @@ export default {
 		return contributor
 	},
 	/**
-	 * 
-	 * @param {*} param0 
-	 * @param {*} id 
+	 * PUT
+	 * Calls api to update contributor information and commit mutation
+	 * to update vuex store 
+	 * @param {commit} param0 
+	 * @param {Object} id 
 	 */
 	async updateContributorBio({commit}, payload) {
-		console.log(payload)
 		const response = (await Api.ApiAdmin().put(`contributor/${payload.id}`, payload)).data
 		commit(types.UPDATE_CONTRIBUTOR, response.contributor)
 		return response
 	},
 	/**
-	 * 
-	 * @param {*} param0 
-	 * @param {*} payload 
+	 * Commits mutation to update contributor object attribute
+	 * @param {commit} param0 
+	 * @param {Object} payload 
 	 */
 	editContributorVal({commit}, payload) {
 		commit(types.EDIT_CONTRIBUTOR_VAL, payload)

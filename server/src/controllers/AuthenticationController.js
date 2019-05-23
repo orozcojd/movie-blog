@@ -14,6 +14,22 @@ let refreshTokens = [];
 
 module.exports = {
 	
+	async loggedInUser (req, res) {
+		try {
+			const currUser = await User.findById(req.userId).lean();
+			console.log(currUser);
+			const contributor = await Contributor.findById(currUser.contributorId).lean();
+			console.log(contributor);
+			res.status(200).send({name: contributor.name});
+
+		} catch (err) {
+			res.status(400).send({
+				data: err,
+				error: 'Unexpected error has occurred trying to get contributor information'
+			});
+		}
+
+	},
 	/**
 	 * GET REQUEST
 	 * Given the contributor id in the req params, returns the contributor model
@@ -37,7 +53,6 @@ module.exports = {
 		} catch (err) {
 			console.log(err);
 			res.status(400).send({
-				
 				error: 'Unexpected error has occurred'
 			});
 		}
