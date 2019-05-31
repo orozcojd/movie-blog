@@ -40,7 +40,7 @@ net:
 
 <br><br>
 ### Admin View
-![Admin View](./screenshots/screenshot6.png)
+![Admin View 1](./screenshots/screenshot6.png)
 <br>
 
 ![Admin View 2](./screenshots/screenshot7.png)
@@ -49,15 +49,19 @@ net:
 ![Admin View 3](./screenshots/screenshot8.png)
 
 <br>
+
 ![Admin View 4](./screenshots/screenshot9.png)
 
 <br>
+
 ![Admin View 5](./screenshots/screenshot10.png)
 
 <br>
+
 ![Admin View 6](./screenshots/screenshot11.png)
 
 <br>
-![Admin View](./screenshots/screenshot12.png)
+
+![Admin View 7](./screenshots/screenshot12.png)
 
 
