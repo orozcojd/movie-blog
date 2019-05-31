@@ -1,12 +1,12 @@
-# Personal Blog
+# Art Culture News Outlet
 ## Description
-This repo holds a personal blog created with Vuejs, Express, Mongodb, Nodejs. To replicate this project download or clone the repo and follow these steps:
+This repo contains source code for the *Art Culture News Outlet* created with Vuejs, Express, Mongodb, Nodejs. To replicate this project download or clone the repo and follow these steps:
 
 1. Navigate to *client* directory and perform `npm install` to install the packages
 2. Navigate to the *server* directory and perform `npm install` to install the packages
-3. In both directores, (client, server) run the command npm start
-3. Download and install mongodb
-4. On mac run the command and copy the following contents to vim in terminal: `vim /usr/local/etc/mongod.conf`
+3. In both directores, (client, server) run the command `npm start`
+3. Download and install mongodb and setup the db account
+4. On mac edit the mongod.conf file `vim /usr/local/etc/mongod.conf` and copy the following contents to vim in terminal: 
 ```
 systemLog:
 	destination: file
@@ -18,3 +18,45 @@ net:
 	bindIp: 127.0.0.1
 ```
 5. To start mongodb run: `brew services start mongodb` or run `mongodb --dbpath "/usr/local/var/mongodb"`
+
+## Screenshots
+### Home Page
+![Home Page](./screenshots/screenshot1.png =600x400)
+![Home Page 2](./screenshots/screenshot1.2.png =600x400)
+![Home Page 3](./screenshots/screenshot1.3.png =600x400)
+![Home Page 4](./screenshots/screenshot1.4.png =600x400)
+<br>
+### Side Bar
+![Home Page 5](./screenshots/screenshot13.png =600x400)
+
+<br><br>
+### Tag View
+![Tag View](./screenshots/screenshot4.png =600x400)
+
+<br><br>
+### Article View
+![Article View](./screenshots/screenshot5.png =600x400)
+
+<br><br>
+### Admin View
+![Admin View](./screenshots/screenshot6.png =600x400)
+<br>
+
+![Admin View 2](./screenshots/screenshot7.png =600x400)
+<br>
+
+![Admin View 3](./screenshots/screenshot8.png =600x400)
+
+<br>
+![Admin View 4](./screenshots/screenshot9.png =600x400)
+
+<br>
+![Admin View 5](./screenshots/screenshot10.png =600x400)
+
+<br>
+![Admin View 6](./screenshots/screenshot11.png =600x400)
+
+<br>
+![Admin View](./screenshots/screenshot12.png =600x400)
+
+

@@ -16,6 +16,7 @@ a {
 .post-title {
 font-family: 'Marcellus SC', serif;
 font-size: 1.75rem;
+margin-bottom: 0.5em;
 }
 .mb-small {
 margin-bottom: .5em;
@@ -28,7 +29,7 @@ margin-bottom: .5em;
 }
 .post-body {
 font-size: 1.7rem;
-font-family: 'Abel', sans-serif;
+// font-family: 'Abel', sans-serif;
 }
 .tag {
 display: inline-block;
@@ -52,10 +53,8 @@ padding-left: 0;
 }
 
 .light-contrast {
-	color: #767676
-}
-.pull-up {
-	margin-top: -1em;
+  color: #767676;
+  font-size: 12px;
 }
 .post-card {
 	padding: 1em 0 2em 4em;

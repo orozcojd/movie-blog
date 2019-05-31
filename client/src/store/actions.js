@@ -21,9 +21,9 @@ export default {
 	 */
 	async login({commit, dispatch}, payload) {
 		await Api.ApiGeneral().post('login', payload).then(async (res) => {
-			console.log(res)
 			await dispatch('setToken', res.data)
 			await dispatch('setUser', res.data.user)
+			await dispatch('contributorName')
 			return res
 		}).catch(err => {
 			return Promise.reject(err)
@@ -371,6 +371,7 @@ export default {
 	 */
 	async contributorName({commit}) {
 		const name = (await Api.ApiAdmin().get('/api/contribuor-name')).data
+		console.log(name)
 		commit(types.SET_CONTRIBUTOR, name)
 	},
 	/**

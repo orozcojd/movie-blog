@@ -1,5 +1,5 @@
 <template>
-  <v-container
+  <div
     v-if="loaded"
     class="post-content"
     fluid
@@ -12,10 +12,11 @@
       <v-flex
         xs12
         sm10
+        md8
         xl6
         offset-md1
       >
-        <v-card class="post-card">
+        <v-card class="post-card content-font">
           <v-card-text>
             <v-layout justify-start>
               <v-flex
@@ -44,7 +45,7 @@
                   {{ article.title }}
                 </h1>
 				
-                <br>
+                <!-- <br> -->
                 <strong>
                   <div
                     align="left"
@@ -70,7 +71,7 @@
                   </div>
                 </strong>
                 <div
-                  align="left"
+                  class="mb-xs"
                 >
                   <v-img
                     id="post-img"
@@ -78,28 +79,25 @@
                     max-height="600"
                   />
                 </div>
-                <br>
+                <div
+                  class="light-contrast mb-med"
+                >
+                  <p>
+                    {{ article.imgCred }}
+                  </p>
+                </div>
+                <!-- <br> -->
               </v-flex>
             </v-layout>
             <v-layout justify-start>
               <v-flex
                 xs12
                 sm10
-                md9
-                lg8
+                
+                
               >
-                <div
-                  class="light-contrast mb-med pull-up"
-                  align="left"
-                >
-                  <label
-                    for="post-img"
-                  >
-                    {{ article.imgCred }}
-                  </label>
-                </div>
                 <editor-content
-                  class="post-body"
+                  class="post-body content-font"
                   :editor="editor"
                   align="left"
                 />
@@ -132,7 +130,7 @@
     <div
       class="after-article"
     />
-  </v-container>
+  </div>
 </template>
 
 <script>
@@ -276,11 +274,23 @@ export default {
 </style>
 <style>
 @import url('../../assets/style/tiptap.scss');
+ .content-font {
+  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+}
+ blockquote {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
 .ProseMirror-focused {
 	outline: none !important;
 }
 .post-body img {
   width: 100%;
   height: auto;
+}
+img {
+  margin-bottom: .25em;
+}
+.mb-xs {
+  margin-bottom: .25em;
 }
 </style>

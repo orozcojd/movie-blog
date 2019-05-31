@@ -34,7 +34,7 @@
           <v-card-title primary-title>
             <div>
               <h3
-                class="card-header"
+                class="card-header head-xl"
                 align="left"
               >
                 {{ article.title }}

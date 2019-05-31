@@ -15,8 +15,10 @@
         v-for="(category,index) in viewableCategories"
         :key="index"
         d-flex
-        xs12
+        xs6
+        sm4
         md3
+        lg2
       >
         <v-card>
           <v-card-title primary-title>

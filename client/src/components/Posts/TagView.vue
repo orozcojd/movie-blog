@@ -24,7 +24,9 @@
               wrap
               class="realm-title"
             >
-              <h1>{{ tag.name }}</h1>
+              <h1 align="center">
+                {{ tag.name }}
+              </h1>
             </v-flex>
           </v-layout>
         </v-container>

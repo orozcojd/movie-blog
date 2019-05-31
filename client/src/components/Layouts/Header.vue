@@ -1,16 +1,15 @@
 <template>
   <div v-resize.quiet="onResize">
     <v-navigation-drawer
-      v-model="drawerRight"
-      right
+      v-model="drawerLeft"
+      left
       clipped
       app
     >
       <v-list>
-        <div v-if="hideNavTitle">
+        <div v-if="showClose">
           <v-list-tile
-          
-            @click="drawerRight = !drawerRight"
+            @click="drawerLeft = !drawerLeft"
           >
             <v-list-tile-action align="right">
               <v-icon>clear</v-icon>
@@ -32,7 +31,7 @@
           >
             <v-list-tile-title>Admin</v-list-tile-title>
             <v-list-tile-action>
-              <v-icon>home</v-icon>
+              <v-icon>supervisor_account</v-icon>
             </v-list-tile-action>
           </v-list-tile>
           <v-list-tile
@@ -40,14 +39,14 @@
           >
             <v-list-tile-title>Logout</v-list-tile-title>
             <v-list-tile-action>
-              <v-icon>home</v-icon>
+              <v-icon>meeting_room</v-icon>
             </v-list-tile-action>
           </v-list-tile>
         </v-list-group>
         <v-list-tile
           v-for="(realm, i) in sideNavRealms"
           :key="i"
-          class="realm-title"
+          class="nav-tile"
           @click="navigateTo('tag-view', { 
             id: realm.ref_id,
             tagName: realm.name,
@@ -61,7 +60,7 @@
           v-if="viewedArticles.length"
           value="true"
           class="contain-group"
-          prepend-icon="account_circle"
+          prepend-icon="history"
         >
           <template v-slot:activator>
             <v-list-tile>
@@ -91,11 +90,11 @@
     <v-toolbar
       fixed
       app
-      :scroll-off-screen="!drawerRight"
-      clipped-right
+      :scroll-off-screen="!drawerLeft"
+      clipped-left
     >
+      <v-toolbar-side-icon @click.stop="drawerLeft = !drawerLeft" />
       <div
-        v-if="!hideNavTitle"
         class="main-title"
         @click="$router.push('/')"
       >
@@ -114,7 +113,7 @@
           {{ realm.name }}
         </v-btn>
       </v-toolbar-items>
-      <v-spacer />
+      <!-- <v-spacer /> -->
       <!--
         <v-btn
           flat
@@ -129,7 +128,6 @@
           Sign Up
         </v-btn>
     </v-toolbar-items> -->
-      <v-toolbar-side-icon @click.stop="drawerRight = !drawerRight" />
     </v-toolbar>
     <v-snackbar
       v-model="snackVal"
@@ -155,7 +153,7 @@ export default {
 	name: 'Header',
 	data() {
 		return {
-			drawerRight: false,
+			drawerLeft: false,
 			right: false,
 			account: [['Admin', 'goTo("/admin")'], ['Logout', 'logout']],
 			realmToggle: true,
@@ -164,7 +162,7 @@ export default {
 				y: 0
 			},
 			toggleDown: false,
-			hideNavTitle: false
+			showClose: false
 		}
 	},
 	computed: {
@@ -210,7 +208,6 @@ export default {
 		}
 		await this.getTags()
 		this.onResize()
-		console.log(this.user)
 	},
 	methods: {
 		...mapActions([
@@ -225,11 +222,11 @@ export default {
 			this.windowSize = { x: window.innerWidth, y: window.innerHeight }
 			if(this.windowSize.x <= 835) {
 				this.toggleDown = true
-				if(this.windowSize.x <= 300) {
-					this.hideNavTitle = true
+				if(this.windowSize.x <= 400) {
+					this.showClose = true
 				}
 				else {
-					this.hideNavTitle = false
+					this.showClose = false
 				}
 			}
 			else {
@@ -288,11 +285,16 @@ export default {
 .realm-title {
   font-size: 1.6rem !important;
 }
+// .nav-tile {
+//   font-size: 1.8rem;
+// }
+.nav-tile:hover {
+  // background-color: 
+}
 </style>
 
 <style>
-
-@media all and (min-width: 960px) {
+/* @media all and (min-width: 960px) {
     html, body{
         font-size: 18px !important;
     }
@@ -314,6 +316,6 @@ export default {
     html, body{
         font-size: 8px !important;
     }
-}
+} */
 </style>
 

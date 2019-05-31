@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <vue-headful
-      :title="headTitle"
+      title="Login"
     />
     <h1>Login</h1>
     <v-layout
@@ -58,6 +58,9 @@ export default {
 			},
 			error: ''
 		}
+	},
+	mounted() {
+		console.log(this.siteTitle)
 	},
 	methods: {
 		...mapActions([
