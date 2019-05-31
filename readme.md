@@ -21,42 +21,43 @@ net:
 
 ## Screenshots
 ### Home Page
-![Home Page](./screenshots/screenshot1.png =600x400)
-![Home Page 2](./screenshots/screenshot1.2.png =600x400)
-![Home Page 3](./screenshots/screenshot1.3.png =600x400)
-![Home Page 4](./screenshots/screenshot1.4.png =600x400)
+![Home Page](screenshots/screenshot1.png)
+
+![Home Page 2](./screenshots/screenshot1.2.png)
+![Home Page 3](./screenshots/screenshot1.3.png)
+![Home Page 4](./screenshots/screenshot1.4.png)
 <br>
 ### Side Bar
-![Home Page 5](./screenshots/screenshot13.png =600x400)
+![Home Page 5](./screenshots/screenshot13.png)
 
 <br><br>
 ### Tag View
-![Tag View](./screenshots/screenshot4.png =600x400)
+![Tag View](./screenshots/screenshot4.png)
 
 <br><br>
 ### Article View
-![Article View](./screenshots/screenshot5.png =600x400)
+![Article View](./screenshots/screenshot5.png)
 
 <br><br>
 ### Admin View
-![Admin View](./screenshots/screenshot6.png =600x400)
+![Admin View](./screenshots/screenshot6.png)
 <br>
 
-![Admin View 2](./screenshots/screenshot7.png =600x400)
+![Admin View 2](./screenshots/screenshot7.png)
 <br>
 
-![Admin View 3](./screenshots/screenshot8.png =600x400)
+![Admin View 3](./screenshots/screenshot8.png)
 
 <br>
-![Admin View 4](./screenshots/screenshot9.png =600x400)
+![Admin View 4](./screenshots/screenshot9.png)
 
 <br>
-![Admin View 5](./screenshots/screenshot10.png =600x400)
+![Admin View 5](./screenshots/screenshot10.png)
 
 <br>
-![Admin View 6](./screenshots/screenshot11.png =600x400)
+![Admin View 6](./screenshots/screenshot11.png)
 
 <br>
-![Admin View](./screenshots/screenshot12.png =600x400)
+![Admin View](./screenshots/screenshot12.png)
 
 
