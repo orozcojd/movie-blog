@@ -10,7 +10,7 @@ export default {
 			v => !!v.trim() || 'Tag is required',
 			v => (v && v.length <= 35) || 'Tag length must not exceed 35 characters'
 		],
-	emailRules: 
+	emailRules:
 		[
 			v => !!v.trim() || 'Email is required',
 			v => (v && v.length <= 40) || 'Email length must not exceed 40 characters',

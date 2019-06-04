@@ -8,7 +8,7 @@ export default {
 		return axios.create({
 			...options,
 			baseURL: `http://localhost:8081/`,
-			timeout: 1000,
+			timeout: 60000,
 		})
 	},
 	ApiAdmin(options = {}) {
@@ -16,7 +16,7 @@ export default {
 			.create({
 				...options,
 				baseURL: `http://localhost:8081/`,
-				timeout: 1000,
+				timeout: 60000,
 				headers: { 'Authorization': AuthGuard.getHeader() }
 			})
 		instance.interceptors.response.use(response => {

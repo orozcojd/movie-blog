@@ -10,6 +10,7 @@ import AddUser from '@/components/AdminView/AddUser'
 import AdminPostPreview from '@/components/AdminView/AdminPostPreview'
 import AboutContributor from '@/components/AdminView/AboutContributor'
 import EditUsers from '@/components/AdminView/EditUsers'
+import PasswordReset from '@/components/AdminView/PasswordReset'
 
 const adminRoutes = [
 	{
@@ -38,6 +39,13 @@ const adminRoutes = [
 				path: 'login',
 				name: 'admin-login',
 				component: Login,
+				canReuse: false,
+				beforeEnter: AuthGuard.loggedInRedirect()
+			},
+			{
+				path: 'password-reset',
+				name: 'admin-pass-reset',
+				component: PasswordReset,
 				canReuse: false,
 				beforeEnter: AuthGuard.loggedInRedirect()
 			},

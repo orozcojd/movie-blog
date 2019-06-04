@@ -41,7 +41,12 @@ module.exports = (app) => {
 		AuthenticationController.getUsers);
 	app.post('/login',  
 		AuthenticationController.login);
-	app.post('/addUser', 
+	app.post('/auth/forgot-password',
+		AuthenticationController.forgotPassword);
+	app.post('/auth/reset-password',
+		AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationController.resetPassword);
+	app.post('/addUser',
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.addUser);
 	app.put('/contributor/:contributorId', 

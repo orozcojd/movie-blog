@@ -19,6 +19,15 @@ const UserSchema = new Schema({
 		type: String,
 		required: true,
 		unique: true
+	},
+	token: {
+		type: String,
+		required:  false
+	},
+	resetToken: {
+		type: String,
+		required: false,
+		default: null
 	}
 });
 
@@ -62,5 +71,21 @@ UserSchema.methods.generateToken = function() {
 	config.authentication.jwtSecret);
 };
 
+UserSchema.methods.generatePwToken = function() {
+	let expiry = new Date();
+	expiry.setHours(expiry.getHours() + 3);
+	const token = jwt.sign({
+		_id: this._id,
+		exp: parseInt(expiry.getTime() / 1000)
+	},
+	config.authentication.jwtSecret);
+	//save token to model
+	console.log('inside generatepwtoken');
+	jwt.verify(token, config.authentication.jwtSecret, (err, decoded) => {
+		console.log(decoded);
+		console.log(err);
+	});
+	this.resetToken = token;
+};
 
 module.exports = mongoose.model('User', UserSchema);

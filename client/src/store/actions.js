@@ -47,6 +47,11 @@ export default {
 			resolve()
 		})
 	},
+	async passwordReset({commit}, payload) {
+		console.log(payload)
+		const submission = (await Api.ApiGeneral().post('/auth/forgot-password', payload)).data
+		return submission
+	},
 	/**
 	 * POST
 	 * Calls api to request for new token given a refresh token
@@ -56,6 +61,21 @@ export default {
 	async refreshToken ({commit}, payload) {
 		const token = (await Api.ApiGeneral().post('/tokens', payload)).data
 		return token
+	},
+	/**
+	 * 
+	 * @param {*} param0 
+	 * @param {*} payload 
+	 */
+	async resetPassword ({commit, dispatch}, payload) {
+		console.log(payload)
+		const response = (await Api.ApiGeneral({
+			headers: { 'Authorization': `Bearer ${payload.token}` }
+		}).post('/auth/reset-password', payload.password)).data
+		await dispatch('setToken', response)
+		await dispatch('setUser', response.user)
+		await dispatch('contributorName')
+		return response
 	},
 	/**
 	 * Commits mutation to set state token to param token

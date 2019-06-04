@@ -2,7 +2,8 @@
 let {User} = require('../models');
 let {Contributor} = require('../models');
 const {Post} = require('../models');
-
+// const nodemailer = require('nodemailer');
+const { sendResetPwEmail } = require('../services/MailService'); 
 const config = require('../config/config');
 const passport = require('passport');
 const randomToken = require('rand-token');
@@ -12,8 +13,103 @@ let refreshTokens = [];
 // User.find({
 // }).remove().exec();
 
+
+
 module.exports = {
 	
+	/**
+	 * POST
+	 * If user associated to email in response exists, calls nodemailer to 
+	 * send email instructions for restarting pasword.
+	 * @param {Object} req 
+	 * @param {Object} res 
+	 */
+	async forgotPassword(req, res) {
+		try {
+			const email = req.body.email;
+			const user = await User.findOneAndUpdate({email: email});
+			if(user){
+				const contributor = await Contributor.findById(user.contributorId);
+				user.generatePwToken();
+				user.save(async (err, saved) => {
+					if(!err) {
+						sendResetPwEmail(user);
+					}
+				});
+			}
+			res.status(200).send({message: 'Please check your email for instructions on how to reset your password.'});
+		} catch (err) {
+			console.log(err);
+			res.status(400).send({
+				data: err,
+				error: 'Unexpected error has occurred trying to reset password'
+			});
+		}
+	},
+	
+	/**
+	 * POST
+	 * Validates passwords, if id from request is valid, updates the passwords
+	 * in db
+	 * @param {Object} req 
+	 * @param {Object} res 
+	 */
+	async resetPassword (req, res) {
+		try {
+			let status = 200;
+			let error = '';
+			if(req.body.pass !== req.body.passConfirm) {
+				status = 400;
+				error = 'Your passwords do not match. Please enter them again.';
+			}
+			else {
+				const user = await User.findById(req.userId);
+				if(user.resetToken !== req.token) {
+					status = 403;
+					error = 'Your token has been already used. To reset your password again, restart the process from the login page.';
+					console.log('TOKEN USED');
+				}
+				else {
+					await user.hashPassword(req.body.pass);
+					user.resetToken = null;
+					user.save((err, saved) => {
+						if(err) {
+							error = err;
+							status = 400;
+						}
+						else {
+						// successful block
+							const token = user.generateToken();
+							const refreshToken = randomToken.uid(256);
+							refreshTokens[refreshToken] = user.email;
+							res.status(200).send({
+								message: 'Your password has been successfully updated.',
+								token: token,
+								refreshToken: refreshToken,
+								user: {_id: user._id, email: user.email, contributorId: user.contributorId, permission: user.permission}
+							});
+						}
+					});
+					return; // needed so headers aren't overwritten
+				}
+			}
+			// send error case
+			res.status(status).send({error: error});
+		} catch (err) {
+			console.log(err);
+			res.status(400).send({
+				data: err,
+				error: 'Unexpected error has occurred trying to reset password.'
+			});
+		}
+	},
+
+	/**
+	 * POST
+	 * Retrieves the contributor name mapped from the user ID in the request.
+	 * @param {Object} req 
+	 * @param {Object} res 
+	 */
 	async loggedInUser (req, res) {
 		try {
 			const currUser = await User.findById(req.userId).lean();
@@ -28,7 +124,6 @@ module.exports = {
 				error: 'Unexpected error has occurred trying to get contributor information'
 			});
 		}
-
 	},
 	/**
 	 * GET REQUEST
@@ -73,6 +168,7 @@ module.exports = {
 				res.status(403).send({
 					message: 'You are unauthorized to make changes to this account!'
 				});
+				res.end();
 				return;
 			}
 			let contributorName = await Contributor.findOne({_id: contributorId});
@@ -117,6 +213,9 @@ module.exports = {
 	 */
 	async getUsers (req, res) {
 		try {
+			console.log('revoke  tokens');
+			// revokeToken();
+			console.log(refreshTokens);
 			const users = await User.find();
 			res.send(users);
 		} catch (err) {
@@ -258,9 +357,7 @@ module.exports = {
 				// console.log(user);
 				const token = user.generateToken();
 				const refreshToken = randomToken.uid(256);
-				
 				refreshTokens[refreshToken] = user.email;
-				console.log(refreshTokens);
 				res.status(200).send({
 					'token': token,
 					'refreshToken': refreshToken,
