@@ -31,11 +31,7 @@ module.exports = {
 			if(user){
 				const contributor = await Contributor.findById(user.contributorId);
 				user.generatePwToken();
-				user.save(async (err, saved) => {
-					if(!err) {
-						sendResetPwEmail(user);
-					}
-				});
+				user.save(async (err, saved) => {if(!err) { sendResetPwEmail(user, contributor);}});
 			}
 			res.status(200).send({message: 'Please check your email for instructions on how to reset your password.'});
 		} catch (err) {
@@ -113,9 +109,7 @@ module.exports = {
 	async loggedInUser (req, res) {
 		try {
 			const currUser = await User.findById(req.userId).lean();
-			console.log(currUser);
 			const contributor = await Contributor.findById(currUser.contributorId).lean();
-			console.log(contributor);
 			res.status(200).send({name: contributor.name});
 
 		} catch (err) {

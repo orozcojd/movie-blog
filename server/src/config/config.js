@@ -12,5 +12,9 @@ module.exports = {
 		tmpPsswrd: process.env.tmpPasswrd || 'password',
 		superUser: process.env.superUser || 1,
 		AdminUser: process.env.adminUser || 2
+	},
+	nodemailer: {
+		username: process.env.mailerUsername || 'unsolicitedcolumns@gmail.com',
+		pw: process.env.mailerPw || 'hyfdom-6fakCa-guxwuf'
 	}
 };
