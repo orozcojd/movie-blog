@@ -45,12 +45,15 @@ module.exports = (app) => {
 		AuthenticationController.forgotPassword);
 	app.post('/auth/reset-password',
 		AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationControllerPolicy.validatePassword,
 		AuthenticationController.resetPassword);
 	app.post('/addUser',
 		AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationControllerPolicy.contributorAccessControl,
 		AuthenticationController.addUser);
 	app.put('/contributor/:contributorId', 
 		AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationControllerPolicy.contributorAccessControl,
 		AuthenticationController.updateContributor);
 	app.get('/api/contribuor-name',
 		AuthenticationControllerPolicy.authenticateToken,

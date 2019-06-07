@@ -177,6 +177,7 @@ export default {
 	},
 	async mounted() {
 		await this.getContributorBio(this.user.contributorId)
+		console.log('after setting contributor')
 	},
 	methods: {
 		...mapActions([

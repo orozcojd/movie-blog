@@ -44,13 +44,9 @@ module.exports = {
 	async articlesByTag (req, res) {
 		try {
 			const size = 12;
-			console.log(req.query);
 			let pageNo = parseInt(req.query.page);
 			let query = {};
-			if(pageNo <= 0 || isNaN(pageNo)) {
-				// set pageNo to 1 if invalid
-				pageNo = 1;
-			}
+			pageNo = (pageNo >= 0) ? pageNo : 1;
 			let count = await Post.countDocuments({$or: [{tags: req.params.tagName},{realm: req.params.tagName}]}) ;
 			query.skip = size * (pageNo - 1);
 			query.limit = size;
@@ -78,13 +74,9 @@ module.exports = {
 		try {
 			const size = 12;
 			let pageNo = parseInt(req.query.page);
-			console.log(req.query);
-			// console.log(req.params);
 			let query = {};
-			if(pageNo <= 0 || isNaN(pageNo)) {
-				// set pageNo to 1 if invalid
-				pageNo = 1;
-			}
+			pageNo = (pageNo >= 0) ? pageNo : 1;
+
 			let count = await Post.countDocuments({contributorId: req.params.contributorId});
 			query.skip = size * (pageNo - 1);
 			query.limit = size;
@@ -100,7 +92,6 @@ module.exports = {
 				'pageNo': pageNo
 
 			};
-
 			res.send(response);
 
 		} catch (err) {
@@ -118,7 +109,6 @@ module.exports = {
 	 * @param {Object} res 
 	 */
 	async associatedArticles(req, res) {
-		console.log(req.query);
 		try {
 			const pageNo = req.query.pageNo;
 			const currId = req.query.id;
@@ -138,7 +128,6 @@ module.exports = {
 				};
 			}
 			else {
-				
 				const tags = req.query.tags;
 				const realm = req.query.realm;
 				query = {

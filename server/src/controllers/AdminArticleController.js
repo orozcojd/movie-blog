@@ -39,9 +39,10 @@ module.exports = {
 	 * @param {Object} res 
 	 */
 	async fetchArticle(req, res) {
-		const verifyUser = await User.findById(req.userId);
+		const user = await User.findById(req.userId);
 		const article = await Post.findById(req.params.articleId).lean();
-		if(verifyUser.contributorId !== article.contributorId) {
+		const isNotArticleContr = user.contributorId !== article.contributorId;
+		if(isNotArticleContr) {
 			res.status(403).send({
 				error: 'You are unauthorized to make changes to this account!'
 			});
@@ -81,8 +82,8 @@ module.exports = {
    */
 	async update (req, res) {
 		try {
-
-			if(!await helpers.authenticateRequest(req)) {
+			const authorized = await helpers.authenticateRequest(req);
+			if(!authorized) {
 				res.status(403).send({
 					error: 'You are unauthorized to make changes to this account!'
 				});
@@ -92,9 +93,9 @@ module.exports = {
 			const contributor = await Contributor.findOne({
 				_id: req.body.contributorId
 			}).lean();
-			if(contributor) {
-				req.body.author = contributor.name;
-			}
+			// if(contributor) {
+			req.body.author = contributor.name;
+			// }
 			const article = await Post.findOneAndUpdate(
 				{contributorId: req.body.contributorId, _id: req.params.articleId},
 				req.body,

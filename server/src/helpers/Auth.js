@@ -11,10 +11,11 @@ module.exports = {
 	async authenticateRequest (req) {
 		const contributorId = req.body.contributorId;
 		const verifyUser = await User.findById(req.userId);
-		if((verifyUser && verifyUser.contributorId !== contributorId) && (req.id && req.id !== verifyUser.contributorId)) {
-			return false;
+		const isContributor = (verifyUser && verifyUser.contributorId === contributorId);
+		if(isContributor) {
+			return true;
 		}
-		return true;
+		return false;
 	},
 	/**
    * Given the userId from the token request, verifies a valid user and returns true
@@ -27,5 +28,15 @@ module.exports = {
 			return false;
 		}
 		return true;
+	},
+	getTokenRequest(req) {
+		let token = null;
+		if(req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer'){
+			token = req.headers.authorization.split(' ')[1];
+		}
+		else if(req.query && req.query.token){
+			token = req.query.token;
+		}
+		return token;
 	}
 };

@@ -95,7 +95,8 @@ export default {
 		const refreshToken = localStorage.getItem('unsolicited-session-refresh-token')
 		if(refreshToken){
 			dispatch('getSetUser')
-			dispatch('contributorName')
+			console.log('inside here')
+			dispatch('getSetContributor')
 			commit(types.SET_TOKEN, {token: token, refreshToken: refreshToken})
 		}
 	},
@@ -114,6 +115,10 @@ export default {
 	getSetUser ({commit}) {
 		const user = JSON.parse(localStorage.getItem('unsolicited-user'))
 		commit(types.SET_USER, user)
+	},
+	getSetContributor ({commit}) {
+		const contributor = JSON.parse(localStorage.getItem('unsolicited-contributor'))
+		commit(types.SET_CONTRIBUTOR, contributor)
 	},
 	/**
 	 * POST
@@ -391,6 +396,7 @@ export default {
 	 */
 	async contributorName({commit}) {
 		const name = (await Api.ApiAdmin().get('/api/contribuor-name')).data
+		localStorage.setItem('unsolicited-contributor', JSON.stringify(name))
 		console.log(name)
 		commit(types.SET_CONTRIBUTOR, name)
 	},

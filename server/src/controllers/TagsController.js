@@ -32,8 +32,6 @@ module.exports = {
 	async addTags (req, res) {
 		try {
 			let tags = [];
-			console.log('REQ.BODY');
-			console.log(req.body);
 			for(let i = 0; i< req.body.length; i++) {
 				let tag = await Tags.create(req.body[i]);
 				tags.push(tag);

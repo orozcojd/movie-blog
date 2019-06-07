@@ -23,7 +23,7 @@
         >
           <template v-slot:activator>
             <v-list-tile>
-              <v-list-tile-title v-text="contributor.name" />
+              <v-list-tile-title v-text="contributorName" />
             </v-list-tile>
           </template>
           <v-list-tile
@@ -179,6 +179,9 @@ export default {
 			'getUser',
 			'siteTitle'
 		]),
+		contributorName() {
+			return this.contributor ? this.contributor.name : ''
+		},
 		snackVal: {
 			get() {
 				return this.snackbar.value

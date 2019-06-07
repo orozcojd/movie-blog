@@ -16,7 +16,6 @@ let refreshTokens = [];
 
 
 module.exports = {
-	
 	/**
 	 * POST
 	 * If user associated to email in response exists, calls nodemailer to 
@@ -31,7 +30,11 @@ module.exports = {
 			if(user){
 				const contributor = await Contributor.findById(user.contributorId);
 				user.generatePwToken();
-				user.save(async (err, saved) => {if(!err) { sendResetPwEmail(user, contributor);}});
+				user.save(async (err, saved) => {
+					if(!err) {
+						sendResetPwEmail(user, contributor);
+					}
+				});
 			}
 			res.status(200).send({message: 'Please check your email for instructions on how to reset your password.'});
 		} catch (err) {
@@ -54,40 +57,35 @@ module.exports = {
 		try {
 			let status = 200;
 			let error = '';
-			if(req.body.pass !== req.body.passConfirm) {
-				status = 400;
-				error = 'Your passwords do not match. Please enter them again.';
+			const user = await User.findById(req.userId);
+			const tokenUsed = user.resetToken !== req.token;
+			if(tokenUsed) {
+				status = 403;
+				error = 'Token has been already used. To reset your password again, please restart the process from the login page.';
 			}
 			else {
-				const user = await User.findById(req.userId);
-				if(user.resetToken !== req.token) {
-					status = 403;
-					error = 'Your token has been already used. To reset your password again, restart the process from the login page.';
-					console.log('TOKEN USED');
-				}
-				else {
-					await user.hashPassword(req.body.pass);
-					user.resetToken = null;
-					user.save((err, saved) => {
-						if(err) {
-							error = err;
-							status = 400;
-						}
-						else {
+				await user.hashPassword(req.body.pass);
+				user.resetToken = null;
+				user.save((err, saved) => {
+					if(err) {
+						error = err;
+						status = 400;
+					}
+					else {
 						// successful block
-							const token = user.generateToken();
-							const refreshToken = randomToken.uid(256);
-							refreshTokens[refreshToken] = user.email;
-							res.status(200).send({
-								message: 'Your password has been successfully updated.',
-								token: token,
-								refreshToken: refreshToken,
-								user: {_id: user._id, email: user.email, contributorId: user.contributorId, permission: user.permission}
-							});
-						}
-					});
-					return; // needed so headers aren't overwritten
-				}
+						const token = user.generateToken();
+						const refreshToken = randomToken.uid(256);
+						refreshTokens[refreshToken] = user.email;
+						const response = {
+							message: 'Your password has been successfully updated.',
+							token: token,
+							refreshToken: refreshToken,
+							user: {_id: user._id, email: user.email, contributorId: user.contributorId, permission: user.permission}
+						};
+						res.status(200).send(response);
+					}
+				});
+				return; // needed so headers aren't overwritten
 			}
 			// send error case
 			res.status(status).send({error: error});
@@ -155,22 +153,10 @@ module.exports = {
 	 */
 	async updateContributor (req, res) {
 		try {
-			// get contributor name - save it
 			const contributorId = req.params.contributorId;
-			
-			if(!await helpers.authenticateRequest(req)) {
-				res.status(403).send({
-					message: 'You are unauthorized to make changes to this account!'
-				});
-				res.end();
-				return;
-			}
 			let contributorName = await Contributor.findOne({_id: contributorId});
 			contributorName = contributorName.name;
-			let updateName = false;
-			if(req.body.name !== contributorName) {
-				updateName = true;
-			}
+			const updateName = req.body.name !== contributorName;
 			const contributor = await Contributor.findOneAndUpdate(
 				{_id: contributorId},
 				req.body,
@@ -227,29 +213,19 @@ module.exports = {
 	 */
 	async addUser (req, res) {
 		try {
-			// prevents unauthorized user from making changes
-			// const contributorId = req.body.contributorId;
-			// const verifyUser = await User.findById(req.userId);
-			
-			if(!await helpers.authenticateTokenUser(req)) {
-				res.status(403).send({
-					message: 'You are unauthorized to make changes to this account!'
-				});
-				return;
-			}
 			const realAdminUid = config.authentication.superUser;
 			const currUser = await User.findById(req.userId);
-			if(currUser.permission === realAdminUid){
+			const permitted = currUser.permission === realAdminUid;
+			if(permitted){
 				const pw = req.body.password;
 				let contributor = new Contributor();
 				await contributor.createContributor({name: req.body.contributorName});
 				contributor.save(async (err, contrib) => {
 					if(err) {
 						res.status(400).send({
-							error: err,
+							error: 'Contributor name already in use',
 							details: err
 						});
-						console.log(err);
 					}
 					else {
 						let user = new User();
@@ -259,7 +235,7 @@ module.exports = {
 						user.save((err, saved) => {
 							if(err) {
 								res.status(400).send({
-									error: 'Email or contributor name already in use.'
+									error: 'Email already in use.'
 								});
 							}
 							else {
@@ -272,12 +248,13 @@ module.exports = {
 						});
 					}
 				});
+				return;
 			}
-			else {
-				res.status(400).send({
-					error: 'Current User permissions are not allowed to perform this action.'
-				});
-			}
+			
+			res.status(400).send({
+				error: 'Current User permissions are not allowed to perform this action.'
+			});
+		
 		} catch (err) {
 			res.status(400).send({
 				error: 'Unexpected error has occurred',
