@@ -82,20 +82,10 @@ module.exports = {
    */
 	async update (req, res) {
 		try {
-			const authorized = await helpers.authenticateRequest(req);
-			if(!authorized) {
-				res.status(403).send({
-					error: 'You are unauthorized to make changes to this account!'
-				});
-				return;
-			}
-
 			const contributor = await Contributor.findOne({
 				_id: req.body.contributorId
 			}).lean();
-			// if(contributor) {
 			req.body.author = contributor.name;
-			// }
 			const article = await Post.findOneAndUpdate(
 				{contributorId: req.body.contributorId, _id: req.params.articleId},
 				req.body,
@@ -129,14 +119,7 @@ module.exports = {
    * @param {Object} res 
    */
 	async delete (req, res) {
-		try {
-			if(!await helpers.authenticateRequest(req)) {
-				res.status(403).send({
-					message: 'You are unauthorized to make changes to this account!'
-				});
-				return;
-			}
-			
+		try {			
 			const deleteCount = await Post.deleteOne({
 				_id: req.params.articleId
 			});

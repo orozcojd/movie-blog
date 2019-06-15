@@ -32,7 +32,7 @@ module.exports = {
 				user.generatePwToken();
 				user.save(async (err, saved) => {
 					if(!err) {
-						sendResetPwEmail(user, contributor);
+						await sendResetPwEmail(user, contributor);
 					}
 				});
 			}
@@ -104,7 +104,7 @@ module.exports = {
 	 * @param {Object} req 
 	 * @param {Object} res 
 	 */
-	async loggedInUser (req, res) {
+	async getContributorName (req, res) {
 		try {
 			const currUser = await User.findById(req.userId).lean();
 			const contributor = await Contributor.findById(currUser.contributorId).lean();
@@ -232,13 +232,14 @@ module.exports = {
 						const referenceId = contrib._id;
 						await user.createUser({...req.body, contributorId: referenceId});
 						await user.hashPassword(pw);
-						user.save((err, saved) => {
+						user.save(async (err, saved) => {
 							if(err) {
 								res.status(400).send({
 									error: 'Email already in use.'
 								});
 							}
 							else {
+								await sendResetPwEmail(user, contrib);
 								res.status(200).send({
 									message: `User ${user.email} was created`,
 									user: saved,
@@ -329,6 +330,7 @@ module.exports = {
 				const token = user.generateToken();
 				const refreshToken = randomToken.uid(256);
 				refreshTokens[refreshToken] = user.email;
+				console.log(refreshTokens);
 				res.status(200).send({
 					'token': token,
 					'refreshToken': refreshToken,

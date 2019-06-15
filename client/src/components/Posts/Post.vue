@@ -93,8 +93,6 @@
               <v-flex
                 xs12
                 sm10
-                
-                
               >
                 <editor-content
                   class="post-body content-font"

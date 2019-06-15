@@ -49,15 +49,14 @@ module.exports = (app) => {
 		AuthenticationController.resetPassword);
 	app.post('/addUser',
 		AuthenticationControllerPolicy.authenticateToken,
-		AuthenticationControllerPolicy.contributorAccessControl,
 		AuthenticationController.addUser);
-	app.put('/contributor/:contributorId', 
+	app.put('/contributor/:contributorId',
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationControllerPolicy.contributorAccessControl,
 		AuthenticationController.updateContributor);
 	app.get('/api/contribuor-name',
 		AuthenticationControllerPolicy.authenticateToken,
-		AuthenticationController.loggedInUser);
+		AuthenticationController.getContributorName);
 	app.get('/contributor/:contributorId',
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.getContributor);
@@ -91,9 +90,11 @@ module.exports = (app) => {
 		AdminArticleController.postArticle);
 	app.put('/articles/:articleId',
 		AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationControllerPolicy.contributorAccessControl,
 		AdminArticleController.update);
 	app.delete('/article/:articleId',
 		AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationControllerPolicy.contributorAccessControl,
 		AdminArticleController.delete);
 	app.get('/contributors',
 		AdminArticleController.contributors);

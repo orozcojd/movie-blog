@@ -50,9 +50,11 @@ module.exports = {
 	 */
 	async contributorAccessControl(req, res, next) {
 		const isAuthorized = await helpers.authenticateRequest(req);
+		console.log('isAuthorized');
+		console.log(isAuthorized);
 		if(!isAuthorized) {
 			res.status(403).send({
-				message: 'You are unauthorized to make changes to this account!'
+				error: 'You are unauthorized to make changes to this account!'
 			});
 			res.end();
 		}
