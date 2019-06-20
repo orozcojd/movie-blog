@@ -22,7 +22,6 @@
     >
       <v-flex
         xs12
-        sm11
       >
         <latest-post
           v-if="articles.length"

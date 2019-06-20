@@ -33,26 +33,28 @@
         >
           <v-card-title primary-title>
             <div>
-              <h3
-                class="card-header head-xl"
+              <h2
                 align="left"
               >
-                {{ article.title }}
-              </h3>
-              <br>
+                <b>
+                  {{ article.title }}
+                </b>
+              </h2>
+              <!-- <br>
               <p 
                 class="card-description"
                 align="left"
               >
                 {{ article.thumbnailDescription }}
-              </p>
+              </p> -->
+              <!-- </p> -->
             </div>
           </v-card-title>
-          <!-- <v-card-text>
+          <v-card-text>
             <div align="left">
               {{ article.author }}
             </div>
-          </v-card-text> -->
+          </v-card-text>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -86,20 +88,21 @@ export default {
 </script>
 
 <style scoped>
+/* remove margins from latest post*/
+h2 {
+  margin-top: 0 !important;
+}
 .header {
   margin: 10px;
 }
-.card-description {
+/* .card-description {
   font-size: 16px;
-}
-/* .card-header {
-  font-size: 2em;
 } */
+.card-header {
+  font-size: 2rem;
+}
 .point-cursor {
   cursor: pointer;
 }
 
-@media screen and (max-width: 375px) {
-
-}
 </style>

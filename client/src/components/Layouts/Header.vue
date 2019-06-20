@@ -280,6 +280,11 @@ export default {
     cursor:pointer;
     color: black;
   }
+  @media(max-width: 300px) {
+    .main-title {
+      font-size: 1.3rem !important;
+    }
+  }
 
 .contain-group {
   max-height: 432px;

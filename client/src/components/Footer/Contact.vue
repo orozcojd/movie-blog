@@ -27,43 +27,11 @@
 <script>
 import { mapGetters } from 'vuex'
 export default {
-	name: 'Blank',
-	components: {
-
-	},
-	data () {
-		return {
-		}
-	},
+	name: 'Contact',
 	computed: {
 		...mapGetters([
 			'siteTitle'
 		])
-	},
-	mounted() {
-		
-	},
-	methods: {
 	}
 }
 </script>
-
-<style scoped>
-  /* @media(min-width: 250px) {
-  html {
-    font-size: 12px !important;
-  }
-} */
-  body {
-    font-size: 12px;
-  }
-  h1 {
-    font-size: 2rem;
-  }
-h1 {
-  margin-bottom: 2rem;
-}
-p {
-  font-size: 1.4rem;
-}
-</style>

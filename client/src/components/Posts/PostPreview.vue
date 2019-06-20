@@ -2,6 +2,7 @@
   <v-card
     :hover="true"
     raised
+    :flat="flat"
     @click="navigateTo(article._id)"
   >
     <v-img
@@ -46,6 +47,11 @@ export default {
 		article: {
 			type: Object,
 			required: true
+		},
+		flat: {
+			type: Boolean,
+			required: false,
+			default: false
 		}
 	},
 	data () {
@@ -66,6 +72,9 @@ export default {
 </script>
 
 <style scoped>
+h1, h2, h3 {
+  margin: 0 !important;
+}
 .card-wrapper {
   height: 180px
 }
@@ -76,7 +85,7 @@ export default {
   margin-bottom: 2em;
 }
 .card-info {
-    max-height: 60px;
+    max-height: 70px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 3;

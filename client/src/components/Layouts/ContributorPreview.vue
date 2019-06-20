@@ -77,13 +77,14 @@
       <v-flex
         v-for="article in articles"
         :key="article.id"
-        md4
+      
         xs12
       >
         <post-preview
           class="margin-lg"
           :article="article"
           to="article-view"
+          flat
         />
       </v-flex>
     </v-layout>
@@ -198,7 +199,8 @@ export default {
   margin: 8px
 }
 h1 {
-  font-size: 3rem;
+  font-size: 3em;
   margin-bottom: 2.5rem;
 }
+
 </style>

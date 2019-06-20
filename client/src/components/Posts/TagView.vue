@@ -14,7 +14,8 @@
       <v-img 
         :lazy-src="tag.lazyImg"
         :src="tag.img"
-        aspect-ratio="2"
+        width="100"
+        max-height="100vh"
         :alt="tag.name"
       >
         <v-container fill-height>
@@ -135,18 +136,15 @@ export default {
 </script>
 
 <style scoped>
-
-	.h1 {
-		font-size: 4em !important;
-	}
 	.mb-lg {
 		margin-bottom: 5em;
 	}
 	.realm-title {
 		color: whitesmoke;
-		font-size: 4rem;
 	}
-	/* .img-placeholder {
-		height: 700px;
-	} */
+	@media (min-width:500px) {
+		.realm-title {
+			font-size: 3rem;
+		}
+	}
 </style>

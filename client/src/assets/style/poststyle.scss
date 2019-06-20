@@ -14,39 +14,35 @@ a {
 
 /* export to file */
 .post-title {
-font-family: 'Marcellus SC', serif;
-font-size: 1.75rem;
-margin-bottom: 0.5em;
+  font-family: 'Marcellus SC', serif;
+  margin: 0.2em 0;
 }
 .mb-small {
-margin-bottom: .5em;
+  margin-bottom: .5em;
 }
 .mb-med {
-margin-bottom: 2em;
+  margin-bottom: 2em;
 }
 .post-author {
-margin-bottom: .5em;
+  margin-bottom: .5em;
 }
-.post-body {
-font-size: 1.4rem;
-// font-family: 'Abel', sans-serif;
-}
+/* */
 .tag {
-display: inline-block;
+  display: inline-block;
 }
 .tag::after {
 content: ', ';
-white-space: pre;
+  white-space: pre;
 }
 .tag:last-child::after {
 content: '';
 }
 .tag-list::before {
 content: 'Tags: ';
-white-space: pre;
+  white-space: pre;
 }
 .tag-list {
-padding-left: 0;
+  padding-left: 0;
 }
 .after-article {
 	margin-bottom: 5em;
@@ -57,7 +53,8 @@ padding-left: 0;
   font-size: 12px;
 }
 .post-card {
-	padding: 1em 0 2em 4em;
+  margin-top: 1em;
+	padding: 1em 0 2em 2em;
 }
 @media (max-width: 700px) {
   .post-card {
