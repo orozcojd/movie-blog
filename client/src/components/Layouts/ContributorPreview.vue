@@ -59,7 +59,6 @@
           v-for="(p, i) in bio"
           :key="i"
           class="about"
-          align="left"
         >
           {{ p }}
         </p>
@@ -77,7 +76,7 @@
       <v-flex
         v-for="article in articles"
         :key="article.id"
-      
+        lg6
         xs12
       >
         <post-preview
@@ -192,6 +191,7 @@ export default {
   display: inline-block;
 }
 .inline-social a {
+  display:inline-block;
   line-height:0;
   font-size: 0;
 }

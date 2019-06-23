@@ -56,6 +56,13 @@ content: 'Tags: ';
   margin-top: 1em;
 	padding: 1em 0 2em 2em;
 }
+@media (max-width: 600px) {
+  .post-content {
+		padding-left: 0 !important;
+		padding-right: 0 !important;
+		
+	}
+}
 @media (max-width: 700px) {
   .post-card {
     padding: 1em 0 0.5em .5em;

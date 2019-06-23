@@ -12,7 +12,6 @@
     />
     <v-card-title
       primary-title
-      class="title-wrapper"
     >
       <div
         class="card-wrapper"
@@ -20,21 +19,21 @@
         style="width:100%;"
       >
         <div
-          class="card-title"
+          class="card-title overflow-clamp"
         >
-          <h3>
+          <h5>
             {{ article.title }}
-          </h3>
+          </h5>
         </div>
         <div
-          class="card-info"
+          class="card-info overflow-clamp color-light"
         >
           {{ article.thumbnailDescription }}
         </div>
         <br>
-        <!-- <div align="right">
-          {{ article.author }}
-        </div> -->
+      </div>
+      <div class="card-author color-light">
+        <small>{{ article.author.toUpperCase() }}</small>
       </div>
     </v-card-title>
   </v-card>
@@ -72,25 +71,58 @@ export default {
 </script>
 
 <style scoped>
-h1, h2, h3 {
+  h5 {
   margin: 0 !important;
 }
 .card-wrapper {
-  height: 180px
+  height: 230px
+}
+/* .overflow-clamp {
+  max-height: calc(18px + .2vw) * 3;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical; 
+  text-overflow: ellipsis;
+} */
+.card-author {
+  font-size: 0.7em;
 }
 .card-title {
-  height: 72px;
-  overflow:hidden;
-  text-overflow: ellipsis;
-  margin-bottom: 2em;
+  max-height: 5.3em; /* font-size * line-height * limitNoLineDesired */
+  overflow: hidden;
+  margin-bottom: 1em;
+}
+.color-light {
+  color:gray;
 }
 .card-info {
-    max-height: 70px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical; 
-  text-overflow: ellipsis;
+  font-size: 0.9em;
+  line-height: 1.1em;
+  max-height: 4.3em;
+  position: relative;
+}
+@media (max-width: 1264px) {
+  .card-wrapper {
+    height: 200px;
+  }
+}
+@media (max-width: 600px) {
+  .card-wrapper {
+    height: 180px;
+  }
+}
+@media (max-width: 320px) {
+  .card-wrapper {
+    height: auto;
+  }
+  .card-title {
+    height: auto;
+    max-height: none;
+  }
+  .card-info {
+    display: none;
+  }
 }
 
 </style>

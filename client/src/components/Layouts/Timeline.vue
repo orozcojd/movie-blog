@@ -15,7 +15,8 @@
       >
         <v-avatar
           class="hover-grow"
-          size="60px"
+          size="100px"
+          @click="navigateTo(article._id)"
         >
           <img
             :src="
@@ -26,14 +27,17 @@
       <template
         v-slot:opposite
       >
-        <div class="date-text">
-          <span>{{ convertDate(article.created_at) }}</span>
+        <div
+          class="date-text"
+        >
+          <small>{{ convertDate(article.created_at) }}</small>
         </div>
       </template>
       <template>
         <timeline-card
-          class="post-preview"
+          class="post-preview timeline-info"
           :article="article"
+          @click="navigateTo(article._id)"
         />
       </template>
     </v-timeline-item>
@@ -75,6 +79,15 @@ export default {
 		this.loaded = true
 	},
 	methods: {
+		navigateTo (articleId) {
+			console.log('clik')
+			this.$router.push({
+				name: 'article-view',
+				params: { 
+					id: articleId
+				}
+			})
+		},
 		convertDate(date) {
 			return Helpers.convertDate(date)
 		},
@@ -107,16 +120,24 @@ export default {
 </script>
 
 <style scoped>
-.date-text{
-	font-size: 1.5rem;
-}
-	.hover-grow{
-		transition: all .3s ease-in-out;
+	.date-text{
+		font-size: 1.5rem;
 	}
-	.hover-grow:hover{
-		margin: 50px !important;
-		transform: scale(2) translateY(-20px);;
-		
-		
+	.hover-grow{
+		/* transition: all .3s ease-in-out; */
+		cursor: pointer;
+	}
+	/* .hover-grow:hover{
+		transform: scale(2) translateY(-20px);
+		z-index: 1;
+	} */
+	.timeline-info:hover ~ .date-text{
+		font-weight: bold;
+	}
+	@media (max-width: 600px) {
+			.hover-grow {
+				height: 70px !important;
+				width: 70px !important;
+		}
 	}
 </style>

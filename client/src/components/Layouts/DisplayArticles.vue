@@ -10,7 +10,8 @@
       <v-flex
         v-for="article in articles"
         :key="article.id"
-        md6
+        lg4
+        sm6
         xs12
       >
         <post-preview

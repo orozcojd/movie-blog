@@ -11,19 +11,20 @@
         align="left"
         style="width:100%;"
       >
-        <h2
-          style="margin-bottom:10px"
-        >
+        <h3>
           {{ article.title }}
-        </h2>
+        </h3>
         <div
-          class="card-description"
+          class="card-description color-light overflow-clamp"
         >
           {{ article.thumbnailDescription }}
         </div>
         <br>
-        <div align="left">
-          {{ article.author }}
+        <div
+          class="color-light card-author"
+          align="left"
+        >
+          <small>{{ article.author.toUpperCase() }}</small>
         </div>
       </div>
     </v-card-title>
@@ -59,5 +60,23 @@ export default {
 <style scoped>
   .card-description {
     font-size: 1.2rem;
+  }
+  .card-author {
+    font-size: 0.7em;
+  }
+  h3 {
+    margin-top: 0px;
+    margin-bottom:10px
+  }
+  .overflow-clamp {
+    max-height: calc(18px + .2vw) * 3;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical; 
+    text-overflow: ellipsis;
+}
+  .color-light {
+    color:gray;
   }
 </style>

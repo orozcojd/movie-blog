@@ -1,6 +1,5 @@
 <template>
   <v-card
-    dark
     class="point-cursor"
     @click="navigateTo(article._id)"
   >
@@ -25,17 +24,14 @@
         md4
       >
         <v-layout
-          align-space-around
-          justify-space-between
-          column
-          fill-height
           class="header"
         >
-          <v-card-title primary-title>
-            <div>
-              <h2
-                align="left"
-              >
+          <v-card-title 
+            primary-title
+            class="flex-between"
+          >
+            <div id="latest-title">
+              <h2>
                 <b>
                   {{ article.title }}
                 </b>
@@ -49,12 +45,13 @@
               </p> -->
               <!-- </p> -->
             </div>
-          </v-card-title>
-          <v-card-text>
-            <div align="left">
-              {{ article.author }}
+            <div
+              class="color-light"
+              align="left"
+            >
+              <small>{{ article.author.toUpperCase() }}</small>
             </div>
-          </v-card-text>
+          </v-card-title>
         </v-layout>
       </v-flex>
     </v-layout>
@@ -88,12 +85,22 @@ export default {
 </script>
 
 <style scoped>
+.flex-between {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+#latest-title {
+  /* max-height:  */
+}
 /* remove margins from latest post*/
 h2 {
   margin-top: 0 !important;
 }
 .header {
-  margin: 10px;
+  /* margin: 10px; */
 }
 /* .card-description {
   font-size: 16px;
@@ -104,5 +111,7 @@ h2 {
 .point-cursor {
   cursor: pointer;
 }
-
+.color-light {
+  color:gray;
+}
 </style>

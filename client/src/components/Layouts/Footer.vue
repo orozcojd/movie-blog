@@ -25,7 +25,7 @@
                 {{ icon }}
               </v-icon>
             </v-btn> -->
-            <strong>{{ siteTitle }}</strong>
+            <h5>{{ siteTitle }}</h5>
           </v-card-text>
           <v-card-text class="footer-links">
             <v-btn

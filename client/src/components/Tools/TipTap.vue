@@ -149,12 +149,12 @@
                 <v-icon>format_list_numbered</v-icon>
               </button>
 
-              <button
+              <!-- <button
                 :class="{ 'highlight': isActive.todo_list() }"
                 @click.prevent="commands.todo_list"
               >
                 <v-icon>list_alt</v-icon>
-              </button>
+              </button> -->
               <button
                 :class="{ 'highlight': isActive.blockquote() }"
                 @click.prevent="commands.blockquote"
@@ -197,14 +197,14 @@
 import { Editor, EditorContent, EditorMenuBar, EditorMenuBubble, } from 'tiptap'
 import {
 	Blockquote,
-	CodeBlock,
-	HardBreak,
+	// CodeBlock,
+	// HardBreak,
 	Heading,
 	OrderedList,
 	BulletList,
 	ListItem,
-	TodoItem,
-	TodoList,
+	// TodoItem,
+	// TodoList,
 	Bold,
 	Code,
 	Italic,
@@ -233,14 +233,14 @@ export default {
 				extensions: [
 					new Image(),
 					new Blockquote(),
-					new CodeBlock(),
-					new HardBreak(),
+					// new CodeBlock(),
+					// new HardBreak(),
 					new Heading({ levels: [1, 2, 3] }),
 					new BulletList(),
 					new OrderedList(),
 					new ListItem(),
-					new TodoItem(),
-					new TodoList(),
+					// new TodoItem(),
+					// new TodoList(),
 					new Bold(),
 					new Code(),
 					new Italic(),
@@ -342,9 +342,7 @@ export default {
     top: 10px;
     float: right
 }
-.img {
-  width: device-width;
-}
+
 // .editor__content {
 //   margin-bottom: 0;
 // }

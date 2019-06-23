@@ -58,7 +58,6 @@ module.exports = (app) => {
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.getContributorName);
 	app.get('/contributor/:contributorId',
-		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.getContributor);
 	/* Refresh Token */
 	app.post('/tokens',

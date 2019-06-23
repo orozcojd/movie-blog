@@ -1,7 +1,6 @@
 <template>
   <div
     v-if="loaded"
-    class="post-content"
     fluid
   >
     <vue-headful
@@ -27,15 +26,31 @@
             align="left"
           >
             <a
+              class="hover-bold"
               href="#"
               @click.prevent="navigateTo({
                 _id: article.realm,
                 name: articleRealm
               })"
             >
-              <strong>
+              <small>
                 {{ upperCaseString(articleRealm) }}
-              </strong>
+              </small>
+            </a>
+            |
+            <a
+              class="hover-bold"
+              @click="$router.push({
+                name: 'about-contributor',
+                params: {
+                  id: article.contributorId,
+                  contributor: article.author.toLowerCase().split(' ').join('-')
+                }},
+              )"
+            >
+              <small> 
+                {{ article.author }}
+              </small>
             </a>
           </div>
           <h1
@@ -45,31 +60,14 @@
             {{ article.title }}
           </h1>
 				
-          <!-- <br> -->
-          <strong>
+          <small>
             <div
               align="left"
-              class="mb-small"
-            >
-              <a
-                @click="$router.push({
-                  name: 'about-contributor',
-                  params: {
-                    id: article.contributorId,
-                    contributor: article.author.toLowerCase().split(' ').join('-')
-                  }},
-                )"
-              >
-                {{ article.author }}
-              </a>
-            </div>
-            <div
-              align="left"
-              class="mb-med light-contrast"
+              class="mb-med mt-sm light-contrast"
             >
               Updated {{ articleDate }}
             </div>
-          </strong>
+          </small>
           <div
             class="mb-xs"
           >
@@ -99,7 +97,7 @@
             :editor="editor"
             align="left"
           />
-          <strong>
+          <small>
             <ul
               v-if="article.tags.length"
               align="left"
@@ -111,6 +109,7 @@
                 class="tag"
               >
                 <a
+                  class="hover-bold"
                   @click.prevent="navigateTo({
                     _id: tag,
                     name: convertTagIdToName(tag)
@@ -118,7 +117,7 @@
                 >{{ upperCaseString(convertTagIdToName(tag)) }}</a>
               </li>
             </ul>
-          </strong>
+          </small>
         </v-flex>
       </v-layout>
       <!-- </v-card-text>
@@ -288,8 +287,14 @@ export default {
   width: 100%;
   height: auto;
 }
+.hover-bold:hover {
+  font-weight: bold;
+}
 img {
   margin-bottom: .25em;
+}
+.mt-sm {
+  margin-top: .5em;
 }
 .mb-xs {
   margin-bottom: .25em;

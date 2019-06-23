@@ -6,9 +6,10 @@
     <v-layout justify-center>
       <v-flex
         xs12
-        sm10
+        sm11
         xl6
-        offset-md1
+        offset-sm1
+        offset-lg2
       >
         <v-card class="card-padding">
           <v-card-text>
@@ -46,22 +47,27 @@ export default {
 <style>
 /* @import url('../../assets/style/tiptap.scss'); */
 
-  .post-body img {
+  /* .post-body img {
     width: 100%;
     height: auto;
-  }
+  } */
   .card-padding {
     padding: 1em 0 2em 4em;
   }
   .about {
-		font-size: 1.7rem;
-	}
-  @media (max-width: 500px) {
-    .card-padding {
-    padding: 1em 0.5em 2em 0.5em;
+		/* font-size: 1.7em; */
   }
-  .about {
-		font-size: 14px;
+  @media (max-width: 960px) {
+    .card-padding {
+      padding-left: 2em;
+    }
+  }
+  @media (max-width: 600px) {
+    .card-padding {
+      padding: 1em 0.5em 2em 0.5em;
+    }
+    .about {
+		/* font-size: 14px; */
 	}
 }
 </style>

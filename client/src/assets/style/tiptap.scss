@@ -1,26 +1,43 @@
+
 blockquote::before {
-	content: "\201C"; /*Unicode for Left Double  */
+	content: "\201C";
 	position: relative;
 	float: left;
-	bottom: 20px;
-
-	/* font family */
+	bottom: 0;
 	font-family: 'Proza Libre', sans-serif;
-	font-size: 50px;
+	font-size: 4em;
 	color: #FDA7DF;
 }
+
 blockquote {
-  width: 50%;
+  width: 75%;
 	color: #999;
 	// border-left: 2px solid #999;
-	padding-left: 1em;
+  padding-left: 2em;
+  display: inline-block;
+  // margin-bottom: 0;
 	
+}
+.post-body img {
+  width: 100%;
+  height: auto;
+}
+@media only screen and (max-width: 500px) {
+  blockquote {
+    width: 90%;
+  }
 }
 blockquote::after{
   /*Reset to make sure*/
   content: "";
 }
-
+blockquote p {
+  font-size: 1.4em;
+  line-height: 1.2em;
+}
+blockquote br {
+  display: none; /* remove br from tiptap */
+}
 .editor__content {
   margin-bottom: 0;
 }

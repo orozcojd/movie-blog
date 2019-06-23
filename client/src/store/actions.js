@@ -347,6 +347,18 @@ export default {
 		return articles
 	},
 	/**
+	 * GET
+	 * Calls api get contributor bio of id passed in. Commits mutation to set
+	 * contributor
+	 * @param {commit} param0 
+	 * @param {String} id 
+	 */
+	async getContributorBio({commit}, id) {
+		const contributor = (await Api.ApiGeneral().get(`contributor/${id}`)).data
+		commit(types.SET_CONTRIBUTOR, contributor)
+		return contributor
+	},
+	/**
 	 * PUT
 	 * Calls api to update payload object article in db
 	 * and commits mutation
@@ -397,20 +409,7 @@ export default {
 	async contributorName({commit}) {
 		const name = (await Api.ApiAdmin().get('/api/contribuor-name')).data
 		localStorage.setItem('unsolicited-contributor', JSON.stringify(name))
-		console.log(name)
 		commit(types.SET_CONTRIBUTOR, name)
-	},
-	/**
-	 * GET
-	 * Calls api get contributor bio of id passed in. Commits mutation to set
-	 * contributor
-	 * @param {commit} param0 
-	 * @param {String} id 
-	 */
-	async getContributorBio({commit}, id) {
-		const contributor = (await Api.ApiAdmin().get(`contributor/${id}`)).data
-		commit(types.SET_CONTRIBUTOR, contributor)
-		return contributor
 	},
 	/**
 	 * PUT

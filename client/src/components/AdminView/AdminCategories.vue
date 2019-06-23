@@ -17,8 +17,7 @@
         d-flex
         xs6
         sm4
-        md3
-        lg2
+        lg3
       >
         <v-card>
           <v-card-title primary-title>

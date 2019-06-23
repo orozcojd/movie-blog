@@ -438,5 +438,11 @@ export default {
   h1 {
     // font-size: 4rem;
     // margin-bottom: 2.5rem;
+	}
+</style>
+<style scoped>
+	img {
+    width: 100%;
+    height: auto;
   }
 </style>

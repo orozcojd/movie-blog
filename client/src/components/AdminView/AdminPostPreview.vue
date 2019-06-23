@@ -7,7 +7,7 @@
     <vue-headful
       :title="headTitle"
     />
-    <v-layout justify-center>
+    <!-- <v-layout justify-center>
       <v-flex
         xs12
         sm10
@@ -100,7 +100,102 @@
           </v-card-text>
         </v-card>
       </v-flex>
-    </v-layout>
+    </v-layout> -->
+    <card-view>
+      <v-layout justify-start>
+        <v-flex
+          xs12
+          md11
+          xl10
+        >
+          <div
+            align="left"
+          >
+            <a
+              class="hover-bold"
+              href="#"
+            >
+              <small>
+                {{ upperCaseString(articleRealm) }}
+              </small>
+            </a>
+            |
+            <a
+              class="hover-bold"
+            >
+              <small> 
+                {{ article.author }}
+              </small>
+            </a>
+          </div>
+          <h1
+            class="post-title"
+            align="left"
+          >
+            {{ article.title }}
+          </h1>
+				
+          <small>
+            <div
+              align="left"
+              class="mb-med mt-sm light-contrast"
+            >
+              Updated {{ articleDate }}
+            </div>
+          </small>
+          <div
+            class="mb-xs"
+          >
+            <v-img
+              id="post-img"
+              :src="article.img"
+              max-height="600"
+            />
+          </div>
+          <div
+            class="light-contrast mb-med"
+          >
+            <p>
+              {{ article.imgCred }}
+            </p>
+          </div>
+        </v-flex>
+      </v-layout>
+      <v-layout justify-start>
+        <v-flex
+          xs12
+          md10
+          xl9
+        >
+          <editor-content
+            class="post-body content-font"
+            :editor="editor"
+            align="left"
+          />
+          <small>
+            <ul
+              v-if="article.tags.length"
+              align="left"
+              class="tag-list"
+            >
+              <li
+                v-for="(tag, index) in article.tags"
+                :key="index"
+                class="tag"
+              >
+                <a
+                  class="hover-bold"
+                  @click.prevent="navigateTo({
+                    _id: tag,
+                    name: convertTagIdToName(tag)
+                  })"
+                >{{ upperCaseString(convertTagIdToName(tag)) }}</a>
+              </li>
+            </ul>
+          </small>
+        </v-flex>
+      </v-layout>
+    </card-view>
     <v-layout>
       <v-btn
         @click="goBack()"
@@ -112,6 +207,7 @@
 </template>
 
 <script>
+import CardView from '@/components/Layouts/CardView'
 import { mapState, mapActions } from 'vuex'
 import ParagraphAlignmentNode from '@/components/Tools/ParagraphAlignment'
 import Iframe from '@/components/Tools/Iframe'
@@ -139,7 +235,8 @@ import {
 export default {
 	name: 'AdminPostPreview',
 	components: {
-		EditorContent
+		EditorContent,
+		CardView
 	},
 	data () {
 		return {
@@ -196,7 +293,8 @@ export default {
 			return (this.article ? date : null)
 		},
 		articleRealm() {
-			return (this.article ? this.convertTagIdToName(this.article) : null)
+			console.log(this.article)
+			return (this.article ? this.convertTagIdToName(this.article.realm._id) : null)
 		}
 	},
 	async mounted() {
