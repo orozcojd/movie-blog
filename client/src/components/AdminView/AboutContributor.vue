@@ -176,13 +176,13 @@ export default {
 		}
 	},
 	async mounted() {
-		await this.getContributorBio(this.user.contributorId)
+		await this.getContributor(this.user.contributorId)
 		console.log('after setting contributor')
 	},
 	methods: {
 		...mapActions([
 			'updateContributorBio',
-			'getContributorBio',
+			'getContributor',
 			'editContributorVal',
 			'setSnackbar'
 		]),

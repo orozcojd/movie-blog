@@ -1,5 +1,4 @@
 const {Post} = require('../models');
-
 // Post.find().remove().exec();
 // Tags.collection.dropAllIndexes(function (err, results) {
 // });

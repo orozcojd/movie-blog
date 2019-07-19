@@ -172,7 +172,7 @@ export default {
 			'token',
 			'tags',
 			'snackbar',
-			'contributor'
+			'adminContributor'
 		]),
 		...mapGetters([
 			'isUserLoggedin',
@@ -180,7 +180,8 @@ export default {
 			'siteTitle'
 		]),
 		contributorName() {
-			return this.contributor ? this.contributor.name : ''
+			console.log(this.adminContributor)
+			return this.adminContributor ? this.adminContributor.name : ''
 		},
 		snackVal: {
 			get() {
@@ -211,6 +212,7 @@ export default {
 		}
 		await this.getTags()
 		this.onResize()
+		console.log(this.adminContributor)
 	},
 	methods: {
 		...mapActions([

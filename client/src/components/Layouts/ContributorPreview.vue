@@ -20,34 +20,31 @@
           max-height="400"
           position="left"
         />
-        <div class="inline-social">
-          <a
-            v-if="twitter"
-            :href="twitter"
-            target="_"
-          >
-            <twitter 
-              width="40"
-              height="40"
-            />
-          </a>
-          <a
-            v-if="facebook"
-            :href="facebook"
-            target="_"
-          >
-            <facebook style="margin-right:10px" />
-          </a>
-          <a
-            v-if="instagram"
-            :href="instagram"
-            target="_"
-          >
-            <instagram
-              width="30"
-              height="30"
-            />
-          </a>
+        
+        <div
+          class="inline-social"
+        >
+          <font-awesome-icon
+            v-if="contributor && contributor.facebook"
+            class="iconHover"
+            :icon="['fab', 'facebook-square']"
+            color="gray"
+            @click="openLink(contributor.facebook)"
+          />
+          <font-awesome-icon
+            v-if="contributor && contributor.twitter" 
+            class="iconHover"
+            :icon="['fab', 'twitter-square']"
+            color="gray"
+            @click="openLink(contributor.twitter)"
+          />
+          <font-awesome-icon
+            v-if="contributor && contributor.instagram" 
+            class="iconHover"
+            :icon="['fab', 'instagram']"
+            color="gray"
+            @click="openLink(contributor.instagram)"
+          />
         </div>
       </v-flex>
       <v-flex
@@ -97,9 +94,6 @@
 </template>
 
 <script>
-import Facebook from '@/components/Icons/Facebook'
-import Twitter from '@/components/Icons/Twitter'
-import Instagram from '@/components/Icons/Instagram'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import PostPreview from '@/components/Posts/PostPreview'
 import CardView from '@/components/Layouts/CardView'
@@ -107,10 +101,7 @@ export default {
 	name: 'ContributorView',
 	components: {
 		PostPreview,
-		CardView,
-		Twitter,
-		Instagram,
-		Facebook
+		CardView
 	},
 	data () {
 		return {
@@ -131,15 +122,6 @@ export default {
 		]),
 		headTitle() {
 			return `${this.contributor.name} - ${this.siteTitle}`
-		},
-		twitter() {
-			return this.contributor.twitter ? `https://www.twitter.com/${this.contributor.twitter}` : null
-		},
-		facebook() {
-			return this.contributor.facebook ? `https://www.facebook.com/${this.contributor.facebook}` : null
-		},
-		instagram() {
-			return this.contributor.instagram ? `https://www.instagram.com/${this.contributor.instagram}` : null
 		},
 		pageNo: {
 			get() {
@@ -175,26 +157,39 @@ export default {
 		...mapActions([
 			'getContributorBio',
 			'getArticleByContributor'
-		])
+		]),
+		openLink(site) {
+			window.open(site);
+		}
 	}
 }
 </script>
 
 <style scoped>
+
 .inline-social {
   display: flex;
   justify-content: start;
   align-items: center;
 }
 .inline-social svg {
+  width: auto;
+  height: 1em;
+  /* You would have to include the following two lines to make this work in Safari */
+  max-width: 100%;
+  max-height: 100%;
   margin: 1rem;
   display: inline-block;
+  cursor: pointer;
 }
 .inline-social a {
   display:inline-block;
   line-height:0;
   font-size: 0;
 }
+ .iconHover:hover{
+   color: indigo;
+ }
 .margin-lg {
   margin: 8px
 }
@@ -202,5 +197,6 @@ h1 {
   font-size: 3em;
   margin-bottom: 2.5rem;
 }
+
 
 </style>

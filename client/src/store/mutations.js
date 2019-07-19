@@ -32,9 +32,11 @@ export default {
 			localStorage.removeItem('unsolicited-session-refresh-token')
 		}
 	},
+	[types.SET_ADMIN_CONTRIBUTOR] (state, contributor) {
+		state.adminContributor = contributor
+	},
 	[types.SET_CONTRIBUTOR] (state, contributor) {
 		state.contributor = contributor
-		console.log(state.contributor)
 	},
 	[types.EDIT_CONTRIBUTOR_VAL] (state, payload) {
 		Vue.set(state.contributor, payload.type, payload.val)

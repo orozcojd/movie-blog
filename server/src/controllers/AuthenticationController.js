@@ -8,6 +8,8 @@ const config = require('../config/config');
 const passport = require('passport');
 const randomToken = require('rand-token');
 const helpers = require('../helpers/Auth');
+const contributorHelpers = require('../helpers/Contributor');
+
 let refreshTokens = [];
 // Post.find().remove().exec();
 // User.find({
@@ -129,6 +131,7 @@ module.exports = {
 		try {
 			const contributor = await Contributor.findOne({_id: id});
 			if(contributor) {
+				console.log(contributor);
 				res.send(contributor);
 			}
 			else {
@@ -159,7 +162,7 @@ module.exports = {
 			const updateName = req.body.name !== contributorName;
 			const contributor = await Contributor.findOneAndUpdate(
 				{_id: contributorId},
-				req.body,
+				contributorHelpers.updateSocialLinks(req.body),
 				{new: true}
 			);
 			let updated;
@@ -173,7 +176,7 @@ module.exports = {
 				message += updated.nModified.toString() + ' Article(s) were updated reflecting name change.';
 			}
 			res.send({
-				contributor: contributor,
+				contributor: contributorHelpers.stripSocialLinks(contributor),
 				message: message
 			});
 

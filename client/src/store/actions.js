@@ -118,7 +118,7 @@ export default {
 	},
 	getSetContributor ({commit}) {
 		const contributor = JSON.parse(localStorage.getItem('unsolicited-contributor'))
-		commit(types.SET_CONTRIBUTOR, contributor)
+		commit(types.SET_ADMIN_CONTRIBUTOR, contributor)
 	},
 	/**
 	 * POST
@@ -356,6 +356,7 @@ export default {
 	async getContributorBio({commit}, id) {
 		const contributor = (await Api.ApiGeneral().get(`contributor/${id}`)).data
 		commit(types.SET_CONTRIBUTOR, contributor)
+		console.log(contributor)
 		return contributor
 	},
 	/**
@@ -409,7 +410,12 @@ export default {
 	async contributorName({commit}) {
 		const name = (await Api.ApiAdmin().get('/api/contribuor-name')).data
 		localStorage.setItem('unsolicited-contributor', JSON.stringify(name))
-		commit(types.SET_CONTRIBUTOR, name)
+		commit(types.SET_ADMIN_CONTRIBUTOR, name)
+	},
+	async getContributor({commit}, id) {
+		const contributor = (await Api.ApiAdmin().get(`/api/contributor/${id}`)).data
+		commit(types.SET_CONTRIBUTOR, contributor)
+		return contributor
 	},
 	/**
 	 * PUT
@@ -421,6 +427,7 @@ export default {
 	async updateContributorBio({commit}, payload) {
 		const response = (await Api.ApiAdmin().put(`contributor/${payload.id}`, payload)).data
 		commit(types.UPDATE_CONTRIBUTOR, response.contributor)
+		console.log(response)
 		return response
 	},
 	/**

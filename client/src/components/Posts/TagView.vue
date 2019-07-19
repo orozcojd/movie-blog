@@ -35,7 +35,7 @@
     </v-layout>
     <display-articles 
       v-if="articles.length"
-      :articles="articles.slice(6)"
+      :articles="articles"
     />
     <v-layout
       v-else
@@ -51,7 +51,6 @@
     <v-layout justify-center>
       <v-pagination
         v-model="pageNo"
-      
         :length="pages"
       />
     </v-layout>
@@ -125,6 +124,7 @@ export default {
 		}
 		payload.query = this.tag._id
 		await this.getArticlesByTag(payload)
+		console.log(this.articles)
 	},
 	methods: {
 		...mapActions([

@@ -4,7 +4,7 @@ const AuthenticationController = require('./controllers/AuthenticationController
 const ArticlesController = require('./controllers/ArticlesController');
 const AdminArticleController = require('./controllers/AdminArticleController');
 const TagsController = require('./controllers/TagsController');
-
+const AdminContributorController = require('./controllers/AdminContributorController');
 const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy');
 // const jwt = require('express-jwt');
 // const config = require('./config/config');
@@ -59,6 +59,10 @@ module.exports = (app) => {
 		AuthenticationController.getContributorName);
 	app.get('/contributor/:contributorId',
 		AuthenticationController.getContributor);
+	app.get('/api/contributor/:contributorId',
+		AuthenticationControllerPolicy.authenticateToken,
+		AdminContributorController.getContributor);
+
 	/* Refresh Token */
 	app.post('/tokens',
 		AuthenticationController.refreshToken);

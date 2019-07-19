@@ -13,6 +13,17 @@ import { sync } from 'vuex-router-sync'
 import vueHeadful from 'vue-headful';
 Vue.component('vue-headful', vueHeadful);
 
+// font-awesome icons import
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { dom } from '@fortawesome/fontawesome-svg-core'
+// import { faFacebookSquare } from '@fortawesome/free-solid-svg-icons'
+import { faFacebookSquare, faTwitterSquare, faInstagram } from '@fortawesome/free-brands-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+ 
+dom.watch()
+library.add(faFacebookSquare,faTwitterSquare, faInstagram)
+ 
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 // import colors from 'vuetify/es5/util/colors'
 
