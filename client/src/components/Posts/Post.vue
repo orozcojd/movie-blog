@@ -9,11 +9,12 @@
     />
     <card-view>
       <v-layout justify-start>
-        <v-flex
+        <!-- <v-flex
           xs12
-          md11
-          xl10
-        >
+          md10
+          offset-md1
+        > -->
+        <div class="post-card content-font">
           <!-- <v-card class="post-card content-font">
             <v-card-text>
               <v-layout justify-start>
@@ -84,14 +85,7 @@
               {{ article.imgCred }}
             </p>
           </div>
-        </v-flex>
-      </v-layout>
-      <v-layout justify-start>
-        <v-flex
-          xs12
-          md10
-          xl9
-        >
+ 
           <editor-content
             class="post-body content-font"
             :editor="editor"
@@ -118,7 +112,8 @@
               </li>
             </ul>
           </small>
-        </v-flex>
+        <!-- </v-flex> -->
+        </div>
       </v-layout>
       <!-- </v-card-text>
           </v-card>
@@ -282,6 +277,9 @@ export default {
 }
 .ProseMirror-focused {
 	outline: none !important;
+}
+.post-body {
+  font-size: 21px !important;
 }
 .post-body img {
   width: 100%;
