@@ -2,8 +2,8 @@
 module.exports = {
 	port: process.env.PORT || 8081,
 	db: {
-		database: process.env.DB_NAME || 'mongodb://localhost:27017/personalblog',
-		user: process.DB_USER || 'personalblog',
+		database: process.env.DB_NAME || 'mongodb+srv://jonorozco:<fodbor-gixraJ-popbo9>@cluster0-g74ql.gcp.mongodb.net/test?retryWrites=true&w=majority',
+		user: process.DB_USER || 'jonorozco',
 		password: process.env.DB_PASS || 'personalblog',
 	},
 	authentication: {
