@@ -9,20 +9,7 @@
     />
     <card-view>
       <v-layout justify-start>
-        <!-- <v-flex
-          xs12
-          md10
-          offset-md1
-        > -->
         <div class="post-card content-font">
-          <!-- <v-card class="post-card content-font">
-            <v-card-text>
-              <v-layout justify-start>
-                <v-flex
-                  xs12
-                  md11
-                  xl10
-                > -->
           <div
             align="left"
           >

@@ -7,113 +7,19 @@
     <vue-headful
       :title="headTitle"
     />
-    <!-- <v-layout justify-center>
-      <v-flex
-        xs12
-        sm10
-        xl6
-        offset-md1
-      >
-        <v-card class="post-card">
-          <v-card-text>
-            <v-layout justify-start>
-              <v-flex
-                xs12
-                sm10
-              >
-                <div
-                  align="left"
-                >
-                  <a>
-                    <strong>
-                      {{ upperCaseString(articleRealm) }}
-                    </strong>
-                  </a>
-                </div>
-                <h1
-                  class="post-title"
-                  align="left"
-                >
-                  {{ article.title }}
-                </h1>
-                <br>
-                <strong>
-                  <div
-                    align="left"
-                    class="mb-small"
-                  >
-                    <span>Author: </span>
-                    {{ article.author }}
-                  </div>
-                  <div
-                    align="left"
-                    class="mb-med"
-                  >
-                    {{ articleDate }}
-                  </div>
-                </strong>
-                <div
-                  align="left"
-                >
-                  <v-img
-                    id="post-img"
-                    :src="article.img"
-                    max-height="600"
-                  />
-                  <label
-                    for="post-img"
-                  >
-                    {{ article.imgCred }}
-                  </label>
-                </div>
-              </v-flex>
-            </v-layout>
-            <v-layout justify-start>
-              <v-flex
-                xs12
-                sm10
-                md9
-                lg8
-              >
-                <editor-content
-                  class="post-body"
-                  :editor="editor"
-                  align="left"
-                />
-                <strong>
-                  <ul
-                    v-if="!!article.tags && article.tags.length"
-                    align="left"
-                    class="tag-list"
-                  >
-                    <li
-                      v-for="(tag, index) in article.tags"
-                      :key="index"
-                      class="tag"
-                    >
-                      <a>{{ displayTag(tag) }}</a>
-                    </li>
-                  </ul>
-                </strong>
-              </v-flex>
-            </v-layout>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-    </v-layout> -->
     <card-view>
       <v-layout justify-start>
-        <v-flex
+        <!-- <v-flex
           xs12
           md11
           xl10
-        >
+        > -->
+        <div class="post-card content-font">
           <div
             align="left"
           >
             <a
               class="hover-bold"
-              href="#"
             >
               <small>
                 {{ upperCaseString(articleRealm) }}
@@ -159,14 +65,8 @@
               {{ article.imgCred }}
             </p>
           </div>
-        </v-flex>
-      </v-layout>
-      <v-layout justify-start>
-        <v-flex
-          xs12
-          md10
-          xl9
-        >
+        
+
           <editor-content
             class="post-body content-font"
             :editor="editor"
@@ -189,11 +89,11 @@
                     _id: tag,
                     name: convertTagIdToName(tag)
                   })"
-                >{{ upperCaseString(convertTagIdToName(tag)) }}</a>
+                >{{ upperCaseString(tag.name) }}</a>
               </li>
             </ul>
           </small>
-        </v-flex>
+        </div>
       </v-layout>
     </card-view>
     <v-layout>
@@ -300,13 +200,18 @@ export default {
 	async mounted() {
 		if(Object.keys(this.article).length === 0 && this.article.constructor === Object) {
 			await this.fetchArticle(this.$route.params.id)
+			
 		}
+		
 		await this.setContent()
+		this.prepareArticle()
+		console.log(this.article)
 		this.loaded = true
 	},
 	methods: {
 		...mapActions([
-			'fetchArticle'
+			'fetchArticle',
+			'prepareArticle'
 		]),
 		displayTag(tag) {
 			return tag._id ? this.upperCaseString(this.convertTagIdToName(tag._id)) : this.upperCaseString(this.convertTagIdToName(tag))
@@ -317,7 +222,7 @@ export default {
 		},
 		upperCaseString(str) {
 			if(str !== null && str !== undefined){
-				let strArr = str.split('-')
+				let strArr = str.split(' ')
 				let upperArr = []
 				for(let i = 0; i < strArr.length; i++) {
 					let str = strArr[i]
@@ -338,6 +243,13 @@ export default {
 	}
 }
 </script>
+
+<style scoped>
+  .hover-bold:hover {
+  font-weight: bold;
+}
+</style>
+
 
 <style>
 	@import url('../../assets/style/poststyle.scss');

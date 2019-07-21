@@ -46,16 +46,17 @@
         <v-list-tile
           v-for="(realm, i) in sideNavRealms"
           :key="i"
-          class="nav-tile"
           @click="navigateTo('tag-view', { 
             id: realm.ref_id,
             tagName: realm.name,
           })"
         >
           <v-list-tile-title
+            class="nav-tile"
             v-text="titleCase(realm.name)"
           />
         </v-list-tile>
+
         <v-list-group
           v-if="viewedArticles.length"
           value="true"
@@ -113,21 +114,6 @@
           {{ realm.name }}
         </v-btn>
       </v-toolbar-items>
-      <!-- <v-spacer /> -->
-      <!--
-        <v-btn
-          flat
-          :to="{name:'admin-login'}"
-        >
-          Log In
-        </v-btn>
-        <v-btn
-          flat
-          :to="{name:'admin-register'}"
-        >
-          Sign Up
-        </v-btn>
-    </v-toolbar-items> -->
     </v-toolbar>
     <v-snackbar
       v-model="snackVal"
@@ -272,7 +258,13 @@ export default {
 	}
 }
 </script>
-
+<style>
+  @media(max-width: 280px) {
+    * {
+      font-size: 12px !important;
+    }
+  }
+</style>
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
  .main-title {
@@ -282,9 +274,9 @@ export default {
     cursor:pointer;
     color: black;
   }
-  @media(max-width: 300px) {
+  @media(max-width: 280px) {
     .main-title {
-      font-size: 1.3rem !important;
+      font-size: 1em !important;
     }
   }
 
@@ -292,40 +284,9 @@ export default {
   max-height: 432px;
   overflow: scroll;
 }
-.realm-title {
-  font-size: 1.6rem !important;
+.nav-tile {
+  font-size: 1.4em;
 }
-// .nav-tile {
-//   font-size: 1.8rem;
-// }
-.nav-tile:hover {
-  // background-color: 
-}
-</style>
 
-<style>
-/* @media all and (min-width: 960px) {
-    html, body{
-        font-size: 18px !important;
-    }
-}
- 
-@media all and (max-width: 959px) and (min-width: 600px) {
-    html, body{
-        font-size: 16px !important;
-    }
-}
- 
-@media all and (max-width: 599px) and (min-width: 320px) {
-    html, body{
-        font-size: 12px !important;
-    }
- 
-}
-@media all and (max-width: 320px) {
-    html, body{
-        font-size: 8px !important;
-    }
-} */
 </style>
 

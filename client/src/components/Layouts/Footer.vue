@@ -14,7 +14,7 @@
           tile
           class="indigo lighten-1 white--text text-xs-center"
         >
-          <v-card-text class="main-title">
+          <v-card-text class="main-title footer-title">
             <!-- <v-btn
               v-for="icon in icons"
               :key="icon"
@@ -96,9 +96,9 @@ export default {
     text-decoration: none;
     margin: 0 2rem;
   }
-  /* @media(min-width: 250px) {
-  html {
-    font-size: 12px;
+  @media(max-width: 320px) {
+  .footer-title {
+    font-size: 1em;
   }
-} */
+}
 </style>

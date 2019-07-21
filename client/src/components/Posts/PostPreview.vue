@@ -32,8 +32,8 @@
         </div>
         <br>
       </div>
-      <div class="card-author color-light">
-        <small>{{ article.author.toUpperCase() }}</small>
+      <div class="card-author">
+        <small><strong>{{ article.author.toUpperCase() }}</strong></small>
       </div>
     </v-card-title>
   </v-card>

@@ -1,96 +1,112 @@
 <template>
-  <card-view>
-    <vue-headful
-      :title="headTitle"
-    />
-    <h1 align="left">
-      {{ contributor.name }}
-    </h1>
+  <v-container
+    grid-list-xl
+  >
     <v-layout
       row
       wrap
-    >
+      justify-center
+      class="wrapper"
+    > 
       <v-flex
         xs12
-        md4
       >
-        <v-img
-          :src="contributor.img"
-          max-width="400"
-          max-height="400"
-          position="left"
+        <vue-headful
+          :title="headTitle"
         />
+        <h1 align="left">
+          {{ contributor.name }}
+        </h1>
+        <v-layout
+          row
+          wrap
+        >
+          <v-flex
+            xs12
+            md4
+          >
+            <v-img
+              :src="contributor.img"
+              max-width="400"
+              max-height="400"
+              position="left"
+            />
         
-        <div
-          class="inline-social"
+            <div
+              class="inline-social"
+            >
+              <font-awesome-icon
+                v-if="contributor && contributor.facebook"
+                class="iconHover"
+                :icon="['fab', 'facebook-square']"
+                color="gray"
+                @click="openLink(contributor.facebook)"
+              />
+              <font-awesome-icon
+                v-if="contributor && contributor.twitter" 
+                class="iconHover"
+                :icon="['fab', 'twitter-square']"
+                color="gray"
+                @click="openLink(contributor.twitter)"
+              />
+              <font-awesome-icon
+                v-if="contributor && contributor.instagram" 
+                class="iconHover"
+                :icon="['fab', 'instagram']"
+                color="gray"
+                @click="openLink(contributor.instagram)"
+              />
+            </div>
+          </v-flex>
+          <v-flex
+            xs12
+            md7
+            offset-md1
+          >
+            <p
+              v-for="(p, i) in bio"
+              :key="i"
+              class="about"
+            >
+              {{ p }}
+            </p>
+          </v-flex>
+        </v-layout>
+        <br><br><br>
+        <h1>Contributed Articles</h1>
+        <v-layout
+          v-if="articles.length"
+          row
+          wrap
+          justify-start
+          align-start
         >
-          <font-awesome-icon
-            v-if="contributor && contributor.facebook"
-            class="iconHover"
-            :icon="['fab', 'facebook-square']"
-            color="gray"
-            @click="openLink(contributor.facebook)"
-          />
-          <font-awesome-icon
-            v-if="contributor && contributor.twitter" 
-            class="iconHover"
-            :icon="['fab', 'twitter-square']"
-            color="gray"
-            @click="openLink(contributor.twitter)"
-          />
-          <font-awesome-icon
-            v-if="contributor && contributor.instagram" 
-            class="iconHover"
-            :icon="['fab', 'instagram']"
-            color="gray"
-            @click="openLink(contributor.instagram)"
-          />
-        </div>
-      </v-flex>
-      <v-flex
-        xs12
-        md7
-        offset-md1
-      >
-        <p
-          v-for="(p, i) in bio"
-          :key="i"
-          class="about"
+          <v-flex
+            v-for="article in articles"
+            :key="article.id"
+            sm4
+            xs12
+          >
+            <post-preview
+              :article="article"
+              to="article-view"
+              
+            />
+          </v-flex>
+        </v-layout>
+        <v-layout
+          justify-center
+          class="mt-lg"
         >
-          {{ p }}
-        </p>
+          <v-pagination
+            v-model="pageNo"
+            :length="pages"
+          />
+        </v-layout>
+      <!-- </card-view> -->
       </v-flex>
     </v-layout>
-    <br><br><br>
-    <h1>Contributed Articles</h1>
-    <v-layout
-      v-if="articles.length"
-      row
-      wrap
-      justify-start
-      align-start
-    >
-      <v-flex
-        v-for="article in articles"
-        :key="article.id"
-        lg6
-        xs12
-      >
-        <post-preview
-          class="margin-lg"
-          :article="article"
-          to="article-view"
-          flat
-        />
-      </v-flex>
-    </v-layout>
-    <v-layout justify-center>
-      <v-pagination
-        v-model="pageNo"
-        :length="pages"
-      />
-    </v-layout>
-  </card-view>
+  </v-container>
 </template>
 
 <script>
@@ -190,12 +206,18 @@ export default {
  .iconHover:hover{
    color: indigo;
  }
-.margin-lg {
+.margin-xs {
   margin: 8px
 }
 h1 {
-  font-size: 3em;
+  font-size: 2.5em;
   margin-bottom: 2.5rem;
+}
+
+@media (max-width: 600px){
+  .wrapper {
+    padding: 1em;
+  }
 }
 
 
