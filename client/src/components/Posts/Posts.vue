@@ -93,6 +93,7 @@ export default {
 			}
 		}
 		await this.getArticles(options)
+			.catch(err => console.log(err))
 	},
 	methods: {
 		...mapActions([
@@ -104,52 +105,6 @@ export default {
 
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
-// @import url('../../assets/style/tiptap.scss');
-// Large devices (desktops, less than 1200px)
-  // @media (min-width: 10em) {
-  //   h1 {
-  //     font-size: 0.5em !important;
-  //   }
-  // }
-  // @media (min-width: 25em) {
-  //   h1 {
-  //     font-size: 1em !important;
-  //   }
-  // }
-  // @media (min-width: 40em) {
-  //   h1 {
-  //     font-size: 1.7em !important;
-  //   }
-  // }
-  // @media (min-width: 50em) {
-  //   h1 {
-  //     font-size: 2em !important;
-  //   }
-  // }
-  // @media (min-width: 75em) {
-  //   h1 {
-  //     font-size: 2.5em !important;
-  //   }
-  // }
-  // @media (min-width: 100em) {
-  //   h1 {
-  //     font-size: 3em !important;
-  //   }
-  // }
-  // @media (min-width: 115em) {
-  //   h1 {
-  //     font-size: 4em !important;
-  //   }
-  // }
-  // @media (min-width: 145em) {
-  //   // * {font-size: 1.4em;}
-  //   h1 {
-  //     font-size: 4.6em !important;
-  //   }
-  // }
-  // h1 {
-  //     font-size: 6.75rem !important;
-  //   }
   .content {
     max-width: 1920px
   }

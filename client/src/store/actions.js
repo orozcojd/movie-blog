@@ -38,6 +38,7 @@ export default {
 			const payload = {
 				refreshToken: localStorage.getItem('unsolicited-session-refresh-token')
 			}
+			
 			dispatch('removeRefreshTkn', payload)
 			dispatch('setToken', {
 				token: null,
@@ -48,7 +49,6 @@ export default {
 		})
 	},
 	async passwordReset({commit}, payload) {
-		console.log(payload)
 		const submission = (await Api.ApiGeneral().post('/auth/forgot-password', payload)).data
 		return submission
 	},
@@ -68,7 +68,6 @@ export default {
 	 * @param {*} payload 
 	 */
 	async resetPassword ({commit, dispatch}, payload) {
-		console.log(payload)
 		const response = (await Api.ApiGeneral({
 			headers: { 'Authorization': `Bearer ${payload.token}` }
 		}).post('/auth/reset-password', payload.password)).data
@@ -90,12 +89,10 @@ export default {
 	 * @param {commit} param0 
 	 */
 	getSetToken ({commit, dispatch}) {
-		console.log('getting setting token')
 		const token = localStorage.getItem('unsolicited-session-token')
 		const refreshToken = localStorage.getItem('unsolicited-session-refresh-token')
 		if(refreshToken){
 			dispatch('getSetUser')
-			console.log('inside here')
 			dispatch('getSetContributor')
 			commit(types.SET_TOKEN, {token: token, refreshToken: refreshToken})
 		}
@@ -136,9 +133,16 @@ export default {
 	 * @param {commit} param0 
 	 */
 	async getTags ({commit}, options = {}) {
-		let tags = (await Api.ApiGeneral().get('tags', options)).data
-		commit(types.FETCH_TAGS, tags)
-		return tags
+		// let tags = (await Api.ApiGeneral().get('tags', options)).data
+		await Api.ApiGeneral().get('tags', options)
+			.then(data => {
+				commit(types.FETCH_TAGS, data.data)
+				return data.data
+			}, err => {
+				console.log(err)
+			})
+		// commit(types.FETCH_TAGS, tags)
+		// return tags
 	},
 	/**
 	 * Commits mutation to set state tag object to payload tag
@@ -233,7 +237,6 @@ export default {
 	 * @param {Object} payload 
 	 */
 	async getArticleByContributor({commit}, payload) {
-		// console.log(payload.page)
 		const articles = (await Api.ApiGeneral().get(`articlesByContributor/${payload.query}`, payload.params)).data
 		commit(types.FETCH_BY_CONTRIBUTOR, articles)
 		return articles
@@ -277,10 +280,8 @@ export default {
 		const articles = (await Api.ApiAdmin().get('/api/articles', payload.params)).data		
 		if(payload.params.extend === true) {
 			commit(types.EXTEND_ARTICLES, articles)
-			console.log('extending')
 		}
 		else {
-			console.log('hre')
 			commit(types.FETCH_ARTICLES, articles)
 		}
 		return articles
@@ -356,7 +357,6 @@ export default {
 	async getContributorBio({commit}, id) {
 		const contributor = (await Api.ApiGeneral().get(`contributor/${id}`)).data
 		commit(types.SET_CONTRIBUTOR, contributor)
-		console.log(contributor)
 		return contributor
 	},
 	/**
@@ -427,7 +427,6 @@ export default {
 	async updateContributorBio({commit}, payload) {
 		const response = (await Api.ApiAdmin().put(`contributor/${payload.id}`, payload)).data
 		commit(types.UPDATE_CONTRIBUTOR, response.contributor)
-		console.log(response)
 		return response
 	},
 	/**
