@@ -196,6 +196,7 @@ export default {
 		if(!this.token.token) {
 			await this.getSetToken()		
 		}
+		console.log('after getsettoken')
 		await this.getTags()
 		this.onResize()
 		console.log(this.adminContributor)

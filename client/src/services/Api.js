@@ -7,7 +7,7 @@ export default {
 	ApiGeneral(options={}) {
 		return axios.create({
 			...options,
-			baseURL: `http://localhost:8081/`,
+			baseURL: process.env.ROOT_API,
 			timeout: 60000,
 		})
 	},
@@ -15,7 +15,7 @@ export default {
 		const instance =  axios
 			.create({
 				...options,
-				baseURL: `http://localhost:8081/`,
+				baseURL: process.env.ROOT_API,
 				timeout: 60000,
 				headers: { 'Authorization': AuthGuard.getHeader() }
 			})
@@ -26,11 +26,14 @@ export default {
 			const originalRequest = error.config;
 			let refreshTken = store.getters.getRefeshToken
 			let user = store.getters.getUser
+			if(!error.status) {
+				return Promise.reject(error);
+			}
 			if(!(refreshTken && user)){
 				store.dispatch('logOut')
 				router.push({
-					name: 'admin-login'
-				})
+					name: 'root'
+				})				
 				return Promise.reject(error);
 			}
 			if(error.response.statusText === 'Unauthorized' && error.response.status === 401 && !originalRequest._retry){
@@ -52,17 +55,12 @@ export default {
 					console.log(err)
 					store.dispatch('logOut')
 					router.push({
-						name: 'admin-login'
+						name: 'root'
 					})
 				})
 				return instance(originalRequest)
 			}
 			else {
-				// Do something with response error
-				// store.dispatch('logOut')
-				// router.push({
-				// 	name: 'admin-login'
-				// })
 				return Promise.reject(error)
 			}
 		})
