@@ -4,6 +4,10 @@ const {Post} = require('../models');
 // });
 module.exports = {
 
+
+	root (req, res) {
+		res.send('Hello! You just conneted to the API!');
+	},
 	/**
    * GET REQUEST
    * Tets all posts and limits to 12 posts. send array of articles

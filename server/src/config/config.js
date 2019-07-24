@@ -1,8 +1,9 @@
 /* */
 module.exports = {
-	port: process.env.PORT || 8081,
+	port: process.env.OPENSHIFT_NODEJS_PORT || 8081,
+	serverIp: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
 	db: {
-		database: process.env.DB_NAME || 'mongodb+srv://jonorozco:<fodbor-gixraJ-popbo9>@cluster0-g74ql.gcp.mongodb.net/test?retryWrites=true&w=majority',
+		database: process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost:27017/personalblog',
 		user: process.DB_USER || 'jonorozco',
 		password: process.env.DB_PASS || 'personalblog',
 	},

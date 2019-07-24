@@ -5,7 +5,6 @@ const morgan = require('morgan');
 const config = require('./config/config');
 const mongoose = require('mongoose');
 const passport = require('passport');
-const expressJWT = require('express-jwt');
 // require statements
 require('./models');
 require('./config/passport');
@@ -27,6 +26,8 @@ app.use((req, res, next) => {
 require('./routes')(app);
 mongoose.connect(config.db.database, {
 	useNewUrlParser: true 
-}
-);
-app.listen(config.port);
+})
+	.then(() => {
+		console.log('connected!');
+	}, err => {console.log(err);});
+app.listen(config.port, config.serverIp);

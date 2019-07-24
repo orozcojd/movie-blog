@@ -16,7 +16,8 @@ const AuthenticationControllerPolicy = require('./policies/AuthenticationControl
 
 module.exports = (app) => {
 	
-
+	app.get('/', 
+		ArticlesController.root);
 	app.get('/articles',
 		ArticlesController.index);
 	app.get('/tags',
