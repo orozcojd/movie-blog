@@ -30,4 +30,7 @@ mongoose.connect(config.db.database, {
 	.then(() => {
 		console.log('connected to server.');
 	}, err => {console.log(err);});
+console.log('#### OUTPUT PORT & SERVERIP ####');
+console.log(config.port);
+console.log(config.serverIp);
 app.listen(config.port, config.serverIp);
