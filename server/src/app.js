@@ -33,4 +33,5 @@ mongoose.connect(config.db.database, {
 console.log('#### OUTPUT PORT & SERVERIP ####');
 console.log(config.port);
 console.log(config.serverIp);
+console.log(config.db.database);
 app.listen(config.port, config.serverIp);
