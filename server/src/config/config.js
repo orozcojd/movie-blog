@@ -8,14 +8,14 @@ module.exports = {
 		password: process.env.DB_PASS || 'personalblog',
 	},
 	authentication: {
-		jwtSecret: process.env.JWT_SECRET || 'secret',
+		jwtSecret: process.env.OPENSHIFT_JWT_SECRET || 'secret',
 		tmpUser: process.env.tmpUserName || 'jonathan',
 		tmpPsswrd: process.env.tmpPasswrd || 'password',
-		superUser: process.env.superUser || 1,
-		AdminUser: process.env.adminUser || 2
+		superUser: process.env.OPENSHIFT_SUPER_USER || 1,
+		AdminUser: process.env.OPENSHIFT_ADMIN_USER || 2
 	},
 	nodemailer: {
-		username: process.env.mailerUsername || 'unsolicitedcolumns@gmail.com',
-		pw: process.env.mailerPw || 'hyfdom-6fakCa-guxwuf'
+		username: process.env.OPENSHIFT_MAILER_EMAIL || 'test@gmail.com',
+		pw: process.env.OPENSHIFT_MAILER_PW || null
 	}
 };
