@@ -28,6 +28,6 @@ mongoose.connect(config.db.database, {
 	useNewUrlParser: true 
 })
 	.then(() => {
-		console.log('connected to server!!');
+		console.log('connected to server');
 	}, err => {console.log(err);});
 app.listen(config.port, config.serverIp);
