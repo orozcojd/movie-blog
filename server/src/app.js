@@ -26,9 +26,8 @@ app.use((req, res, next) => {
 require('./routes')(app);
 console.log('before mongoose connect');
 mongoose.connect(config.db.database, {
-	useNewUrlParser: true,
-	user: config.db.user, 
-	pass: config.db.password})
+	useNewUrlParser: true
+})
 	.then(() => {
 		console.log('connected to server.');
 	}, err => {

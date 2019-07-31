@@ -4,8 +4,8 @@ module.exports = {
 	serverIp: process.env.OPENSHIFT_NODEJS_IP || '127.0.0.1',
 	db: {
 		database: process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost:27017/personalblog',
-		user: process.OPENSHIFT_MONGODB_DB_USER || 'jonorozco',
-		password: process.env.OPENSHIFT_MONGODB_DB_PASS || 'personalblog',
+		// user: process.OPENSHIFT_MONGODB_DB_USER || 'jonorozco',
+		// password: process.env.OPENSHIFT_MONGODB_DB_PASS || 'personalblog',
 	},
 	authentication: {
 		jwtSecret: process.env.OPENSHIFT_JWT_SECRET || 'secret',
