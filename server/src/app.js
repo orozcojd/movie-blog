@@ -43,9 +43,6 @@ mongoose.connect(config.db.database, {
 // 		console.log('error connecting to mongodb');
 // 		console.log(err);
 // 	});
-console.log('#### OUTPUT PORT & SERVERIP ####');
-
-console.log(config);
 
 app.listen(config.port, config.serverIp);
 console.log('after listening..');
