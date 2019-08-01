@@ -12,10 +12,8 @@ blockquote::before {
 blockquote {
   width: 75%;
 	color: #999;
-	// border-left: 2px solid #999;
   padding-left: 2em;
   display: inline-block;
-  // margin-bottom: 0;
 	
 }
 .post-body img {
@@ -65,10 +63,8 @@ li[data-type="todo_item"] {
   margin-top: 0.3rem;
   user-select: none;
   -webkit-user-select: none;
-  // cursor: pointer;
   border-radius: 0.2em;
   background-color: transparent;
-  transition: 0.4s background;
 }
 .todo-content {
   flex: 1;
