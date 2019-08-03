@@ -28,7 +28,7 @@ module.exports = {
 	async forgotPassword(req, res) {
 		try {
 			const email = req.body.email;
-			const user = await User.findOneAndUpdate({email: email});
+			const user = await User.findOne({email: email});
 			if(user){
 				const contributor = await Contributor.findById(user.contributorId);
 				user.generatePwToken();

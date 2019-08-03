@@ -18,9 +18,9 @@ module.exports = () => ({
 	associatedArticles: {
 		pageNo: 1,
 		articleIds: [],
-		// maxRelatedReached: false
 	},
 	maxRelatedReached: false,
+	maxArticlesReached: false,
 	unAssociatedArticles: {
 		pageNo: 1,
 		articleIds: [],
@@ -32,6 +32,6 @@ module.exports = () => ({
 	},
 	strings: {
 		title: 'Unsolicited.mp3',
-		
-	}
+	},
+	pagesVisibile: 7
 })

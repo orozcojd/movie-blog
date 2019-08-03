@@ -12,6 +12,17 @@
         :key="index"
         :article="article"
       />
+      <div
+        v-if="busy"
+        class="text-center loading"
+        align="center"
+      >
+        <v-progress-circular
+          :size="50"
+          indeterminate
+          color="purple"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -37,7 +48,8 @@ export default {
 			'associatedArticles',
 			'infiniteArticles',
 			'unAssociatedArticles',
-			'maxRelatedReached'
+			'maxRelatedReached',
+			'maxArticlesReached'
 		]),
 		...mapGetters([
 			'getArticle',
@@ -65,6 +77,7 @@ export default {
 		await this.loadArticle(id)
 		this.loaded = true
 		this.articleViewed()
+		window.scrollTo(0,0);
 	},
 	methods: {
 		...mapActions([
@@ -89,7 +102,7 @@ export default {
 			this.PUSH_VIEWED(viewed)
 		},
 		async loadMore() {
-			if(!this.loaded)
+			if(!this.loaded || this.maxArticlesReached)
 				return
 			this.busy = true
 			if(!this.maxRelatedReached) {
@@ -129,5 +142,8 @@ export default {
 </script>
 
 <style scoped>
-
+	.loading {
+		margin-top: -4em;
+		height: 5em;
+	}
 </style>

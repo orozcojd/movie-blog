@@ -84,13 +84,13 @@
           <v-flex
             v-for="article in articles"
             :key="article.id"
-            sm4
             xs12
+            sm6
+            lg4
           >
             <post-preview
               :article="article"
               to="article-view"
-              
             />
           </v-flex>
         </v-layout>
@@ -101,6 +101,7 @@
           <v-pagination
             v-model="pageNo"
             :length="pages"
+            :total-visible="pagesVisibile"
           />
         </v-layout>
       <!-- </card-view> -->
@@ -128,7 +129,8 @@ export default {
 			'contributor',
 			'articles',
 			'pages',
-			'page'
+			'page',
+			'pagesVisibile'
 		]),
 		bio() {
 			return this.contributor.bio ? this.contributor.bio.split('\n') : ''

@@ -102,10 +102,6 @@
         <!-- </v-flex> -->
         </div>
       </v-layout>
-      <!-- </v-card-text>
-          </v-card>
-        </v-flex>
-      </v-layout> -->
     </card-view>
     <div
       class="after-article"

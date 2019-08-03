@@ -141,6 +141,9 @@ export default {
 			state.infiniteArticles.push(...payload.message)
 			state.unAssociatedArticles.pageNo +=1
 		}
+		else {
+			state.maxArticlesReached = true
+		}
 	},
 	/**
 	 * Resets all Vuex inifinite articles arrays
