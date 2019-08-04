@@ -177,7 +177,6 @@ export default {
 	},
 	async mounted() {
 		await this.getContributor(this.user.contributorId)
-		console.log('after setting contributor')
 	},
 	methods: {
 		...mapActions([

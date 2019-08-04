@@ -9,11 +9,6 @@
     />
     <card-view>
       <v-layout justify-start>
-        <!-- <v-flex
-          xs12
-          md11
-          xl10
-        > -->
         <div class="post-card content-font">
           <div
             align="left"
@@ -59,14 +54,12 @@
             />
           </div>
           <div
-            class="light-contrast mb-med"
+            class="light-contrast neg-marg-xs mb-med"
           >
             <p>
               {{ article.imgCred }}
             </p>
           </div>
-        
-
           <editor-content
             class="post-body content-font"
             :editor="editor"
@@ -111,6 +104,7 @@ import CardView from '@/components/Layouts/CardView'
 import { mapState, mapActions } from 'vuex'
 import ParagraphAlignmentNode from '@/components/Tools/ParagraphAlignment'
 import Iframe from '@/components/Tools/Iframe'
+import captionComment from '@/components/Tools/captionComment'
 import { Editor, EditorContent} from 'tiptap'
 import {
 	Blockquote,
@@ -161,8 +155,9 @@ export default {
 					new Underline(),
 					new History(),
 					new ParagraphAlignmentNode(),
+					new captionComment(),
 					new Iframe()
-				],
+				], 
 				content: ``,
 				editable: false,
 				dropCursor: {
@@ -193,19 +188,15 @@ export default {
 			return (this.article ? date : null)
 		},
 		articleRealm() {
-			console.log(this.article)
 			return (this.article ? this.convertTagIdToName(this.article.realm._id) : null)
 		}
 	},
 	async mounted() {
 		if(Object.keys(this.article).length === 0 && this.article.constructor === Object) {
 			await this.fetchArticle(this.$route.params.id)
-			
 		}
-		
 		await this.setContent()
-		this.prepareArticle()
-		console.log(this.article)
+		await this.prepareArticle()
 		this.loaded = true
 	},
 	methods: {
@@ -238,18 +229,10 @@ export default {
 		},
 		goBack () {
 			this.$router.push({name: 'admin-edit-post'})
-			console.log(this.article)
 		}
 	}
 }
 </script>
-
-<style scoped>
-  .hover-bold:hover {
-  font-weight: bold;
-}
-</style>
-
 
 <style>
 	@import url('../../assets/style/poststyle.scss');

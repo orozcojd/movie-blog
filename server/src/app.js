@@ -24,25 +24,11 @@ app.use((req, res, next) => {
 	next();
 });
 require('./routes')(app);
-console.log('before mongoose connect');
 mongoose.connect(config.db.database, {
 	useNewUrlParser: true
 })
 	.then(() => {
-		console.log('connected to server.');
 	}, err => {
-		console.log('error connecting to mongodb');
 		console.log(err);
 	});
-// mongoose.connect(config.db.database, {
-// 	useNewUrlParser: true 
-// })
-// 	.then(() => {
-// 		console.log('connected to server.');
-// 	}, err => {
-// 		console.log('error connecting to mongodb');
-// 		console.log(err);
-// 	});
-
 app.listen(config.port, config.serverIp);
-console.log('after listening..');

@@ -52,7 +52,6 @@ export default {
 					originalRequest._retry = false
 
 				}).catch((err) => {
-					console.log(err)
 					store.dispatch('logOut')
 					router.push({
 						name: 'root'

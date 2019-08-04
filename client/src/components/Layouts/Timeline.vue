@@ -80,7 +80,6 @@ export default {
 	},
 	methods: {
 		navigateTo (articleId) {
-			console.log('clik')
 			this.$router.push({
 				name: 'article-view',
 				params: { 

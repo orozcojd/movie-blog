@@ -80,10 +80,7 @@ UserSchema.methods.generatePwToken = function() {
 	},
 	config.authentication.jwtSecret);
 	//save token to model
-	console.log('inside generatepwtoken');
 	jwt.verify(token, config.authentication.jwtSecret, (err, decoded) => {
-		console.log(decoded);
-		console.log(err);
 	});
 	this.resetToken = token;
 };

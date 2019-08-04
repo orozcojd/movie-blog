@@ -166,7 +166,6 @@ export default {
 			'siteTitle'
 		]),
 		contributorName() {
-			console.log(this.adminContributor)
 			return this.adminContributor ? this.adminContributor.name : ''
 		},
 		snackVal: {
@@ -196,10 +195,8 @@ export default {
 		if(!this.token.token) {
 			await this.getSetToken()		
 		}
-		console.log('after getsettoken')
 		await this.getTags()
 		this.onResize()
-		console.log(this.adminContributor)
 	},
 	methods: {
 		...mapActions([

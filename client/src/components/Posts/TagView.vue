@@ -124,7 +124,6 @@ export default {
 		}
 		payload.query = this.tag._id
 		await this.getArticlesByTag(payload)
-		console.log(this.articles)
 	},
 	methods: {
 		...mapActions([

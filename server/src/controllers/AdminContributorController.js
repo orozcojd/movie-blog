@@ -13,7 +13,6 @@ module.exports = {
 				res.send(contributorHelpers.stripSocialLinks(contributor));
 			}
 			else {
-				console.log('inside else');
 				res.status(404).send({
 					error: 'The resource is not found'
 				});

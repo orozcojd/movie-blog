@@ -311,7 +311,6 @@ export default {
 		}
 	},
 	async mounted () {
-		// console.log(this.article)
 		let id = this.$route.params.id
 		// if article not found in store, fetch it
 		if(id){
@@ -396,7 +395,6 @@ export default {
 			if (this.requestRunning) {
 				return
 			}
-			
 			// disable cancel button & prevent api from firing after multiple button clicks
 			this.requestRunning = true
 			this.validation.cancelDisabled = true
@@ -432,17 +430,3 @@ export default {
 	}
 }
 </script>
-<style lang="scss">
-@import url('https://fonts.googleapis.com/css?family=Proza+Libre');
-@import url('../../assets/style/tiptap.scss');
-  h1 {
-    // font-size: 4rem;
-    // margin-bottom: 2.5rem;
-	}
-</style>
-<style scoped>
-	img {
-    width: 100%;
-    height: auto;
-  }
-</style>

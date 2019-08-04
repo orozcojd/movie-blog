@@ -66,7 +66,7 @@
             />
           </div>
           <div
-            class="light-contrast mb-med"
+            class="light-contrast mb-med neg-marg-xs"
           >
             <p>
               {{ article.imgCred }}
@@ -99,7 +99,6 @@
               </li>
             </ul>
           </small>
-        <!-- </v-flex> -->
         </div>
       </v-layout>
     </card-view>
@@ -115,6 +114,7 @@ import { mapState, mapMutations } from 'vuex'
 import ParagraphAlignmentNode from '@/components/Tools/ParagraphAlignment'
 import Iframe from '@/components/Tools/Iframe'
 import { Editor, EditorContent} from 'tiptap'
+import captionComment from '@/components/Tools/captionComment'
 import {
 	Blockquote,
 	CodeBlock,
@@ -170,6 +170,7 @@ export default {
 					new Strike(),
 					new Underline(),
 					new History(),
+					new captionComment(),
 					new ParagraphAlignmentNode(),
 					new Iframe()
 				],
@@ -246,38 +247,7 @@ export default {
 	}
 }
 </script>
-
-<style scoped>
-@import url('../../assets/style/poststyle.scss');
-</style>
 <style>
+@import url('../../assets/style/poststyle.scss');
 @import url('../../assets/style/tiptap.scss');
- .content-font {
-  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
-}
- blockquote {
-  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
-}
-.ProseMirror-focused {
-	outline: none !important;
-}
-.post-body {
-  font-size: 21px !important;
-}
-.post-body img {
-  width: 100%;
-  height: auto;
-}
-.hover-bold:hover {
-  font-weight: bold;
-}
-img {
-  margin-bottom: .25em;
-}
-.mt-sm {
-  margin-top: .5em;
-}
-.mb-xs {
-  margin-bottom: .25em;
-}
 </style>

@@ -43,7 +43,6 @@ module.exports = {
 		}
 		catch (err) {
 			let error = 'An error has occured trying to add tags';
-			console.log(err);
 			if(err.code === 11000) {
 				error = 'Tag already exists! Please check existing tag names.';
 			}
@@ -63,7 +62,6 @@ module.exports = {
 	async update (req, res) {
 		try {
 			let tags = req.body;
-			console.log(req.body);
 			let updated = [];
 			for(let i = 0; i< tags.length; i++) {
 				let tag = tags[i];

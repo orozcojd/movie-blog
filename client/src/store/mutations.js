@@ -100,7 +100,6 @@ export default {
 	[types.FETCH_BY_CONTRIBUTOR] (state, payload) {
 		state.articles = payload.message
 		state.pages = payload.pages
-		console.log(payload)
 		if(payload.pageNo) {
 			state.page = payload.pageNo
 		}

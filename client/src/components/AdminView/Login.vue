@@ -107,8 +107,8 @@ export default {
 			alert: false,
 			alertMessage: '',
 			credentials: {
-				email: 'socaljorozco@gmail.com',
-				password: 'password'
+				email: '',
+				password: ''
 			},
 			resetTriggered: false,
 			emailReset: {
@@ -122,7 +122,6 @@ export default {
 		}
 	},
 	mounted() {
-		console.log(this.resetFieldValid)
 	},
 	methods: {
 		...mapActions([

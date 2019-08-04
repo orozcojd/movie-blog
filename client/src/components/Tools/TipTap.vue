@@ -124,7 +124,7 @@
               >
                 <v-icon>format_align_left</v-icon>
               </button>
-              <!-- <button
+              <button
                 :class="{ 'highlight': isActive.paragraph({ textAlign: 'center' }) }"
                 @click.prevent="commands.paragraph({ textAlign: 'center' })"
               >
@@ -135,7 +135,13 @@
                 @click.prevent="commands.paragraph({ textAlign: 'right' })"
               >
                 <v-icon>format_align_right</v-icon>
-              </button> -->
+              </button>
+              <button
+                :class="{ 'highlight': isActive.caption_comment() }"
+                @click.prevent="commands.caption_comment()"
+              >
+                <v-icon>insert_comment</v-icon>
+              </button>
               <button
                 :class="{ 'highlight': isActive.bullet_list() }"
                 @click.prevent="commands.bullet_list"
@@ -215,10 +221,10 @@ import {
 	Image
 } from 'tiptap-extensions'
 import ParagraphAlignmentNode from './ParagraphAlignment'
+import captionComment from './captionComment'
 // import FontIncreaseNode from './FontIncrease.js'
 import { mapActions, mapMutations, mapState } from 'vuex'
 import Iframe from './Iframe'
-
 
 export default {
 	components: {
@@ -249,6 +255,7 @@ export default {
 					new Underline(),
 					new History(),
 					new ParagraphAlignmentNode(),
+					new captionComment(),
 					new Iframe()
 					// new FontIncreaseNode()
 				],
@@ -321,20 +328,11 @@ export default {
 			this.editor.focus()
 		}
 	}
-	// watch: {
-	// 	body(val) {
-	// 		let atags = document.getElementById('content').getElementsByTagName('a')
-	// 		for(let i = 0; i < atags.length; i++) {
-	// 			if(!atags[i].target) {
-	// 				atags[i].target="_blank"
-	// 			}
-	// 		}
-	// 	}
-	// }
 }
 </script>
 
 <style lang="scss">
+@import url('../../assets/style/tiptap.scss');
 .sticky {
   align-self: flex-start;
     position: -webkit-sticky;
