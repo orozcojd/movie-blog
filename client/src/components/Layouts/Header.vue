@@ -4,6 +4,7 @@
       v-model="drawerLeft"
       left
       clipped
+      :disable-resize-watcher="true"
       app
     >
       <v-list>

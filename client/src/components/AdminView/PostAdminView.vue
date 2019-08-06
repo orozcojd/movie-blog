@@ -1,6 +1,7 @@
 <template>
   <v-container
     v-if="loaded"
+    id="post-admin"
     fluid
   >
     <vue-headful
@@ -430,3 +431,9 @@ export default {
 	}
 }
 </script>
+
+<style>
+#post-admin img {
+  max-width: 100%;
+}
+</style>

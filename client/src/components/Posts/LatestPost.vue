@@ -92,19 +92,12 @@ export default {
   justify-content: space-between;
   align-items: flex-start;
 }
-#latest-title {
-  /* max-height:  */
-}
+
 /* remove margins from latest post*/
 h2 {
   margin-top: 0 !important;
 }
-.header {
-  /* margin: 10px; */
-}
-/* .card-description {
-  font-size: 16px;
-} */
+
 .card-header {
   font-size: 2rem;
 }

@@ -1,6 +1,7 @@
 <template>
   <div
     v-if="loaded"
+    id="content-post"
     fluid
   >
     <vue-headful
@@ -250,4 +251,10 @@ export default {
 <style>
 @import url('../../assets/style/poststyle.scss');
 @import url('../../assets/style/tiptap.scss');
+</style>
+<style scoped>
+	a {		
+  color: black;		
+  text-decoration: none;		
+}
 </style>

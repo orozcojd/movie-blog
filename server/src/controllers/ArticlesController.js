@@ -18,6 +18,7 @@ module.exports = {
 	async index (req, res) {
 		try {
 			let options = {};
+			let trimArticle = {};
 			if(req.query.skip)
 				options.skip = parseInt(req.query.skip);
 			if(req.query.limit)
@@ -25,7 +26,9 @@ module.exports = {
 			options.sort = {created_at: 'desc'};
 			let query = {};
 			query.draft = false;
-			const articles = await Post.find(query,{}, options).lean();
+			if(req.query.postPreview)
+				trimArticle = {title: 1, author: 1, img: 1, updatedAt: 1, thumbnailDescription: 1};
+			const articles = await Post.find(query,trimArticle, options).lean();
 			
 			res.send(articles);   
 		}
@@ -36,7 +39,6 @@ module.exports = {
 			});
 		}
 	},
-
 	/**
    * GET REQUEST
    * Gets all posts by tag name (tag) and limits to 12 posts. 
@@ -47,6 +49,7 @@ module.exports = {
 	async articlesByTag (req, res) {
 		try {
 			const size = 12;
+			let trimArticle = {};
 			let pageNo = parseInt(req.query.page);
 			let query = {};
 			pageNo = (pageNo >= 0) ? pageNo : 1;
@@ -54,10 +57,12 @@ module.exports = {
 			query.skip = size * (pageNo - 1);
 			query.limit = size;
 			query.sort = {created_at: 'desc'};
+			if(req.query.postPreview)
+				trimArticle = {title: 1, author: 1, img: 1, thumbnailDescription: 1};
 			const articles = await Post
 				.find({
 					$or: [{tags: req.params.tagName},{realm: req.params.tagName}]
-				}, {}, query).lean();
+				}, trimArticle, query).lean();
 			const response = {
 				'message': articles,
 				'pages': Math.ceil(count/size),
@@ -76,6 +81,7 @@ module.exports = {
 	async articlesByContributor(req, res) {
 		try {
 			const size = 12;
+			let trimArticle = {};
 			let pageNo = parseInt(req.query.page);
 			let query = {};
 			pageNo = (pageNo >= 0) ? pageNo : 1;
@@ -84,10 +90,11 @@ module.exports = {
 			query.skip = size * (pageNo - 1);
 			query.limit = size;
 			query.sort = {created_at: 'desc'};
-
+			if(req.query.postPreview)
+				trimArticle = {title: 1, author: 1, img: 1, thumbnailDescription: 1};
 			const articles = await Post.find({
 				contributorId: req.params.contributorId
-			}, {}, query).lean();
+			}, trimArticle, query).lean();
 
 			const response = {
 				'message': articles,
@@ -153,22 +160,7 @@ module.exports = {
 			});
 		}
 	},
-	// /**
-	//  * 
-	//  * @param {*} req 
-	//  * @param {*} res 
-	//  */
-	// async previews (req, res) {
-	// 	try {
-	// 		console.log('hello');
-	// 	}
-	// 	catch (err) {
-	// 		res.status(400).send({
-	// 			error: 'An error has occured trying to get article previews',
-	// 			details: err
-	// 		});
-	// 	}
-	// },
+
 	/**
    * GET REQUEST BY ID
    * Finds the article by id and sends the reponse if id is valid
@@ -179,7 +171,15 @@ module.exports = {
 	async articlesById (req, res) {
 		try {
 			const article = await Post.findById(req.params.articleId).lean();
-			res.send(article);
+			if(article) {
+				res.send(article);
+			}
+			else {
+				res.status(404).send({
+					error: 'Article was not found.',
+					// message: err
+				});
+			}
 		}
 		catch (err) {
 			res.status(400).send({

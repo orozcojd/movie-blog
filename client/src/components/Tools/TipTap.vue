@@ -340,7 +340,7 @@ export default {
     top: 10px;
     float: right
 }
-img {
-  max-width: 100%;
-}
+// img {
+//   max-width: 100%;
+// }
 </style>

@@ -30,7 +30,7 @@
         <div
           class="date-text"
         >
-          <small>{{ convertDate(article.created_at) }}</small>
+          <small>{{ convertDate(article.updatedAt) }}</small>
         </div>
       </template>
       <template>

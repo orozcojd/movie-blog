@@ -225,8 +225,9 @@ export default {
 	 * @param {String} id 
 	 */
 	async fetchArticle ({commit}, id) {
-		const article = (await Api.ApiGeneral().get(`articles/${id}`)).data
-		commit(types.FETCH_ARTICLE, article)
+		const article = (await Api.ApiGeneral().get(`articles/${id}`))
+		// console.log(article)
+		commit(types.FETCH_ARTICLE, article.data)
 		return article
 	},
 	/**

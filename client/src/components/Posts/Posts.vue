@@ -7,16 +7,6 @@
       :title="siteTitle"
       description="Description from vue-headful"
     />
-    <!-- <v-layout
-      class="main-title"
-      justify-center
-    >
-      <v-flex
-        xs12
-      >
-        <h1>{{ siteTitle }}</h1>
-      </v-flex>
-    </v-layout> -->
     <v-layout
       justify-center
     >
@@ -87,7 +77,8 @@ export default {
 			params: {
 				params: {
 					// skip: 0,
-					limit: 15
+					limit: 15,
+					// postPreview: true
 				},
 				extend: false
 			}

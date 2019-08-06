@@ -123,19 +123,12 @@ export default {
 		async loadArticle (id) {
 		// if article not found in store, fetch it
 			if(id){
-				let article = this.getArticle(id)
-				if(article) {
-					// if article set article state to article found in articles array
-					await this.setSingleArticle(article)
-				}
-				else {
-				// else fetch then set article state
-					await this.fetchArticle(id)
-				}
+				await this.fetchArticle(id)
+					.catch(() => {
+						this.$router.go(-1)
+					})
 			}
-			else {
-				// this.SET_SINGLE_ARTICLE({});
-			}
+
 		}
 	}
 }
