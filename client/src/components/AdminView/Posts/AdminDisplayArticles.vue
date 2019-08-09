@@ -13,7 +13,7 @@
         md4
         xs12
       >
-        <admin-post-preview
+        <tile-preview
           class="post-preview"
           :article="article"
           to="article-view" 
@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import AdminPostPreview from '@/components/AdminView/PostPreview'
+import TilePreview from '@/components/AdminView/Posts/TilePreview'
 
 export default {
 	name: 'DisplayArticles',
 	components: {
-		AdminPostPreview,
+		TilePreview,
 	},
 	props: {
 		articles: {

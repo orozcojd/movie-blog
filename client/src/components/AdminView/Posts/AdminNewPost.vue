@@ -11,7 +11,9 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
-import AdminPostForm from '@/components/AdminView/AdminPostForm'
+import AdminPostForm from '@/components/AdminView/Forms/AdminPostForm'
+import { adminCategories, adminEditPost, adminPostPreview, adminPreviewPost } from '@/constants/types'
+
 export default {
 	name: 'AdminNewPost',
 	components: {
@@ -32,7 +34,7 @@ export default {
 	},
 
 	beforeRouteLeave (to, from, next) {
-		if(to.name === 'admin-new-post-preview' || to.name === 'admin-post-preview' || to.name === 'admin-categories'){
+		if(to.name === adminPreviewPost.name || to.name === adminPostPreview.name || to.name === adminCategories.name){
 			next()
 			return
 		}
@@ -47,7 +49,7 @@ export default {
 		const id = this.$route.params.id
 		await this.getContributorBio(this.user.contributorId)
 		const getArticle = (Object.keys(this.article).length === 0 && this.article.constructor === Object)
-		const postExists = this.$route.name === 'admin-edit-post'
+		const postExists = this.$route.name === adminEditPost.name
 		if(postExists) {
 			this.previewPath = 'admin-post-preview'
 		}

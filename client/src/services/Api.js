@@ -1,9 +1,9 @@
 import axios from 'axios'
-import AuthGuard from '@/components/Authentication/AuthGuard'
+import {getHeader} from '@/Authentication/AuthGuard'
 import store from '@/store/index'
 import router from '@/router'
 
-export default {
+export default {	
 	ApiGeneral(options={}) {
 		return axios.create({
 			...options,
@@ -17,7 +17,7 @@ export default {
 				...options,
 				baseURL: process.env.ROOT_API,
 				timeout: 60000,
-				headers: { 'Authorization': AuthGuard.getHeader() }
+				headers: { 'Authorization': getHeader() }
 			})
 		instance.interceptors.response.use(response => {
 			return response;
@@ -48,7 +48,7 @@ export default {
 						token: token.token,
 						refreshToken: refreshTken
 					})
-					originalRequest.headers['Authorization'] = AuthGuard.getHeader()
+					originalRequest.headers['Authorization'] = getHeader()
 					originalRequest._retry = false
 
 				}).catch((err) => {

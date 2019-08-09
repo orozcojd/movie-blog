@@ -70,6 +70,8 @@
 <script>
 import AdminValidation from '@/components/Tools/AdminMainValidation'
 import { mapActions, mapState, mapGetters } from 'vuex'
+import {adminCategories} from '@/constants/types'
+
 export default {
 	name: 'AdminAddUser',
 	data () {
@@ -120,7 +122,7 @@ export default {
 						this.snackText = `User ${this.user.email} was created.`
 						setTimeout(() => {
 							this.$router.push({
-								name: 'admin-categories'
+								name: adminCategories.name
 							})
 						}, this.snackbar.timeout)
 					})

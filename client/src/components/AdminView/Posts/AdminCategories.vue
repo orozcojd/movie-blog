@@ -44,32 +44,28 @@
 </template>
 
 <script>
-// import AdminCategoryTile from './AdminCategoryTile'
 import { mapState, mapGetters, mapActions } from 'vuex'
-
+import * as types from '@/constants/types'
 export default {
 	name: 'AdminCategories',
-	// components: {
-	// 	AdminCategoryTile
-	// },
 	data () {
 		return {
 			categories: [
 				{
 					title: 'Create Post',
-					to: {name: 'admin-create-post'},
+					to: {name: types.adminCreatePost.name},
 					granted: () => { return true },
 					onEnter: () => { this.setSingleArticle({})}
 				},
 				{
 					title: 'Edit Posts',
-					to: {name: 'admin-edit-posts'},
+					to: {name: types.adminEditPosts.name},
 					granted: () => { return true }
 				},
 				{
 					title: 'Edit Drafts',
 					to: {
-						name: 'admin-edit-drafts',
+						name: types.adminEditDrafts.name,
 						params: {
 							drafts: true
 						}
@@ -79,7 +75,7 @@ export default {
 				{
 					title: 'Edit Contributor Details',
 					to: {
-						name: 'admin-about-contributor',
+						name: types.adminAboutContributor.name,
 						params: {
 							drafts: true
 						}
@@ -88,18 +84,18 @@ export default {
 				},
 				{
 					title: 'Edit Admin Users',
-					to: {name: 'admin-edit-users'},
+					to: {name: types.adminEditUsers.name},
 					granted: () => {return this.permissionGranted}
 				},
 				{
 					title: 'Add Admin User',
-					to: {name: 'admin-add-user'},
+					to: {name: types.addUser.name},
 					granted: () => {return this.permissionGranted}
 				},
 
 				{
 					title: 'Edit Tags',
-					to: {name: 'admin-edit-main'},
+					to: {name: types.adminEditMain.name},
 					granted: () => { return true }
 				}
 			]

@@ -230,6 +230,7 @@
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import AdminMainValidation from '@/components/Tools/AdminMainValidation'
 import FormValidation from '@/components/Tools/FormValidation'
+import {adminCategories} from '@/constants/types'
 
 export default {
 	name: 'AdminEditTags',
@@ -291,7 +292,7 @@ export default {
 		snackVal(val, prev) {
 			if(val === false && prev === true) {
 				this.submitColor = 'undefined'
-				this.$router.push({name: 'admin-categories'})
+				this.$router.push({name: adminCategories.name})
 			}
 		}
 	},

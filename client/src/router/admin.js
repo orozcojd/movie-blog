@@ -1,121 +1,100 @@
-import Login from '@/components/AdminView/Login'
-import Register from '@/components/AdminView/Register'
-import AuthGuard from '@/components/Authentication/AuthGuard'
-import AdminPostForm from '@/components/AdminView/AdminPostForm'
-import AdminNewPost from '@/components/AdminView/AdminNewPost'
-import AdminPosts from '@/components/AdminView/Posts'
+
+import {adminGuard} from '@/Authentication/AuthGuard'
+import AdminPostForm from '@/components/AdminView/Forms/AdminPostForm'
+import AdminNewPost from '@/components/AdminView/Posts/AdminNewPost'
+import AdminPosts from '@/components/AdminView/Posts/Posts'
 import Index from '@/components/AdminView/Index'
-import AdminCategories from '@/components/AdminView/AdminCategories'
-import AdminTagView from '@/components/AdminView/AdminTagView'
-import AddUser from '@/components/AdminView/AddUser'
-import AdminPostPreview from '@/components/AdminView/AdminPostPreview'
-import AdminNewPPreview from '@/components/AdminView/AdminNewPPreview'
-import AboutContributor from '@/components/AdminView/AboutContributor'
-import EditUsers from '@/components/AdminView/EditUsers'
-import PasswordReset from '@/components/AdminView/PasswordReset'
-import store from '@/store'
+import AdminCategories from '@/components/AdminView/Posts/AdminCategories'
+import AdminTagView from '@/components/AdminView/Forms/AdminTagView'
+import AddUser from '@/components/AdminView/Forms/AddUser'
+import AdminPreviewLayout from '@/components/AdminView/Posts/AdminPreviewLayout'
+import AboutContributor from '@/components/AdminView/Forms/AboutContributor'
+import EditUsers from '@/components/AdminView/Forms/EditUsers'
+import * as types from '@/constants/types'
+
 const adminRoutes = [
 	{
 		path: '/admin',
 		component: Index,
 		children: [
 			{
-				path: '',
-				name: 'admin-categories',
+				path: types.adminCategories.path,
+				name: types.adminCategories.name,
 				component: AdminCategories,
-				beforeEnter: AuthGuard.adminGuard()
+				beforeEnter: adminGuard()
 			},
 			{
-				path: 'add-user',
-				name: 'admin-add-user',
+				path: types.addUser.path,
+				name: types.addUser.name,
 				component: AddUser,
-				beforeEnter: AuthGuard.adminGuard()
+				beforeEnter: adminGuard()
 			},
 			{
-				path: 'edit-users',
-				name: 'admin-edit-users',
+				path: types.editUsers.path,
+				name: types.editUsers.name,
 				component: EditUsers,
-				beforeEnter: AuthGuard.adminGuard()
+				beforeEnter: adminGuard()
 			},
+
 			{
-				path: 'login',
-				name: 'admin-login',
-				component: Login,
-				canReuse: false,
-				beforeEnter: AuthGuard.loggedInRedirect()
-			},
-			{
-				path: 'password-reset',
-				name: 'admin-pass-reset',
-				component: PasswordReset,
-				canReuse: false,
-				beforeEnter: AuthGuard.loggedInRedirect()
-			},
-			{
-				path: 'register',
-				name: 'admin-register',
-				component: Register,
-				// beforeEnter: AuthGuard.adminGuard()
-			},
-			{
-				path: 'article/:id',
-				name: 'admin-article-view',
+				path: types.adminArticleView.path,
+				name: types.adminArticleView.name,
 				component: AdminPostForm,
-				beforeEnter: AuthGuard.adminGuard()
+				beforeEnter: adminGuard()
 			},
 			{
-				path: 'create-post',
-				name: 'admin-create-post',
+				path: types.adminCreatePost.path,
+				name: types.adminCreatePost.name,
 				component: AdminNewPost,
-				beforeEnter: AuthGuard.adminGuard()
+				beforeEnter: adminGuard()
 			},
 			{
-				path: 'edit-post/:id',
-				name: 'admin-edit-post',
+				path: types.adminEditPost.path,
+				name: types.adminEditPost.name,
 				props: true,
 				component: AdminNewPost,
-				beforeEnter: AuthGuard.adminGuard()
+				beforeEnter: adminGuard()
 			},
 			{
-				path: 'edit-posts',
-				name: 'admin-edit-posts',
+				path: types.adminEditPosts.path,
+				name: types.adminEditPosts.name,
 				component: AdminPosts,
 				props: { drafts: false },
-				beforeEnter: AuthGuard.adminGuard()
+				beforeEnter: adminGuard()
 			},
 			{
-				path: 'edit-drafts',
-				name: 'admin-edit-drafts',
+				path: types.adminEditDrafts.path,
+				name: types.adminEditDrafts.name,
 				component: AdminPosts,
 				props: { drafts: true },
-				beforeEnter: AuthGuard.adminGuard()
+				beforeEnter: adminGuard()
 			},
 			{
-				path: 'edit-main',
-				name: 'admin-edit-main',
+				path: types.adminEditMain.path,
+				name: types.adminEditMain.name,
 				component: AdminTagView,
-				beforeEnter: AuthGuard.adminGuard()
+				beforeEnter: adminGuard()
 			},
 			{
-				path: 'preview-post/:id',
-				name: 'admin-post-preview',
+				path: types.adminPostPreview.path,
+				name: types.adminPostPreview.name,
 				props: true,
-				component: AdminNewPPreview,
-				beforeEnter: AuthGuard.adminGuard()
+				component: AdminPreviewLayout,
+				beforeEnter: adminGuard()
 			},
 			{
-				path: 'preview-post',
-				name: 'admin-new-post-preview',
+				path: types.adminPreviewPost.path,
+				name: types.adminPreviewPost.name,
 				props: true,
-				component: AdminNewPPreview,
-				beforeEnter: AuthGuard.adminGuard()
+				component: AdminPreviewLayout,
+				beforeEnter: adminGuard()
 			},
 			{
-				path: 'about-contributor',
-				name: 'admin-about-contributor',
+				path: types.adminAboutContributor.path,
+				name: types.adminAboutContributor.name,
 				props: true,
 				component: AboutContributor,
-				beforeEnter: AuthGuard.adminGuard()
+				beforeEnter: adminGuard()
 			}
 		]
 	}

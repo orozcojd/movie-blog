@@ -1,6 +1,6 @@
 <template>
   <div v-if="loaded">
-    <admin-post-preview
+    <admin-preview
       :new-post="true"
     />
   </div>
@@ -8,11 +8,11 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import AdminPostPreview from '@/components/AdminView/AdminPostPreview'
+import AdminPreview from '@/components/AdminView/Posts/AdminPreview'
 export default {
-	name: 'AdminNewPPreview',
+	name: 'AdminPreviewLayout',
 	components: {
-		AdminPostPreview
+		AdminPreview
 	},
 	data () {
 		return {

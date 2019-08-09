@@ -1,6 +1,5 @@
 <template>
   <v-container
-    v-if="loaded"
     id="post-admin"
     fluid
   >
@@ -91,7 +90,7 @@
             small-chips
             deletable-chips
           />
-          <tip-tap 
+          <tip-tap
             align="left"
             class="editor"
           />
@@ -149,11 +148,23 @@ import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
 import TipTap from '@/components/Tools/TipTap'
 import Article from '@/Model/Article'
 import FormValidation from '@/components/Tools/FormValidation'
+import {adminCategories} from '@/constants/types'
+
 export default {
 
 	name: 'AdminPostForm',
 	components: {
 		TipTap
+	},
+	props: {
+		newpost: {
+			type: Boolean,
+			required: true
+		},
+		previewPath: {
+			type: String,
+			required: true
+		}
 	},
 	data () {
 		return {
@@ -165,7 +176,6 @@ export default {
 			descriptionRules: FormValidation.descriptionRules,
 			imageRules: FormValidation.imageRules,
 			realmRules: FormValidation.realmRules,
-			loaded: false,
 			requestRunning: false,
 			validation: {
 				draft: 'undefined',
@@ -307,43 +317,21 @@ export default {
 		snackVal(val, prev) {
 			if(val === false && prev === true) {
 				this.submitColor = 'undefined'
-				// this.$router.push({name: 'admin-categories'})
 			}
 		}
 	},
 	async mounted () {
-		let id = this.$route.params.id
-		// if article not found in store, fetch it
-		if(id){
-			if((Object.keys(this.article).length === 0 && this.article.constructor === Object) || this.article._id !== id) {
-				// if article set article state to article found in articles array
-				// this.setSingleArticle(this.article)
-				await this.fetchArticleApi(id).catch(err => {
-					this.setSnackbar({
-						type: 'text',
-						value: err.response.data.error,
-						show: true
-					})
-					// this.$router.push({
-					// 	name: 'admin-categories'
-					// })
-				})
-			}
-		}
-		else {
-			this.SET_SINGLE_ARTICLE({});
-		}
-		this.prepareArticle()
-		await this.getContributorBio(this.user.contributorId)
-		this.loaded = true
+		console.log(this.previewPath)
 	},
 	methods: {
 		validate (btnType) {
 			if (this.$refs.form.validate()) {
+				console.log('valid')
 				/* if validation is approved */
 				this.submit(btnType)
 			}
 			else {
+				console.log("HERE")
 				this.validation[btnType] = 'error'
 				setTimeout(() => {
 					this.validation[btnType] = 'undefined'
@@ -360,26 +348,22 @@ export default {
 			,'REMOVE_POST_TAG'
 		]),
 		...mapActions([
+			'prepareArticle',
+			'fetchArticleApi',
 			'updateArticle',
 			'postArticle',
-			'fetchArticleApi',
-			'setSingleArticle',
-			'prepareArticle',
 			'setSnackbar',
-			'getContributorBio'
 		]),
 		cancel () {
 			this.$router.push({
-				name: 'admin-categories'
+				name: adminCategories.name
 			})
 		},
 		previewPost () {
-			console.log(this.article)
 			this.$router.push({
-				name: 'admin-post-preview',
+				name: this.previewPath,
 				params: {
 					article: this.article,
-					id: 1
 				}
 			})
 		},
@@ -395,12 +379,16 @@ export default {
 				this.validation[btnType] = 'success'
 			setTimeout(() => {
 				this.validation[btnType] = 'undefined'
+				this.$router.push({
+					name: adminCategories.name
+				})
 			}, this.snackbar.timeout)
 		},
 		async submit (btnType) {
 			if (this.requestRunning) {
 				return
 			}
+			
 			// disable cancel button & prevent api from firing after multiple button clicks
 			this.requestRunning = true
 			this.validation.cancelDisabled = true
@@ -415,9 +403,6 @@ export default {
 					})
 					.catch(err => {
 						this.submitCallback(err.response.data.error, btnType, true)
-						// this.$router.push({
-						// 	name: 'admin-categories'
-						// })
 					})
 			} else {
 				await this.postArticle({...new Article({
@@ -432,6 +417,7 @@ export default {
 						this.submitCallback(err.response.data.error, btnType, true)
 					})
 			}
+			this.requestRunning = false
 		}
 	}
 }

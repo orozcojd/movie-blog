@@ -74,6 +74,7 @@
 import FormValidation from '@/components/Tools/FormValidation'
 import { mapActions, mapState } from 'vuex'
 import Contributor from '@/Model/Contributor'
+import {adminCategories} from '@/constants/types'
 
 export default {
 	name: 'AboutContributor',
@@ -171,7 +172,7 @@ export default {
 		snackVal(val, prev) {
 			if(val === false && prev === true) {
 				this.submitColor = 'undefined'
-				this.$router.push({name: 'admin-categories'})
+				this.$router.push({name: adminCategories.name})
 			}
 		}
 	},

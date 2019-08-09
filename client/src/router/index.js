@@ -5,10 +5,11 @@ import Router from 'vue-router'
 
 import postRoutes from './posts'
 import adminRoutes from './admin'
+import authRoutes from './auth'
 
 Vue.use(Router)
 
-let routes = postRoutes.concat(adminRoutes)
+let routes = postRoutes.concat(adminRoutes).concat(authRoutes)
 export default new Router({
 	routes
 })

@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import AdminDisplayArticles from '@/components/AdminView/AdminDisplayArticles'
+import AdminDisplayArticles from '@/components/AdminView/Posts/AdminDisplayArticles'
 import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {

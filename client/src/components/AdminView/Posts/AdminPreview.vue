@@ -105,7 +105,8 @@ import { mapState } from 'vuex'
 import ParagraphAlignmentNode from '@/components/Tools/ParagraphAlignment'
 import Iframe from '@/components/Tools/Iframe'
 import captionComment from '@/components/Tools/captionComment'
-import { Editor, EditorContent} from 'tiptap'
+import { Editor, EditorContent } from 'tiptap'
+import { adminCreatePost, adminEditPost } from '@/constants/types'
 import {
 	Blockquote,
 	CodeBlock,
@@ -228,10 +229,10 @@ export default {
 		},
 		goBack () {
 			if(!this.$route.params.id) {
-				this.$router.push({name: 'admin-create-post'})
+				this.$router.push({name: adminCreatePost.name})
 			}
 			else {
-				this.$router.push({name: 'admin-edit-post'})
+				this.$router.push({name: adminEditPost.name})
 			}
 		}
 	}
@@ -239,6 +240,6 @@ export default {
 </script>
 
 <style>
-	@import url('../../assets/style/poststyle.scss');
-	@import url('../../assets/style/tiptap.scss');
+	@import url('../../../assets/style/poststyle.scss');
+	@import url('../../../assets/style/tiptap.scss');
 </style>
