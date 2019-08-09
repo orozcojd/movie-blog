@@ -166,13 +166,15 @@ export default {
 	 */
 	[types.NEW_ARTICLE] (state) {
 		// copy realm object
-		if(Object.keys(state.article).length === 0 && state.article.constructor === Object){
-			return
-		}
-		else if(state.article.realm._id) {
-			return
-		}
+		
+		// if(Object.keys(state.article).length === 0 && state.article.constructor === Object){
+		// 	return
+		// }
+		// else if(state.article.realm._id) {
+		// 	return
+		// }
 		let found = state.tags.find(tag => tag._id === state.article.realm)
+		console.log(found)
 		let realmObj = {}
 		if(!!found && found !== -1) {
 			realmObj._id = found._id

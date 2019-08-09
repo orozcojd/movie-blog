@@ -48,9 +48,11 @@
             class="mb-xs"
           >
             <v-img
+              v-if="article.img && !failedImage"
               id="post-img"
-              :src="article.img"
+              :src="cImage"
               max-height="600"
+              @error="onImgError"
             />
           </div>
           <div
@@ -101,7 +103,7 @@
 
 <script>
 import CardView from '@/components/Layouts/CardView'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import ParagraphAlignmentNode from '@/components/Tools/ParagraphAlignment'
 import Iframe from '@/components/Tools/Iframe'
 import captionComment from '@/components/Tools/captionComment'
@@ -132,14 +134,10 @@ export default {
 		EditorContent,
 		CardView
 	},
-	props: {
-		newPost: {
-			type: Boolean,
-		}
-	},
 	data () {
 		return {
 			loaded: false,
+			failedImage: false,
 			editor: new Editor({
 				extensions: [
 					new Image(),
@@ -177,7 +175,9 @@ export default {
 			'tags',
 			'article'
 		]),
-
+		cImage() {
+			return this.onImgError ? null : this.article.img
+		},
 		headTitle() {
 			return this.article.title ? `Admin Preview - ${this.article.title}` : 'Admin Create Article - Unsolocited.mp3'
 		},
@@ -198,11 +198,27 @@ export default {
 		}
 	},
 	async mounted() {
-		await this.setContent()
+		console.log(this.article)
+		if(Object.keys(this.article).length === 0 && this.article.constructor === Object) {
+			await this.fetchArticle(this.$route.params.id)
+				.then(async () => {
+					await this.setContent()
+					await this.prepareArticle()
+				})
+				.catch((err) => {
+					console.log(err)
+				})
+		}
 		this.loaded = true
-		console.log(this.$route)
 	},
 	methods: {
+		...mapActions([
+			'fetchArticle',
+			'prepareArticle'
+		]),
+		onImgError() {
+			this.failedImage = true
+		},
 		displayTag(tag) {
 			return tag._id ? this.upperCaseString(this.convertTagIdToName(tag._id)) : this.upperCaseString(this.convertTagIdToName(tag))
 		},
@@ -227,12 +243,8 @@ export default {
 			await this.editor.setContent(this.article.body, true)
 		},
 		goBack () {
-			if(!this.$route.params.id) {
-				this.$router.push({name: 'admin-create-post'})
-			}
-			else {
-				this.$router.push({name: 'admin-edit-post'})
-			}
+			console.log(this.$route)
+			this.$router.push({name: 'admin-edit-post'})
 		}
 	}
 }

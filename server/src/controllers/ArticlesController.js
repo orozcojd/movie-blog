@@ -4,7 +4,6 @@ const {Post} = require('../models');
 // });
 module.exports = {
 
-
 	root (req, res) {
 		res.send('Hello! You just conneted to the API!');
 	},
@@ -67,7 +66,6 @@ module.exports = {
 				'message': articles,
 				'pages': Math.ceil(count/size),
 				'pageNo': pageNo
-
 			};
 			res.send(response);
 		}

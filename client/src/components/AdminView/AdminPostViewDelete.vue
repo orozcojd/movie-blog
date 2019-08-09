@@ -151,7 +151,7 @@ import Article from '@/Model/Article'
 import FormValidation from '@/components/Tools/FormValidation'
 export default {
 
-	name: 'PostAdminView',
+	name: 'AdminPostForm',
 	components: {
 		TipTap
 	},
@@ -307,7 +307,7 @@ export default {
 		snackVal(val, prev) {
 			if(val === false && prev === true) {
 				this.submitColor = 'undefined'
-				this.$router.push({name: 'admin-categories'})
+				// this.$router.push({name: 'admin-categories'})
 			}
 		}
 	},
@@ -324,9 +324,9 @@ export default {
 						value: err.response.data.error,
 						show: true
 					})
-					this.$router.push({
-						name: 'admin-categories'
-					})
+					// this.$router.push({
+					// 	name: 'admin-categories'
+					// })
 				})
 			}
 		}
@@ -374,10 +374,12 @@ export default {
 			})
 		},
 		previewPost () {
+			console.log(this.article)
 			this.$router.push({
 				name: 'admin-post-preview',
 				params: {
-					article: this.article
+					article: this.article,
+					id: 1
 				}
 			})
 		},
@@ -391,6 +393,9 @@ export default {
 				this.validation[btnType] = 'error'
 			else
 				this.validation[btnType] = 'success'
+			setTimeout(() => {
+				this.validation[btnType] = 'undefined'
+			}, this.snackbar.timeout)
 		},
 		async submit (btnType) {
 			if (this.requestRunning) {
@@ -410,9 +415,9 @@ export default {
 					})
 					.catch(err => {
 						this.submitCallback(err.response.data.error, btnType, true)
-						this.$router.push({
-							name: 'admin-categories'
-						})
+						// this.$router.push({
+						// 	name: 'admin-categories'
+						// })
 					})
 			} else {
 				await this.postArticle({...new Article({

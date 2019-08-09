@@ -30,7 +30,9 @@ let articleSchema = new Schema({
 	},
 	img: {
 		type: String,
-		required: true
+		required: true,
+		trim: true,
+		minlength: 1
 	},
 	imgCred: String,
 	thumbnailDescription: String,

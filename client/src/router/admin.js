@@ -1,17 +1,19 @@
 import Login from '@/components/AdminView/Login'
 import Register from '@/components/AdminView/Register'
 import AuthGuard from '@/components/Authentication/AuthGuard'
-import PostAdminView from '@/components/AdminView/PostAdminView'
+import AdminPostForm from '@/components/AdminView/AdminPostForm'
+import AdminNewPost from '@/components/AdminView/AdminNewPost'
 import AdminPosts from '@/components/AdminView/Posts'
 import Index from '@/components/AdminView/Index'
 import AdminCategories from '@/components/AdminView/AdminCategories'
 import AdminTagView from '@/components/AdminView/AdminTagView'
 import AddUser from '@/components/AdminView/AddUser'
 import AdminPostPreview from '@/components/AdminView/AdminPostPreview'
+import AdminNewPPreview from '@/components/AdminView/AdminNewPPreview'
 import AboutContributor from '@/components/AdminView/AboutContributor'
 import EditUsers from '@/components/AdminView/EditUsers'
 import PasswordReset from '@/components/AdminView/PasswordReset'
-
+import store from '@/store'
 const adminRoutes = [
 	{
 		path: '/admin',
@@ -58,19 +60,20 @@ const adminRoutes = [
 			{
 				path: 'article/:id',
 				name: 'admin-article-view',
-				component: PostAdminView,
+				component: AdminPostForm,
 				beforeEnter: AuthGuard.adminGuard()
 			},
 			{
 				path: 'create-post',
 				name: 'admin-create-post',
-				component: PostAdminView,
+				component: AdminNewPost,
 				beforeEnter: AuthGuard.adminGuard()
 			},
 			{
 				path: 'edit-post/:id',
 				name: 'admin-edit-post',
-				component: PostAdminView,
+				props: true,
+				component: AdminNewPost,
 				beforeEnter: AuthGuard.adminGuard()
 			},
 			{
@@ -97,7 +100,14 @@ const adminRoutes = [
 				path: 'preview-post/:id',
 				name: 'admin-post-preview',
 				props: true,
-				component: AdminPostPreview,
+				component: AdminNewPPreview,
+				beforeEnter: AuthGuard.adminGuard()
+			},
+			{
+				path: 'preview-post',
+				name: 'admin-new-post-preview',
+				props: true,
+				component: AdminNewPPreview,
 				beforeEnter: AuthGuard.adminGuard()
 			},
 			{

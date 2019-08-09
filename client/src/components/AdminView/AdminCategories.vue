@@ -32,7 +32,7 @@
               flat
               color="orange"
               :ripple="false"
-              :to="category.to"
+              @click="navigateTo(category)"
             >
               View
             </v-btn>
@@ -45,7 +45,7 @@
 
 <script>
 // import AdminCategoryTile from './AdminCategoryTile'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 
 export default {
 	name: 'AdminCategories',
@@ -58,7 +58,8 @@ export default {
 				{
 					title: 'Create Post',
 					to: {name: 'admin-create-post'},
-					granted: () => { return true }
+					granted: () => { return true },
+					onEnter: () => { this.setSingleArticle({})}
 				},
 				{
 					title: 'Edit Posts',
@@ -121,6 +122,15 @@ export default {
 		},
 		permissionGranted() {
 			return !!this.user && this.user.permission === 1
+		}
+	},
+	methods: {
+		...mapActions(['setSingleArticle']),
+		navigateTo(category) {
+			if(category.onEnter) {
+				category.onEnter()
+			}
+			this.$router.push(category.to)
 		}
 	}
 }
