@@ -16,7 +16,6 @@ let refreshTokens = [];
 // }).remove().exec();
 
 
-
 module.exports = {
 	/**
 	 * POST
@@ -321,26 +320,28 @@ module.exports = {
 	 * @param {Object} res 
 	 */
 	login (req, res) {
-		// console.log('inside login');
+		if(!req.body.email.trim() || !req.body.password.trim()) {
+			return res.status(403).send({
+				message: 'Please enter valid credentials'
+			});
+		}
 		passport.authenticate('local', (err, user, info) => {			
 			if (err) {
-				// console.log('ERROR IN LOGIN');
-				res.status(404).json(err);
-				return;
+				return res.status(404).json(err);
 			}
 			if (user) {
 				// console.log(user);
 				const token = user.generateToken();
 				const refreshToken = randomToken.uid(256);
 				refreshTokens[refreshToken] = user.email;
-				console.log(refreshTokens);
 				res.status(200).send({
 					'token': token,
 					'refreshToken': refreshToken,
 					'user': {_id: user._id, email: user.email, contributorId: user.contributorId, permission: user.permission}
 				});
 			} else {
-				// console.log('ANOTHER ERROR');
+				console.log('ANOTHER ERROR');
+				console.log(info);
 				res.status(401).json(info);
 			}
 		})(req, res);

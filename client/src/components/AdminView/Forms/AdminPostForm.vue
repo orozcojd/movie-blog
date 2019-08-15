@@ -126,15 +126,7 @@
                 Submit
               </v-btn>
             </v-flex>
-            <v-flex>
-              <div align="right">
-                <v-btn
-                  @click="previewPost"
-                >
-                  Preview
-                </v-btn>
-              </div>
-            </v-flex>
+            <slot />
           </v-layout>
           <br>
         </v-form>
@@ -144,27 +136,16 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import TipTap from '@/components/Tools/TipTap'
-import Article from '@/Model/Article'
 import FormValidation from '@/components/Tools/FormValidation'
 import {adminCategories} from '@/constants/types'
-
+import Article from '@/Model/Article'
 export default {
 
 	name: 'AdminPostForm',
 	components: {
 		TipTap
-	},
-	props: {
-		newpost: {
-			type: Boolean,
-			required: true
-		},
-		previewPath: {
-			type: String,
-			required: true
-		}
 	},
 	data () {
 		return {
@@ -180,7 +161,7 @@ export default {
 			validation: {
 				draft: 'undefined',
 				submit: 'undefined',
-				cancelDisabled: false,
+				cancelDisabled: false
 			},
 		}
 	},
@@ -192,9 +173,6 @@ export default {
 			user: 'user',
 			contributor: 'contributor'
 		}),
-		...mapGetters([
-			'getArticle'		
-		]),
 		headTitle() {
 			return this.article.title ? `Admin Edit - ${this.article.title}` : 'Admin Create Article - Unsolocited.mp3'
 		},
@@ -320,24 +298,12 @@ export default {
 			}
 		}
 	},
-	async mounted () {
-		console.log(this.previewPath)
-	},
 	methods: {
-		validate (btnType) {
-			if (this.$refs.form.validate()) {
-				console.log('valid')
-				/* if validation is approved */
-				this.submit(btnType)
-			}
-			else {
-				console.log("HERE")
-				this.validation[btnType] = 'error'
-				setTimeout(() => {
-					this.validation[btnType] = 'undefined'
-				}, 2000)				
-			}
-		},
+		...mapActions([
+			'updateArticle',
+			'postArticle',
+			'setSnackbar',
+		]),
 		disableRealm (name) {
 			if(!!name.name && !!this.realm && name._id === this.realm._id)
 				return true
@@ -347,48 +313,22 @@ export default {
 			'SET_SINGLE_ARTICLE'
 			,'REMOVE_POST_TAG'
 		]),
-		...mapActions([
-			'prepareArticle',
-			'fetchArticleApi',
-			'updateArticle',
-			'postArticle',
-			'setSnackbar',
-		]),
-		cancel () {
-			this.$router.push({
-				name: adminCategories.name
-			})
-		},
-		previewPost () {
-			this.$router.push({
-				name: this.previewPath,
-				params: {
-					article: this.article,
-				}
-			})
-		},
-		submitCallback(message, btnType, fail = false) {
-			this.setSnackbar({
-				type: 'text',
-				value: message,
-				show: true
-			})
-			if(fail)
+		validate (btnType) {
+			if (this.$refs.form.validate()) {
+				/* if validation is approved */
+				this.submit(btnType)
+			}
+			else {
 				this.validation[btnType] = 'error'
-			else
-				this.validation[btnType] = 'success'
-			setTimeout(() => {
-				this.validation[btnType] = 'undefined'
-				this.$router.push({
-					name: adminCategories.name
-				})
-			}, this.snackbar.timeout)
+				setTimeout(() => {
+					this.validation[btnType] = 'undefined'
+				}, 2000)				
+			}
 		},
 		async submit (btnType) {
 			if (this.requestRunning) {
 				return
 			}
-			
 			// disable cancel button & prevent api from firing after multiple button clicks
 			this.requestRunning = true
 			this.validation.cancelDisabled = true
@@ -418,7 +358,29 @@ export default {
 					})
 			}
 			this.requestRunning = false
-		}
+		},
+		submitCallback(message, btnType, fail = false) {
+			this.setSnackbar({
+				type: 'text',
+				value: message,
+				show: true
+			})
+			if(fail)
+				this.validation[btnType] = 'error'
+			else
+				this.validation[btnType] = 'success'
+			setTimeout(() => {
+				this.validation[btnType] = 'undefined'
+				this.$router.push({
+					name: adminCategories.name
+				})
+			}, this.snackbar.timeout)
+		},
+		cancel () {
+			this.$router.push({
+				name: adminCategories.name
+			})
+		},
 	}
 }
 </script>

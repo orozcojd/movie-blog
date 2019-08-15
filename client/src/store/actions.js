@@ -194,6 +194,15 @@ export default {
 
 	},
 	/**
+	 * Commits mutation to set state article to
+	 * equal to payload
+	 * @param {commit} param0 
+	 * @param {Object} payload 
+	 */
+	setArticle ({commit}, payload) {
+		commit(types.SET_ARTICLE, payload)
+	},
+	/**
 	 * Commits mutation to convert state article tags & realms
 	 * from names to IDs
 	 * @param {commit} param0 
@@ -237,7 +246,7 @@ export default {
 	 * @param {commit} param0 
 	 * @param {Object} payload 
 	 */
-	async getArticleByContributor({commit}, payload) {
+	async fetchArticleByContributor({commit}, payload) {
 		const articles = (await Api.ApiGeneral().get(`articlesByContributor/${payload.query}`, payload.params)).data
 		commit(types.FETCH_BY_CONTRIBUTOR, articles)
 		return articles
@@ -261,7 +270,7 @@ export default {
 	 * set state articles array to retrieved articles
 	 * @param {commit} param0 
 	 */
-	async getArticles ({commit}, payload) {
+	async fetchArticles ({commit}, payload) {
 		const articles = (await Api.ApiAdmin().get('/articles', payload.params)).data		
 		if(payload.params.extend === true) {
 			commit(types.EXTEND_ARTICLES, articles)
@@ -277,7 +286,7 @@ export default {
 	 * set state articles array to retrieved articles
 	 * @param {commit} param0 
 	 */
-	async getArticlesApi ({commit}, payload) {
+	async fetchArticlesApi ({commit}, payload) {
 		const articles = (await Api.ApiAdmin().get('/api/articles', payload.params)).data		
 		if(payload.params.extend === true) {
 			commit(types.EXTEND_ARTICLES, articles)

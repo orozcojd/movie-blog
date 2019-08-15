@@ -84,7 +84,7 @@ export default {
 				},
 				{
 					title: 'Edit Admin Users',
-					to: {name: types.adminEditUsers.name},
+					to: {name: types.editUsers.name},
 					granted: () => {return this.permissionGranted}
 				},
 				{

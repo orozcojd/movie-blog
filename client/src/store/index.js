@@ -8,7 +8,7 @@ import mutations from '@/store/mutations'
 Vue.use(Vuex)
 
 const createStore = new Vuex.Store({
-	strict: true,
+	strict: process.env.NODE_ENV !== 'production',
 	state,
 	getters,
 	actions,

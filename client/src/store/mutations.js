@@ -160,6 +160,14 @@ export default {
 		}
 	},
 	/**
+	 * Sets state article to payload
+	 * @param {Vuex state} state 
+	 * @param {Object} payload 
+	 */
+	[types.SET_ARTICLE] (state, payload) {
+		state.article = payload
+	},
+	/**
 	 * Maps state article tags & realms to corresponding IDs
 	 * TODO: refactor code export copies to tools
 	 * @param {Vuex state} state 
@@ -174,7 +182,6 @@ export default {
 		// 	return
 		// }
 		let found = state.tags.find(tag => tag._id === state.article.realm)
-		console.log(found)
 		let realmObj = {}
 		if(!!found && found !== -1) {
 			realmObj._id = found._id
@@ -184,7 +191,7 @@ export default {
 		state.article.realm = realmObj
 		// copy tags objects
 		found = state.tags.filter(function(tag) {
-			return this.indexOf(tag._id) >= 0;
+			return this.indexOf(tag._id) >= 0 ;
 		},state.article.tags)
 		let copiedTags = []
 		for(let i = 0; i < found.length; i++) {
@@ -196,6 +203,7 @@ export default {
 			copiedTags.push(tmp)
 		}
 		state.article.tags = copiedTags
+		console.log(state.article)
 	},
 	[types.MAX_RELATED_REACHED] (state, payload) {
 		state.maxRelatedReached = payload

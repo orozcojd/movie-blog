@@ -51,9 +51,6 @@ export default {
 			'maxRelatedReached',
 			'maxArticlesReached'
 		]),
-		...mapGetters([
-			'getArticle',
-		]),
 
 		infiniteArticleIds () {
 			return this.infiniteArticles.map(article => article._id)

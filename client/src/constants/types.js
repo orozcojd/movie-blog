@@ -34,14 +34,7 @@ export const adminEditMain = {
 	path: 'edit-main',
 	name: 'admin-edit-main',
 }
-export const adminPostPreview = {
-	path: 'preview-post/:id',
-	name: 'admin-post-preview',
-}
-export const adminPreviewPost = {
-	path: 'preview-post',
-	name: 'admin-new-post-preview',
-}
+
 export const adminAboutContributor = {
 	path: 'about-contributor',
 	name: 'admin-about-contributor',

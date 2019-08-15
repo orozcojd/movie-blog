@@ -6,7 +6,7 @@ class Article {
 	 * Fills class with object attributes
 	 * @param {object} param0 
 	 */
-	fill ({ title = null, draft = null, author = null, body = null, imgCred = null, thumbnailDescription = null, lazyImg = null, img = null, realm = null, tags = null, contributorId = null }) {
+	fill ({ title = '', draft = '', author = '', body = '', imgCred = '', thumbnailDescription = '', lazyImg = '', img = '', realm = '', tags = [], contributorId = '' }) {
 		// this._id = _id
 		this.title = title
 		this.draft = draft

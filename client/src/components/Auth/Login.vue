@@ -30,6 +30,7 @@
           <v-form>
             <v-text-field
               v-model="credentials.email"
+              :rules="emailRules"
               autofocus
               label="Email"
               autocomplete="on"
@@ -55,8 +56,10 @@
           <br>
           <div
             class="error"
-            v-html="error"
-          />
+          >
+            {{ error }}
+          </div>
+
           <br>
         </v-card>
         <keep-alive>
@@ -160,13 +163,13 @@ export default {
 			this.login({
 				email: this.credentials.email,
 				password: this.credentials.password
-			}).then(() => {
+			}).then((res) => {
 				this.error = null
 				this.$router.push({
 					path: '/admin'
 				})
 			}).catch(err => {
-				this.error = err
+				this.error = err.response.data.message
 			})
 		}
 	}

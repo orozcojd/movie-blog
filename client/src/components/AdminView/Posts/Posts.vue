@@ -58,11 +58,12 @@ export default {
 				extend: false,
 			}
 		}
-		await this.getArticlesApi(options)
+		await this.fetchArticlesApi(options)
+		console.log(this.filterArticles)
 	},
 	methods: {
 		...mapActions([
-			'getArticlesApi'
+			'fetchArticlesApi'
 		])
 	}
 }

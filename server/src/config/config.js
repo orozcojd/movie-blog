@@ -1,5 +1,8 @@
 /* */
 module.exports = {
+	env: {
+		
+	},
 	port: process.env.OPENSHIFT_NODEJS_PORT || 8081,
 	serverIp: process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
 	apiDomain: process.env.OPENSHIFT_DOMAIN || 'http://localhost',

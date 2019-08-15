@@ -14,6 +14,56 @@ const AuthenticationControllerPolicy = require('./policies/AuthenticationControl
 // 	userProperty: 'payload'
 // });
 
+
+require('connect-flash');
+var ExpressBrute = require('express-brute'),
+	MemcachedStore = require('express-brute-memcached'),
+	// moment = require('moment'),
+	store;
+ 
+if (true){
+	store = new ExpressBrute.MemoryStore(); // stores state locally, don't use this in production
+} else {
+	// stores state with memcached
+	store = new MemcachedStore(['127.0.0.1'], {
+		prefix: 'NoConflicts'
+	});
+}
+ 
+let failCallback = function (req, res, next, nextValidRequestDate) {
+	console.log('fail callbak');
+	res.status(404).send({message: 'Too many login attempts. Please try again later.'});
+	// req.flash('error', 'You\'ve made too many failed attempts in a short period of time, please try again ');
+	// res.redirect('/articles'); // brute force protection triggered, send them back to the login page
+};
+let handleStoreError = (error) => {
+	// log.error(error); // log this error so we can figure out what went wrong
+	// cause node to exit, hopefully restarting the process fixes the problem
+	throw {
+		message: error.message,
+		parent: error.parent
+	};
+};
+// Start slowing requests after 5 failed attempts to do something for the same user
+let userBruteforce = new ExpressBrute(store, {
+	freeRetries: 5,
+	minWait: 5*60*1000, // 5 minutes
+	maxWait: 60*60*1000, // 1 hour,
+	failCallback: failCallback,
+	handleStoreError: handleStoreError
+});
+// No more than 1000 login attempts per day per IP
+let globalBruteforce = new ExpressBrute(store, {
+	freeRetries: 1000,
+	attachResetToRequest: false,
+	refreshTimeoutOnRequest: false,
+	minWait: 25*60*60*1000, // 1 day 1 hour (should never reach this wait time)
+	maxWait: 25*60*60*1000, // 1 day 1 hour (should never reach this wait time)
+	lifetime: 24*60*60, // 1 day (seconds not milliseconds)
+	failCallback: failCallback,
+	handleStoreError: handleStoreError
+});
+
 module.exports = (app) => {
 	
 	app.get('/', 
@@ -40,7 +90,14 @@ module.exports = (app) => {
 	app.get('/users',
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.getUsers);
-	app.post('/login',  
+	app.post('/login',
+		globalBruteforce.prevent,
+		userBruteforce.getMiddleware({
+			key: function(req, res, next) {
+				// prevent too many attempts for the same username
+				next(req.body.email);
+			}
+		}),
 		AuthenticationController.login);
 	app.post('/auth/forgot-password',
 		AuthenticationController.forgotPassword);

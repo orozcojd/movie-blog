@@ -77,6 +77,7 @@
                 class="tag"
               >
                 <a
+                  
                   class="hover-bold"
                   @click.prevent="navigateTo({
                     _id: tag,
@@ -89,13 +90,7 @@
         </div>
       </v-layout>
     </card-view>
-    <v-layout>
-      <v-btn
-        @click="goBack()"
-      >
-        Back
-      </v-btn>
-    </v-layout>
+    <slot />
   </v-container>
 </template>
 
@@ -134,8 +129,9 @@ export default {
 		CardView
 	},
 	props: {
-		newPost: {
-			type: Boolean,
+		article: {
+			type: Object,
+			required: true
 		}
 	},
 	data () {
@@ -176,7 +172,6 @@ export default {
 	computed: {
 		...mapState([
 			'tags',
-			'article'
 		]),
 
 		headTitle() {
@@ -199,9 +194,9 @@ export default {
 		}
 	},
 	async mounted() {
+		// if(this.article)
 		await this.setContent()
 		this.loaded = true
-		console.log(this.$route)
 	},
 	methods: {
 		displayTag(tag) {

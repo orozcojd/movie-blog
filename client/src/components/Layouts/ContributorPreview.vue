@@ -170,12 +170,12 @@ export default {
 			}
 		}
 		payload.query = this.contributor._id
-		await this.getArticleByContributor(payload)
+		await this.fetchArticleByContributor(payload)
 	},
 	methods: {
 		...mapActions([
 			'getContributorBio',
-			'getArticleByContributor'
+			'fetchArticleByContributor'
 		]),
 		openLink(site) {
 			window.open(site);

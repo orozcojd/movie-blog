@@ -12,14 +12,14 @@ passport.use(new LocalStrategy({
 		// return if user not found
 		if(!user) {
 			return done(null, false, {
-				message: 'Username not found'
+				message: 'Invalid Login Credentials'
 			});
 		}
 		user.comparePasswords(password)
 			.then(res => {
 				if(!res) {
 					return done(null, false, {
-						message: 'Password incorrect'
+						message: 'Invalid Login Credentials'
 					});
 				}
 				//return user object - valid creds

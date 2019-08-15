@@ -1,13 +1,12 @@
 
 import {adminGuard} from '@/Authentication/AuthGuard'
 import AdminPostForm from '@/components/AdminView/Forms/AdminPostForm'
-import AdminNewPost from '@/components/AdminView/Posts/AdminNewPost'
+import AdminEditPost from '@/components/AdminView/Posts/AdminEditPost'
 import AdminPosts from '@/components/AdminView/Posts/Posts'
 import Index from '@/components/AdminView/Index'
 import AdminCategories from '@/components/AdminView/Posts/AdminCategories'
 import AdminTagView from '@/components/AdminView/Forms/AdminTagView'
 import AddUser from '@/components/AdminView/Forms/AddUser'
-import AdminPreviewLayout from '@/components/AdminView/Posts/AdminPreviewLayout'
 import AboutContributor from '@/components/AdminView/Forms/AboutContributor'
 import EditUsers from '@/components/AdminView/Forms/EditUsers'
 import * as types from '@/constants/types'
@@ -45,14 +44,14 @@ const adminRoutes = [
 			{
 				path: types.adminCreatePost.path,
 				name: types.adminCreatePost.name,
-				component: AdminNewPost,
+				component: AdminEditPost,
 				beforeEnter: adminGuard()
 			},
 			{
 				path: types.adminEditPost.path,
 				name: types.adminEditPost.name,
 				props: true,
-				component: AdminNewPost,
+				component: AdminEditPost,
 				beforeEnter: adminGuard()
 			},
 			{
@@ -73,20 +72,6 @@ const adminRoutes = [
 				path: types.adminEditMain.path,
 				name: types.adminEditMain.name,
 				component: AdminTagView,
-				beforeEnter: adminGuard()
-			},
-			{
-				path: types.adminPostPreview.path,
-				name: types.adminPostPreview.name,
-				props: true,
-				component: AdminPreviewLayout,
-				beforeEnter: adminGuard()
-			},
-			{
-				path: types.adminPreviewPost.path,
-				name: types.adminPreviewPost.name,
-				props: true,
-				component: AdminPreviewLayout,
 				beforeEnter: adminGuard()
 			},
 			{

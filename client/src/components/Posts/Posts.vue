@@ -83,12 +83,12 @@ export default {
 				extend: false
 			}
 		}
-		await this.getArticles(options)
+		await this.fetchArticles(options)
 			.catch(err => console.log(err))
 	},
 	methods: {
 		...mapActions([
-			'getArticles'
+			'fetchArticles'
 		])
 	}
 }

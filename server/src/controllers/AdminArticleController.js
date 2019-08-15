@@ -1,7 +1,7 @@
 const {Post} = require('../models');
 let {Contributor} = require('../models');
 let {User} = require('../models');
-
+const mongoose = require('mongoose');
 const helpers = require('../helpers/Auth');
 
 
@@ -39,6 +39,9 @@ module.exports = {
 	 * @param {Object} res 
 	 */
 	async fetchArticle(req, res) {
+		if(!req.params.articleId) {
+			return res.status(422).json({message: 'Invalid Article identifier.'});
+		}
 		const user = await User.findById(req.userId);
 		const article = await Post.findById(req.params.articleId).lean();
 		const isNotArticleContr = user.contributorId !== article.contributorId;
