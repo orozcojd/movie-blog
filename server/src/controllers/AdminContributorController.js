@@ -1,5 +1,4 @@
 let {Contributor} = require('../models');
-let {User} = require('../models');
 const contributorHelpers = require('../helpers/Contributor');
 
 

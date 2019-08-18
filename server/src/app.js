@@ -9,24 +9,41 @@ const rateLimit = require('express-rate-limit');
 
 const loginLimit = rateLimit({
 	windowMs: 15 * 60 * 100,
-	max: 100
+	max: 10,
+	skipSuccessfulRequests: true,
+	message: 'Max attempts reached. Please try again later.'
 });
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 100,
+	message: 'You are abusing your priviledge. Please try again later.',
+	max: 1000
+});
+const apiLimiter = rateLimit({
+	windowMs: 15 * 60 * 100,
+	message: 'Too many requests made. Please try again later.',
 	max: 100
 });
-
+const addUserLimiter = rateLimit({
+	windowMs: 60 * 60 * 1000,
+	max: 5,
+	message: 'Too many accounts created from this IP, please try again after an hour'
+});
 // create express server
 const app = express();
 
 // API declarations
+app.use(bodyParser.json({limit:'300kb', extended: true}));
+app.use(bodyParser.urlencoded({limit: '300kb'}));
+
 app.use(flash());
-app.use(helmet());
+app.use(helmet.hidePoweredBy());
 app.disable('x-powered-by');
+app.disable('x-ratelimit-limit');
 app.use(limiter);
 app.use('/login', loginLimit);
+app.use('/api/', apiLimiter);
+app.use('/api/addUser/', addUserLimiter);
 app.use(morgan('combined'));
-app.use(bodyParser.json());
 app.use(cors({credentials: true, origin: true}));
 app.use(passport.initialize());
 app.use((req, res, next) => {

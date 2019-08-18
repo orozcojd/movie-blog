@@ -1,5 +1,5 @@
 import Login from '@/components/Auth/Login'
-import Register from '@/components/Auth/Register'
+// import Register from '@/components/Auth/Register'
 import Index from '@/components/Auth/Index'
 import PasswordReset from '@/components/AdminView/Forms/PasswordReset'
 import {loggedInRedirect} from '@/Authentication/AuthGuard'
@@ -23,12 +23,7 @@ const authRoutes = [
 				component: PasswordReset,
 				canReuse: false,
 				beforeEnter: loggedInRedirect()
-			},
-			// {
-			// 	path: 'register',
-			// 	name: 'admin-register',
-			// 	component: Register,
-			// }
+			}
 		]
 	}
 ]

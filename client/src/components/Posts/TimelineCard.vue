@@ -1,5 +1,7 @@
 <template>
   <v-card
+    
+    class="gradient"
     :hover="true"
     raised
     @click="navigateTo(article._id)"
@@ -8,6 +10,7 @@
       primary-title
     >
       <div
+        class="timeline-title"
         align="left"
         style="width:100%;"
       >
@@ -76,7 +79,14 @@ export default {
     -webkit-box-orient: vertical; 
     text-overflow: ellipsis;
 }
-  .color-light {
+  /* .color-light {
     color:gray;
+  } */
+  .gradient {
+    background-image: linear-gradient(to bottom right, #5c6bc0, #9982c0, #bbc3d6);
+  }
+  /*background-image: linear-gradient(to bottom right, #5c6bc0, #9982c0, #bbc3d6); */
+  .timeline-title {
+    color: #ffff;
   }
 </style>

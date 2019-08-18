@@ -1,8 +1,6 @@
 const {Post} = require('../models');
 let {Contributor} = require('../models');
 let {User} = require('../models');
-const mongoose = require('mongoose');
-const helpers = require('../helpers/Auth');
 
 
 module.exports = {
@@ -27,7 +25,6 @@ module.exports = {
 		catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get articles',
-				details: err
 			});
 		}
 	},
@@ -72,7 +69,6 @@ module.exports = {
 		catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to create articles',
-				details: err
 			});
 		}
 	},
@@ -103,14 +99,12 @@ module.exports = {
 			else {
 				res.status(404).send({
 					error: 'Oops! The article you are trying to update does not exist.',
-					// details: err
 				});
 			}
 		}
 		catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to update the article',
-				details: err
 			});
 		}
 	},
@@ -134,7 +128,6 @@ module.exports = {
 		catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to delete the article',
-				details: err
 			});
 		}
 	},
@@ -150,7 +143,6 @@ module.exports = {
 		} catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get contributors',
-				details: err
 			});
 		}
 

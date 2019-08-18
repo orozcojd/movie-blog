@@ -11,7 +11,7 @@ export const tagView = {
 	name: 'tag-view'
 }
 export const aboutContributor = {
-	path: '/contributor/:contributor/:id',
+	path: '/contributors/:contributor/:id',
 	name: 'about-contributor'
 }
 export const aboutView = {

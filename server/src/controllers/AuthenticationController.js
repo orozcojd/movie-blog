@@ -39,9 +39,7 @@ module.exports = {
 			}
 			res.status(200).send({message: 'Please check your email for instructions on how to reset your password.'});
 		} catch (err) {
-			console.log(err);
 			res.status(400).send({
-				data: err,
 				error: 'Unexpected error has occurred trying to reset password'
 			});
 		}
@@ -93,7 +91,6 @@ module.exports = {
 		} catch (err) {
 			console.log(err);
 			res.status(400).send({
-				data: err,
 				error: 'Unexpected error has occurred trying to reset password.'
 			});
 		}
@@ -113,7 +110,6 @@ module.exports = {
 
 		} catch (err) {
 			res.status(400).send({
-				data: err,
 				error: 'Unexpected error has occurred trying to get contributor information'
 			});
 		}
@@ -180,7 +176,6 @@ module.exports = {
 			});
 
 		} catch(err) {
-			console.log(err);
 			res.status(400).send({
 				error: 'Unexpected error has occurred'
 			});
@@ -226,7 +221,6 @@ module.exports = {
 					if(err) {
 						res.status(400).send({
 							error: 'Contributor name already in use',
-							details: err
 						});
 					}
 					else {
@@ -268,51 +262,6 @@ module.exports = {
 
 	/**
 	 * POST REQUEST
-	 * Registers new user by hasing REQ password and saving 
-	 * user data to db returning token and user
-	 * @param {Object} req 
-	 * @param {Object} res 
-	 */
-	async register (req, res) {
-		try {
-			const pw = req.body.password;
-			let contributor = new Contributor();
-			await contributor.createContributor({name: req.body.contributorName});
-			contributor.save(async (err, contrib) => {
-				if(err) {
-					res.status(400).send({
-						error: 'Contributor name already in use.'
-					});
-				}
-				else {
-					let user = new User();
-					const referenceId = contrib._id;
-					await user.createUser({...req.body, contributorId: referenceId});
-					await user.hashPassword(pw);
-					user.save((err, saved) => {
-						if(err) {
-							res.status(400).send({
-								error: 'Email or contributor name already in use.'
-							});
-						}
-						else {
-							res.status(200).send({
-								message: `User ${user.email} was created`,
-								user: saved,
-								contributor: contrib
-							});
-						}
-					});
-				}
-			});
-		} catch (err) {
-			res.status(400).send({
-				error: 'Unexpected error has occurred'
-			});
-		}
-	},
-	/**
-	 * POST REQUEST
 	 * Validates user by comparing hash of user plaintext pw
 	 * to hash stored in db returning token and user details if
 	 * valid
@@ -340,8 +289,6 @@ module.exports = {
 					'user': {_id: user._id, email: user.email, contributorId: user.contributorId, permission: user.permission}
 				});
 			} else {
-				console.log('ANOTHER ERROR');
-				console.log(info);
 				res.status(401).json(info);
 			}
 		})(req, res);
@@ -355,15 +302,16 @@ module.exports = {
 	 * @param {Object} res 
 	 */
 	async refreshToken (req, res) {
+		// if (!req.is('json')) {
+		// 	return res.sendStatus(415); // -> Unsupported media type if request doesn't have JSON body
+		// }
 		const email = req.body.email;
 		const refreshToken = req.body.refreshToken;
-		console.log(res.body);
-		console.log(refreshTokens);
 		try {
 			if((refreshToken in refreshTokens) &&  refreshTokens[refreshToken] === email) {
 				await User.findOne({email: email}, (err, user)=>{
 					if(!user) {
-						res.status(401).send({error: err});
+						res.status(401).send({error: 'User not found.'});
 					}
 					else {
 						const token = user.generateToken();

@@ -18,7 +18,6 @@ module.exports = {
 		catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get tags',
-				details: err
 			});
 		}
 	},
@@ -48,7 +47,6 @@ module.exports = {
 			}
 			res.status(400).send({
 				error: error,
-				details: err
 			});
 		}
 	},
@@ -80,7 +78,6 @@ module.exports = {
 		catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to update the tag',
-				details: err
 			});
 		}
 	},
@@ -102,7 +99,6 @@ module.exports = {
 		catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to add tags',
-				details: err
 			});
 		}
 	},

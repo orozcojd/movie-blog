@@ -169,7 +169,7 @@ export default {
 					path: '/admin'
 				})
 			}).catch(err => {
-				this.error = err.response.data.message
+				this.error = err.response.message
 			})
 		}
 	}

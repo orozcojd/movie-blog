@@ -34,7 +34,6 @@ module.exports = {
 		catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get articles',
-				details: err
 			});
 		}
 	},
@@ -72,7 +71,6 @@ module.exports = {
 		catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get article tag',
-				details: err
 			});
 		}
 	},
@@ -105,7 +103,6 @@ module.exports = {
 		} catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get associated articles',
-				details: err
 			});
 		}
 	},
@@ -154,7 +151,6 @@ module.exports = {
 		catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get associated articles',
-				details: err
 			});
 		}
 	},
@@ -175,14 +171,12 @@ module.exports = {
 			else {
 				res.status(404).send({
 					error: 'Article was not found.',
-					// message: err
 				});
 			}
 		}
 		catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get articles',
-				details: err
 			});
 		}
 	}

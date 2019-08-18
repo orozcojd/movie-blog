@@ -1,5 +1,6 @@
 <template>
   <v-card
+    class="preview-gradient"
     :hover="true"
     raised
     :flat="flat"
@@ -89,6 +90,7 @@ export default {
   font-size: 0.7em;
 }
 .card-title {
+  /* color: #ffff; */
   max-height: 5.3em; /* font-size * line-height * limitNoLineDesired */
   overflow: hidden;
   margin-bottom: 1em;
@@ -101,6 +103,9 @@ export default {
   line-height: 1.1em;
   max-height: 4.3em;
   position: relative;
+}
+.preview-gradient {
+  background-image: linear-gradient(to bottom right, #bdc3e5, #d6cde5, #e3e7ee);
 }
 @media (max-width: 1264px) {
   .card-wrapper {
