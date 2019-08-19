@@ -31,7 +31,7 @@ export const adminEditDrafts = {
 	name: 'admin-edit-drafts',
 }
 export const adminEditMain = {
-	path: 'edit-main',
+	path: 'edit-tags',
 	name: 'admin-edit-main',
 }
 

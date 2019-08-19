@@ -111,11 +111,10 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import PostPreview from '@/components/Posts/PostPreview'
 export default {
 	name: 'ContributorView',
 	components: {
-		PostPreview,
+		PostPreview: () => import('@/components/Posts/PostPreview'),
 	},
 	data () {
 		return {

@@ -35,6 +35,7 @@ export default {
 		...mapState('auth', ['user']),
 		...mapGetters('posts', ['siteTitle']),
 		filterArticles () {
+			console.log(this.articles)
 			return this.articles.filter(article => article.draft === this.drafts)
 		},
 		headTitle() {

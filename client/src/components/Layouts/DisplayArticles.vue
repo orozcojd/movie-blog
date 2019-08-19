@@ -24,12 +24,12 @@
 </template>
 
 <script>
-import PostPreview from '@/components/Posts/PostPreview'
+// import PostPreview from '@/components/Posts/PostPreview'
 
 export default {
 	name: 'DisplayArticles',
 	components: {
-		PostPreview,
+		PostPreview: () => import('@/components/Posts/PostPreview'),
 	},
 	props: {
 		articles: {

@@ -1,5 +1,3 @@
-
-import {adminGuard} from '@/Authentication/AuthGuard'
 const AdminPostForm = () => import('@/components/AdminView/Forms/AdminPostForm')
 const AdminEditPost = () => import('@/components/AdminView/Posts/AdminEditPost')
 const AdminPosts = () => import('@/components/AdminView/Posts/Posts')
@@ -9,7 +7,7 @@ const AdminTagView = () => import('@/components/AdminView/Forms/AdminTagView')
 const AddUser = () => import('@/components/AdminView/Forms/AddUser')
 const AboutContributor = ()  => import('@/components/AdminView/Forms/AboutContributor')
 const EditUsers = () => import('@/components/AdminView/Forms/EditUsers')
-
+import {adminGuard} from '@/Authentication/AuthGuard'
 import * as types from '@/constants/types'
 
 const adminRoutes = [
@@ -35,7 +33,6 @@ const adminRoutes = [
 				component: EditUsers,
 				beforeEnter: adminGuard()
 			},
-
 			{
 				path: types.adminArticleView.path,
 				name: types.adminArticleView.name,

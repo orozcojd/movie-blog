@@ -29,11 +29,10 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
-import Post from './Post'
 export default {
 	name: 'PostView',
 	components: {
-		Post
+		Post: () => import('./Post')
 	},
 	data () {
 		return {

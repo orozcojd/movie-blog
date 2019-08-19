@@ -45,12 +45,11 @@
 </template>
 
 <script>
-import TimelineCard from '@/components/Posts/TimelineCard'
 import Helpers from '@/components/Tools/Helper'
 export default {
 	name: 'Timeline',
 	components: {
-		TimelineCard
+		TimelineCard: () => import('@/components/Posts/TimelineCard')
 	},
 	props: {
 		articles: {

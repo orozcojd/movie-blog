@@ -110,7 +110,6 @@
 </template>
 
 <script>
-import CardView from '@/components/Layouts/CardView'
 import { mapState, mapMutations } from 'vuex'
 import ParagraphAlignmentNode from '@/components/Tools/ParagraphAlignment'
 import Iframe from '@/components/Tools/Iframe'
@@ -140,7 +139,7 @@ export default {
 	name: 'Posts',
 	components: {
 		EditorContent,
-		CardView
+		CardView: () => import('@/components/Layouts/CardView')
 	},
 	props: {
 		article: {

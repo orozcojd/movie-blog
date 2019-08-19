@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import auth from '@/store/auth'
-
 import posts from '@/store/posts'
 
 Vue.use(Vuex)
@@ -13,6 +12,4 @@ const createStore = new Vuex.Store({
 		posts
 	}
 })
-
-
 export default createStore

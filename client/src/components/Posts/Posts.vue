@@ -49,16 +49,13 @@
 
 <script>
 'use strict'
-import LatestPost from '@/components/Posts/LatestPost'
-import DisplayArticles from '@/components/Layouts/DisplayArticles'
-import Timeline from '@/components/Layouts/Timeline'
 import { mapActions, mapState, mapGetters } from 'vuex'
 export default {
 	name: 'Posts',
 	components: {
-		LatestPost,
-		DisplayArticles,
-		Timeline
+		LatestPost: () => import('@/components/Posts/LatestPost'),
+		DisplayArticles: () => import('@/components/Layouts/DisplayArticles'),
+		Timeline: () => import('@/components/Layouts/Timeline')
 	},
 	data () {
 		return {

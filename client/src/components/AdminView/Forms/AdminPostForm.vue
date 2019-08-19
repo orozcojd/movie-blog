@@ -137,7 +137,6 @@
 
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
-import TipTap from '@/components/Tools/TipTap'
 import FormValidation from '@/components/Tools/FormValidation'
 import {adminCategories} from '@/constants/types'
 import Article from '@/Model/Article'
@@ -145,7 +144,7 @@ export default {
 
 	name: 'AdminPostForm',
 	components: {
-		TipTap
+		TipTap: () => import('@/components/Tools/TipTap')
 	},
 	data () {
 		return {

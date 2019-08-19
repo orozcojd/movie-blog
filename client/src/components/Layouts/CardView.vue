@@ -30,8 +30,7 @@
 
 
 export default {
-	name: 'CardView',
-
+	name: 'CardView'
 }
 </script>
 

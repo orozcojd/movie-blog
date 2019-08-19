@@ -58,14 +58,13 @@
 </template>
 
 <script>
-import DisplayArticles from '@/components/Layouts/DisplayArticles'
 import { mapActions, mapState, mapGetters } from 'vuex'
 
 export default {
   
 	name: 'TagView',
 	components: {
-		DisplayArticles
+		DisplayArticles: () => import('@/components/Layouts/DisplayArticles')
 	},
 	data () {
 		return {

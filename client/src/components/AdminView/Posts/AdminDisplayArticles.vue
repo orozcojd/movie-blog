@@ -24,12 +24,10 @@
 </template>
 
 <script>
-import TilePreview from '@/components/AdminView/Posts/TilePreview'
-
 export default {
 	name: 'DisplayArticles',
 	components: {
-		TilePreview,
+		TilePreview: () => import('@/components/AdminView/Posts/TilePreview')
 	},
 	props: {
 		articles: {

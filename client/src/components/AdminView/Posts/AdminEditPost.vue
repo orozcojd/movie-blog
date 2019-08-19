@@ -30,14 +30,12 @@
 
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
-import AdminPreview from '@/components/AdminView/Posts/AdminPreview'
-import AdminPostForm from '@/components/AdminView/Forms/AdminPostForm'
 import Article from '@/Model/Article'
 export default {
 	name: 'AdminEditPost',
 	components: {
-		AdminPostForm,
-		AdminPreview
+		AdminPostForm: () => import('@/components/AdminView/Forms/AdminPostForm'),
+		AdminPreview: () => import('@/components/AdminView/Posts/AdminPreview')
 	},
 	data () {
 		return {
