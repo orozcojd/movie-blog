@@ -35,10 +35,6 @@ export default {
 		articles: {
 			type: Array,
 			required: true
-		},
-		admin: {
-			type: Boolean,
-			default: false
 		}
 	}
 }

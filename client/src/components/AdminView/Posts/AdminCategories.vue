@@ -55,7 +55,7 @@ export default {
 					title: 'Create Post',
 					to: {name: types.adminCreatePost.name},
 					granted: () => { return true },
-					onEnter: () => { this.setSingleArticle({})}
+					onEnter: () => { this.clearArticle()}
 				},
 				{
 					title: 'Edit Posts',
@@ -102,12 +102,8 @@ export default {
 		}
 	},
 	computed: {
-		...mapState([
-			'user'
-		]),
-		...mapGetters([
-			'siteTitle'
-		]),
+		...mapState('auth',['user']),
+		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
 			return `Admin Main - ${this.siteTitle}`
 		},
@@ -121,7 +117,7 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions(['setSingleArticle']),
+		...mapActions('admin',['clearArticle']),
 		navigateTo(category) {
 			if(category.onEnter) {
 				category.onEnter()

@@ -6,10 +6,13 @@ export function adminGuard() {
 			otherwise redirect to main page
 		*/
 	return (to, from, next) => {
-		if(!store.getters.isUserLoggedin) {
-			store.dispatch('getSetToken')
+		if(!store.getters['auth/isUserLoggedin']) {
+			store.dispatch('auth/getSetToken')
 		}
-		if(store.getters.isUserLoggedin) {
+		if(store.getters['auth/isUserLoggedin']) {
+			// if(!store.getters['admin/getTagsLength']) {
+			// 	store.dispatch('admin/fetchTags')
+			// }
 			next()
 		}
 		else {
@@ -24,7 +27,7 @@ export function	loggedInRedirect() {
 			otherwise allow user to access login page
 		*/
 	return (to, from, next) => {
-		if(store.getters.isUserLoggedin) {
+		if(store.getters['auth/isUserLoggedin']) {
 			next('/admin')
 		}
 		else {

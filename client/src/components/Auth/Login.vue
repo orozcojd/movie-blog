@@ -127,13 +127,11 @@ export default {
 	mounted() {
 	},
 	methods: {
-		...mapActions([
+		...mapActions('auth',[
 			'login',
 			'passwordReset'
 		]),
-		...mapGetters([
-			'siteTitle'
-		]),
+		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
 			return `${this.siteTitle} - Login`
 		},

@@ -6,8 +6,15 @@
 </template>
 
 <script>
+import admin from '@/store/admin'
 export default {
-	name: 'AdminIndex'
+	name: 'AdminIndex',
+	mounted () {
+		this.$store.registerModule('admin', admin)
+	},
+	beforeDestroy() {
+		this.$store.unregisterModule('admin', admin)
+	}
 }
 </script>
 

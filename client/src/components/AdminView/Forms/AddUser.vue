@@ -90,18 +90,13 @@ export default {
 			userFieldsValid: true,
 			permissions: [{text:'Administrator', value:1}, {text:'Contributor', value: 2}],
 			submitColor: 'default',
-			errorMsg: '',
 			snackText: ''
 		}
 	},
 	computed: {
-		...mapState({
-			adminUser: 'user',
-			snackbar: 'snackbar'  
-		}),
-		...mapGetters([
-			'siteTitle'
-		]),
+		...mapState('auth', {adminUser: 'user'}),
+		...mapState('admin',['snackbar']),
+		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
 			return `Admin Add User - ${this.siteTitle}`
 		}
@@ -110,7 +105,7 @@ export default {
 		this.user.id = this.adminUser._id
 	},
 	methods: {
-		...mapActions([
+		...mapActions('admin',[
 			'addUser',
 			'setSnackbar'
 		]),

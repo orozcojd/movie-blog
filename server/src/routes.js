@@ -32,7 +32,6 @@ const appSpeedLimiter = slowDown({
 	delayMs: 1000
 });
 
-
 module.exports = (app) => {
 	app.get('/', 
 		appSpeedLimiter,

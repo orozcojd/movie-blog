@@ -185,9 +185,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState([
-			'tags',
-		]),
+		...mapState('posts',['tags']),
 		articleDate() {
 			let date = new Date(this.article.updatedAt).toLocaleString('en-us', 
 				{ 
@@ -211,9 +209,7 @@ export default {
 		this.loaded = true
 	},
 	methods: {
-		...mapMutations([
-			'PUSH_VIEWED',
-		]),
+		...mapMutations('posts', ['PUSH_VIEWED']),
 		convertTagIdToName (id) {
 			if(this.tags.length){
 				const tag = this.tags.find(tag => tag._id === id)

@@ -16,9 +16,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters([
-			'siteTitle'
-		]),
+		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
 			return `Admin Edit Users - ${this.siteTitle}}`
 		},

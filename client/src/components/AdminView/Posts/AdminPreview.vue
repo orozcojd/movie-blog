@@ -170,9 +170,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState([
-			'tags',
-		]),
+		...mapState('posts', ['tags']),
 
 		headTitle() {
 			return this.article.title ? `Admin Preview - ${this.article.title}` : 'Admin Create Article - Unsolocited.mp3'
@@ -194,7 +192,6 @@ export default {
 		}
 	},
 	async mounted() {
-		// if(this.article)
 		await this.setContent()
 		this.loaded = true
 	},

@@ -72,9 +72,7 @@ export default {
 		]
 	}),
 	computed: {
-		...mapGetters([
-			'siteTitle'
-		])
+		...mapGetters('posts', ['siteTitle']),
 	}
 }
 </script>

@@ -104,7 +104,6 @@
             :total-visible="pagesVisibile"
           />
         </v-layout>
-      <!-- </card-view> -->
       </v-flex>
     </v-layout>
   </v-container>
@@ -113,19 +112,17 @@
 <script>
 import { mapActions, mapState, mapGetters } from 'vuex'
 import PostPreview from '@/components/Posts/PostPreview'
-import CardView from '@/components/Layouts/CardView'
 export default {
 	name: 'ContributorView',
 	components: {
 		PostPreview,
-		CardView
 	},
 	data () {
 		return {
 		}
 	},
 	computed: {
-		...mapState([
+		...mapState('posts',[
 			'contributor',
 			'articles',
 			'pages',
@@ -135,9 +132,7 @@ export default {
 		bio() {
 			return this.contributor.bio ? this.contributor.bio.split('\n') : ''
 		},
-		...mapGetters([
-			'siteTitle'
-		]),
+		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
 			return `${this.contributor.name} - ${this.siteTitle}`
 		},
@@ -173,7 +168,7 @@ export default {
 		await this.fetchArticleByContributor(payload)
 	},
 	methods: {
-		...mapActions([
+		...mapActions('posts',[
 			'getContributorBio',
 			'fetchArticleByContributor'
 		]),

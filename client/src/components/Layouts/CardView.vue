@@ -9,7 +9,6 @@
         xl6
       >
         <v-card class="card-padding">
-          <!-- <v-card-text> -->
           <v-layout justify-start>
             <v-flex
               xs12
@@ -21,7 +20,6 @@
               </div>
             </v-flex>
           </v-layout>
-          <!-- </v-card-text> -->
         </v-card>
       </v-flex>
     </v-layout>

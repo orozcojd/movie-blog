@@ -116,7 +116,7 @@
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
-    <v-snackbar
+    <!-- <v-snackbar
       v-model="snackVal"
       :timeout="snackbar.timeout"
       :top="true"
@@ -130,7 +130,7 @@
       >
         Close
       </v-btn>
-    </v-snackbar>
+    </v-snackbar> -->
   </div>
 </template>
 
@@ -141,9 +141,6 @@ export default {
 	data() {
 		return {
 			drawerLeft: false,
-			right: false,
-			account: [['Admin', 'goTo("/admin")'], ['Logout', 'logout']],
-			realmToggle: true,
 			windowSize: {
 				x: 0,
 				y: 0
@@ -153,19 +150,23 @@ export default {
 		}
 	},
 	computed: {
-		...mapState([
+		...mapState('posts', [
 			'viewedArticles',
+			'tags',
+		]),
+		// ...mapState('admin', [
+		// 	'snackbar',
+		// ]),
+		...mapState('auth', [
 			'user',
 			'token',
-			'tags',
-			'snackbar',
 			'adminContributor'
 		]),
-		...mapGetters([
+		...mapGetters('auth', [
 			'isUserLoggedin',
 			'getUser',
-			'siteTitle'
 		]),
+		...mapGetters('posts', ['siteTitle']),
 		contributorName() {
 			return this.adminContributor ? this.adminContributor.name : ''
 		},
@@ -196,18 +197,18 @@ export default {
 		if(!this.token.token) {
 			await this.getSetToken()		
 		}
-		await this.getTags()
+		if(!this.tags.length)
+			await this.getTags()
 		this.onResize()
 	},
 	methods: {
-		...mapActions([
-			'getTags',
+		...mapActions('posts',['getTags']),
+		...mapActions('auth', [
 			'getSetToken',
 			'setUser',
-			'logOut',
-			'setSnackbar',
-			
+			'logOut'
 		]),
+		// ...mapActions('admin', ['setSnackbar']),
 		onResize () {
 			this.windowSize = { x: window.innerWidth, y: window.innerHeight }
 			if(this.windowSize.x <= 835) {
@@ -249,10 +250,10 @@ export default {
 			})
 		},
 		snackClose() {
-			this.setSnackbar({
-				type: 'value',
-				value: false
-			})
+			// this.setSnackbar({
+			// 	type: 'value',
+			// 	value: false
+			// })
 		}
 	}
 }

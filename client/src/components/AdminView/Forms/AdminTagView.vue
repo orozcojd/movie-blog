@@ -256,14 +256,12 @@ export default {
 		disabled() {
 			return !(!!this.user && this.user.permission === 1)
 		},
-		...mapState([
+		...mapState('auth', ['user']),
+		...mapState('admin',[
 			'tags',
-			'user',
 			'snackbar'
 		]),
-		...mapGetters([
-			'siteTitle'
-		]),
+		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
 			return `Admin Edit Tags - ${this.siteTitle}}`
 		},
@@ -297,18 +295,18 @@ export default {
 		}
 	},
 	async mounted() {
-		await this.getTags()
+		await this.fetchTags()
 		this.loaded = true
 	},
 	methods: {
-		...mapMutations([
+		...mapMutations('admin',[
 			'ADD_TAGS',
 			'SET_TAGS',
 			'REMOVE_TAG',
 			'EDIT_TAG_VAL',
 		]),
-		...mapActions([
-			'getTags',
+		...mapActions('admin',[
+			'fetchTags',
 			'postTags',
 			'deleteTags',
 			'updateTags',

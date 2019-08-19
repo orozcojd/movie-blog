@@ -69,21 +69,18 @@ export default {
 	},
 	data () {
 		return {
-			// tagName: '',
 			loaded: false
 		}
 	},
 	computed: {
-		...mapState([
+		...mapState('posts', [
 			'articles',
 			'tags',
 			'tag',
 			'pages',
 			'page'
 		]),
-		...mapGetters([
-			'siteTitle'
-		]),
+		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
 			return `${this.tag.name} - ${this.siteTitle}`
 		},
@@ -127,7 +124,7 @@ export default {
 		await this.getArticlesByTag(payload)
 	},
 	methods: {
-		...mapActions([
+		...mapActions('posts',[
 			'getArticlesByTag',
 			'setTag'
 		])

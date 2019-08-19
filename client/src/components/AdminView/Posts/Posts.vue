@@ -31,13 +31,9 @@ export default {
 		}
 	},
 	computed: {
-		...mapState([
-			'articles',
-			'user'
-		]),
-		...mapGetters([
-			'siteTitle'
-		]),
+		...mapState('admin',['articles']),
+		...mapState('auth', ['user']),
+		...mapGetters('posts', ['siteTitle']),
 		filterArticles () {
 			return this.articles.filter(article => article.draft === this.drafts)
 		},
@@ -54,17 +50,13 @@ export default {
 				params: {
 					draft: this.drafts,
 					contributorId: this.user.contributorId
-				},
-				extend: false,
+				}
 			}
 		}
 		await this.fetchArticlesApi(options)
-		console.log(this.filterArticles)
 	},
 	methods: {
-		...mapActions([
-			'fetchArticlesApi'
-		])
+		...mapActions('admin',['fetchArticlesApi'])
 	}
 }
 

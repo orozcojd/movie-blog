@@ -46,11 +46,13 @@ export default {
 		}
 	},
 	computed: {
-		...mapState(['user', 'article', 'contributor']),
-		...mapGetters(['getArticle'])
+		...mapState('auth',['user', 'contributor']),
+		...mapState('admin', ['article', 'tags']),
+		...mapGetters('admin',['getArticle'])
 	},
 	async mounted() {
-		await this.getContributorBio(this.user.contributorId)
+		await this.getContributor(this.user.contributorId)
+		await this.fetchTags()
 		const id = this.$route.params.id
 		let articleFound = this.getArticle(id)
 		if(articleFound) {
@@ -76,12 +78,13 @@ export default {
 		this.loaded = true
 	},
 	methods: {
-		...mapActions([
-			'getContributorBio',
+		...mapActions('auth', ['getContributor']),
+		...mapActions('admin',[
 			'setArticle',
 			'prepareArticle',
 			'fetchArticleApi',
 			'setSnackbar',
+			'fetchTags'
 		]),
 		previewPost () {
 			this.preview = true

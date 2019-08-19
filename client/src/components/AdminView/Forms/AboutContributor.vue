@@ -89,9 +89,9 @@ export default {
 		}
 	},
 	computed: {
-		...mapState([
+		...mapState('admin', ['snackbar']),
+		...mapState('auth',[
 			'user',
-			'snackbar',
 			'contributor'
 		]),
 		headTitle() {
@@ -180,12 +180,12 @@ export default {
 		await this.getContributor(this.user.contributorId)
 	},
 	methods: {
-		...mapActions([
+		...mapActions('auth',[
 			'updateContributorBio',
 			'getContributor',
 			'editContributorVal',
-			'setSnackbar'
 		]),
+		...mapActions('admin', ['setSnackbar']),
 		validate (){
 			if (this.$refs.form.validate()) {
 				/* if validation is approved */

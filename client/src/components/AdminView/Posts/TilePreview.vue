@@ -81,7 +81,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions } from 'vuex'
 export default {
 	name: 'PostPreview',
 	props: {
@@ -95,13 +95,8 @@ export default {
 			dialog: false
 		}
 	},
-	computed: {
-		...mapState({
-			'articles': 'article'
-		})
-	},
 	methods: {
-		...mapActions([
+		...mapActions('admin',[
 			'deleteArticle'
 		]),
 		navigateTo (articleId) {

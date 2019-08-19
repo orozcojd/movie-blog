@@ -24,9 +24,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapGetters([
-			'siteTitle'
-		]),
+		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
 			return `Page Not Found - ${this.siteTitle}`
 		}

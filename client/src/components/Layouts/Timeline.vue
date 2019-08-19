@@ -65,10 +65,6 @@ export default {
 			loaded: false
 		}
 	},
-	computed: {
-
-	},
-  
 	created() {
 		this.resizeTimeline()
 		window.addEventListener("resize", this.debounce(() => {

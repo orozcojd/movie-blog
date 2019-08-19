@@ -65,20 +65,14 @@ export default {
 		}
 	},
 	computed: {
-		...mapState([
-			'articles'
-		]),
-		...mapGetters([
-			'siteTitle'
-		])
+		...mapState('posts', ['articles']),
+		...mapGetters('posts', ['siteTitle']),
 	},
 	async mounted () {
 		let options = {
 			params: {
 				params: {
-					// skip: 0,
 					limit: 15,
-					// postPreview: true
 				},
 				extend: false
 			}
@@ -87,9 +81,7 @@ export default {
 			.catch(err => console.log(err))
 	},
 	methods: {
-		...mapActions([
-			'fetchArticles'
-		])
+		...mapActions('posts',['fetchArticles'])
 	}
 }
 </script>

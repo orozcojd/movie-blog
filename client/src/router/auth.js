@@ -1,7 +1,6 @@
-import Login from '@/components/Auth/Login'
-// import Register from '@/components/Auth/Register'
-import Index from '@/components/Auth/Index'
-import PasswordReset from '@/components/AdminView/Forms/PasswordReset'
+const Login = () => ('@/components/Auth/Login')
+const Index = () => import('@/components/Auth/Index')
+const PasswordReset = () => import('@/components/AdminView/Forms/PasswordReset')
 import {loggedInRedirect} from '@/Authentication/AuthGuard'
 import { adminLogin, passReset } from '@/constants/types'
 

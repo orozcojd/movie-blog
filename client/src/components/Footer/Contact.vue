@@ -29,9 +29,7 @@ import { mapGetters } from 'vuex'
 export default {
 	name: 'Contact',
 	computed: {
-		...mapGetters([
-			'siteTitle'
-		])
+		...mapGetters('posts', ['siteTitle']),
 	}
 }
 </script>

@@ -1,11 +1,4 @@
 module.exports = () => ({
-	token: {
-		token: null,
-		refreshToken: null,
-		tokenDetails: null
-	},
-	adminContributor: {},
-	user: null,
 	contributor: {},
 	articles: [],
 	article: {},
@@ -24,11 +17,6 @@ module.exports = () => ({
 	unAssociatedArticles: {
 		pageNo: 1,
 		articleIds: [],
-	},
-	snackbar: {
-		text: '',
-		timeout: 4000,
-		value: false
 	},
 	strings: {
 		title: 'Unsolicited.mp3',

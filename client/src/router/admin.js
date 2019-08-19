@@ -1,14 +1,15 @@
 
 import {adminGuard} from '@/Authentication/AuthGuard'
-import AdminPostForm from '@/components/AdminView/Forms/AdminPostForm'
-import AdminEditPost from '@/components/AdminView/Posts/AdminEditPost'
-import AdminPosts from '@/components/AdminView/Posts/Posts'
-import Index from '@/components/AdminView/Index'
-import AdminCategories from '@/components/AdminView/Posts/AdminCategories'
-import AdminTagView from '@/components/AdminView/Forms/AdminTagView'
-import AddUser from '@/components/AdminView/Forms/AddUser'
-import AboutContributor from '@/components/AdminView/Forms/AboutContributor'
-import EditUsers from '@/components/AdminView/Forms/EditUsers'
+const AdminPostForm = () => import('@/components/AdminView/Forms/AdminPostForm')
+const AdminEditPost = () => import('@/components/AdminView/Posts/AdminEditPost')
+const AdminPosts = () => import('@/components/AdminView/Posts/Posts')
+const Index = () => import('@/components/AdminView/Index')
+const AdminCategories = () => import('@/components/AdminView/Posts/AdminCategories')
+const AdminTagView = () => import('@/components/AdminView/Forms/AdminTagView')
+const AddUser = () => import('@/components/AdminView/Forms/AddUser')
+const AboutContributor = ()  => import('@/components/AdminView/Forms/AboutContributor')
+const EditUsers = () => import('@/components/AdminView/Forms/EditUsers')
+
 import * as types from '@/constants/types'
 
 const adminRoutes = [

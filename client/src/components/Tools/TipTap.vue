@@ -223,7 +223,7 @@ import {
 import ParagraphAlignmentNode from './ParagraphAlignment'
 import captionComment from './captionComment'
 // import FontIncreaseNode from './FontIncrease.js'
-import { mapActions, mapMutations, mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import Iframe from './Iframe'
 
 export default {
@@ -275,7 +275,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState([
+		...mapState('admin', [
 			'article'
 		]),
 		body: {
@@ -283,7 +283,7 @@ export default {
 				return this.article.body
 			},
 			set(value) {
-				this.UPDATE_ARTICLE_CONTENT({
+				this.updateArticleContent({
 					type: 'body',
 					value: value
 				})
@@ -295,11 +295,8 @@ export default {
 		this.setContent()
 	},
 	methods: {
-		...mapActions([
+		...mapActions('admin',[
 			'updateArticleContent'
-		]),
-		...mapMutations([
-			'UPDATE_ARTICLE_CONTENT'
 		]),
 		setContent () {
 			if(this.body)

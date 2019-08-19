@@ -1,11 +1,12 @@
-import Posts from '@/components/Posts/Posts'
-import PostView from '@/components/Posts/PostView'
-import TagView from '@/components/Posts/TagView'
-import NotFound from '@/components/Layouts/NotFound'
+const Posts = () => import('@/components/Posts/Posts')
+const PostView = () => import('@/components/Posts/PostView')
+const TagView = () => import('@/components/Posts/TagView')
+const NotFound = () => import('@/components/Layouts/NotFound')
+const ContributorView = () => import('@/components/Layouts/ContributorPreview')
+const AboutView = () => import('@/components/Footer/About')
+const ContactView = () => import('@/components/Footer/Contact')
 import ArticleGuard from '@/components/RouterGuards/ArticleGuards'
-import ContributorView from '@/components/Layouts/ContributorPreview'
-import AboutView from '@/components/Footer/About'
-import ConactView from '@/components/Footer/Contact'
+
 import * as types from '@/constants/postTypes'
 const postRoutes = [
 	{
@@ -39,7 +40,7 @@ const postRoutes = [
 	{
 		path: types.contactView.path,
 		name: types.contactView.name,
-		component: ConactView
+		component: ContactView
 	},
 	{
 		path: types.notFound.path,

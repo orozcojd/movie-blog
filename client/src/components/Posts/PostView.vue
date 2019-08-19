@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 import Post from './Post'
 export default {
 	name: 'PostView',
@@ -42,7 +42,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState([
+		...mapState('posts', [
 			'article',
 			'tags',
 			'associatedArticles',
@@ -77,19 +77,14 @@ export default {
 		window.scrollTo(0,0);
 	},
 	methods: {
-		...mapActions([
+		...mapActions('posts', [
 			'fetchArticle',
-			'setSingleArticle',
-			'getTags',
 			'getNextArticles',
 			'resetNextArticles',
 			'getLatestUnrelated',
 			'setMaxRelated'
 		]),
-		...mapMutations([
-			'SET_SINGLE_ARTICLE',
-			'PUSH_VIEWED'
-		]),
+		...mapMutations('posts',['PUSH_VIEWED']),
 		articleViewed () {
 			let viewed = {
 				title: this.article.title,

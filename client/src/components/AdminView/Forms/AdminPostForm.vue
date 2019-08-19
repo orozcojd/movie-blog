@@ -166,12 +166,14 @@ export default {
 		}
 	},
 	computed: {
-		...mapState({
+		...mapState('auth',[
+			'user',
+			'contributor'
+		]),
+		...mapState('admin',{
 			article:'article',
 			tagChoices: 'tags',
-			snackbar: 'snackbar',
-			user: 'user',
-			contributor: 'contributor'
+			snackbar: 'snackbar'
 		}),
 		headTitle() {
 			return this.article.title ? `Admin Edit - ${this.article.title}` : 'Admin Create Article - Unsolocited.mp3'
@@ -184,7 +186,7 @@ export default {
 				return this.article.title
 			},
 			set(value) {
-				this.UPDATE_ARTICLE_CONTENT({
+				this.updateArticleContent({
 					type: 'title',
 					value: value
 				})
@@ -200,7 +202,7 @@ export default {
 				return this.article.thumbnailDescription
 			},
 			set(value) {
-				this.UPDATE_ARTICLE_CONTENT({
+				this.updateArticleContent({
 					type: 'thumbnailDescription',
 					value: value
 				})
@@ -211,7 +213,7 @@ export default {
 				return this.article.lazyImg
 			},
 			set(value) {
-				this.UPDATE_ARTICLE_CONTENT({
+				this.updateArticleContent({
 					type: 'lazyImg',
 					value: value
 				})
@@ -222,7 +224,7 @@ export default {
 				return this.article.img
 			},
 			set(value) {
-				this.UPDATE_ARTICLE_CONTENT({
+				this.updateArticleContent({
 					type: 'img',
 					value: value
 				})
@@ -233,7 +235,7 @@ export default {
 				return this.article.imgCred
 			},
 			set (value) {
-				this.UPDATE_ARTICLE_CONTENT({
+				this.updateArticleContent({
 					type: 'imgCred',
 					value: value
 				})
@@ -244,7 +246,7 @@ export default {
 				return this.article.realm
 			},
 			set(value) {
-				this.UPDATE_ARTICLE_CONTENT({
+				this.updateArticleContent({
 					type: 'realm',
 					value: value
 				})
@@ -255,7 +257,7 @@ export default {
 				return this.article.tags
 			},
 			set(value) {
-				this.UPDATE_ARTICLE_CONTENT({
+				this.updateArticleContent({
 					type: 'tags',
 					value: value
 				})
@@ -266,7 +268,7 @@ export default {
 				return this.article.draft
 			},
 			set(value) {
-				this.UPDATE_ARTICLE_CONTENT({
+				this.updateArticleContent({
 					type: 'draft',
 					value: value
 				})
@@ -299,20 +301,17 @@ export default {
 		}
 	},
 	methods: {
-		...mapActions([
+		...mapActions('admin',[
 			'updateArticle',
 			'postArticle',
 			'setSnackbar',
+			'updateArticleContent'
 		]),
 		disableRealm (name) {
 			if(!!name.name && !!this.realm && name._id === this.realm._id)
 				return true
 		},
-		...mapMutations([
-			'UPDATE_ARTICLE_CONTENT',
-			'SET_SINGLE_ARTICLE'
-			,'REMOVE_POST_TAG'
-		]),
+		...mapMutations('admin',['REMOVE_POST_TAG']),
 		validate (btnType) {
 			if (this.$refs.form.validate()) {
 				/* if validation is approved */
