@@ -1,5 +1,5 @@
 <template>
-  <div v-resize.quiet="onResize">
+  <div v-resize="onResize">
     <v-navigation-drawer
       v-model="drawerLeft"
       left
@@ -104,7 +104,7 @@
       </div>
       <v-toolbar-items v-if="!toggleDown">
         <v-btn
-          v-for="(realm, i) in realms.slice(0,5)"
+          v-for="(realm, i) in realms.slice(tagShow.start,tagShow.end)"
           :key="i"
           depressed
           @click="navigateTo('tag-view', { 
@@ -145,6 +145,12 @@ export default {
 				x: 0,
 				y: 0
 			},
+			tagShow: {
+				start: 0,
+				end: 8,
+				max: 8
+			},
+
 			toggleDown: false,
 			showClose: false
 		}
@@ -189,7 +195,7 @@ export default {
 				return this.realms
 			}
 			else {
-				return this.realms.slice(5)
+				return this.realms.slice(this.tagShow.end, this.realms.length)
 			}
 		}
 	},
@@ -220,9 +226,13 @@ export default {
 					this.showClose = false
 				}
 			}
-			else {
+			else if(this.windowSize.x <=1135) {
+				this.tagShow.end = 5
 				this.toggleDown = false
-				
+			}
+			else {
+				this.tagShow.end = 8
+				this.toggleDown = false		
 			}
 		},
 		titleCase(word) {

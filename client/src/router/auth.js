@@ -1,4 +1,4 @@
-const Login = () => ('@/components/Auth/Login')
+const Login = () => import('@/components/Auth/Login')
 const Index = () => import('@/components/Auth/Index')
 const PasswordReset = () => import('@/components/AdminView/Forms/PasswordReset')
 import {loggedInRedirect} from '@/Authentication/AuthGuard'

@@ -204,6 +204,7 @@ export default {
 		}
 	},
 	async mounted () {
+		// console.log(this.tags)
 		await this.setContent()
 		this.loaded = true
 	},
@@ -248,8 +249,8 @@ export default {
 @import url('../../assets/style/tiptap.scss');
 </style>
 <style scoped>
-	a {		
-  color: black;		
-  text-decoration: none;		
+	a {
+  color: black !important;		
+  text-decoration: none !important;		
 }
 </style>

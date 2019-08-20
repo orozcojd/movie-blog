@@ -6,7 +6,6 @@
     <v-layout justify-center>
       <v-flex
         xs12
-        xl6
       >
         <v-card class="card-padding">
           <v-layout justify-start>
