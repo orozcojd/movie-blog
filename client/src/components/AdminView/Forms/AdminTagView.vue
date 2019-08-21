@@ -6,9 +6,7 @@
     <vue-headful
       :title="headTitle"
     />
-    <h1
-      align="left"
-    >
+    <h1>
       Edit Tags
     </h1>
     <v-layout>

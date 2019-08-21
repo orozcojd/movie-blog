@@ -3,9 +3,16 @@
     <vue-headful
       :title="headTitle"
     />
+    <v-container
+      fluid
+      grid-list-md
+    >
+      <h1>
+        Edit your {{ postType }}
+      </h1>
+    </v-container>
     <admin-display-articles 
       :articles="filterArticles"
-      :admin="true"
     />
   </div>
 </template>
@@ -35,14 +42,16 @@ export default {
 		...mapState('auth', ['user']),
 		...mapGetters('posts', ['siteTitle']),
 		filterArticles () {
-			console.log(this.articles)
 			return this.articles.filter(article => article.draft === this.drafts)
 		},
-		headTitle() {
+		headTitle () {
 			let type = 'Posts'
 			if(this.drafts)
 				type = 'Drafts'
 			return `Admin View ${type} - ${this.siteTitle}`
+		},
+		postType () {
+			return this.drafts ? 'Drafts' : 'Published Posts'
 		}
 	},
 	async mounted () {

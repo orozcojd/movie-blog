@@ -178,6 +178,9 @@ export default {
 	},
 	async mounted() {
 		await this.getContributor(this.user.contributorId)
+			.catch(err => {
+				console.log(err)
+			})
 	},
 	methods: {
 		...mapActions('auth',[

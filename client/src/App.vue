@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <v-app>
-      <v-content>
-        <Header />
-        <!-- <h1>My Header</h1> -->
+      <v-content v-if="loaded">
+        <admin-header v-if="isUserLoggedin" />
+        <Header v-else />
         <router-view
           id="route-content"
           :key="$route.fullPath"
@@ -15,18 +15,36 @@
 </template>
 
 <script>
+import { mapState, mapGetters, mapActions } from 'vuex'
 import Header from '@/components/Layouts/Header.vue'
 import Footer from '@/components/Layouts/Footer.vue'
+
 export default {
 	name: 'App',
 	components: {
 		Header,
-		Footer
+		Footer,
+		AdminHeader: () => import('@/components/AdminView/Layouts/Header')
 	},
-	mounted () {
+	data () {
+		return {
+			loaded: false
+		}
+	},
+	computed: {
+		...mapState('auth', ['token']),
+		...mapGetters('auth', [
+			'isUserLoggedin'
+		]),
+	},
+	async mounted () {
+		if(!this.token.token) {
+			await this.getSetToken()
+		}
+		this.loaded = true
 	},
 	methods: {
-
+		...mapActions('auth', ['getSetToken'])
 	}
 }
 </script>

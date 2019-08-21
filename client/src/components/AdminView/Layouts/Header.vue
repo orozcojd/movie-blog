@@ -1,9 +1,13 @@
 <template>
-  <div v-resize="onResize">
+  <div
+    v-if="loaded"
+    v-resize="onResize"
+  >
     <v-navigation-drawer
       v-model="drawerLeft"
       left
       clipped
+      dark
       :disable-resize-watcher="true"
       app
     >
@@ -18,6 +22,32 @@
           </v-list-tile>
           <v-divider />
         </div>
+        <v-list-group
+          v-if="isUserLoggedin"
+          prepend-icon="account_circle"
+        >
+          <template v-slot:activator>
+            <v-list-tile>
+              <v-list-tile-title v-text="contributorName" />
+            </v-list-tile>
+          </template>
+          <v-list-tile
+            to="/admin"
+          >
+            <v-list-tile-title>Admin</v-list-tile-title>
+            <v-list-tile-action>
+              <v-icon>supervisor_account</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+          <v-list-tile
+            @click="logout"
+          >
+            <v-list-tile-title>Logout</v-list-tile-title>
+            <v-list-tile-action>
+              <v-icon>meeting_room</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
+        </v-list-group>
         <v-list-tile
           v-for="(realm, i) in sideNavRealms"
           :key="i"
@@ -64,6 +94,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
+      dark
       fixed
       app
       :scroll-off-screen="!drawerLeft"
@@ -90,15 +121,32 @@
         </v-btn>
       </v-toolbar-items>
     </v-toolbar>
+    <v-snackbar
+      v-model="snackVal"
+      :timeout="snackbar.timeout"
+      :top="true"
+      :multi-line="true"
+    >
+      {{ snackbar.text }}
+      <v-btn
+        color="pink"
+        flat
+        @click="snackClose"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </div>
 </template>
 
 <script>
+import admin from '@/store/admin'
 import { mapState, mapActions, mapGetters } from 'vuex'
 export default {
 	name: 'Header',
 	data() {
 		return {
+			loaded: false,
 			drawerLeft: false,
 			windowSize: {
 				x: 0,
@@ -109,7 +157,6 @@ export default {
 				end: 8,
 				max: 8
 			},
-
 			toggleDown: false,
 			showClose: false
 		}
@@ -117,10 +164,35 @@ export default {
 	computed: {
 		...mapState('posts', [
 			'viewedArticles',
-			'tags',
+		]),
+		...mapState('admin', [
+			'snackbar',
+			'tags'
+		]),
+		...mapState('auth', [
+			'user',
+			'token',
+			'adminContributor'
+		]),
+		...mapGetters('auth', [
+			'isUserLoggedin',
+			'getUser',
 		]),
 		...mapGetters('posts', ['siteTitle']),
-
+		contributorName() {
+			return this.adminContributor ? this.adminContributor.name : ''
+		},
+		snackVal: {
+			get() {
+				return this.snackbar.value
+			},
+			set(val) {
+				this.setSnackbar({
+					type: 'value',
+					value: val
+				})
+			},
+		},
 		realms () {
 			return this.tags.filter(tag => tag.realm === true)
 		},
@@ -134,13 +206,29 @@ export default {
 		}
 	},
 	async mounted () {
+		if(!admin.registered) {
+			this.$store.registerModule('admin', admin)
+			admin.registered = true
+		}
+		if(!this.token.token) {
+			await this.getSetToken()		
+		}
 		if(!this.tags.length)
-			await this.getTags()
+			await this.fetchTags()
 		this.onResize()
+		this.loaded = true
+	},
+	beforeDestroy() {
+		this.$store.unregisterModule('admin', admin)
 	},
 	methods: {
-		...mapActions('posts',['getTags']),
-
+		...mapActions('admin',['fetchTags']),
+		...mapActions('auth', [
+			'getSetToken',
+			'setUser',
+			'logOut'
+		]),
+		...mapActions('admin', ['setSnackbar']),
 		onResize () {
 			this.windowSize = { x: window.innerWidth, y: window.innerHeight }
 			if(this.windowSize.x <= 835) {
@@ -152,7 +240,7 @@ export default {
 					this.showClose = false
 				}
 			}
-			else if(this.windowSize.x <=1125) {
+			else if(this.windowSize.x <=1135) {
 				this.tagShow.end = 5
 				this.toggleDown = false
 			}
@@ -168,7 +256,13 @@ export default {
 			}
 			return title.join(' ')
 		},
-
+		logout () {
+			this.logOut().then(() => {
+				this.$router.push({
+					name: 'root'
+				})
+			})
+		},
 		goTo(route) {
 			this.$router.push(route)
 		},
@@ -176,6 +270,13 @@ export default {
 			this.$router.push({
 				name: name,
 				params: params,
+				// query: {page: 1}
+			})
+		},
+		snackClose() {
+			this.setSnackbar({
+				type: 'value',
+				value: false
 			})
 		}
 	}
@@ -195,7 +296,7 @@ export default {
     font-size: 2rem !important;
     margin-right: 1em; 
     cursor:pointer;
-    color: black;
+    color: white;
   }
   @media(max-width: 280px) {
     .main-title {

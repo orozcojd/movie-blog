@@ -17,11 +17,11 @@ export default {
 		}
 	},
 	mounted () {
-		this.$store.registerModule('admin', admin)
+		if(!admin.registered) {
+			this.$store.registerModule('admin', admin)
+			admin.registered = true
+		}
 		this.loaded = true
-	},
-	beforeDestroy() {
-		this.$store.unregisterModule('admin', admin)
 	}
 }
 </script>
