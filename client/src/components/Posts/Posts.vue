@@ -14,7 +14,7 @@
         xs12
       >
         <latest-post
-          v-if="articles.length"
+          v-if="articles && articles.length"
           class="mb-med"
           :article="articles[0]"
         />
@@ -75,7 +75,7 @@ export default {
 			}
 		}
 		await this.fetchArticles(options)
-			.catch(err => console.log(err))
+		// .catch(err => console.log(err))
 	},
 	methods: {
 		...mapActions('posts',['fetchArticles'])

@@ -106,8 +106,9 @@ module.exports = {
 		try {
 			const currUser = await User.findById(req.userId).lean();
 			const contributor = await Contributor.findById(currUser.contributorId).lean();
+			console.log(contributor);
 			res.status(200).send({name: contributor.name});
-
+			
 		} catch (err) {
 			res.status(400).send({
 				error: 'Unexpected error has occurred trying to get contributor information'
@@ -271,15 +272,16 @@ module.exports = {
 	login (req, res) {
 		if(!req.body.email.trim() || !req.body.password.trim()) {
 			return res.status(403).send({
-				message: 'Please enter valid credentials'
+				error: 'Please enter valid credentials'
 			});
 		}
 		passport.authenticate('local', (err, user, info) => {			
 			if (err) {
-				return res.status(404).json(err);
+				return res.status(404).send({
+					error: 'Something went wrong trying to log you in.'
+				});
 			}
 			if (user) {
-				// console.log(user);
 				const token = user.generateToken();
 				const refreshToken = randomToken.uid(256);
 				refreshTokens[refreshToken] = user.email;
@@ -289,7 +291,7 @@ module.exports = {
 					'user': {_id: user._id, email: user.email, contributorId: user.contributorId, permission: user.permission}
 				});
 			} else {
-				res.status(401).json(info);
+				res.status(401).send(info);
 			}
 		})(req, res);
 	},

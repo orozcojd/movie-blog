@@ -17,10 +17,11 @@ export default {
 		}
 	},
 	mounted () {
-		if(!admin.registered) {
-			this.$store.registerModule('admin', admin)
-			admin.registered = true
-		}
+		// if(!admin.registered) {
+		// 	console.log('hereee')
+		// 	this.$store.registerModule('admin', admin)
+		// 	admin.registered = true
+		// }
 		this.loaded = true
 	}
 }

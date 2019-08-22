@@ -136,6 +136,7 @@ export default {
 	async mounted () {
 		if(!this.tags.length)
 			await this.getTags()
+		console.log(this.tags)
 		this.onResize()
 	},
 	methods: {

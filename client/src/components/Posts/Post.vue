@@ -81,7 +81,7 @@
           />
           <small>
             <ul
-              v-if="article.tags.length"
+              v-if="article.tags && article.tags.length"
               align="left"
               class="tag-list"
             >
@@ -204,14 +204,13 @@ export default {
 		}
 	},
 	async mounted () {
-		// console.log(this.tags)
 		await this.setContent()
 		this.loaded = true
 	},
 	methods: {
 		...mapMutations('posts', ['PUSH_VIEWED']),
 		convertTagIdToName (id) {
-			if(this.tags.length){
+			if(this.tags && this.tags.length){
 				const tag = this.tags.find(tag => tag._id === id)
 				if(tag)
 					return tag.name.trim()

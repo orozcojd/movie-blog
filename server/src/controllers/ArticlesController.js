@@ -25,8 +25,7 @@ module.exports = {
 			options.sort = {created_at: 'desc'};
 			let query = {};
 			query.draft = false;
-			if(req.query.postPreview)
-				trimArticle = {title: 1, author: 1, img: 1, updatedAt: 1, thumbnailDescription: 1};
+			trimArticle = {title: 1, author: 1, img: 1, updatedAt: 1, thumbnailDescription: 1};
 			const articles = await Post.find(query,trimArticle, options).lean();
 			
 			res.send(articles);   
@@ -55,8 +54,7 @@ module.exports = {
 			query.skip = size * (pageNo - 1);
 			query.limit = size;
 			query.sort = {created_at: 'desc'};
-			if(req.query.postPreview)
-				trimArticle = {title: 1, author: 1, img: 1, thumbnailDescription: 1};
+			trimArticle = {title: 1, author: 1, img: 1, thumbnailDescription: 1};
 			const articles = await Post
 				.find({
 					$or: [{tags: req.params.tagName},{realm: req.params.tagName}]
@@ -86,8 +84,7 @@ module.exports = {
 			query.skip = size * (pageNo - 1);
 			query.limit = size;
 			query.sort = {created_at: 'desc'};
-			if(req.query.postPreview)
-				trimArticle = {title: 1, author: 1, img: 1, thumbnailDescription: 1};
+			trimArticle = {title: 1, author: 1, img: 1, thumbnailDescription: 1};
 			const articles = await Post.find({
 				contributorId: req.params.contributorId
 			}, trimArticle, query).lean();

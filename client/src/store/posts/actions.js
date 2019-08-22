@@ -1,46 +1,22 @@
 import Api from '@/services/Api'
 import types from '@/store/types'
+import to from '@/store/to'
 
 export default {
-	/**
-	 * POST
-	 * Calls api to request for new token given a refresh token
-	 * @param {commit} param0 
-	 * @param {Object} payload 
-	 */
-	async refreshToken ({commit}, payload) {
-		const token = (await Api.ApiGeneral().post('/tokens', payload)).data
-		return token
-	},
-	/**
-	 * 
-	 * @param {*} param0 
-	 * @param {*} payload 
-	 */
-	async resetPassword ({commit, dispatch}, payload) {
-		const response = (await Api.ApiGeneral({
-			headers: { 'Authorization': `Bearer ${payload.token}` }
-		}).post('/api/auth/reset-password', payload.password)).data
-		await dispatch('setToken', response)
-		await dispatch('setUser', response.user)
-		await dispatch('contributorName')
-		return response
-	},
 	/**
 	 * GET
 	 * Calls api to get articles and commits mutation to
 	 * set state articles array to retrieved articles
 	 * @param {commit} param0 
 	 */
-	async fetchArticles ({commit}, payload) {
-		const articles = (await Api.ApiGeneral().get('/articles', payload.params)).data		
-		if(payload.params.extend === true) {
-			commit(types.EXTEND_ARTICLES, articles)
+	async fetchArticles ({commit, dispatch}, payload) {
+		const [err, articles] = await to(Api.ApiGeneral().get('/articles', payload.params))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
 		}
 		else {
-			commit(types.FETCH_ARTICLES, articles)
+			commit(types.FETCH_ARTICLES, articles.data)
 		}
-		return articles
 	},
 	/**
 	 * GET
@@ -49,11 +25,14 @@ export default {
 	 * @param {commit} param0 
 	 * @param {String} id 
 	 */
-	async fetchArticle ({commit}, id) {
-		const article = (await Api.ApiGeneral().get(`/articles/${id}`))
-		// console.log(article)
-		commit(types.FETCH_ARTICLE, article.data)
-		return article
+	async fetchArticle ({commit, dispatch}, id) {
+		const [err, article] = await to(Api.ApiGeneral().get(`/articles/${id}`))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+		}
+		else {
+			commit(types.FETCH_ARTICLE, article.data)
+		}
 	},
 	/**
 	 * GET
@@ -62,10 +41,14 @@ export default {
 	 * @param {commit} param0 
 	 * @param {Object} payload 
 	 */
-	async fetchArticleByContributor({commit}, payload) {
-		const articles = (await Api.ApiGeneral().get(`/articlesByContributor/${payload.query}`, payload.params)).data
-		commit(types.FETCH_BY_CONTRIBUTOR, articles)
-		return articles
+	async fetchArticleByContributor({commit, dispatch}, payload) {
+		const [err, articles] = await to(Api.ApiGeneral().get(`/articlesByContributor/${payload.query}`, payload.params))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+		}
+		else {
+			commit(types.FETCH_BY_CONTRIBUTOR, articles.data)
+		}
 	},
 	/**
 	 * GET
@@ -82,13 +65,17 @@ export default {
 				id: payload.article._id,
 				pageNo: payload.pageNo
 			}}
-		const nextArticles = (await Api.ApiGeneral().get('/infinite-articles', params)).data
-		if(nextArticles.message.length)
-			commit(types.FETCH_NEXT_ARTICLES, nextArticles)
-		else {
-			dispatch('setMaxRelated', true)
+		const [err, nextArticles] = await to(Api.ApiGeneral().get('/infinite-articles', params))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
 		}
-		return nextArticles
+		else {
+			if(nextArticles.data.message.length)
+				commit(types.FETCH_NEXT_ARTICLES, nextArticles.data)
+			else {
+				dispatch('setMaxRelated', true)
+			}
+		}
 	},
 	/**
 	 * GET
@@ -97,16 +84,20 @@ export default {
 	 * @param {commit} param0 
 	 * @param {Object} payload 
 	 */
-	async getLatestUnrelated({commit}, payload) {
+	async getLatestUnrelated({commit, dispatch}, payload) {
 		let params = {
 			params: {
 				latestUnrelated: true,
 				...payload
 			}
 		}
-		const nextArticles = (await Api.ApiGeneral().get('/infinite-articles', params)).data
-		commit(types.FETCH_UNRELATED_ARTICLES, nextArticles)
-		return nextArticles
+		const [err, nextArticles] = await to(Api.ApiGeneral().get('/infinite-articles', params))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+		}
+		else {
+			commit(types.FETCH_UNRELATED_ARTICLES, nextArticles.data)
+		}
 	},
 	/**
 	 * GET
@@ -115,10 +106,14 @@ export default {
 	 * @param {commit} param0 
 	 * @param {String} tag 
 	 */
-	async getArticlesByTag ({commit}, payload) {
-		const articles = (await Api.ApiGeneral().get(`/tag/${payload.query}`, payload.params)).data
-		commit(types.FETCH_BY_TAG, articles)
-		return articles
+	async getArticlesByTag ({commit, dispatch}, payload) {
+		const [err, articles] = await to(Api.ApiGeneral().get(`/tag/${payload.query}`, payload.params))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+		}
+		else {
+			commit(types.FETCH_BY_TAG, articles.data)
+		}
 	},
 	/**
 	 * GET
@@ -127,10 +122,14 @@ export default {
 	 * @param {commit} param0 
 	 * @param {String} id 
 	 */
-	async getContributorBio({commit}, id) {
-		const contributor = (await Api.ApiGeneral().get(`/contributors/${id}`)).data
-		commit(types.SET_CONTRIBUTOR, contributor)
-		return contributor
+	async getContributorBio({commit, dispatch}, id) {
+		const [err, contributor] = await to(Api.ApiGeneral().get(`/contributors/${id}`))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+		}
+		else {
+			commit(types.SET_CONTRIBUTOR, contributor.data)
+		}
 	},
 	/**
 	 * GET
@@ -138,17 +137,16 @@ export default {
 	 * set state tags array to retrieved result
 	 * @param {commit} param0 
 	 */
-	async getTags ({commit}, options = {}) {
+	async getTags ({commit, dispatch}, options = {}) {
 		// let tags = (await Api.ApiGeneral().get('tags', options)).data
-		await Api.ApiGeneral().get('/tags', options)
-			.then(data => {
-				commit(types.FETCH_TAGS, data.data)
-				return data.data
-			}, err => {
-				console.log(err)
-			})
-		// commit(types.FETCH_TAGS, tags)
-		// return tags
+		let err, tags
+		[err, tags] = await to(Api.ApiGeneral().get('/tags', options))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+		}
+		else {
+			commit(types.FETCH_TAGS, tags.data)
+		}
 	},
 	/**
 	 * Commits mutation to reset infinite scroll objects

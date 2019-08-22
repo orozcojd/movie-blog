@@ -63,7 +63,7 @@
         </v-list-tile>
 
         <v-list-group
-          v-if="viewedArticles.length"
+          v-if="viewedArticles && viewedArticles.length"
           value="true"
           class="contain-group"
           prepend-icon="history"
@@ -206,23 +206,22 @@ export default {
 		}
 	},
 	async mounted () {
-		if(!admin.registered) {
-			this.$store.registerModule('admin', admin)
-			admin.registered = true
-		}
 		if(!this.token.token) {
 			await this.getSetToken()		
 		}
-		if(!this.tags.length)
+		await this.getTags()
+		
+		if(this.tags && !this.tags.length)
 			await this.fetchTags()
 		this.onResize()
 		this.loaded = true
 	},
 	beforeDestroy() {
-		this.$store.unregisterModule('admin', admin)
+		this.$store.unregisterModule('admin')
 	},
 	methods: {
 		...mapActions('admin',['fetchTags']),
+		...mapActions('posts',['getTags']),
 		...mapActions('auth', [
 			'getSetToken',
 			'setUser',

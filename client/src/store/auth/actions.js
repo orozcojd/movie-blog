@@ -1,6 +1,6 @@
 import Api from '@/services/Api'
 import types from '@/store/types'
-
+import to from '@/store/to'
 export default {
 	/**
 	 * Logs in user if validated by backend and
@@ -9,14 +9,18 @@ export default {
 	 * @param {object} payload 
 	 */
 	async login({commit, dispatch}, payload) {
-		await Api.ApiGeneral().post('login', payload).then(async (res) => {
+		const [err, res] = await to(Api.ApiGeneral().post('login', payload))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+			return Promise.reject()
+		}
+		else {
 			await dispatch('setToken', res.data)
 			await dispatch('setUser', res.data.user)
 			await dispatch('contributorName')
 			return res
-		}).catch(err => {
-			return Promise.reject(err)
-		})
+		}
+
 	},
 	/**
 	 * Commits mutations to set token and user to null
@@ -27,25 +31,61 @@ export default {
 			const payload = {
 				refreshToken: localStorage.getItem('unsolicited-session-refresh-token')
 			}
-			
 			dispatch('removeRefreshTkn', payload)
-			dispatch('setToken', {
-				token: null,
-				refreshToken: null
-			})
+			dispatch('setToken', {token: null, refreshToken: null})
 			dispatch('setUser', null)
 			resolve()
 		})
 	},
-
 	/**
 	 * 
 	 * @param {*} param0 
 	 * @param {*} payload 
 	 */
-	async passwordReset({commit}, payload) {
-		const submission = (await Api.ApiGeneral().post('/api/auth/forgot-password', payload)).data
-		return submission
+	async resetPassword ({commit, dispatch}, payload) {
+		const [err, response] = await to(Api.ApiGeneral({
+			headers: { 'Authorization': `Bearer ${payload.token}` }
+		}).post('/api/auth/reset-password', payload.password))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+			return Promise.reject()
+		}
+		else {
+			await dispatch('setToken', response.data)
+			await dispatch('setUser', response.data.user)
+			await dispatch('contributorName')
+			return Promise.resolve()
+		}
+	},
+	/**
+	 * 
+	 * @param {*} param0 
+	 * @param {*} payload 
+	 */
+	async passwordReset({commit, dispatch}, payload) {
+		const [err, submission] = await to(Api.ApiGeneral().post('/api/auth/forgot-password', payload))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+			return Promise.reject()
+		}
+		else {
+			return submission.data
+		}
+	},
+	/**
+	 * POST
+	 * Calls api to request for new token given a refresh token
+	 * @param {commit} param0 
+	 * @param {Object} payload 
+	 */
+	async refreshToken ({commit, dispatch}, payload) {
+		const [err, token] = await to(Api.ApiGeneral().post('/tokens', payload))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+		}
+		else {
+			dispatch('setTokenAttr', token.data)
+		}
 	},
 	/**
 	 * Commits mutation to set state token to param token
@@ -54,6 +94,9 @@ export default {
 	 */
 	setToken ({commit}, token) {
 		commit(types.SET_TOKEN, token)
+	},
+	setTokenAttr ({commit}, token) {
+		commit(types.SET_TOKEN_ATTR, token)
 	},
 	/**
 	 * Commits mutation to set local storage item in store
@@ -74,8 +117,11 @@ export default {
 	 * @param {commit} param0 
 	 * @param {Object} refreshToken 
 	 */
-	async removeRefreshTkn ({commit}, refreshToken) {
-		await (Api.ApiAdmin().post('/tokens/removeRefresh', refreshToken))
+	async removeRefreshTkn ({commit, dispatch}, refreshToken) {
+		const [err] = await to(Api.ApiAdmin().post('/tokens/removeRefresh', refreshToken))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+		}
 	},
 	/**
 	 * Commits mutations to set user to param user
@@ -110,15 +156,23 @@ export default {
 	 * Calls api to get the current logged in user's name and commits mutation
 	 * @param {commit} param0 
 	 */
-	async contributorName({commit}) {
-		const name = (await Api.ApiAdmin().get('/api/contribuor-name')).data
-		localStorage.setItem('unsolicited-contributor', JSON.stringify(name))
-		commit(types.SET_ADMIN_CONTRIBUTOR, name)
+	async contributorName({commit, dispatch}) {
+		const [err, name] = await to(Api.ApiAdmin().get('/api/contribuor-name'))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+		}
+		else {
+			localStorage.setItem('unsolicited-contributor', JSON.stringify(name.data))
+			commit(types.SET_ADMIN_CONTRIBUTOR, name.data)
+		}
 	},
-	async getContributor({commit}, id) {
-		const contributor = (await Api.ApiAdmin().get(`/api/contributors/${id}`)).data
-		commit(types.SET_CONTRIBUTOR, contributor)
-		return contributor
+	async getContributor({commit, dispatch}, id) {
+		const [err, contributor] = await to(Api.ApiAdmin().get(`/api/contributors/${id}`))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+		}
+		commit(types.SET_CONTRIBUTOR, contributor.data)
+		return contributor.data
 	},
 	/**
 	 * PUT
@@ -127,10 +181,14 @@ export default {
 	 * @param {commit} param0 
 	 * @param {Object} id 
 	 */
-	async updateContributorBio({commit}, payload) {
-		const response = (await Api.ApiAdmin().put(`/api/contributors/${payload.id}`, payload)).data
-		console.log(response)
-		commit(types.UPDATE_CONTRIBUTOR, response.contributor)
-		return response
+	async updateContributorBio({commit, dispatch}, payload) {
+		const [err, response] = await to(Api.ApiAdmin().put(`/api/contributors/${payload.id}`, payload))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+		}
+		else {
+			commit(types.UPDATE_CONTRIBUTOR, response.contributor.data)
+			return response.data
+		}
 	}
 }

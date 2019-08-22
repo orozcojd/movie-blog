@@ -101,8 +101,7 @@ export default {
 		let payload = {
 			params: {
 				params: {
-					page: page,
-					postPreview: true
+					page: page
 				}
 			}
 		}

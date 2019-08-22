@@ -8,10 +8,9 @@ export default {
 	 * @param {String} token 
 	 */
 	[types.SET_TOKEN]: (state, payload) => {
+		console.log(payload)
 		Vue.set(state.token, 'token', payload.token)
 		Vue.set(state.token, 'refreshToken', payload.refreshToken)
-		// state.token.token = payload.token
-		// state.token.refreshToken = payload.refreshToken
 		if (state.token.token) {
 			try {
 				let payload = state.token.token.split('.')[1]
@@ -32,6 +31,9 @@ export default {
 			localStorage.removeItem('unsolicited-session-refresh-token')
 		}
 	},
+	[types.SET_TOKEN_ATTR] (state, payload) {
+		Vue.set(state.token, 'token', payload.token)
+	},
 	/**
 	 * sets user to string payload
 	 * @param {Vuex state} state 
@@ -46,6 +48,7 @@ export default {
 			window.localStorage.removeItem('unsolicited-user')
 		}
 	},
+	
 	[types.SET_ADMIN_CONTRIBUTOR] (state, contributor) {
 		state.adminContributor = contributor
 	},

@@ -12,23 +12,22 @@ passport.use(new LocalStrategy({
 		// return if user not found
 		if(!user) {
 			return done(null, false, {
-				message: 'Invalid Login Credentials'
+				error: 'Invalid Login Credentials'
 			});
 		}
 		user.comparePasswords(password)
 			.then(res => {
 				if(!res) {
 					return done(null, false, {
-						message: 'Invalid Login Credentials'
+						error: 'Invalid Login Credentials'
 					});
 				}
 				//return user object - valid creds
 				return done(null, user);
 			})
 			.catch(err => {
-				console.log(err);
 				return done(null, false, {
-					message: 'Internal Server Error'
+					error: 'Internal Server Error'
 				});
 			});
 	});

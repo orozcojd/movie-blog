@@ -358,19 +358,18 @@ export default {
 			if(this.addedTags.length){
 				await this.postTags(this.addedTags.map(name => ({name: name})))
 					.then((response) => {
-						
 						this.snackText = response.message
 						// this.snackbar = true
 						this.addRemoveBtnType = 'success'
 						this.addedTags = []
 					})
-					.catch(err => {
-						if(err && !err.response) {
-							this.snackText = err
-						}
-						else {
-							this.snackText = err.response.data.error
-						}
+					.catch(() => {
+						// if(err && !err.response) {
+						// 	this.snackText = err
+						// }
+						// else {
+						// 	this.snackText = err.response.data.error
+						// }
 						this.addRemoveBtnType = 'error'
 					})
 				this.setSnackbar({

@@ -1,6 +1,5 @@
 import types from '@/store/types'
 export default {
-	
 	[types.MAX_RELATED_REACHED] (state, payload) {
 		state.maxRelatedReached = payload
 	},
@@ -21,16 +20,6 @@ export default {
 	 */
 	[types.FETCH_ARTICLES] (state, payload) {
 		state.articles = payload
-	},
-
-	/**
-	 * Extends state articles array by spreading payload array
-	 * and pushing it
-	 * @param {Vuex state} state 
-	 * @param {Array} payload 
-	 */
-	[types.EXTEND_ARTICLES] (state, payload) {
-		state.articles.push(...payload)
 	},
 	/**
 	 * Sets the state tags object to payload object

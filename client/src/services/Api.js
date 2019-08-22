@@ -22,7 +22,6 @@ export default {
 		instance.interceptors.response.use(response => {
 			return response;
 		}, async (error) => {
-			console.log(error)
 			const originalRequest = error.config;
 			let refreshTken = store.getters.getRefeshToken
 			let user = store.getters.getUser
@@ -42,16 +41,10 @@ export default {
 					email: user.email,
 					refreshToken: refreshTken
 				}
-				await store.dispatch('refreshToken', payload).then(async token => {
-					// set new token in store
-					await store.dispatch('setToken', {
-						token: token.token,
-						refreshToken: refreshTken
-					})
+				await store.dispatch('auth/refreshToken', payload).then(() => {
 					originalRequest.headers['Authorization'] = getHeader()
 					originalRequest._retry = false
-
-				}).catch((err) => {
+				}).catch(() => {
 					store.dispatch('logOut')
 					router.push({
 						name: 'root'

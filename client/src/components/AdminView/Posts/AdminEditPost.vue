@@ -50,6 +50,7 @@ export default {
 	},
 	async mounted() {
 		await this.getContributor(this.user.contributorId)
+		console.log(this.contributor)
 		// await this.fetchTags()
 		const id = this.$route.params.id
 		let articleFound = this.getArticle(id)

@@ -4,6 +4,7 @@
       <v-content v-if="loaded">
         <admin-header v-if="isUserLoggedin" />
         <Header v-else />
+        <display-errors />
         <router-view
           id="route-content"
           :key="$route.fullPath"
@@ -18,12 +19,15 @@
 import { mapState, mapGetters, mapActions } from 'vuex'
 import Header from '@/components/Layouts/Header.vue'
 import Footer from '@/components/Layouts/Footer.vue'
+import DisplayErrors from '@/components/Errors/DisplayErrors'
+import admin from '@/store/admin'
 
 export default {
 	name: 'App',
 	components: {
 		Header,
 		Footer,
+		DisplayErrors,
 		AdminHeader: () => import('@/components/AdminView/Layouts/Header')
 	},
 	data () {
@@ -37,9 +41,19 @@ export default {
 			'isUserLoggedin'
 		]),
 	},
+	watch: {
+		isUserLoggedin(val) {
+			if(val) {
+				this.$store.registerModule('admin', admin)
+			}
+		}
+	},
 	async mounted () {
 		if(!this.token.token) {
 			await this.getSetToken()
+		}
+		if(this.isUserLoggedin) {
+			this.$store.registerModule('admin', admin)
 		}
 		this.loaded = true
 	},

@@ -20,12 +20,6 @@
         >
           <h1>Password Reset</h1>
         </div>
-        <v-alert
-          v-model="alert"
-          type="error"
-        >
-          {{ alertMessage }}
-        </v-alert>
         <v-card
           
           class="card-padding"
@@ -78,9 +72,7 @@ export default {
 			},
 			formValid: true,
 			submitColor: '',
-			token: '',
-			alert: false,
-			alertMessage: ''
+			token: ''
 		}
 	},
 	computed: {
@@ -95,7 +87,7 @@ export default {
 		this.token = this.$route.query.token
 	},
 	methods: {
-		...mapActions([
+		...mapActions('auth',[
 			'resetPassword'
 		]),
 		submit() {
@@ -103,10 +95,11 @@ export default {
 				.then(() => {
 					this.$router.push({path: '/admin'})
 				})
-				.catch(err => {
-					this.alert = true
-					this.alertMessage = err.response.data.error
+				.catch(() => {
 					this.submitColor = "error"
+					setTimeout(() => {
+						this.submitColor = ''
+					}, 4000)
 				})
 		},
 		validate() {

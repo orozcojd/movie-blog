@@ -110,8 +110,8 @@ export default {
 			alert: false,
 			alertMessage: '',
 			credentials: {
-				email: '',
-				password: ''
+				email: 'socaljorozco@gmail.com',
+				password: 'password'
 			},
 			resetTriggered: false,
 			emailReset: {
@@ -153,22 +153,20 @@ export default {
 					this.alert = true;
 					this.resetTriggered = false;
 				})
-				.catch(err => {
-					console.log(err)
-				})
+				.catch()
 		},
 		async submit () {
 			this.login({
 				email: this.credentials.email,
 				password: this.credentials.password
-			}).then((res) => {
-				this.error = null
-				this.$router.push({
-					path: '/admin'
-				})
-			}).catch(err => {
-				this.error = err.response.message
 			})
+				.then(() => {
+					this.error = null
+					this.$router.push({
+						path: '/admin'
+					})
+				})
+				.catch() 
 		}
 	}
 }

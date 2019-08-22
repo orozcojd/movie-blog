@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
 export default {
 	name: 'PostView',
 	components: {
@@ -50,7 +50,6 @@ export default {
 			'maxRelatedReached',
 			'maxArticlesReached'
 		]),
-
 		infiniteArticleIds () {
 			return this.infiniteArticles.map(article => article._id)
 		},
@@ -81,7 +80,8 @@ export default {
 			'getNextArticles',
 			'resetNextArticles',
 			'getLatestUnrelated',
-			'setMaxRelated'
+			'setMaxRelated',
+			'setArticle'
 		]),
 		...mapMutations('posts',['PUSH_VIEWED']),
 		articleViewed () {
@@ -112,14 +112,7 @@ export default {
 			this.busy = false
 		},
 		async loadArticle (id) {
-		// if article not found in store, fetch it
-			if(id){
-				await this.fetchArticle(id)
-					.catch(() => {
-						this.$router.go(-1)
-					})
-			}
-
+			await this.fetchArticle(id)
 		}
 	}
 }
