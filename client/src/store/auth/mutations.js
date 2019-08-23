@@ -8,7 +8,6 @@ export default {
 	 * @param {String} token 
 	 */
 	[types.SET_TOKEN]: (state, payload) => {
-		console.log(payload)
 		Vue.set(state.token, 'token', payload.token)
 		Vue.set(state.token, 'refreshToken', payload.refreshToken)
 		if (state.token.token) {

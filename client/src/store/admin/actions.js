@@ -55,10 +55,35 @@ export default {
 		}
 		else {
 			commit(types.POST_ARTICLE, article.data)
-			return article.data.message
+			dispatch('setSnackbar', {
+				type: 'text',
+				value: article.data.message,
+				show: true
+			})
 		}
 	},
-
+	/**
+	 * PUT
+	 * Calls api to update payload object article in db
+	 * and commits mutation
+	 * @param {commit} param0 
+	 * @param {Object} payload 
+	 */
+	async updateArticle ({commit, dispatch}, payload) {
+		const [err, article] = await to(Api.ApiAdmin().put(`/api/articles/${payload.id}`, payload.article))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+			return Promise.reject()
+		}
+		else {
+			commit(types.UPDATE_ARTICLE, article.data)
+			dispatch('setSnackbar', {
+				type: 'text',
+				value: article.data.message,
+				show: true
+			})
+		}
+	},
 	/**
 	 * Calls API to post user detail data and returns reponse
 	 * @param {commit} param0 
@@ -71,7 +96,11 @@ export default {
 			return Promise.reject()
 		}
 		else {
-			return response.data
+			dispatch('setSnackbar', {
+				type: 'text',
+				value: response.data.message,
+				show: true
+			})
 		}
 	},
 	/**
@@ -104,7 +133,11 @@ export default {
 		}
 		else {
 			commit(types.ADD_TAGS, tags.data)
-			return tags.data
+			dispatch('setSnackbar', {
+				type: 'text',
+				value: tags.data.message,
+				show: true
+			})
 		}
 	},
 	/**
@@ -122,6 +155,11 @@ export default {
 		}
 		else {
 			commit(types.SET_TAGS, tags.data.tags)
+			dispatch('setSnackbar', {
+				type: 'text',
+				value: tags.data.message,
+				show: true
+			})
 		}
 	},
 	/**
@@ -136,14 +174,18 @@ export default {
 		let params = {
 			data: payload
 		}
-		const [err, deletedTags] = await to(Api.ApiAdmin().delete('/api/tags', params))
+		const [err, res] = await to(Api.ApiAdmin().delete('/api/tags', params))
 		if(err) {
 			dispatch('errors/handleConnectionError', err.response, {root: true})
 			return Promise.reject()
 		}
 		else {
-			commit(types.REMOVE_TAG, deletedTags.data)
-			return deletedTags.data.deleteCount
+			commit(types.REMOVE_TAG, res.data)
+			dispatch('setSnackbar', {
+				type: 'text',
+				value: `Deleted the ${res.data.deleteCount} tag(s) selected.`,
+				show: true
+			})
 		}
 	},
 	/**
@@ -182,24 +224,7 @@ export default {
 			return articles.data
 		}
 	},
-	/**
-	 * PUT
-	 * Calls api to update payload object article in db
-	 * and commits mutation
-	 * @param {commit} param0 
-	 * @param {Object} payload 
-	 */
-	async updateArticle ({commit, dispatch}, payload) {
-		const [err, article] = await to(Api.ApiAdmin().put(`/api/articles/${payload.id}`, payload.article))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
-			commit(types.UPDATE_ARTICLE, article.data)
-			return article.data.message
-		}
-	},
+	
 	/**
 	 * DELETE
 	 * Calls api to delete article by id passed in and commits

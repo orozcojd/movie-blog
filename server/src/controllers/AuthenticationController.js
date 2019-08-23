@@ -238,9 +238,7 @@ module.exports = {
 							else {
 								await sendResetPwEmail(user, contrib);
 								res.status(200).send({
-									message: `User ${user.email} was created`,
-									user: saved,
-									contributor: contrib
+									message: `User ${user.email} was created`
 								});
 							}
 						});

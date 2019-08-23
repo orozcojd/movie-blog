@@ -95,12 +95,7 @@ export default {
 				.then(() => {
 					this.$router.push({path: '/admin'})
 				})
-				.catch(() => {
-					this.submitColor = "error"
-					setTimeout(() => {
-						this.submitColor = ''
-					}, 4000)
-				})
+				.catch()
 		},
 		validate() {
 			if(this.$refs.passResetForm.validate()) {

@@ -284,14 +284,14 @@ export default {
 		}
 
 	},
-	watch: {
-		snackVal(val, prev) {
-			if(val === false && prev === true) {
-				this.submitColor = 'undefined'
-				this.$router.push({name: adminCategories.name})
-			}
-		}
-	},
+	// watch: {
+	// 	snackVal(val, prev) {
+	// 		if(val === false && prev === true) {
+	// 			this.submitColor = 'undefined'
+	// 			this.$router.push({name: adminCategories.name})
+	// 		}
+	// 	}
+	// },
 	async mounted() {
 		await this.fetchTags()
 		this.loaded = true
@@ -319,16 +319,20 @@ export default {
 		},
 		updateTagInfo() {
 			if (this.$refs.editNameForm.validate()) {
-				this.updateTags(this.tags).then(() => {
-					this.editNameBtnType = 'success'
-				})
+				this.updateTags(this.tags)
+					.then(() => {
+						this.editNameBtnType = 'success'
+					})
+					.catch(() => {
+						this.addRemoveBtnType = 'error'
+					})
 			}
 			else {
 				this.editNameBtnType = 'error'
 			}
 			setTimeout(() => {
 				this.editNameBtnType = 'default'
-			}, 1500)
+			}, this.snackbar.timeout)
 		},    
 		addTag() {
 			if (this.$refs.addTagForm.validate()) {
@@ -357,47 +361,25 @@ export default {
 		async addRemoveTags() {
 			if(this.addedTags.length){
 				await this.postTags(this.addedTags.map(name => ({name: name})))
-					.then((response) => {
-						this.snackText = response.message
-						// this.snackbar = true
+					.then(() => {
 						this.addRemoveBtnType = 'success'
 						this.addedTags = []
 					})
 					.catch(() => {
-						// if(err && !err.response) {
-						// 	this.snackText = err
-						// }
-						// else {
-						// 	this.snackText = err.response.data.error
-						// }
 						this.addRemoveBtnType = 'error'
 					})
-				this.setSnackbar({
-					type: 'text',
-					value: this.snackText,
-					show: true
-				})
 			}
 			// if delete tags was commented out - this code is unreachable
 			if(this.removedTags.length) {
 				await this.deleteTags(this.removedTags)
-					.then(msg => {
-						this.addRemoveBtnType = 'success'
-						this.removedTags = []
-						this.snackText = "Deleted: " + msg.toString() + " tags"
+					.then(() => this.addRemoveBtnType = 'success')
+					.catch(() => {
+						this.addRemoveBtnType = 'error'
 					})
-					.catch(err => {
-						this.snackText = err
-					})
-				this.setSnackbar({
-					type: 'text',
-					value: this.snackText,
-					show: true
-				})
 			}
-			// setTimeout(() => {
-			// 	this.addRemoveBtnType = 'default'
-			// }, this.snackbar.timeout)
+			setTimeout(() => {
+				this.addRemoveBtnType = 'default'
+			}, this.snackbar.timeout)
 		}
 	}
 }

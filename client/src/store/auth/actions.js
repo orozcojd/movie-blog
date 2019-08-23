@@ -185,10 +185,15 @@ export default {
 		const [err, response] = await to(Api.ApiAdmin().put(`/api/contributors/${payload.id}`, payload))
 		if(err) {
 			dispatch('errors/handleConnectionError', err.response, {root: true})
+			return Promise.reject()
 		}
 		else {
-			commit(types.UPDATE_CONTRIBUTOR, response.contributor.data)
-			return response.data
+			commit(types.UPDATE_CONTRIBUTOR, response.data.contributor)
+			dispatch('admin/setSnackbar', {
+				type: 'text',
+				value: response.data.message,
+				show: true
+			}, {root: true})
 		}
 	}
 }

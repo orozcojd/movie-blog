@@ -296,6 +296,7 @@ export default {
 		snackVal(val, prev) {
 			if(val === false && prev === true) {
 				this.submitColor = 'undefined'
+				this.$router.push({name: adminCategories.name})
 			}
 		}
 	},
@@ -327,7 +328,6 @@ export default {
 			if (this.requestRunning) {
 				return
 			}
-			// disable cancel button & prevent api from firing after multiple button clicks
 			this.requestRunning = true
 			this.validation.cancelDisabled = true
 			if (this.$route.params.id) {
@@ -336,11 +336,8 @@ export default {
 					id: this.$route.params.id
 				}
 				await this.updateArticle(payload)
-					.then(response => {
-						this.submitCallback(response, btnType)
-					})
-					.catch(err => {
-						this.submitCallback(err.response.data.error, btnType, true)
+					.then(() => {
+						this.submitCallback(btnType)
 					})
 			} else {
 				await this.postArticle({...new Article({
@@ -348,36 +345,32 @@ export default {
 					author: this.contributor.name
 				}),
 				contributorId:this.user.contributorId})
-					.then(response => {
-						this.submitCallback(response, btnType)
+					.then(() => {
+						this.submitCallback(btnType)
 					})
-					.catch(err => {
-						this.submitCallback(err.response.data.error, btnType, true)
+					.catch(() => {
+						this.submitCallback(btnType, true)
 					})
 			}
 			this.requestRunning = false
 		},
-		submitCallback(message, btnType, fail = false) {
-			this.setSnackbar({
-				type: 'text',
-				value: message,
-				show: true
-			})
-			if(fail)
+		submitCallback(btnType, fail = false) {
+			if(fail){
 				this.validation[btnType] = 'error'
+				setTimeout(() => {
+					this.validation[btnType] = 'undefined'
+				}, this.snackbar.timeout)
+			}
 			else
 				this.validation[btnType] = 'success'
-			setTimeout(() => {
-				this.validation[btnType] = 'undefined'
+
+		},
+		cancel () {
+			if(!this.requestRunning) {
 				this.$router.push({
 					name: adminCategories.name
 				})
-			}, this.snackbar.timeout)
-		},
-		cancel () {
-			this.$router.push({
-				name: adminCategories.name
-			})
+			}
 		},
 	}
 }

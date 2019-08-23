@@ -166,7 +166,6 @@ export default {
 		snackVal() {
 			return this.snackbar.value
 		}
-    
 	},
 	watch: {
 		snackVal(val, prev) {
@@ -178,9 +177,6 @@ export default {
 	},
 	async mounted() {
 		await this.getContributor(this.user.contributorId)
-			.catch(err => {
-				console.log(err)
-			})
 	},
 	methods: {
 		...mapActions('auth',[
@@ -205,19 +201,11 @@ export default {
 			const contributor = new Contributor(this.contributor)
 			const payload = {...contributor, userId: this.user._id, id: this.contributor._id}
 			await this.updateContributorBio(payload)
-				.then(response => {
+				.then(() => {
 					this.submitColor = 'success'
-					this.snackText = response.message
 				})
-				.catch(err => {
-					this.submitColor = 'error'
-					this.snackText = err
-				})
-			this.setSnackbar({
-				type: 'text',
-				value: this.snackText,
-				show: true
-			})
+				.catch(() => this.submitColor = 'error')
+
 		}
 	}
 }

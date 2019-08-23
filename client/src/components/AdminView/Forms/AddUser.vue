@@ -99,6 +99,17 @@ export default {
 		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
 			return `Admin Add User - ${this.siteTitle}`
+		},
+		snackVal() {
+			return this.snackbar.value
+		}
+	},
+	watch: {
+		snackVal(val, prev) {
+			if(val === false && prev === true) {
+				this.submitColor = 'undefined'
+				this.$router.push({name: adminCategories.name})
+			}
 		}
 	},
 	mounted() {
@@ -112,28 +123,8 @@ export default {
 		async submit () {
 			if (this.$refs.addUserForm.validate()) {
 				await this.addUser(this.user)
-					.then(() => {
-						this.submitColor = 'success'
-						this.snackText = `User ${this.user.email} was created.`
-						setTimeout(() => {
-							this.$router.push({
-								name: adminCategories.name
-							})
-						}, this.snackbar.timeout)
-					})
-					.catch(err => {
-						if(err.response)
-							this.snackText = err.response.data.error
-						else
-							this.snackText = err
-						this.submitColor = 'error'
-
-					})
-				this.setSnackbar({
-					type: 'text',
-					value: this.snackText,
-					show: true
-				})
+					.then(() => this.submitColor = 'success')
+					.catch(() => this.submitColor = 'error')
 			}
 			else {
 				this.submitColor = 'error'
@@ -145,7 +136,3 @@ export default {
 	}
 }
 </script>
-
-<style scoped>
-
-</style>
