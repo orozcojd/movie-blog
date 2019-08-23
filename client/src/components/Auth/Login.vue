@@ -110,8 +110,8 @@ export default {
 			alert: false,
 			alertMessage: '',
 			credentials: {
-				email: 'socaljorozco@gmail.com',
-				password: 'password'
+				email: '',
+				password: ''
 			},
 			resetTriggered: false,
 			emailReset: {
