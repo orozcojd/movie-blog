@@ -161,6 +161,7 @@ export default {
 			showClose: false
 		}
 	},
+  
 	computed: {
 		...mapState('posts', [
 			'viewedArticles',
@@ -205,14 +206,21 @@ export default {
 			}
 		}
 	},
+	created: function () {
+		const store = this.$store;
+		if (!(store && store.state && store.state['admin'])) {
+			store.registerModule('admin', admin);
+		}
+	},
 	async mounted () {
 		if(!this.token.token) {
 			await this.getSetToken()		
 		}
 		await this.getTags()
 		
-		if(this.tags && !this.tags.length)
+		if(this.tags && !this.tags.length){
 			await this.fetchTags()
+		}
 		this.onResize()
 		this.loaded = true
 	},

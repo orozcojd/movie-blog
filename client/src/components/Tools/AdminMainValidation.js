@@ -23,7 +23,8 @@ export default {
 		],
 	passwordRules: 
 	[
-		v => !!v || 'Password is required'
+		v => !!v || 'Password is required',
+		v => (v && v.length <= 300) || 'PAssword name length must not exceed 300 characters',
 	],
 	permissionRules: 
 	[

@@ -3,14 +3,14 @@
     fluid
   >
     <vue-headful
-      title="Login"
+      :title="headTitle"
     />
     <v-alert
-      v-model="alert"
+      v-model="alert.val"
       dismissible
-      :type="alertType"
+      :type="alert.type"
     >
-      {{ alertMessage }}
+      {{ alert.message }}
     </v-alert>
     <v-layout
       align-top
@@ -24,149 +24,145 @@
           <h1>Login</h1>
         </div>
         <v-card
-          v-if="!resetTriggered"
+         
           class="card-padding"
         >
-          <v-form>
-            <v-text-field
-              v-model="credentials.email"
-              :rules="emailRules"
-              autofocus
-              label="Email"
-              autocomplete="on"
-              required
-            />
-            <v-text-field
-              v-model="credentials.password"
-              label="Password"
-              type="password"
-              autocomplete="on"
-              required
-            />
-            <div class="mb-xs">
-              <a @click="resetTriggered = !resetTriggered">Forgot Password?</a>
-            </div>
-            <v-btn 
-              type="submit"
-              @click="submit"
-            >
-              Submit
-            </v-btn>
-          </v-form>
-          <br>
-          <div
-            class="error"
-          >
-            {{ error }}
-          </div>
-
-          <br>
-        </v-card>
-        <keep-alive>
-          <v-card
-            v-if="resetTriggered"
-            class="card-padding"
-          >
+          <div v-if="!resetTriggered">
             <v-form
-              ref="resetPasswordForm"
-              v-model="resetFieldValid"
-              lazy-validation
+              ref="loginForm"
             >
-              <h2>Forgot Password</h2>
-              <v-label>Please enter your email address and we will send you an email how to reset your password.</v-label>
               <v-text-field
-                v-model="emailReset.email"
+                v-model="credentials.email"
                 :rules="emailRules"
+                :counter="40"
                 autofocus
                 label="Email"
-                class="mb-xs"
+                autocomplete="on"
                 required
               />
-              <v-btn
-                color="error"
-                type="submit"
-                @click="validate"
-              >
-                Reset Password
-              </v-btn>
-              <div align="right">
-                <a @click="resetTriggered = !resetTriggered">Back to Login</a>
+              <v-text-field
+                v-model="credentials.password"
+                :rules="passwordRules"
+                :counter="300"
+                label="Password"
+                type="password"
+                autocomplete="on"
+                required
+              />
+              <div class="mb-xs">
+                <a @click="resetTriggered = !resetTriggered">Forgot Password?</a>
               </div>
+              <vue-recaptcha
+                ref="recaptcha"
+                sitekey="6LdbmbQUAAAAAFqSXxy-GYvQwfYMcvpRkLTcUlgG"
+                :load-recaptcha-script="true"
+                theme="dark"
+                @expired="onCaptchaExpired"
+                @verify="verifyLoginCaptcha"
+              >
+                <v-btn 
+                  type="submit"
+                  @click="validateLogin"
+                >
+                  Submit
+                </v-btn>
+              </vue-recaptcha>
             </v-form>
-          </v-card>
-        </keep-alive>
+            <br>
+          </div>
+          <div v-else>
+            <keep-alive>
+              <forgot-password 
+                v-if="resetTriggered"
+                @reset="resetTriggered = false"
+                @showalert="showAlert"
+              />
+            </keep-alive>
+          </div>
+        </v-card>
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
+
+
 <script>
 import AdminRules from '@/components/Tools/AdminMainValidation'
 import { mapActions, mapGetters } from 'vuex'
+import VueRecaptcha from 'vue-recaptcha';
 export default {
 	name: 'Login',
+	components: {
+		VueRecaptcha,
+		ForgotPassword: () => import('@/components/Auth/ForgotPassword')
+	},
 	data () {
 		return {
-			alert: false,
-			alertMessage: '',
+			recaptcha: {
+				token: '',
+				verified: false
+			},
+			alert: {
+				val: false,
+				message: '',
+				type: 'error'
+			},
 			credentials: {
 				email: '',
 				password: ''
 			},
 			resetTriggered: false,
-			emailReset: {
-				email: ''
-			},
-			error: '',
 			emailRules: AdminRules.emailRules,
-			resetFieldValid: true,
-			loginFieldsValid: true,
-			alertType: 'error'
+			passwordRules: AdminRules.passwordRules,
 		}
 	},
-	mounted() {
+	computed: {
+		headTitle() {
+			return `${this.siteTitle()} - Login`
+		}
 	},
 	methods: {
+		verifyLoginCaptcha (token) {
+			this.recaptcha.token = token
+			this.recaptcha.verified = true
+			this.$refs.recaptcha.reset();
+			this.validateLogin()
+		},
+		onCaptchaExpired: function () {
+			this.$refs.recaptcha.reset();
+		},
 		...mapActions('auth',[
 			'login',
-			'passwordReset'
 		]),
 		...mapGetters('posts', ['siteTitle']),
-		headTitle() {
-			return `${this.siteTitle} - Login`
+		showAlert (e) {
+			this.alert = e
 		},
-		validate() {
-			if(this.$refs.resetPasswordForm.validate()) {
-				this.resetPassword()
+		validateLogin () {
+			if(this.$refs.loginForm.validate()) {
+				this.submit()
 			}
 			else {
-				this.alert = true;
-				this.alertType = 'error'
-				this.alertMessage = 'Please enter a valid email address.'
+				this.alert.message = "Email and password must comply."
+				this.alert.type = 'error'
+				this.alert.val = true;
 			}
 		},
-		async resetPassword () {
-			await this.passwordReset(this.emailReset)
-				.then(res => {
-					this.alertType = 'success'
-					this.alertMessage = res.message
-					this.alert = true;
-					this.resetTriggered = false;
-				})
-				.catch()
-		},
 		async submit () {
+			if(!this.recaptcha.verified)
+				return
 			this.login({
 				email: this.credentials.email,
-				password: this.credentials.password
+				password: this.credentials.password,
+				recaptchaToken: this.recaptcha.token
 			})
 				.then(() => {
-					this.error = null
 					this.$router.push({
 						path: '/admin'
 					})
 				})
-				.catch() 
+				.catch(() => this.recaptcha.verified = false) 
 		}
 	}
 }

@@ -1,8 +1,33 @@
 const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 const helpers = require('../helpers/Auth');
+const request = require('request');
 
 module.exports = {
+	recaptchaPolicy(req, res, next) {
+		if(!req.body.recaptchaToken) {
+			return res.status(400).send({
+				error: 'Recaptcha Token required!'
+			});
+		}
+		const verifyCaptchaOptions = {
+			uri: 'https://www.google.com/recaptcha/api/siteverify',
+			json: true,
+			form: {
+				secret: config.authentication.recaptchaSecret,
+				response: req.body.recaptchaToken
+			}
+		};
+		request.post(verifyCaptchaOptions, async (err, response, body) => {
+			if (err) {
+				return res.status(500).json({message: 'oops, something went wrong...'});
+			}
+			if (!body.success) {
+				return res.status(500).json({message: body['error-codes'].join('.')});
+			}
+			next();
+		});
+	},
 	/**
 	 * 
 	 * @param {*} req 

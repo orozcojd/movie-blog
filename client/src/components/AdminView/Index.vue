@@ -1,9 +1,6 @@
 <template>
   <div>
-    <!-- <h1>Admin View</h1> -->
-    <router-view
-      v-if="loaded"
-    />
+    <router-view />
   </div>
 </template>
 
@@ -16,14 +13,12 @@ export default {
 			loaded: false
 		}
 	},
-	mounted () {
-		// if(!admin.registered) {
-		// 	console.log('hereee')
-		// 	this.$store.registerModule('admin', admin)
-		// 	admin.registered = true
-		// }
-		this.loaded = true
-	}
+	created: function () {
+		const store = this.$store;		
+		if (!(store && store.state && store.state['admin'])) {
+			store.registerModule('admin', admin);
+		}
+	},
 }
 </script>
 

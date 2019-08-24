@@ -43,33 +43,18 @@ export default {
 			preview: false,
 		}
 	},
+
 	computed: {
 		...mapState('auth',['user', 'contributor']),
-		...mapState('admin', ['article', 'tags']),
-		...mapGetters('admin',['getArticle'])
+		...mapState('admin', ['article', 'tags'])
 	},
 	async mounted() {
 		await this.getContributor(this.user.contributorId)
-		console.log(this.contributor)
-		// await this.fetchTags()
+
 		const id = this.$route.params.id
-		let articleFound = this.getArticle(id)
-		if(articleFound) {
-			this.setArticle(articleFound)
-			await this.prepareArticle()
-		}
-		else if(id) {
+		if(id) {
 			await this.fetchArticleApi(id)
-				.then(async () => {
-					await this.prepareArticle()
-				})
-				.catch(err => {
-					this.setSnackbar({
-						type: 'text',
-						value: err.response,
-						show: true
-					})
-				})
+			await this.prepareArticle()
 		}
 		else {
 			this.setArticle(new Article({author: this.contributor.name}))

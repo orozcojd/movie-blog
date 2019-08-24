@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-app>
-      <v-content v-if="loaded">
+      <v-content>
         <admin-header v-if="isUserLoggedin" />
         <Header v-else />
         <display-errors />
@@ -20,8 +20,6 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import Header from '@/components/Layouts/Header.vue'
 import Footer from '@/components/Layouts/Footer.vue'
 import DisplayErrors from '@/components/Errors/DisplayErrors'
-import admin from '@/store/admin'
-
 export default {
 	name: 'App',
 	components: {
@@ -41,21 +39,10 @@ export default {
 			'isUserLoggedin'
 		]),
 	},
-	watch: {
-		isUserLoggedin(val) {
-			if(val) {
-				this.$store.registerModule('admin', admin)
-			}
-		}
-	},
 	async mounted () {
 		if(!this.token.token) {
 			await this.getSetToken()
 		}
-		if(this.isUserLoggedin) {
-			this.$store.registerModule('admin', admin)
-		}
-		this.loaded = true
 	},
 	methods: {
 		...mapActions('auth', ['getSetToken'])

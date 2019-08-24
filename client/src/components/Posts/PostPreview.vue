@@ -96,7 +96,7 @@ export default {
   margin-bottom: 1em;
 }
 .color-light {
-  color:gray;
+  color: #2b2b2a
 }
 .card-info {
   font-size: 0.9em;
@@ -105,7 +105,7 @@ export default {
   position: relative;
 }
 .preview-gradient {
-  background-image: linear-gradient(to bottom right, #bdc3e5, #d6cde5, #e3e7ee);
+  background-image: linear-gradient(to bottom right, #d6cde5, #bdc3e5, #e3e7ee);
 }
 @media (max-width: 1264px) {
   .card-wrapper {

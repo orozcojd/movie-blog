@@ -10,9 +10,6 @@ export function adminGuard() {
 			store.dispatch('auth/getSetToken')
 		}
 		if(store.getters['auth/isUserLoggedin']) {
-			// if(!store.getters['admin/getTagsLength']) {
-			// 	store.dispatch('admin/fetchTags')
-			// }
 			next()
 		}
 		else {

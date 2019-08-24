@@ -28,7 +28,8 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
+import store from '@/store'
 export default {
 	name: 'PostView',
 	components: {
@@ -65,11 +66,14 @@ export default {
 			}
 		}
 	},
+	beforeRouteEnter (to, from, next) {
+		let id = to.params.id
+		store.dispatch('posts/fetchArticle', (id))
+		next()
+	},
 	async mounted() {
 		this.setMaxRelated(false)
 		this.resetNextArticles()
-		let id = this.$route.params.id
-		await this.loadArticle(id)
 		this.loaded = true
 		this.articleViewed()
 		window.scrollTo(0,0);
@@ -103,6 +107,7 @@ export default {
 				})
 			}
 			else {
+				console.log('HERE')
 				await this.getLatestUnrelated({
 					excludeIds: this.associatedArticles.articleIds,
 					...this.unAssociatedArticles,
@@ -110,9 +115,6 @@ export default {
 				})
 			}
 			this.busy = false
-		},
-		async loadArticle (id) {
-			await this.fetchArticle(id)
 		}
 	}
 }

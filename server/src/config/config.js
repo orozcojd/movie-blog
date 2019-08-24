@@ -16,7 +16,8 @@ module.exports = {
 		tmpUser: process.env.tmpUserName || 'jonathan',
 		tmpPsswrd: process.env.tmpPasswrd || 'password',
 		superUser: process.env.OPENSHIFT_SUPER_USER || 1,
-		AdminUser: process.env.OPENSHIFT_ADMIN_USER || 2
+		AdminUser: process.env.OPENSHIFT_ADMIN_USER || 2,
+		recaptchaSecret: process.env.OPENSHIFT_RECAPTCHA || '6LdbmbQUAAAAAI5hgBlTZnHgjCw7CdRRthDrIST0'
 	},
 	nodemailer: {
 		username: process.env.OPENSHIFT_MAILER_EMAIL || 'helen.herman61@ethereal.email',

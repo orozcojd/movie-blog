@@ -38,6 +38,7 @@ module.exports = (app) => {
 		ArticlesController.root);
 	app.post('/login',
 		VerifyJsonPolicy.verifyJson,
+		AuthenticationControllerPolicy.recaptchaPolicy,
 		authSpeedLimiter,
 		AuthenticationController.login);
 	app.get('/articles',
@@ -74,6 +75,7 @@ module.exports = (app) => {
 	app.post('/api/auth/forgot-password',
 		apiSpeedLimiter,
 		VerifyJsonPolicy.verifyJson,
+		AuthenticationControllerPolicy.recaptchaPolicy,
 		AuthenticationController.forgotPassword);
 	app.post('/api/auth/reset-password',
 		VerifyJsonPolicy.verifyJson,
@@ -84,6 +86,7 @@ module.exports = (app) => {
 	app.post('/api/addUser',
 		VerifyJsonPolicy.verifyJson,
 		apiSpeedLimiter,
+		AuthenticationControllerPolicy.recaptchaPolicy,
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.addUser);
 	app.get('/api/contribuor-name',

@@ -113,6 +113,7 @@
             Cancel
           </v-btn>
           <v-btn
+            :loading="addTagReqRunning"
             :color="addRemoveBtnType"
             @click="addRemoveTags"
           >
@@ -214,6 +215,7 @@
           Cancel
         </v-btn>
         <v-btn
+          :loading="editTagReqRunning"
           :color="editNameBtnType"
           @click="updateTagInfo"
         >
@@ -228,7 +230,6 @@
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import AdminMainValidation from '@/components/Tools/AdminMainValidation'
 import FormValidation from '@/components/Tools/FormValidation'
-import {adminCategories} from '@/constants/types'
 
 export default {
 	name: 'AdminEditTags',
@@ -248,6 +249,8 @@ export default {
 			tagRules: AdminMainValidation.tagRules,
 			newTagRules: AdminMainValidation.newTagRules,
 			imageRules: FormValidation.imageRules,
+			addTagReqRunning: false,
+			editTagReqRunning: false
 		}
 	},
 	computed: {
@@ -318,9 +321,11 @@ export default {
 			})
 		},
 		updateTagInfo() {
-			if (this.$refs.editNameForm.validate()) {
+			if (this.$refs.editNameForm.validate() && !this.editTagReqRunning) {
+				this.editTagReqRunning = true
 				this.updateTags(this.tags)
 					.then(() => {
+						this.editTagReqRunning = false
 						this.editNameBtnType = 'success'
 					})
 					.catch(() => {
@@ -359,9 +364,11 @@ export default {
 		},
 
 		async addRemoveTags() {
-			if(this.addedTags.length){
+			if(this.addedTags.length && !this.addTagReqRunning){
+				this.addTagReqRunning = true
 				await this.postTags(this.addedTags.map(name => ({name: name})))
 					.then(() => {
+						this.addTagReqRunning = false
 						this.addRemoveBtnType = 'success'
 						this.addedTags = []
 					})
@@ -370,7 +377,8 @@ export default {
 					})
 			}
 			// if delete tags was commented out - this code is unreachable
-			if(this.removedTags.length) {
+			if(this.removedTags.length && !this.addTagReqRunning) {
+				this.addTagReqRunning = true
 				await this.deleteTags(this.removedTags)
 					.then(() => this.addRemoveBtnType = 'success')
 					.catch(() => {

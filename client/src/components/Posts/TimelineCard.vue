@@ -79,14 +79,18 @@ export default {
     -webkit-box-orient: vertical; 
     text-overflow: ellipsis;
 }
-  /* .color-light {
-    color:gray;
-  } */
+  .color-light {
+    color: whitesmoke;
+    font-weight: bold;
+  }
   .gradient {
-    background-image: linear-gradient(to bottom right, #5c6bc0, #9982c0, #bbc3d6);
+    background-image: linear-gradient(to bottom right, #9982c0, #5c6bc0, #bbc3d6);
   }
   /*background-image: linear-gradient(to bottom right, #5c6bc0, #9982c0, #bbc3d6); */
   .timeline-title {
     color: #ffff;
+  }
+  .v-timeline-item__inner-dot{
+    display: none;
   }
 </style>

@@ -39,6 +39,7 @@ export default {
 		// else if(state.article.realm._id) {
 		// 	return
 		// }
+		
 		let found = state.tags.find(tag => tag._id === state.article.realm)
 		let realmObj = {}
 		if(!!found && found !== -1) {
@@ -61,7 +62,7 @@ export default {
 			copiedTags.push(tmp)
 		}
 		state.article.tags = copiedTags
-		console.log(state.article)
+		// console.log(state.article)
 	},
 	/**
 	 * Finds the index of matching _id in articles array and updates value

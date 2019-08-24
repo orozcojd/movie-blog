@@ -105,6 +105,6 @@ h2 {
   cursor: pointer;
 }
 .color-light {
-  color:gray;
+  color: #2b2b2a;
 }
 </style>

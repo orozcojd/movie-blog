@@ -150,7 +150,6 @@ export default {
 	data () {
 		return {
 			loaded: false,
-			// article: {},
 			editor: new Editor({
 				extensions: [
 					new Image(),

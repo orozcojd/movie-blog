@@ -7,8 +7,9 @@ const { sendResetPwEmail } = require('../services/MailService');
 const config = require('../config/config');
 const passport = require('passport');
 const randomToken = require('rand-token');
-const helpers = require('../helpers/Auth');
+// const helpers = require('../helpers/Auth');
 const contributorHelpers = require('../helpers/Contributor');
+
 
 let refreshTokens = [];
 // Post.find().remove().exec();
@@ -17,6 +18,41 @@ let refreshTokens = [];
 
 
 module.exports = {
+
+	/**
+	 * POST REQUEST
+	 * Validates user by comparing hash of user plaintext pw
+	 * to hash stored in db returning token and user details if
+	 * valid
+	 * @param {Object} req 
+	 * @param {Object} res 
+	 */
+	login (req, res) {
+		if(!req.body.email.trim() || !req.body.password.trim()) {
+			return res.status(403).send({
+				error: 'Please enter valid credentials'
+			});
+		}
+		passport.authenticate('local', (err, user, info) => {			
+			if (err) {
+				return res.status(404).send({
+					error: 'Something went wrong trying to log you in.'
+				});
+			}
+			if (user) {
+				const token = user.generateToken();
+				const refreshToken = randomToken.uid(256);
+				refreshTokens[refreshToken] = user.email;
+				res.status(200).send({
+					'token': token,
+					'refreshToken': refreshToken,
+					'user': {_id: user._id, email: user.email, contributorId: user.contributorId, permission: user.permission}
+				});
+			} else {
+				res.status(401).send(info);
+			}
+		})(req, res);
+	},
 	/**
 	 * POST
 	 * If user associated to email in response exists, calls nodemailer to 
@@ -26,18 +62,24 @@ module.exports = {
 	 */
 	async forgotPassword(req, res) {
 		try {
+			if(!req.body.email.trim()) {
+				return res.status(400).send({
+					error: 'Email is required!'
+				});
+			}
+
 			const email = req.body.email;
 			const user = await User.findOne({email: email});
 			if(user){
 				const contributor = await Contributor.findById(user.contributorId);
 				user.generatePwToken();
-				user.save(async (err, saved) => {
+				user.save(async (err) => {
 					if(!err) {
 						await sendResetPwEmail(user, contributor);
 					}
 				});
 			}
-			res.status(200).send({message: 'Please check your email for instructions on how to reset your password.'});
+			res.status(200).send({message: 'If your email exists, you will receive instructions for how to reset your password.'});
 		} catch (err) {
 			res.status(400).send({
 				error: 'Unexpected error has occurred trying to reset password'
@@ -258,42 +300,6 @@ module.exports = {
 			});
 		}
 	},
-
-	/**
-	 * POST REQUEST
-	 * Validates user by comparing hash of user plaintext pw
-	 * to hash stored in db returning token and user details if
-	 * valid
-	 * @param {Object} req 
-	 * @param {Object} res 
-	 */
-	login (req, res) {
-		if(!req.body.email.trim() || !req.body.password.trim()) {
-			return res.status(403).send({
-				error: 'Please enter valid credentials'
-			});
-		}
-		passport.authenticate('local', (err, user, info) => {			
-			if (err) {
-				return res.status(404).send({
-					error: 'Something went wrong trying to log you in.'
-				});
-			}
-			if (user) {
-				const token = user.generateToken();
-				const refreshToken = randomToken.uid(256);
-				refreshTokens[refreshToken] = user.email;
-				res.status(200).send({
-					'token': token,
-					'refreshToken': refreshToken,
-					'user': {_id: user._id, email: user.email, contributorId: user.contributorId, permission: user.permission}
-				});
-			} else {
-				res.status(401).send(info);
-			}
-		})(req, res);
-	},
-
 	/**
 	 * POST REQUEST
 	 * Extracts email and refresh token from body and if valid: responds with new token

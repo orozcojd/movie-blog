@@ -30,6 +30,7 @@ module.exports = {
    */
 	async addTags (req, res) {
 		try {
+			
 			let tags = [];
 			for(let i = 0; i< req.body.length; i++) {
 				let tag = await Tags.create(req.body[i]);
@@ -39,6 +40,7 @@ module.exports = {
 				tags: tags,
 				message: 'Your new tags were added!'
 			});
+
 		}
 		catch (err) {
 			let error = 'An error has occured trying to add tags';
