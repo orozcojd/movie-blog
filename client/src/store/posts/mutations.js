@@ -21,6 +21,9 @@ export default {
 	[types.FETCH_ARTICLES] (state, payload) {
 		state.articles = payload
 	},
+	[types.COPY_RELATED_TAGS] (state, payload) {
+		state.associatedArticles.tags.push(payload.realm, ...payload.tags)
+	},
 	/**
 	 * Sets the state tags object to payload object
 	 * @param {Vuex state} state 
@@ -80,6 +83,7 @@ export default {
 			state.unAssociatedArticles.pageNo +=1
 		}
 		else {
+			console.log('HERE SETTING TO TRUE')
 			state.maxArticlesReached = true
 		}
 	},
@@ -91,11 +95,11 @@ export default {
 		state.infiniteArticles = []
 		state.associatedArticles = {
 			pageNo: 1,
-			articleIds: []
+			articleIds: [],
+			tags: []
 		}
 		state.unAssociatedArticles = {
-			pageNo: 1,
-			
+			pageNo: 1
 		}
 	},
 	/**

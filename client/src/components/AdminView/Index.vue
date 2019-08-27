@@ -18,7 +18,7 @@ export default {
 		if (!(store && store.state && store.state['admin'])) {
 			store.registerModule('admin', admin);
 		}
-	},
+	}
 }
 </script>
 

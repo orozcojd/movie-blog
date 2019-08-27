@@ -1,6 +1,5 @@
 <template>
   <v-container
-    v-if="loaded"
     fluid
   >
     <vue-headful
@@ -238,7 +237,6 @@ export default {
 			newTag: '',
 			removedTags: [],
 			addedTags: [],
-			loaded: false,
 			snackText: '',
 			addRemoveBtnType: 'default',
 			editNameBtnType: 'default',
@@ -287,17 +285,10 @@ export default {
 		}
 
 	},
-	// watch: {
-	// 	snackVal(val, prev) {
-	// 		if(val === false && prev === true) {
-	// 			this.submitColor = 'undefined'
-	// 			this.$router.push({name: adminCategories.name})
-	// 		}
-	// 	}
-	// },
+
 	async mounted() {
 		await this.fetchTags()
-		this.loaded = true
+		
 	},
 	methods: {
 		...mapMutations('admin',[

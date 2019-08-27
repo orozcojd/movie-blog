@@ -112,30 +112,29 @@ module.exports = {
 	 */
 	async associatedArticles(req, res) {
 		try {
-			const pageNo = req.query.pageNo;
+			const pageNo = isNaN(req.query.pageNo) ? 1 : req.query.pageNo;
 			const currId = req.query.id;
 			const size = 5;
 			let options = {};
 			let query = {};
+			query.draft = false;
 			options.skip = size * (pageNo - 1);
 			options.limit = size;
+
 			options.sort = {created_at: 'desc'};
-			
 			if(req.query.latestUnrelated === 'true') {
-				const excludeIds = req.query.excludeIds;
-				query = {
-					// _id: { $ne: currId }
-					_id: {$nin: excludeIds},
-					$and: [{_id: { $ne: currId }}]
-				};
+				query.$and = [
+					{realm: {$nin: req.query.relatedTags}},
+					{tags: {$nin: req.query.relatedTags}},
+					{_id: { $ne: currId }}
+				];
 			}
 			else {
-				const tags = req.query.tags;
-				const realm = req.query.realm;
-				query = {
-					$or: [{realm: realm}, {realm: tags}, {tags: [realm]}, {tags: {$in: tags}}],
-					$and: [{_id: { $ne: currId }}]
-				};
+				const tags = req.query.relatedTags;
+				query.$and = [
+					{$or: [{realm: {$in: tags}}, {tags: {$in: tags}}]},
+					{$or: [{_id: { $ne: currId }}]}
+				];
 			}
 			const article = await Post
 				.find(query, {}, options).lean();

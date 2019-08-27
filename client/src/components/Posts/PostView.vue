@@ -59,8 +59,8 @@ export default {
 		async maxRelatedReached(val, prev) {
 			if(prev === false && val === true) {
 				await this.getLatestUnrelated({
-					excludeIds: this.infiniteArticleIds,
-					...this.unAssociatedArticles,
+					relatedTags: this.associatedArticles.tags,
+					pageNo: this.unAssociatedArticles.pageNo,
 					id: this.article._id
 				})
 			}
@@ -71,11 +71,11 @@ export default {
 		store.dispatch('posts/fetchArticle', (id))
 		next()
 	},
-	async mounted() {
+	mounted() {
 		this.setMaxRelated(false)
 		this.resetNextArticles()
-		this.loaded = true
 		this.articleViewed()
+		this.loaded = true
 		window.scrollTo(0,0);
 	},
 	methods: {
@@ -97,20 +97,20 @@ export default {
 			this.PUSH_VIEWED(viewed)
 		},
 		async loadMore() {
-			if(!this.loaded || this.maxArticlesReached)
+			if(!this.loaded || this.maxArticlesReached || this.busy)
 				return
 			this.busy = true
 			if(!this.maxRelatedReached) {
 				await this.getNextArticles({
-					article: this.article,
-					pageNo: this.associatedArticles.pageNo
+					id: this.article._id,
+					pageNo: this.associatedArticles.pageNo,
+					relatedTags: this.associatedArticles.tags,
 				})
 			}
 			else {
-				console.log('HERE')
 				await this.getLatestUnrelated({
-					excludeIds: this.associatedArticles.articleIds,
-					...this.unAssociatedArticles,
+					relatedTags: this.associatedArticles.tags,
+					pageNo: this.unAssociatedArticles.pageNo,
 					id: this.article._id
 				})
 			}

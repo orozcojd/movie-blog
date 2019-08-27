@@ -31,6 +31,7 @@ export default {
 			dispatch('errors/handleConnectionError', err.response, {root: true})
 		}
 		else {
+			dispatch('copyRelatedTags', article.data)
 			commit(types.FETCH_ARTICLE, article.data)
 		}
 	},
@@ -50,6 +51,9 @@ export default {
 			commit(types.FETCH_BY_CONTRIBUTOR, articles.data)
 		}
 	},
+	async copyRelatedTags({commit}, payload) {
+		commit(types.COPY_RELATED_TAGS, payload)
+	},
 	/**
 	 * GET
 	 * Calls API to get associated articles by tag, realms found in current
@@ -60,9 +64,10 @@ export default {
 	async getNextArticles({commit, dispatch}, payload) {
 		const params = {
 			params: {
-				tags: payload.article.tags,
-				realm: payload.article.realm,
-				id: payload.article._id,
+				// tags: payload.article.tags,
+				// realm: payload.article.realm,
+				relatedTags: payload.relatedTags,
+				id: payload.id,
 				pageNo: payload.pageNo
 			}}
 		const [err, nextArticles] = await to(Api.ApiGeneral().get('/infinite-articles', params))
@@ -73,6 +78,7 @@ export default {
 			if(nextArticles.data.message.length)
 				commit(types.FETCH_NEXT_ARTICLES, nextArticles.data)
 			else {
+				console.log('setting max related reached!')
 				dispatch('setMaxRelated', true)
 			}
 		}
@@ -88,7 +94,9 @@ export default {
 		let params = {
 			params: {
 				latestUnrelated: true,
-				...payload
+				relatedTags: payload.relatedTags,
+				id: payload.id,
+				pageNo: payload.pageNo
 			}
 		}
 		const [err, nextArticles] = await to(Api.ApiGeneral().get('/infinite-articles', params))

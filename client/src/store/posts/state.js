@@ -11,12 +11,12 @@ module.exports = () => ({
 	associatedArticles: {
 		pageNo: 1,
 		articleIds: [],
+		tags: []
 	},
 	maxRelatedReached: false,
 	maxArticlesReached: false,
 	unAssociatedArticles: {
-		pageNo: 1,
-		articleIds: [],
+		pageNo: 1
 	},
 	strings: {
 		title: 'Unsolicited.mp3',
