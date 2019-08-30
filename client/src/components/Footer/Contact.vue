@@ -15,8 +15,7 @@
         </p>
         <p>
           Our Info: 
-          <a href="mailto:socaljorozco@gmail.com">socaljorozco@gmail.com
-            
+          <a href="mailto:unsolicitedcolumns@gmail.com">unsolicitedcolumns@gmail.com
           </a>
         </p>
       </v-flex>

@@ -63,49 +63,19 @@ export default {
 	 */
 	async getNextArticles({commit, dispatch}, payload) {
 		const params = {
-			params: {
-				// tags: payload.article.tags,
-				// realm: payload.article.realm,
-				relatedTags: payload.relatedTags,
-				id: payload.id,
-				pageNo: payload.pageNo
-			}}
-		const [err, nextArticles] = await to(Api.ApiGeneral().get('/infinite-articles', params))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-		}
-		else {
-			if(nextArticles.data.message.length)
-				commit(types.FETCH_NEXT_ARTICLES, nextArticles.data)
-			else {
-				console.log('setting max related reached!')
-				dispatch('setMaxRelated', true)
-			}
-		}
-	},
-	/**
-	 * GET
-	 * Calls API to GET unrelated articles sorted by 
-	 * created_at field and commits to store
-	 * @param {commit} param0 
-	 * @param {Object} payload 
-	 */
-	async getLatestUnrelated({commit, dispatch}, payload) {
-		let params = {
-			params: {
-				latestUnrelated: true,
-				relatedTags: payload.relatedTags,
-				id: payload.id,
-				pageNo: payload.pageNo
-			}
+			params: payload
 		}
 		const [err, nextArticles] = await to(Api.ApiGeneral().get('/infinite-articles', params))
 		if(err) {
 			dispatch('errors/handleConnectionError', err.response, {root: true})
+			return
 		}
-		else {
+		if(!payload.latestUnrelated && nextArticles.data.message.length) 
+			commit(types.FETCH_NEXT_ARTICLES, nextArticles.data)
+		else if(!payload.latestUnrelated && !nextArticles.data.message.length)
+			dispatch('setMaxRelated', true)
+		else
 			commit(types.FETCH_UNRELATED_ARTICLES, nextArticles.data)
-		}
 	},
 	/**
 	 * GET

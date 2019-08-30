@@ -19,7 +19,7 @@ module.exports = () => ({
 		pageNo: 1
 	},
 	strings: {
-		title: 'Unsolicited.mp3',
+		title: 'Unsolicited News',
 	},
 	pagesVisibile: 7
 })

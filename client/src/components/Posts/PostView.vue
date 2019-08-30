@@ -53,18 +53,24 @@ export default {
 		]),
 		infiniteArticleIds () {
 			return this.infiniteArticles.map(article => article._id)
-		},
+		}
 	},
 	watch:{
 		async maxRelatedReached(val, prev) {
 			if(prev === false && val === true) {
-				await this.getLatestUnrelated({
+				await this.getNextArticles({
 					relatedTags: this.associatedArticles.tags,
 					pageNo: this.unAssociatedArticles.pageNo,
-					id: this.article._id
+					id: this.article._id,
+					latestUnrelated: true
 				})
 			}
 		}
+	},
+	beforeRouteUpdate(to, from, next) {
+		let id = to.params.id
+		store.dispatch('posts/fetchArticle', (id))
+		next()
 	},
 	beforeRouteEnter (to, from, next) {
 		let id = to.params.id
@@ -78,12 +84,19 @@ export default {
 		this.loaded = true
 		window.scrollTo(0,0);
 	},
+	// updated() {
+	// 	this.setMaxRelated(false)
+	// 	this.resetNextArticles()
+	// 	this.articleViewed()
+	// 	this.loaded = true
+	// 	window.scrollTo(0,0);
+	// 	store.dispatch('posts/fetchArticle', (this.$route.params.id))
+	// },
 	methods: {
 		...mapActions('posts', [
 			'fetchArticle',
 			'getNextArticles',
 			'resetNextArticles',
-			'getLatestUnrelated',
 			'setMaxRelated',
 			'setArticle'
 		]),
@@ -97,8 +110,9 @@ export default {
 			this.PUSH_VIEWED(viewed)
 		},
 		async loadMore() {
-			if(!this.loaded || this.maxArticlesReached || this.busy)
+			if(!this.loaded || this.maxArticlesReached || this.busy){
 				return
+			}
 			this.busy = true
 			if(!this.maxRelatedReached) {
 				await this.getNextArticles({
@@ -108,10 +122,11 @@ export default {
 				})
 			}
 			else {
-				await this.getLatestUnrelated({
+				await this.getNextArticles({
 					relatedTags: this.associatedArticles.tags,
 					pageNo: this.unAssociatedArticles.pageNo,
-					id: this.article._id
+					id: this.article._id,
+					latestUnrelated: true
 				})
 			}
 			this.busy = false
@@ -121,6 +136,8 @@ export default {
 </script>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+@import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap');
 	.loading {
 		margin-top: -4em;
 		height: 5em;

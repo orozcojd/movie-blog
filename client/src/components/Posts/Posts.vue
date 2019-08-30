@@ -84,18 +84,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
   .content {
     max-width: 1920px
   }
   .container {
     padding-top: 0 !important;
-  }
-  .main-title {
-    font-family: 'Permanent Marker', cursive;
-    font-size: 3rem !important;
-    /* margin-bottom: 1em; */
-    color: black;
   }
   .mb-lg {
     margin-top: 120px;

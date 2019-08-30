@@ -17,6 +17,7 @@
         width="100"
         max-height="100vh"
         :alt="tag.name"
+        gradient="to top right, rgba(100,115,201,.33), rgba(25,32,72,.3)"
       >
         <v-container fill-height>
           <v-layout align-center>

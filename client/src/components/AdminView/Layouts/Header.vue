@@ -297,7 +297,6 @@ export default {
   }
 </style>
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
  .main-title {
     font-family: 'Permanent Marker', cursive;
     font-size: 2rem !important;

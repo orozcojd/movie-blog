@@ -5,13 +5,15 @@ const config = require('../config/config');
 module.exports = {
 	async sendResetPwEmail(user, contributor) {
 		const islocal = config.nodemailer.host !== 'gmail';
+		const testAccount = await nodemailer.createTestAccount();
 		let transporter = nodemailer.createTransport({
 			service: islocal === true ? null : config.nodemailer.host,
+			secure: islocal === true ? false : null,
 			host: islocal === true ? config.nodemailer.host : null,
 			port: islocal === true ? 587 : null,
 			auth: {
-				user: config.nodemailer.username,
-				pass: config.nodemailer.pw
+				user: islocal === true ? config.nodemailer.username : testAccount.user,
+				pass: islocal === true ? config.nodemailer.pw : testAccount.pass
 			}
 		});
 		const resetLink = `${config.apiDomain}:8080/?#/admin/password-reset?token=${user.resetToken}`;

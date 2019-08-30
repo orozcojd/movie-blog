@@ -1,6 +1,6 @@
 <template>
   <v-card
-    class="preview-gradient"
+    class="theme-gradient"
     :hover="true"
     raised
     :flat="flat"
@@ -20,7 +20,7 @@
         style="width:100%;"
       >
         <div
-          class="card-title overflow-clamp"
+          class="card-title"
         >
           <h5>
             {{ article.title }}
@@ -78,20 +78,20 @@ export default {
 .card-wrapper {
   height: 230px
 }
-/* .overflow-clamp {
-  max-height: calc(18px + .2vw) * 3;
+.overflow-clamp {
+  /* max-height: calc(18px + .2vw) * 3; */
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical; 
   text-overflow: ellipsis;
-} */
+}
 .card-author {
   font-size: 0.7em;
 }
 .card-title {
   /* color: #ffff; */
-  max-height: 5.3em; /* font-size * line-height * limitNoLineDesired */
+  max-height: 5.3em;
   overflow: hidden;
   margin-bottom: 1em;
 }
@@ -99,12 +99,13 @@ export default {
   color: #2b2b2a
 }
 .card-info {
+  font-family: 'Mitr Roboto', sans-serif;
   font-size: 0.9em;
   line-height: 1.1em;
   max-height: 4.3em;
   position: relative;
 }
-.preview-gradient {
+.theme-gradient {
   background-image: linear-gradient(to bottom right, #d6cde5, #bdc3e5, #e3e7ee);
 }
 @media (max-width: 1264px) {

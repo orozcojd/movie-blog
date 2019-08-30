@@ -24,20 +24,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 export default {
 	name: 'DisplayErrors',
-	data () {
-		return {
+	props: {
+		errors: {
+			type: Array,
+			required: true
 		}
-	},
-	computed: {
-		...mapState('errors', ['errors'])
-	},
-	mounted() {
-		
-	},
-	methods: {
 	}
 }
 </script>

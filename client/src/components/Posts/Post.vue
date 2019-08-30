@@ -79,16 +79,26 @@
             :editor="editor"
             align="left"
           />
-          <small>
-            <ul
-              v-if="article.tags && article.tags.length"
-              align="left"
-              class="tag-list"
+          
+          <div
+            v-if="article.tags && article.tags.length"
+            align="center"
+            class="tag-list-pre"
+          >
+            points of interest
+          </div>
+          <ul
+            v-if="article.tags && article.tags.length"
+            align="left"
+            class="tag-list"
+          >
+            <li
+              v-for="(tag, index) in article.tags"
+              :key="index"
+              class="tag"
             >
-              <li
-                v-for="(tag, index) in article.tags"
-                :key="index"
-                class="tag"
+              <v-chip
+                class="theme-gradient"
               >
                 <a
                   class="hover-bold"
@@ -96,10 +106,11 @@
                     _id: tag,
                     name: convertTagIdToName(tag)
                   })"
-                >{{ upperCaseString(convertTagIdToName(tag)) }}</a>
-              </li>
-            </ul>
-          </small>
+                >{{ upperCaseString(convertTagIdToName(tag)) }}
+                </a>
+              </v-chip>
+            </li>
+          </ul>
         </div>
       </v-layout>
     </card-view>
@@ -245,10 +256,10 @@ export default {
 <style>
 @import url('../../assets/style/poststyle.scss');
 @import url('../../assets/style/tiptap.scss');
+
 </style>
 <style scoped>
-	a {
-  color: black !important;		
-  text-decoration: none !important;		
-}
+	.theme-gradient {
+		background-image: linear-gradient(to bottom right, #d6cde5, #bdc3e5, #e3e7ee);
+	}
 </style>

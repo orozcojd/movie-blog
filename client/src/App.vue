@@ -4,7 +4,11 @@
       <v-content>
         <admin-header v-if="isUserLoggedin" />
         <Header v-else />
-        <display-errors />
+        <div v-if="errors && errors.length">
+          <display-errors 
+            :errors="errors"
+          />
+        </div>
         <router-view
           id="route-content"
           :key="$route.fullPath"
@@ -35,9 +39,11 @@ export default {
 	},
 	computed: {
 		...mapState('auth', ['token']),
+		...mapState('errors', ['errors']),
 		...mapGetters('auth', [
 			'isUserLoggedin'
 		]),
+    
 	},
 	async mounted () {
 		if(!this.token.token) {
@@ -51,6 +57,7 @@ export default {
 </script>
 
 <style>
+@import url('https://fonts.googleapis.com/css?family=Mitr|Roboto&display=swap');
 #route-content {
   min-height: 100vh;
 }
@@ -67,19 +74,20 @@ export default {
   /* color: #2c3e50; */
   /* margin-top: 60px; */
 }
+
 h1 {
   font-size: 1.912em;
-  line-height: 1.2em; /* Responsive Vertical Rhythm */
+  line-height: 1.2em; 
 }
 
 h2 {
   font-size: 1.616em;
-  line-height: 1.2em; /* Responsive Vertical Rhythm */
+  line-height: 1.2em; 
 }
 
 h3 {
   font-size: 1.471em;
-  line-height: 1.1em; /* Responsive Vertical Rhythm */
+  line-height: 1.1em; 
 }
 
 h4 { font-size: 1.3em; }
@@ -87,10 +95,15 @@ h5 { font-size: 1.243em; }
 h6 { font-size: 1.132em; }
 
 h4, h5, h6 { 
-  line-height: 1.1em; /* Responsive Vertical Rhythm */
+  line-height: 1.1em; 
 }
 
-h1, h2, h3, h4, h5, h6, blockquote {
-  margin: calc(14px + 1.05vw) 0; /* Responsive margins */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Mitr Roboto', sans-serif;
+  margin: calc(14px + 1.05vw) 0; 
 }
+blockquote {
+  margin: calc(14px + 1.05vw) 0; 
+}
+
 </style>

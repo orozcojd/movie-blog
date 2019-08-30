@@ -136,7 +136,6 @@ export default {
 	async mounted () {
 		if(!this.tags.length)
 			await this.getTags()
-		console.log(this.tags)
 		this.onResize()
 	},
 	methods: {
@@ -144,7 +143,7 @@ export default {
 
 		onResize () {
 			this.windowSize = { x: window.innerWidth, y: window.innerHeight }
-			if(this.windowSize.x <= 835) {
+			if(this.windowSize.x <= 845) {
 				this.toggleDown = true
 				if(this.windowSize.x <= 400) {
 					this.showClose = true
@@ -153,7 +152,7 @@ export default {
 					this.showClose = false
 				}
 			}
-			else if(this.windowSize.x <=1125) {
+			else if(this.windowSize.x <=1215) {
 				this.tagShow.end = 5
 				this.toggleDown = false
 			}
@@ -190,17 +189,18 @@ export default {
   }
 </style>
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css?family=Permanent+Marker');
+@import url('https://fonts.googleapis.com/css?family=Baloo&display=swap');
  .main-title {
-    font-family: 'Permanent Marker', cursive;
-    font-size: 2rem !important;
-    margin-right: 1em; 
-    cursor:pointer;
+    font-family: 'Baloo', cursive;
+    font-size: 2.2rem;
+    margin-right: .5em; 
+    cursor: pointer;
     color: black;
+    min-width: 244px;
   }
   @media(max-width: 280px) {
     .main-title {
-      font-size: 1em !important;
+      font-size: 1em;
     }
   }
 

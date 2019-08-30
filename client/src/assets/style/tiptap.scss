@@ -36,10 +36,14 @@ blockquote {
 
 
 .content-font {
-  font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-family: 'IBM Plex Sans', sans-serif;
+  /*
+  font-family: 'ABeeZee', sans-serif;
+  */
 }
 .post-body {
   font-size: 21px;
+  line-height: 1.40em;
 }
 .post-body img {
   width: 100%;
@@ -77,6 +81,7 @@ ul[data-type="todo_list"] {
 li[data-type="todo_item"] {
   display: flex;
   flex-direction: row;
+
 }
 .todo-checkbox {
   border: 2px solid pink;
@@ -130,7 +135,7 @@ post style
 @import url('https://fonts.googleapis.com/css?family=Marcellus+SC');
 
 .post-title {
-  font-family: 'Marcellus SC', serif;
+  font-family: 'Poppins', sans-serif;
   margin: 0.2em 0;
 }
 .mb-small {
@@ -146,21 +151,33 @@ post style
 .tag {
   display: inline-block;
 }
+.tag a {
+  color: #ffff;
+  font-weight: bold;
+}
 .tag::after {
-content: ', ';
+content: ' ';
   white-space: pre;
 }
 .tag:last-child::after {
 content: '';
 }
-.tag-list::before {
-content: 'Tags: ';
+.tag-list-pre {
+  display: flex;
+  justify-content: center;
   color: #767676;
   font-weight: bold;
-  white-space: pre;
+  margin-bottom: 1em;
 }
 .tag-list {
   padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: center;
+}
+.tag-list a {
+  color: #ffff;
 }
 .after-article {
 	margin-bottom: 5em;
