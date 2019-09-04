@@ -7,7 +7,10 @@
       <v-flex
         xs12
       >
-        <v-card class="card-padding">
+        <v-card
+          class="card-padding"
+          min-height="300"
+        >
           <v-layout justify-start>
             <v-flex
               xs12

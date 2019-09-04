@@ -9,6 +9,7 @@ const AboutContributor = ()  => import('@/components/AdminView/Forms/AboutContri
 const EditUsers = () => import('@/components/AdminView/Forms/EditUsers')
 import {adminGuard} from '@/Authentication/AuthGuard'
 import * as types from '@/constants/types'
+
 const adminRoutes = [
 	{
 		path: '/admin',

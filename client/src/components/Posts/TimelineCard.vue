@@ -1,6 +1,5 @@
 <template>
   <v-card
-    
     class="gradient"
     :hover="true"
     raised

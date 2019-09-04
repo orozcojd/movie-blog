@@ -1,7 +1,7 @@
 <template>
   <div>
     <admin-post-form
-      v-if="loaded && !preview"
+      v-show="loaded && !preview"
     >
       <v-flex>
         <div align="right">
@@ -48,7 +48,7 @@ export default {
 		...mapState('auth',['user', 'contributor']),
 		...mapState('admin', ['article', 'tags'])
 	},
-	async mounted() {
+	async created() {
 		await this.getContributor(this.user.contributorId)
 
 		const id = this.$route.params.id

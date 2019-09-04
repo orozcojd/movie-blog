@@ -48,9 +48,22 @@ import { mapState, mapGetters, mapActions } from 'vuex'
 import * as types from '@/constants/types'
 export default {
 	name: 'AdminCategories',
-	data () {
-		return {
-			categories: [
+	computed: {
+		...mapState('auth',['user']),
+		...mapGetters('posts', ['siteTitle']),
+		headTitle() {
+			return `Admin Main - ${this.siteTitle}`
+		},
+		viewableCategories () {
+			return this.categories.filter((category) => {
+				return category.granted && category.granted()
+			})
+		},
+		permissionGranted() {
+			return !!this.user && this.user.permission === 1
+		},
+		categories() { 
+			return [
 				{
 					title: 'Create Post',
 					to: {name: types.adminCreatePost.name},
@@ -59,7 +72,14 @@ export default {
 				},
 				{
 					title: 'Edit Posts',
-					to: {name: types.adminEditPosts.name},
+					to: {
+						name: types.adminEditPosts.name,
+						// query: {
+						// 	drafts: false,
+						// 	user: this.user._id
+						// },
+					},
+
 					granted: () => { return true }
 				},
 				{
@@ -67,18 +87,19 @@ export default {
 					to: {
 						name: types.adminEditDrafts.name,
 						params: {
-							drafts: true
-						}
+							drafts: true,
+						},
+						// query: {
+						// 	drafts: true,
+						// 	user: this.user._id
+						// }
 					},
 					granted: () => { return true }
 				},
 				{
 					title: 'Edit Contributor Details',
 					to: {
-						name: types.adminAboutContributor.name,
-						params: {
-							drafts: true
-						}
+						name: types.adminAboutContributor.name
 					},
 					granted: () => { return true }
 				},
@@ -99,21 +120,6 @@ export default {
 					granted: () => { return true }
 				}
 			]
-		}
-	},
-	computed: {
-		...mapState('auth',['user']),
-		...mapGetters('posts', ['siteTitle']),
-		headTitle() {
-			return `Admin Main - ${this.siteTitle}`
-		},
-		viewableCategories () {
-			return this.categories.filter((category) => {
-				return category.granted && category.granted()
-			})
-		},
-		permissionGranted() {
-			return !!this.user && this.user.permission === 1
 		}
 	},
 	methods: {

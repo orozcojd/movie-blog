@@ -4,24 +4,24 @@
     :infinite-scroll-disabled="busy"
     infinite-scroll-distance="10"
   >
-    <div
-      v-if="loaded"
-    >
+    <div v-show="loaded">
       <post
         v-for="(article, index) in infiniteArticles"
         :key="index"
         :article="article"
+        @setloaded="loaded = true; busy = false"
       />
       <div
-        v-if="busy"
+        v-if="busy && !maxRelatedReached"
         class="text-center loading"
         align="center"
       >
-        <v-progress-circular
+        <card-view />
+        <!-- <v-progress-circular
           :size="50"
           indeterminate
           color="purple"
-        />
+        /> -->
       </div>
     </div>
   </div>
@@ -33,7 +33,8 @@ import store from '@/store'
 export default {
 	name: 'PostView',
 	components: {
-		Post: () => import('./Post')
+		Post: () => import('./Post'),
+		CardView: () => import('@/components/Layouts/CardView')
 	},
 	data () {
 		return {
@@ -68,6 +69,7 @@ export default {
 		}
 	},
 	beforeRouteUpdate(to, from, next) {
+		this.loaded=false
 		let id = to.params.id
 		store.dispatch('posts/fetchArticle', (id))
 		next()
@@ -78,21 +80,15 @@ export default {
 		next()
 	},
 	mounted() {
-		this.setMaxRelated(false)
-		this.resetNextArticles()
-		this.articleViewed()
-		this.loaded = true
-		window.scrollTo(0,0);
+		this.init()
 	},
-	// updated() {
-	// 	this.setMaxRelated(false)
-	// 	this.resetNextArticles()
-	// 	this.articleViewed()
-	// 	this.loaded = true
-	// 	window.scrollTo(0,0);
-	// 	store.dispatch('posts/fetchArticle', (this.$route.params.id))
-	// },
 	methods: {
+		init() {
+			this.setMaxRelated(false)
+			this.resetNextArticles()
+			this.articleViewed()
+			window.scrollTo(0,0);			
+		},
 		...mapActions('posts', [
 			'fetchArticle',
 			'getNextArticles',
@@ -110,6 +106,7 @@ export default {
 			this.PUSH_VIEWED(viewed)
 		},
 		async loadMore() {
+			console.log(this.loaded)
 			if(!this.loaded || this.maxArticlesReached || this.busy){
 				return
 			}
@@ -129,7 +126,7 @@ export default {
 					latestUnrelated: true
 				})
 			}
-			this.busy = false
+			// this.busy = false
 		}
 	}
 }
@@ -138,8 +135,8 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
 @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap');
-	.loading {
+	/* .loading {
 		margin-top: -4em;
 		height: 5em;
-	}
+	} */
 </style>

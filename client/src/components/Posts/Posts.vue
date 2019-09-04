@@ -22,7 +22,7 @@
     </v-layout>
     <hr
       size="5"
-      color="black"
+      color="#bdc3e5"
     >
     <br>
     <h2
@@ -50,6 +50,7 @@
 <script>
 'use strict'
 import { mapActions, mapState, mapGetters } from 'vuex'
+import store from '@/store'
 export default {
 	name: 'Posts',
 	components: {
@@ -65,7 +66,7 @@ export default {
 		...mapState('posts', ['articles']),
 		...mapGetters('posts', ['siteTitle']),
 	},
-	async mounted () {
+	beforeRouteEnter (to, from, next) {
 		let options = {
 			params: {
 				params: {
@@ -74,7 +75,19 @@ export default {
 				extend: false
 			}
 		}
-		await this.fetchArticles(options)
+		store.dispatch('posts/fetchArticles', options)
+		next()
+	},
+	async mounted () {
+		// let options = {
+		// 	params: {
+		// 		params: {
+		// 			limit: 15,
+		// 		},
+		// 		extend: false
+		// 	}
+		// }
+		// await this.fetchArticles(options)
 		// .catch(err => console.log(err))
 	},
 	methods: {

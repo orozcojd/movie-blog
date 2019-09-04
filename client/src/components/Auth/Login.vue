@@ -61,6 +61,7 @@
                 @verify="verifyLoginCaptcha"
               >
                 <v-btn 
+                  :color="loginBtn"
                   type="submit"
                   @click="validateLogin"
                 >
@@ -103,6 +104,7 @@ export default {
 				token: '',
 				verified: false
 			},
+			loginBtn: '',
 			alert: {
 				val: false,
 				message: '',
@@ -158,6 +160,7 @@ export default {
 				recaptchaToken: this.recaptcha.token
 			})
 				.then(() => {
+					this.loginBtn = 'success'
 					this.$router.push({
 						path: '/admin'
 					})

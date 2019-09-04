@@ -12,6 +12,7 @@
       <v-layout justify-start>
         <div class="post-card content-font">
           <div
+            v-if="article.realm"
             align="left"
           >
             <a
@@ -51,6 +52,7 @@
 				
           <small>
             <div
+              v-if="article.updatedAt"
               align="left"
               class="mb-med mt-sm light-contrast"
             >
@@ -215,6 +217,7 @@ export default {
 	},
 	async mounted () {
 		await this.setContent()
+		this.$emit('setloaded')
 		this.loaded = true
 	},
 	methods: {

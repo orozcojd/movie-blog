@@ -96,7 +96,7 @@ export default {
 			}
 		}
 	},
-	async mounted() {
+	async created() {
 		const urlTag = this.$route.params.tagName
 		const page = this.$route.query.page
 		let payload = {

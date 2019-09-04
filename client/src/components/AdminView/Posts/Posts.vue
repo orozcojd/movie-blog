@@ -33,10 +33,6 @@ export default {
 			required: false
 		}
 	},
-	data () {
-		return {
-		}
-	},
 	computed: {
 		...mapState('admin',['articles']),
 		...mapState('auth', ['user']),
