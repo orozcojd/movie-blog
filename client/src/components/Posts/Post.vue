@@ -217,7 +217,6 @@ export default {
 	async mounted () {
 		await this.setContent()
 		this.$emit('setloaded')
-		console.log('setting loaded...')
 		this.loaded = true
 	},
 	methods: {

@@ -1,12 +1,12 @@
 <template>
   <div class="post-card content-font">
     <div class="load-animation">
-      <div class="white-mask realm-right" />
-      <h1 class="white-mask title-top" />
-      <div class="white-mask title-right" />
-      <div class="white-mask title-bottom" />
-      <div class="white-mask date-top" />
-      <div class="white-mask date-right" />
+      <div class="white-mask-load realm-right" />
+      <h1 class="white-mask-load title-top" />
+      <div class="white-mask-load title-right" />
+      <div class="white-mask-load title-bottom" />
+      <div class="white-mask-load date-top" />
+      <div class="white-mask-load date-right" />
     </div>
   </div>
 </template>
@@ -34,11 +34,11 @@ export default {
 @import url('../../assets/style/tiptap.scss');
 </style>
 <style scoped>
-.white-mask {
+.white-mask-load {
   background-color: #ffff;
   position: absolute;
 }
-.white-mask.realm-right {
+.white-mask-load.realm-right {
   top: 0;
   left: 20%;
   right: 0;
@@ -46,34 +46,34 @@ export default {
   height: 1.7em;
 
 }
-.white-mask.title-top {
+.white-mask-load.title-top {
   width: 100%;
   height: .7em;
   top: -2%;
 }
-/* .white-mask.title-right {
+/* .white-mask-load.title-right {
   width: 40%;
   height: .7em;
   top: -2%;
   left: 20%
 } */
-.white-mask.title-right {
+.white-mask-load.title-right {
   width: 20%;
   height: 5.5em;
   top: 11%;
   left: 80%
 }
-.white-mask.title-bottom {
+.white-mask-load.title-bottom {
   top: 45%;
   width: 100%;
   height: 1em;
 }
-.white-mask.date-top {
+.white-mask-load.date-top {
   top: 55%;
   width: 100%;
   height: 1em;
 }
-.white-mask.date-right {
+.white-mask-load.date-right {
   top: 50%;
   width: 80%;
   height: 1em;

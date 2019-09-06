@@ -63,7 +63,6 @@ export default {
 	watch:{
 		async maxRelatedReached(val, prev) {
 			if(prev === false && val === true) {
-				console.log(val)
 				await this.getNextArticles({
 					relatedTags: this.associatedArticles.tags,
 					pageNo: this.unAssociatedArticles.pageNo,
