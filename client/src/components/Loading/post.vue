@@ -1,8 +1,9 @@
 <template>
-  <div class="post-card content-font">
+  <div class="post-card">
     <div class="load-animation">
       <div class="white-mask-load realm-right" />
-      <h1 class="white-mask-load title-top" />
+      <div class="white-mask-load realm-top" />
+      <div class="white-mask-load title-top" />
       <div class="white-mask-load title-right" />
       <div class="white-mask-load title-bottom" />
       <div class="white-mask-load date-top" />
@@ -29,11 +30,12 @@ export default {
 }
 </script>
 
-<style>
-@import url('../../assets/style/poststyle.scss');
-@import url('../../assets/style/tiptap.scss');
-</style>
 <style scoped>
+.post-card {
+  width:100%;
+  margin-top: 1em;
+	padding: 0.5em 1em 2em 2em;
+}
 .white-mask-load {
   background-color: #ffff;
   position: absolute;
@@ -46,17 +48,16 @@ export default {
   height: 1.7em;
 
 }
-.white-mask-load.title-top {
+.white-mask-load.realm-top {
   width: 100%;
   height: .7em;
   top: -2%;
 }
-/* .white-mask-load.title-right {
-  width: 40%;
-  height: .7em;
-  top: -2%;
-  left: 20%
-} */
+.white-mask-load.title-top {
+  width: 100%;
+  height: 1em;
+  top: 9%;
+}
 .white-mask-load.title-right {
   width: 20%;
   height: 5.5em;

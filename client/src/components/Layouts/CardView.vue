@@ -37,7 +37,15 @@ export default {
 </script>
 
 <style>
-
+  .post-content {
+    max-width: 850px !important;
+  }
+  @media (max-width: 960px) {
+    .post-content {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+  }
   .card-padding {
     padding: 1em 0.5em 2em 0.5em;
   }

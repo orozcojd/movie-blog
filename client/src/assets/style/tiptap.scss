@@ -194,15 +194,7 @@ content: '';
   margin-top: 1em;
 	padding: 0.5em 1em 2em 2em;
 }
-.post-content {
-  max-width: 850px !important;
-}
-@media (max-width: 960px) {
-  .post-content {
-		padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-}
+
 @media (max-width: 650px) {
   .post-body {
     font-size: 18px !important;
