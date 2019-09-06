@@ -4,12 +4,12 @@
     :infinite-scroll-disabled="busy"
     infinite-scroll-distance="10"
   >
-    <div>
+    <div v-if="!loaded">
       <card-view>
         <loading-post />
       </card-view>
     </div>
-    <!-- <div v-show="loaded">
+    <div v-show="loaded">
       <post
         v-for="(article, index) in infiniteArticles"
         :key="index"
@@ -25,7 +25,7 @@
           <loading-post />
         </card-view>
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
