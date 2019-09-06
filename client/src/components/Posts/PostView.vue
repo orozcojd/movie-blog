@@ -4,6 +4,11 @@
     :infinite-scroll-disabled="busy"
     infinite-scroll-distance="10"
   >
+    <div v-if="!loaded">
+      <card-view>
+        <loading-post />
+      </card-view>
+    </div>
     <div v-show="loaded">
       <post
         v-for="(article, index) in infiniteArticles"
@@ -12,16 +17,13 @@
         @setloaded="loaded = true; busy = false"
       />
       <div
-        v-if="busy && !maxRelatedReached"
-        class="text-center loading"
+        v-if="busy && !maxArticlesReached"
+        class="text-center"
         align="center"
       >
-        <card-view />
-        <!-- <v-progress-circular
-          :size="50"
-          indeterminate
-          color="purple"
-        /> -->
+        <card-view>
+          <loading-post />
+        </card-view>
       </div>
     </div>
   </div>
@@ -30,11 +32,13 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import store from '@/store'
+// import LoadingPost from '@/components/Loading/post'
 export default {
 	name: 'PostView',
 	components: {
 		Post: () => import('./Post'),
-		CardView: () => import('@/components/Layouts/CardView')
+		CardView: () => import('@/components/Layouts/CardView'),
+		LoadingPost: () => import('@/components/Loading/post')
 	},
 	data () {
 		return {
@@ -59,6 +63,7 @@ export default {
 	watch:{
 		async maxRelatedReached(val, prev) {
 			if(prev === false && val === true) {
+				console.log(val)
 				await this.getNextArticles({
 					relatedTags: this.associatedArticles.tags,
 					pageNo: this.unAssociatedArticles.pageNo,
@@ -106,7 +111,6 @@ export default {
 			this.PUSH_VIEWED(viewed)
 		},
 		async loadMore() {
-			console.log(this.loaded)
 			if(!this.loaded || this.maxArticlesReached || this.busy){
 				return
 			}

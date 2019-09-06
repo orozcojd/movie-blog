@@ -1,7 +1,6 @@
 <template>
   <div
     v-if="loaded"
-    id="content-post"
     fluid
   >
     <vue-headful
@@ -218,6 +217,7 @@ export default {
 	async mounted () {
 		await this.setContent()
 		this.$emit('setloaded')
+		console.log('setting loaded...')
 		this.loaded = true
 	},
 	methods: {
