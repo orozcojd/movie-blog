@@ -54,10 +54,6 @@ export default {
 			default: false
 		}
 	},
-	data () {
-		return {
-		}
-	},
 	methods: {
 		navigateTo (articleId) {
 			this.$router.push({
@@ -96,7 +92,7 @@ export default {
   margin-bottom: 1em;
 }
 .color-light {
-  color: #2b2b2a
+  color: #2b2b2a;
 }
 .card-info {
   font-family: 'Mitr Roboto', sans-serif;

@@ -67,10 +67,6 @@ export default {
 			required: true
 		}
 	},
-	data () {
-		return {
-		}
-	},
 	methods: {
 		navigateTo (articleId) {
 			this.$router.push({
@@ -105,6 +101,6 @@ h2 {
   cursor: pointer;
 }
 .color-light {
-  color: #2b2b2a;
+  color: #767676;
 }
 </style>

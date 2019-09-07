@@ -53,6 +53,7 @@
       <v-pagination
         v-model="pageNo"
         :length="pages"
+        color="#5c6bc0"
       />
     </v-layout>
   </v-container>
@@ -136,7 +137,7 @@ export default {
 		margin-bottom: 5em;
 	}
 	.realm-title {
-		color: whitesmoke;
+		color: #f5f5f5;
 	}
 	@media (min-width:500px) {
 		.realm-title {

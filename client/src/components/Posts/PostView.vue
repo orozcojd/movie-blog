@@ -73,14 +73,12 @@ export default {
 		}
 	},
 	beforeRouteUpdate(to, from, next) {
-		this.loaded=false
-		let id = to.params.id
-		store.dispatch('posts/fetchArticle', (id))
+		this.loaded = false
+		store.dispatch('posts/fetchArticle', (to.params.id))
 		next()
 	},
 	beforeRouteEnter (to, from, next) {
-		let id = to.params.id
-		store.dispatch('posts/fetchArticle', (id))
+		store.dispatch('posts/fetchArticle', (to.params.id))
 		next()
 	},
 	mounted() {
@@ -90,7 +88,6 @@ export default {
 		init() {
 			this.setMaxRelated(false)
 			this.resetNextArticles()
-			this.articleViewed()
 			window.scrollTo(0,0);			
 		},
 		...mapActions('posts', [
@@ -101,14 +98,6 @@ export default {
 			'setArticle'
 		]),
 		...mapMutations('posts',['PUSH_VIEWED']),
-		articleViewed () {
-			let viewed = {
-				title: this.article.title,
-				id: this.article._id,
-				img: this.article.img
-			}
-			this.PUSH_VIEWED(viewed)
-		},
 		async loadMore() {
 			if(!this.loaded || this.maxArticlesReached || this.busy){
 				return
@@ -138,8 +127,4 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
 @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans&display=swap');
-	/* .loading {
-		margin-top: -4em;
-		height: 5em;
-	} */
 </style>

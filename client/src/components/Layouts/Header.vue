@@ -191,7 +191,7 @@ export default {
 <style lang="scss" scoped>
 @import url('https://fonts.googleapis.com/css?family=Baloo&display=swap');
  .main-title {
-    font-family: 'Baloo', cursive;
+    font-family: 'Baloo', sans-serif;
     font-size: 2.2rem;
     margin-right: .5em; 
     cursor: pointer;

@@ -73,7 +73,6 @@ export default {
 		//  hook the progress bar to finish after we've finished moving router-view
 		this.$router.afterEach((to, from) => {
 			//  finish the progress bar
-			console.log('finishing progress')
 			this.$Progress.finish()
 		})
 	},
@@ -85,11 +84,12 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Mitr|Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Manjari:700&display=swap');
 #route-content {
   min-height: 100vh;
 }
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: 'Manjari', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
@@ -126,7 +126,7 @@ h4, h5, h6 {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Mitr Roboto', sans-serif;
+  font-family: 'Manjari', sans-serif;
   margin: calc(14px + 1.05vw) 0; 
 }
 blockquote {

@@ -30,7 +30,7 @@
         <div
           class="date-text"
         >
-          <small>{{ convertDate(article.updatedAt) }}</small>
+          {{ convertDate(article.updatedAt) }}
         </div>
       </template>
       <template>
@@ -116,15 +116,11 @@ export default {
 <style scoped>
 	.date-text{
 		font-size: 2.5rem;
+		line-height: 1.2em;
 	}
 	.hover-grow{
-		/* transition: all .3s ease-in-out; */
 		cursor: pointer;
 	}
-	/* .hover-grow:hover{
-		transform: scale(2) translateY(-20px);
-		z-index: 1;
-	} */
 	.timeline-info:hover ~ .date-text{
 		font-weight: bold;
 	}

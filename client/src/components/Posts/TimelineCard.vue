@@ -79,7 +79,7 @@ export default {
     text-overflow: ellipsis;
 }
   .color-light {
-    color: whitesmoke;
+    color: #f5f5f5;
     font-weight: bold;
   }
   .gradient {

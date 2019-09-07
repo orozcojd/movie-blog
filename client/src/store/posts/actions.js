@@ -18,6 +18,9 @@ export default {
 			commit(types.FETCH_ARTICLES, articles.data)
 		}
 	},
+	setArticleViewed ({commit}, article) {
+		commit(types.PUSH_VIEWED, {...article, id: article._id})
+	},
 	/**
 	 * GET
 	 * Calls api to get article by id and commits mutation 
@@ -32,6 +35,7 @@ export default {
 		}
 		else {
 			dispatch('copyRelatedTags', article.data)
+			dispatch('setArticleViewed', article.data)
 			commit(types.FETCH_ARTICLE, article.data)
 		}
 	},

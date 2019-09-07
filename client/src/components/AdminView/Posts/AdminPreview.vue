@@ -233,4 +233,8 @@ export default {
 <style>
 	@import url('../../../assets/style/poststyle.scss');
 	@import url('../../../assets/style/tiptap.scss');
+	.post-title {
+			font-family: 'Poppins', sans-serif;
+			margin: 0.2em 0;
+	}
 </style>
