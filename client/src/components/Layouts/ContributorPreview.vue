@@ -26,10 +26,12 @@
             md4
           >
             <v-img
+              v-if="contributor && contributor.img"
               :src="contributor.img"
               max-width="400"
               max-height="400"
               position="left"
+              :alt="contributor.name"
             />
         
             <div
@@ -63,13 +65,18 @@
             md7
             offset-md1
           >
-            <p
-              v-for="(p, i) in bio"
-              :key="i"
-              class="about"
-            >
-              {{ p }}
-            </p>
+            <div v-if="bio">
+              <p
+                v-for="(p, i) in bio"
+                :key="i"
+                class="about"
+              >
+                {{ p }}
+              </p>
+            </div>
+            <div v-else>
+              {{ contributor.name }} will update the bio page soon!
+            </div>
           </v-flex>
         </v-layout>
         <br><br><br>
@@ -215,6 +222,4 @@ h1 {
     padding: 1em;
   }
 }
-
-
 </style>

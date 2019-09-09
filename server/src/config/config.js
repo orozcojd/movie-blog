@@ -24,5 +24,11 @@ module.exports = {
 		pw: process.env.OPENSHIFT_MAILER_PW || 'jvP5gqXuxRMT8qzbCK',
 		admin: process.env.OPENSHIFT_MAIL_ADMIN || 'administrator',
 		host: process.env.OPENSHIFT_NODE_MAIL_SERVICE || 'smtp.ethereal.email'
+	},
+	ratelimits: {
+		login: process.env.OPENSHIFT_LOGIN_RATELIMIT || 1000,
+		default: process.env.OPENSHIFT_DEFAULT_RATELIMIT || 1000,
+		api: process.env.OPENSHIFT_API_RATELIMIT || 1000,
+		adduser: process.env.OPENSHIFT_ADDUSER_RATELIMIT || 1000
 	}
 };

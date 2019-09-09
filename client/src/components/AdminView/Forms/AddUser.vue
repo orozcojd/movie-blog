@@ -54,13 +54,21 @@
             disabled
             required 
           />
-          <v-btn
-            type="submit"
-            :color="submitColor"
-            @click="submit"
+          <vue-recaptcha
+            ref="recaptcha"
+            sitekey="6LdbmbQUAAAAAFqSXxy-GYvQwfYMcvpRkLTcUlgG"
+            :load-recaptcha-script="true"
+            theme="dark"
+            @expired="onCaptchaExpired"
+            @verify="verifySubmitCaptcha"
           >
-            Submit
-          </v-btn>
+            <v-btn
+              type="submit"
+              :color="submitColor"
+            >
+              Submit
+            </v-btn>
+          </vue-recaptcha>
         </v-form>
       </v-flex>
     </v-layout>
@@ -71,9 +79,12 @@
 import AdminValidation from '@/components/Tools/AdminMainValidation'
 import { mapActions, mapState, mapGetters } from 'vuex'
 import {adminCategories} from '@/constants/types'
-
+import VueRecaptcha from 'vue-recaptcha';
 export default {
 	name: 'AdminAddUser',
+	components: {
+		VueRecaptcha
+	},
 	data () {
 		return {
 			user: {
@@ -82,6 +93,10 @@ export default {
 				contributorName: '',
 				permission: null,
 				id: null
+			},
+			recaptcha: {
+				token: '',
+				verified: false
 			},
 			emailRules: AdminValidation.emailRules,
 			contributorRules: AdminValidation.contributorRules,
@@ -120,11 +135,18 @@ export default {
 			'addUser',
 			'setSnackbar'
 		]),
-		async submit () {
+		onCaptchaExpired: function () {
+			this.$refs.recaptcha.reset();
+		},
+		verifySubmitCaptcha (token) {
+			this.recaptcha.token = token
+			this.recaptcha.verified = true
+			this.$refs.recaptcha.reset();
+			this.validateAddUserForm()
+		},
+		validateAddUserForm() {
 			if (this.$refs.addUserForm.validate()) {
-				await this.addUser(this.user)
-					.then(() => this.submitColor = 'success')
-					.catch(() => this.submitColor = 'error')
+				this.submit()
 			}
 			else {
 				this.submitColor = 'error'
@@ -132,7 +154,12 @@ export default {
 			setTimeout(() => {
 				this.submitColor = 'default'
 			}, this.snackbar.timeout)
-		}
+		},
+		async submit () {
+			await this.addUser({...this.user, recaptchaToken: this.recaptcha.token})
+				.then(() => this.submitColor = 'success')
+				.catch(() => this.submitColor = 'error')
+		}		
 	}
 }
 </script>

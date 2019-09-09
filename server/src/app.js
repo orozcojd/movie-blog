@@ -6,26 +6,27 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const config = require('../config/config');
 
 const loginLimit = rateLimit({
 	windowMs: 15 * 60 * 100,
-	max: 10,
+	max: config.ratelimits.login,
 	skipSuccessfulRequests: true,
 	message: 'Max attempts reached. Please try again later.'
 });
 const limiter = rateLimit({
 	windowMs: 15 * 60 * 100,
 	message: 'You are abusing your priviledge. Please try again later.',
-	max: 1000
+	max: config.ratelimits.default
 });
 const apiLimiter = rateLimit({
 	windowMs: 15 * 60 * 100,
 	message: 'Too many requests made. Please try again later.',
-	max: 100
+	max: config.ratelimits.api
 });
 const addUserLimiter = rateLimit({
 	windowMs: 60 * 60 * 1000,
-	max: 5,
+	max: config.ratelimits.adduser,
 	message: 'Too many accounts created from this IP, please try again after an hour'
 });
 // create express server

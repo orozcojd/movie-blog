@@ -63,7 +63,6 @@
                 <v-btn 
                   :color="loginBtn"
                   type="submit"
-                  @click="validateLogin"
                 >
                   Submit
                 </v-btn>
