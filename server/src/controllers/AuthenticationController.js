@@ -62,6 +62,7 @@ module.exports = {
 	 */
 	async forgotPassword(req, res) {
 		try {
+			console.log('inside forgotpassword');
 			if(!req.body.email.trim()) {
 				return res.status(400).send({
 					error: 'Email is required!'

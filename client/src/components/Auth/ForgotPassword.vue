@@ -32,7 +32,7 @@
       <v-btn
         color="error"
         type="submit"
-        @click.prevent="checkVerifiedCaptcha"
+        @click.prevent=""
       >
         Reset Password
       </v-btn>

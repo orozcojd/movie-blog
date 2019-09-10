@@ -5,6 +5,7 @@ const request = require('request');
 
 module.exports = {
 	recaptchaPolicy(req, res, next) {
+		if(process.env.NODE_ENV !== 'production') return next();
 		if(!req.body.recaptchaToken) {
 			return res.status(400).send({
 				error: 'Recaptcha Token required!'

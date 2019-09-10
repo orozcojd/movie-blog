@@ -6,7 +6,7 @@ const passport = require('passport');
 const flash = require('connect-flash');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
-const config = require('../config/config');
+const config = require('./config/config');
 
 const loginLimit = rateLimit({
 	windowMs: 15 * 60 * 100,
