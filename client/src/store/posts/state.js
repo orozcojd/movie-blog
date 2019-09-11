@@ -19,7 +19,7 @@ module.exports = () => ({
 		pageNo: 1
 	},
 	strings: {
-		title: 'threepointO',
+		title: 'threepointO'
 	},
 	pagesVisibile: 7
 })

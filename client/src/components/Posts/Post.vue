@@ -262,7 +262,7 @@ export default {
 </style>
 <style scoped>
 	.theme-gradient {
-		background-image: linear-gradient(to bottom right, #d6cde5, #bdc3e5, #e3e7ee);
+		background-image: linear-gradient(to bottom right, #d6cde5, #bdc3e5, #e3e7ee) !important;
 	}
 	.post-title {
 		font-family: 'Poppins', sans-serif;

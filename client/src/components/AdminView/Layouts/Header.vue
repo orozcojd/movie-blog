@@ -48,29 +48,34 @@
             </v-list-tile-action>
           </v-list-tile>
         </v-list-group>
-        <v-list-tile
-          v-for="(realm, i) in sideNavRealms"
-          :key="i"
-          @click="navigateTo('tag-view', { 
-            id: realm.ref_id,
-            tagName: realm.name,
-          })"
-        >
-          <v-list-tile-title
-            class="nav-tile"
-            v-text="titleCase(realm.name)"
-          />
+        <v-list-tile v-if="tagShow.end < 9">
+          <v-list-tile-title class="sidenav-title">
+            {{ realmTitle }}
+          </v-list-tile-title>
         </v-list-tile>
-
+        <div class="sidenav-realms flex-col">
+          <div
+            v-for="(realm, i) in sideNavRealms"
+            :key="i"
+            class="sidenav-realm"
+            @click="navigateTo('tag-view', { 
+              id: realm.ref_id,
+              tagName: realm.name,
+            })"
+          >
+            {{ realm.name }}
+          </div>
+        </div>
         <v-list-group
-          v-if="viewedArticles && viewedArticles.length"
+          v-if="viewedArticles.length"
           value="true"
           class="contain-group"
-          prepend-icon="history"
         >
           <template v-slot:activator>
             <v-list-tile>
-              <v-list-tile-title>Recently Visited</v-list-tile-title>
+              <v-list-tile-title class="sidenav-title">
+                recently visited
+              </v-list-tile-title>
             </v-list-tile>
           </template>
           <v-list-tile
@@ -99,6 +104,7 @@
       app
       :scroll-off-screen="!drawerLeft"
       clipped-left
+      class="nav-items"
     >
       <v-toolbar-side-icon @click.stop="drawerLeft = !drawerLeft" />
       <div
@@ -107,18 +113,21 @@
       >
         {{ siteTitle }}
       </div>
-      <v-toolbar-items v-if="!toggleDown">
-        <v-btn
+      <v-toolbar-items
+        v-if="!toggleDown"
+        class="nav-realms flex-row"
+      >
+        <div
           v-for="(realm, i) in realms.slice(tagShow.start,tagShow.end)"
           :key="i"
-          depressed
+          class="nav-realm"
           @click="navigateTo('tag-view', { 
             id: realm.ref_id,
             tagName: realm.name,
           })"
         >
           {{ realm.name }}
-        </v-btn>
+        </div>
       </v-toolbar-items>
     </v-toolbar>
     <v-snackbar
@@ -155,7 +164,7 @@ export default {
 			tagShow: {
 				start: 0,
 				end: 8,
-				max: 8
+				max: 9
 			},
 			toggleDown: false,
 			showClose: false
@@ -182,6 +191,9 @@ export default {
 		...mapGetters('posts', ['siteTitle']),
 		contributorName() {
 			return this.adminContributor ? this.adminContributor.name : ''
+		},
+		realmTitle () {
+			return this.toggleDown ? 'Realms' : 'more realms'
 		},
 		snackVal: {
 			get() {
@@ -238,7 +250,7 @@ export default {
 		...mapActions('admin', ['setSnackbar']),
 		onResize () {
 			this.windowSize = { x: window.innerWidth, y: window.innerHeight }
-			if(this.windowSize.x <= 835) {
+			if(this.windowSize.x <= 635) {
 				this.toggleDown = true
 				if(this.windowSize.x <= 400) {
 					this.showClose = true
@@ -247,12 +259,17 @@ export default {
 					this.showClose = false
 				}
 			}
-			else if(this.windowSize.x <=1135) {
-				this.tagShow.end = 5
+			else if(this.windowSize.x <=900) {
+				this.tagShow.end = 4
 				this.toggleDown = false
 			}
+			else if(this.windowSize.x <=1170) {
+				this.tagShow.end = 7
+				this.toggleDown = false
+			}
+
 			else {
-				this.tagShow.end = 8
+				this.tagShow.end = 9
 				this.toggleDown = false		
 			}
 		},
@@ -301,10 +318,14 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=Baloo&display=swap');
  .main-title {
     font-family: 'Baloo', sans-serif;
-    font-size: 2.2rem;
+    font-size: 2.8rem;
     margin-right: .5em; 
+    margin-left: .5em;
     cursor: pointer;
-    min-width: 244px;
+    // min-width: 244px;
+  }
+  .main-title:hover, .nav-realm:hover, .sidenav-realm:hover {
+    color: #5c6bc0;
   }
   @media(max-width: 280px) {
     .main-title {
@@ -315,8 +336,41 @@ export default {
   max-height: 432px;
   overflow: scroll;
 }
-.nav-tile {
-  font-size: 1.4em;
+.v-toolbar__content, .flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
 }
+.nav-tile {
+  font-size: 1em;
+}
+.nav-realm {
+  cursor: pointer;
+  text-transform: uppercase;
+  margin: 0 .95em;
+}
+.nav-realms {
+  justify-content: start;
+  font-size: .8em;
+ }
+ .sidenav-realms {
+   margin-top: .5em;
+ }
+ .sidenav-realm {
+   text-transform: uppercase;
+   font-size: 1em;
+   height: 48px;
+   cursor: pointer;
+ }
+ .sidenav-title {
+   font-size: 1.5em;
+ }
+ .flex-col {
+   display: flex;
+   padding: 0 16px;
+   flex-direction: column;
+
+ }
 </style>
 

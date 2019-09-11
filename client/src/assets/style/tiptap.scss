@@ -62,7 +62,7 @@ blockquote {
 
 .hover-bold:hover {
   font-weight: bold;
-  color: black !important;
+  color: #000000 !important;
 }
 
 .editor__content {
@@ -123,7 +123,7 @@ li[data-done="false"] {
     font: inherit;
     border: 0;
     border-radius: 5px;
-    background-color: rgba(black, 0.1);
+    background-color: rgba(#0000, 0.1);
     padding: 0.3rem 0.5rem;
   }
 }
@@ -192,6 +192,11 @@ content: '';
 	padding: 0.5em 1em 2em 2em;
 }
 
+@media (max-width: 600px) {
+  .post-card {
+    padding: 0.5em .5em 2em .8em;
+  }
+}
 @media (max-width: 650px) {
   .post-body {
     font-size: 18px !important;

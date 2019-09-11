@@ -93,7 +93,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: left;
-  font-size: calc(16px + 0.35vw) !important;
+  font-size: calc(16px + 0.35vw);
   line-height: 1.25em;
   /* line-height: calc(12px + 1.05vw); */
   /* background-color: var(--v-accent-base); */

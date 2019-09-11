@@ -28,7 +28,7 @@
     <h2
       align="left"
     >
-      Most Recent
+      most recent
     </h2>
     <timeline
       :articles="articles.slice(1)"
@@ -38,7 +38,7 @@
       class="mb-sm"
       align="left"
     >
-      Weekly Updates
+      weekly updates
     </h2>
 
     <display-articles 
