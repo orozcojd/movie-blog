@@ -80,7 +80,7 @@ module.exports = {
 					}
 				});
 			}
-			res.status(200).send({message: 'If your email exists, you will receive instructions for how to reset your password.'});
+			res.status(200).send({message: 'If your email exists, you will receive instructions to reset your password.'});
 		} catch (err) {
 			res.status(400).send({
 				error: 'Unexpected error has occurred trying to reset password'

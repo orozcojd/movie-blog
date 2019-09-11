@@ -1,5 +1,5 @@
 'use strict'
 module.exports = {
 	NODE_ENV: '"production"',
-	ROOT_API: '"http://blog-app-unsolicited-opinions.apps.us-east-1.online-starter.openshift.com/"'
+	ROOT_API: '"https://edge-route-threepointo.b9ad.pro-us-east-1.openshiftapps.com/"'
 }
