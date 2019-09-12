@@ -36,19 +36,25 @@ module.exports = {
 	 * @param {Object} res 
 	 */
 	async fetchArticle(req, res) {
-		if(!req.params.articleId) {
-			return res.status(422).json({message: 'Invalid Article identifier.'});
-		}
-		const user = await User.findById(req.userId);
-		const article = await Post.findById(req.params.articleId).lean();
-		const isNotArticleContr = user.contributorId !== article.contributorId;
-		if(isNotArticleContr) {
-			res.status(403).send({
-				error: 'You are unauthorized to make changes to this account!'
+		try {
+			if(!req.params.articleId) {
+				return res.status(422).json({message: 'Invalid Article identifier.'});
+			}
+			const user = await User.findById(req.userId);
+			const article = await Post.findById(req.params.articleId).lean();
+			const isNotArticleContr = user.contributorId !== article.contributorId;
+			if(isNotArticleContr) {
+				res.status(403).send({
+					error: 'You are unauthorized to make changes to this account!'
+				});
+				return; 
+			}
+			res.status(200).send(article);
+		} catch (err) {
+			res.status(400).send({
+				error: 'An error has occured trying to get articles',
 			});
-			return; 
 		}
-		res.status(200).send(article);
 	},
 
 	/**

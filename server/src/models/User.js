@@ -3,7 +3,7 @@ let Schema = mongoose.Schema;
 const bcrypt = require('bcrypt');
 const config = require('../config/config');
 const jwt = require('jsonwebtoken');
-const permissions = [config.authentication.AdminUser, config.authentication.superUser];
+
 const UserSchema = new Schema({
 	email: {
 		type: String,
@@ -12,10 +12,8 @@ const UserSchema = new Schema({
 	},
 	hash: String,
 	permission: {
-		type: Number,
-		required: true,
-		enum: permissions,
-		default: config.authentication.AdminUser
+		type: String,
+		required: true
 	},
 	contributorId: {
 		type: String,
@@ -51,6 +49,9 @@ UserSchema.methods.hashPassword = async function(password) {
 		.then(hash => {
 			this.hash = hash;
 		});
+};
+UserSchema.methods.updatePermission = async function(permission) {
+	this.permission = permission;
 };
 
 UserSchema.methods.comparePasswords = async function(password) {

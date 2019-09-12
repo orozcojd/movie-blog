@@ -1,6 +1,7 @@
 // controllers are used for declaring all the endpoints
 let {User} = require('../models');
 let {Contributor} = require('../models');
+const {Permissions} = require('../models');
 const {Post} = require('../models');
 // const nodemailer = require('nodemailer');
 const { sendResetPwEmail } = require('../services/MailService'); 
@@ -234,9 +235,6 @@ module.exports = {
 	 */
 	async getUsers (req, res) {
 		try {
-			console.log('revoke  tokens');
-			// revokeToken();
-			console.log(refreshTokens);
 			const users = await User.find();
 			res.send(users);
 		} catch (err) {
@@ -254,50 +252,68 @@ module.exports = {
 	 */
 	async addUser (req, res) {
 		try {
-			const realAdminUid = config.authentication.superUser;
-			const currUser = await User.findById(req.userId);
-			const permitted = currUser.permission === realAdminUid;
-			if(permitted){
-				const pw = req.body.password;
-				let contributor = new Contributor();
-				await contributor.createContributor({name: req.body.contributorName});
-				contributor.save(async (err, contrib) => {
-					if(err) {
-						res.status(400).send({
-							error: 'Contributor name already in use',
-						});
-					}
-					else {
-						let user = new User();
-						const referenceId = contrib._id;
-						await user.createUser({...req.body, contributorId: referenceId});
-						await user.hashPassword(pw);
-						user.save(async (err, saved) => {
-							if(err) {
-								res.status(400).send({
-									error: 'Email already in use.'
-								});
-							}
-							else {
-								await sendResetPwEmail(user, contrib);
-								res.status(200).send({
-									message: `User ${user.email} was created`
-								});
-							}
-						});
-					}
-				});
-				return;
-			}
-			
-			res.status(400).send({
-				error: 'Current User permissions are not allowed to perform this action.'
+			const pw = req.body.password;
+			let contributor = new Contributor();
+			await contributor.createContributor({name: req.body.contributorName});
+			contributor.save(async (err, contrib) => {
+				if(err) {
+					res.status(400).send({
+						error: 'Contributor name already in use',
+					});
+				}
+				else {
+					let user = new User();
+					const referenceId = contrib._id;
+					await user.createUser({...req.body, contributorId: referenceId});
+					await user.hashPassword(pw);
+					user.save(async (err, saved) => {
+						if(err) {
+							res.status(400).send({
+								error: 'Email already in use.'
+							});
+						}
+						else {
+							await sendResetPwEmail(user, contrib);
+							res.status(200).send({
+								message: `User ${user.email} was created`
+							});
+						}
+					});
+				}
 			});
+			return;
+			// }
+			
+			// res.status(400).send({
+			// 	error: 'Current User permissions are not allowed to perform this action.'
+			// });
 		
 		} catch (err) {
 			res.status(400).send({
 				error: 'Unexpected error has occurred',
-				details: err
+			});
+		}
+	},
+	/**
+	 * 
+		{
+			permission: String,
+			id: String
+		}
+	 */
+	async updateUserPermission(req, res) {
+		try {
+			const user = await User.findById(req.body.id);
+			user.updatePermission(req.body.permission);
+			user.save(async (err) => {
+				if(!err) {
+					res.status(200).send({message: 'User permission level updated.'});
+				}
+			});
+		} catch (err) {
+			res.status(400).send({
+				error: 'Unexpected error has occurred trying to update permission.',
+				
 			});
 		}
 	},

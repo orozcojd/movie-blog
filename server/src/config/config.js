@@ -18,6 +18,7 @@ module.exports = {
 		tmpPsswrd: process.env.tmpPasswrd || 'password',
 		superUser: process.env.OPENSHIFT_SUPER_USER || 1,
 		AdminUser: process.env.OPENSHIFT_ADMIN_USER || 2,
+		creator: process.env.OPENSHIFT_CREATOR_PERMISSION || 3,
 		recaptchaSecret: process.env.OPENSHIFT_RECAPTCHA
 	},
 	nodemailer: {

@@ -3,6 +3,7 @@ const config = require('../config/config');
 const helpers = require('../helpers/Auth');
 const request = require('request');
 
+
 module.exports = {
 	recaptchaPolicy(req, res, next) {
 		if(process.env.NODE_ENV !== 'production') return next();
@@ -75,8 +76,6 @@ module.exports = {
 	 */
 	async contributorAccessControl(req, res, next) {
 		const isAuthorized = await helpers.authenticateRequest(req);
-		console.log('isAuthorized');
-		console.log(isAuthorized);
 		if(!isAuthorized) {
 			res.status(403).send({
 				error: 'You are unauthorized to make changes to this account!'

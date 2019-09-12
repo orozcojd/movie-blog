@@ -283,10 +283,10 @@ export default {
 		snackVal() {
 			return this.snackbar.value
 		}
-
 	},
 
 	async mounted() {
+		console.log(this.user)
 		await this.fetchTags()
 		
 	},

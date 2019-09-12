@@ -5,7 +5,9 @@ const ArticlesController = require('./controllers/ArticlesController');
 const AdminArticleController = require('./controllers/AdminArticleController');
 const TagsController = require('./controllers/TagsController');
 const AdminContributorController = require('./controllers/AdminContributorController');
+const PermissionController = require('./controllers/PermissionController');
 const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy');
+const PermissionControllerPolicy = require('./policies/PermissionControllerPolicy');
 const VerifyJsonPolicy = require('./policies/VerifyJsonPolicy');
 // const jwt = require('express-jwt');
 // const config = require('./config/config');\
@@ -86,9 +88,17 @@ module.exports = (app) => {
 	app.post('/api/addUser',
 		VerifyJsonPolicy.verifyJson,
 		apiSpeedLimiter,
-		AuthenticationControllerPolicy.recaptchaPolicy,
 		AuthenticationControllerPolicy.authenticateToken,
+		PermissionControllerPolicy.checkCreatorPermissions,
+		AuthenticationControllerPolicy.recaptchaPolicy,
+		PermissionControllerPolicy.validatePermissions,
 		AuthenticationController.addUser);
+	app.put('/api/updateUserPermission',
+		VerifyJsonPolicy.verifyJson,
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		PermissionControllerPolicy.validatePermissions,
+		AuthenticationController.updateUserPermission);
 	app.get('/api/contribuor-name',
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
@@ -103,6 +113,23 @@ module.exports = (app) => {
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationControllerPolicy.contributorAccessControl,
 		AuthenticationController.updateContributor);
+	
+	/** permissions */
+	app.get('/api/permissions',
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		PermissionController.getPermissions
+	);
+	app.post('/api/permissions',
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		PermissionController.addPermissions
+	);
+	app.put('/api/permissions',
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		PermissionController.updatePermissions
+	);
 
 	/* Refresh Token */
 	app.post('/tokens',
@@ -130,6 +157,7 @@ module.exports = (app) => {
 		VerifyJsonPolicy.verifyJson,
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
+		PermissionControllerPolicy.checkCreatorPermissions,
 		TagsController.deleteTags);
 
 	/* Admin Article Routes */
