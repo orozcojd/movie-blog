@@ -46,7 +46,6 @@ export default {
 	setSnackbar({commit}, payload) {
 		commit(types.SET_SNACKBAR, payload)
 	},
-
 	async postArticle ({commit, dispatch}, payload) {
 		const [err, article] = await to(Api.ApiAdmin().post('/api/articles/', payload))
 		if(err) {

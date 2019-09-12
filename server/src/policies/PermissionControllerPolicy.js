@@ -6,10 +6,11 @@ module.exports = {
 		const loggedInUser = await User.findById(req.userId);
 		const currUserPermission = loggedInUser;
 		const permissions = await Permissions.find();
-		const creator = permissions.find(p => {
-			return p.name === 'CREATOR';
+		let whitelist = permissions.filter(p => {
+			return p.name === 'CREATOR' || p.name === 'ADMINISTRATOR';
 		});
-		const isAuthorized = currUserPermission.permission === creator._id.toString();
+		whitelist = whitelist.map(p => p._id.toString() );
+		const isAuthorized = whitelist.includes(currUserPermission.permission);
 		if(isAuthorized) next();
 		else {
 			res.status(403).send({

@@ -85,6 +85,7 @@
         </div>
       </v-flex>
       <v-flex
+        v-if="enforcePermission(guesCPerm)"
         xs12
         md6
         class="mb-med"
@@ -105,23 +106,10 @@
           >
             {{ tag.name }}
           </v-chip>
-          <br><br>
-          <v-btn
-            to="/admin"
-          >
-            Cancel
-          </v-btn>
-          <v-btn
-            :loading="addTagReqRunning"
-            :color="addRemoveBtnType"
-            @click="addRemoveTags"
-          >
-            Add/Remove Tags
-          </v-btn>
         </div>
       </v-flex>
       <v-flex
-        v-if="removedTags.length && !!user && user.permission === 1"
+        v-if="removedTags.length"
         md6
         xs12
         class="mb-med"
@@ -146,6 +134,22 @@
         </div>
       </v-flex>
     </v-layout>
+    <v-layout>
+      <v-flex>
+        <v-btn
+          to="/admin"
+        >
+          Cancel
+        </v-btn>
+        <v-btn
+          :loading="addTagReqRunning"
+          :color="addRemoveBtnType"
+          @click="addRemoveTags"
+        >
+          Submit Tags
+        </v-btn>
+      </v-flex>
+    </v-layout>
     <br><br>
     <h2 align="left">
       Edit Tag Names
@@ -158,9 +162,10 @@
       <v-layout
         row
         wrap
+        align-center
       >
         <v-flex
-          v-for="(tag, i) in tags"
+          v-for="(tag, i) in sortedTags"
           :key="i"
           md4
           xs12
@@ -169,37 +174,39 @@
           <v-card>
             <v-container>
               <h2 align="left">
-                {{ tags[i].name }}
+                {{ sortedTags[i].name }}
               </h2>
               <v-text-field
-                :value="tags[i].name"
+                :value="sortedTags[i].name"
                 :rules="tagRules"
                 :counter="35"
                 label="Tag Name"
-                :disabled="disabled && tags[i].realm"
+                :disabled="permission.name === 'CONTRIBUTOR' && sortedTags[i].realm"
                 @input="updateTag($event, 'name', tag._id)"
               />
               <v-switch
-                v-if="!!user && user.permission === 1"
-                :input-value="tags[i].realm"
+                v-if="enforcePermission(adminPerm)"
+                :input-value="sortedTags[i].realm"
                 label="Use Tag as Realm"
                 @change="updateTag($event, 'realm', tag._id)"
               />
-              <div v-if="tags[i].realm">
+              <div v-if="enforcePermission(adminPerm) && sortedTags[i].realm">
                 <v-text-field
-                  :value="tags[i].img"
                   :rules="imageRules"
+                  :value="sortedTags[i].img"
+                  required
                   label="Realm Image"
                   hint="Enter the image URL from lensdump"
-                  :disabled="disabled && tags[i].realm"
+                  :disabled="!(enforcePermission(guesCPerm) || sortedTags[i].realm)"
                   @input="updateTag($event, 'img', tag._id)"
                 />
                 <v-text-field
                   :rules="imageRules"
-                  :value="tags[i].lazyImg"
+                  :value="sortedTags[i].lazyImg"
+                  required
                   label="Realm Medium Image"
                   hint="Enter the medium size image URL from lensdump"
-                  :disabled="disabled && tags[i].realm"
+                  :disabled="!(enforcePermission(guesCPerm) || sortedTags[i].realm)"
                   @input="updateTag($event, 'lazyImg', tag._id)"
                 />
               </div>
@@ -248,14 +255,18 @@ export default {
 			newTagRules: AdminMainValidation.newTagRules,
 			imageRules: FormValidation.imageRules,
 			addTagReqRunning: false,
-			editTagReqRunning: false
+			editTagReqRunning: false,
+			creatorPerm: ['CREATOR'],
+			adminPerm: ['CREATOR', 'ADMINISTRATOR', 'GUEST'],
+			guestPerm: ['CREATOR', 'ADMINISTRATOR', 'CONTRIBUTOR', 'GUEST'],
+			guesCPerm: ['CREATOR', 'GUEST']
 		}
 	},
 	computed: {
 		disabled() {
 			return !(!!this.user && this.user.permission === 1)
 		},
-		...mapState('auth', ['user']),
+		...mapState('auth', ['user', 'permission']),
 		...mapState('admin',[
 			'tags',
 			'snackbar'
@@ -264,9 +275,12 @@ export default {
 		headTitle() {
 			return `Admin Edit Tags - ${this.siteTitle}}`
 		},
+		sortedTags() {
+			return this.tags.slice().sort(this.sortAlpha())
+		},
 		chipTags: {
 			get() {
-				return this.tags.map(tag => ({...tag, chip:true}))
+				return this.tags.map(tag => ({...tag, chip:true})).sort(this.sortAlpha())
 			},
 			set(value) {
 				this.SET_TAGS({
@@ -286,7 +300,6 @@ export default {
 	},
 
 	async mounted() {
-		console.log(this.user)
 		await this.fetchTags()
 		
 	},
@@ -304,6 +317,16 @@ export default {
 			'updateTags',
 			'setSnackbar'
 		]),
+		sortAlpha() {
+			return (a,b) => {
+				if(a.name < b.name)return -1;
+				if(a.name > b.name) return 1;
+				return 0;
+			}
+		},
+		enforcePermission(options) {
+			return options.includes(this.permission.name)
+		},
 		updateTag(val, type, id) {
 			this.EDIT_TAG_VAL({
 				id: id,

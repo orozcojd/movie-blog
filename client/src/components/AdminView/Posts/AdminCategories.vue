@@ -49,38 +49,29 @@ import * as types from '@/constants/types'
 export default {
 	name: 'AdminCategories',
 	computed: {
-		...mapState('auth',['user']),
+		...mapState('auth',['user', 'permission']),
 		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
 			return `Admin Main - ${this.siteTitle}`
 		},
 		viewableCategories () {
-			return this.categories.filter((category) => {
-				return category.granted && category.granted()
+			return this.categories.filter(category => {
+				return category.roles.includes(this.permission.name)
 			})
 		},
-		permissionGranted() {
-			return !!this.user && this.user.permission === 1
-		},
+
 		categories() { 
 			return [
 				{
 					title: 'Create Post',
 					to: {name: types.adminCreatePost.name},
-					granted: () => { return true },
+					roles: ['CREATOR', 'ADMINISTRATOR', 'CONTRIBUTOR', 'GUEST'],
 					onEnter: () => { this.clearArticle()}
 				},
 				{
 					title: 'Edit Posts',
-					to: {
-						name: types.adminEditPosts.name,
-						// query: {
-						// 	drafts: false,
-						// 	user: this.user._id
-						// },
-					},
-
-					granted: () => { return true }
+					to: {name: types.adminEditPosts.name},
+					roles: ['CREATOR', 'ADMINISTRATOR', 'CONTRIBUTOR', 'GUEST']
 				},
 				{
 					title: 'Edit Drafts',
@@ -88,36 +79,29 @@ export default {
 						name: types.adminEditDrafts.name,
 						params: {
 							drafts: true,
-						},
-						// query: {
-						// 	drafts: true,
-						// 	user: this.user._id
-						// }
+						}
 					},
-					granted: () => { return true }
+					roles: ['CREATOR', 'ADMINISTRATOR', 'CONTRIBUTOR', 'GUEST']
 				},
 				{
 					title: 'Edit Contributor Details',
-					to: {
-						name: types.adminAboutContributor.name
-					},
-					granted: () => { return true }
+					to: {name: types.adminAboutContributor.name},
+					roles: ['CREATOR', 'ADMINISTRATOR', 'CONTRIBUTOR', 'GUEST']
 				},
 				{
 					title: 'Edit Admin Users',
 					to: {name: types.editUsers.name},
-					granted: () => {return this.permissionGranted}
+					roles: ['CREATOR'],
 				},
 				{
 					title: 'Add Admin User',
 					to: {name: types.addUser.name},
-					granted: () => {return this.permissionGranted}
+					roles: ['CREATOR', 'ADMINISTRATOR']
 				},
-
 				{
 					title: 'Edit Tags',
 					to: {name: types.adminEditMain.name},
-					granted: () => { return true }
+					roles: ['CREATOR', 'ADMINISTRATOR', 'CONTRIBUTOR', 'GUEST']
 				}
 			]
 		}

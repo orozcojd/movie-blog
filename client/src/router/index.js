@@ -6,10 +6,14 @@ import Router from 'vue-router'
 import postRoutes from './posts'
 import adminRoutes from './admin'
 import authRoutes from './auth'
+import {validatePermissions} from '@/Authentication/AuthGuard'
 
 Vue.use(Router)
 
 let routes = postRoutes.concat(adminRoutes).concat(authRoutes)
-export default new Router({
-	routes
+const router = new Router({
+	routes,
+	// mode: 'history'
 })
+router.beforeEach(validatePermissions())
+export default router

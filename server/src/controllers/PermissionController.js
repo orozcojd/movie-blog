@@ -4,7 +4,7 @@ module.exports = {
 	async getPermissions (req, res) {
 		try {
 			const permissions = await Permissions.find();
-			res.status(200).send({permissions: permissions});
+			res.status(200).send(permissions);
 		} catch (e) {
 			console.log(e);
 			res.status(400).send({

@@ -152,6 +152,25 @@ export default {
 		commit(types.SET_ADMIN_CONTRIBUTOR, contributor)
 	},
 	/**
+	 * Calls API and fetches user permissions, then commits to store
+	 * @param {commit} param0 
+	 */
+	async fetchPermissions ({commit, dispatch}) {
+		const [err, permissions] = await to(Api.ApiAdmin().get('/api/permissions'))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+			return Promise.reject()
+		}
+		commit(types.FETCH_PERMISSIONS, permissions.data)
+	},
+	/**
+	 * Commits to store to set permission matching user permission ID
+	 * @param {commit} param0 
+	 */
+	setPermission({commit}) {
+		commit(types.SET_PERMISSION)
+	},
+	/**
 	 * GET
 	 * Calls api to get the current logged in user's name and commits mutation
 	 * @param {commit} param0 

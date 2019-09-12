@@ -32,6 +32,14 @@ export function	loggedInRedirect() {
 		}
 	}
 }
+export function validatePermissions() {
+	return (to, from, next) => {
+		if(!to.meta.requiresAuth) return next()
+		const hasPermission = to.meta.roles.includes(store.getters['auth/getPermissionName'])
+		if(!hasPermission) return next('/admin')
+		return next()
+	}
+}
 export function	getHeader() {
 	return `Bearer ${localStorage.getItem('unsolicited-session-token')}`
 }

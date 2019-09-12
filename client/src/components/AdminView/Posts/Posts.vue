@@ -10,6 +10,9 @@
       <h1>
         Edit your {{ postType }}
       </h1>
+      <h6 v-if="!filterArticles.length">
+        When you create {{ postType }}, they will appear here.
+      </h6>
     </v-container>
     <admin-display-articles 
       :articles="filterArticles"

@@ -1,7 +1,24 @@
 import types from '@/store/types'
 import Vue from 'vue'
 export default {
-/**
+	/**
+	 * sets permissions array to payload
+	 * @param {Vuex state} state 
+	 * @param {object} payload 
+	 */
+	[types.FETCH_PERMISSIONS] (state, payload) {
+		state.permissions = payload
+	},
+	/**
+	 * Sets state permission object equal to matched id of user permission
+	 * @param {Vuex state} state 
+	 */
+	[types.SET_PERMISSION] (state) {
+		state.permission = state.permissions.find(p => {
+			return state.user.permission === p._id.toString()
+		})
+	},
+	/**
 	 * Sets state token to payload token
    * adds/removes token to/from local storage
 	 * @param {Vuex state} state 

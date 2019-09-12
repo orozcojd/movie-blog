@@ -44,6 +44,8 @@
           <v-select
             v-model="user.permission"
             :items="permissions"
+            item-text="name"
+            item-value="_id"
             :rules="permissionRules"
             label="Permission Level"
             required
@@ -103,13 +105,12 @@ export default {
 			permissionRules: AdminValidation.permissionRules,
 			passwordRules: AdminValidation.passwordRules,
 			userFieldsValid: true,
-			permissions: [{text:'Administrator', value:1}, {text:'Contributor', value: 2}],
 			submitColor: 'default',
 			snackText: ''
 		}
 	},
 	computed: {
-		...mapState('auth', {adminUser: 'user'}),
+		...mapState('auth', {adminUser: 'user', perms: 'permissions', permission: 'permission'}),
 		...mapState('admin',['snackbar']),
 		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
@@ -117,6 +118,12 @@ export default {
 		},
 		snackVal() {
 			return this.snackbar.value
+		},
+		permissions() {
+			if(this.permission.name === 'CREATOR') return this.perms
+			return this.perms.filter(p => {
+				return p.name !== 'CREATOR'
+			})
 		}
 	},
 	watch: {
@@ -129,6 +136,7 @@ export default {
 	},
 	mounted() {
 		this.user.id = this.adminUser._id
+		console.log(this.permissions)
 	},
 	methods: {
 		...mapActions('admin',[

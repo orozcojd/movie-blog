@@ -30,16 +30,7 @@ export default {
 	 * TODO: refactor code export copies to tools
 	 * @param {Vuex state} state 
 	 */
-	[types.NEW_ARTICLE] (state) {
-		// copy realm object
-		
-		// if(Object.keys(state.article).length === 0 && state.article.constructor === Object){
-		// 	return
-		// }
-		// else if(state.article.realm._id) {
-		// 	return
-		// }
-		
+	[types.NEW_ARTICLE] (state) {		
 		let found = state.tags.find(tag => tag._id === state.article.realm)
 		let realmObj = {}
 		if(!!found && found !== -1) {

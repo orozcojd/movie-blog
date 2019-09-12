@@ -34,7 +34,7 @@
           <v-list-tile
             to="/admin"
           >
-            <v-list-tile-title>Admin</v-list-tile-title>
+            <v-list-tile-title>{{ permission.name }}</v-list-tile-title>
             <v-list-tile-action>
               <v-icon>supervisor_account</v-icon>
             </v-list-tile-action>
@@ -177,16 +177,19 @@ export default {
 		]),
 		...mapState('admin', [
 			'snackbar',
-			'tags'
+			'tags',
 		]),
 		...mapState('auth', [
 			'user',
 			'token',
-			'adminContributor'
+			'adminContributor',
+			'permission',
+			'permissions'
 		]),
 		...mapGetters('auth', [
 			'isUserLoggedin',
 			'getUser',
+			'getPermissionName'
 		]),
 		...mapGetters('posts', ['siteTitle']),
 		contributorName() {
@@ -225,11 +228,12 @@ export default {
 		}
 	},
 	async mounted () {
+		await this.fetchPermissions()
 		if(!this.token.token) {
 			await this.getSetToken()		
 		}
+		await this.setPermission()
 		await this.getTags()
-		
 		if(this.tags && !this.tags.length){
 			await this.fetchTags()
 		}
@@ -245,6 +249,8 @@ export default {
 		...mapActions('auth', [
 			'getSetToken',
 			'setUser',
+			'fetchPermissions',
+			'setPermission',
 			'logOut'
 		]),
 		...mapActions('admin', ['setSnackbar']),

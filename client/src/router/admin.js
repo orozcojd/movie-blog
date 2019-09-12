@@ -25,13 +25,15 @@ const adminRoutes = [
 				path: types.addUser.path,
 				name: types.addUser.name,
 				component: AddUser,
-				beforeEnter: adminGuard()
+				beforeEnter: adminGuard(),
+				meta: {requiresAuth: true, roles: ['CREATOR', 'ADMINISTRATOR']},
 			},
 			{
 				path: types.editUsers.path,
 				name: types.editUsers.name,
 				component: EditUsers,
-				beforeEnter: adminGuard()
+				beforeEnter: adminGuard(),
+				meta: {requiresAuth: true, roles: ['CREATOR']}
 			},
 			{
 				path: types.adminArticleView.path,

@@ -7,4 +7,6 @@ module.exports = () => ({
 	adminContributor: {},
 	user: null,
 	contributor: {},
+	permissions: [],
+	permission: {}
 })
