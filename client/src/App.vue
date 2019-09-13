@@ -84,12 +84,13 @@ export default {
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Mitr|Roboto&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Manjari:700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Manjari&display=swap');
 #route-content {
   min-height: 100vh;
 }
 #app {
-  font-family: 'Manjari', sans-serif;
+	font-family: 'Manjari', sans-serif;
+	font-weight: 100;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: left;

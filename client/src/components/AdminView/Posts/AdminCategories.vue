@@ -6,7 +6,9 @@
     <vue-headful
       :title="headTitle"
     />
+    <h4>Admin Actions</h4>
     <v-layout
+      v-if="permission.name"
       row
       wrap
       justify-start
@@ -59,8 +61,7 @@ export default {
 				return category.roles.includes(this.permission.name)
 			})
 		},
-
-		categories() { 
+		categories() {
 			return [
 				{
 					title: 'Create Post',
@@ -106,6 +107,7 @@ export default {
 			]
 		}
 	},
+
 	methods: {
 		...mapActions('admin',['clearArticle']),
 		navigateTo(category) {

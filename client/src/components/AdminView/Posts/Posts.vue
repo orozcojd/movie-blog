@@ -10,9 +10,9 @@
       <h1>
         Edit your {{ postType }}
       </h1>
-      <h6 v-if="!filterArticles.length">
-        When you create {{ postType }}, they will appear here.
-      </h6>
+      <div v-if="!filterArticles.length">
+        When you {{ description }}, it will appear here.
+      </div>
     </v-container>
     <admin-display-articles 
       :articles="filterArticles"
@@ -23,7 +23,6 @@
 <script>
 import AdminDisplayArticles from '@/components/AdminView/Posts/AdminDisplayArticles'
 import { mapActions, mapState, mapGetters } from 'vuex'
-
 export default {
 	name: 'AdminView',
 	components: {
@@ -50,7 +49,10 @@ export default {
 			return `Admin View ${type} - ${this.siteTitle}`
 		},
 		postType () {
-			return this.drafts ? 'Drafts' : 'Published Posts'
+			return this.drafts ? 'Drafts' : 'Posts'
+		},
+		description () {
+			return this.drafts ? 'create a draft' : 'publish a post'
 		}
 	},
 	async mounted () {
@@ -68,8 +70,4 @@ export default {
 		...mapActions('admin',['fetchArticlesApi'])
 	}
 }
-
 </script>
-
-<style scoped>
-</style>

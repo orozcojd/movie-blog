@@ -74,6 +74,20 @@ module.exports = (app) => {
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationController.getUsers);
+	app.post('/api/users',
+		VerifyJsonPolicy.verifyJson,
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		PermissionControllerPolicy.checkCreatorPermissions,
+		AuthenticationControllerPolicy.recaptchaPolicy,
+		PermissionControllerPolicy.validatePermissions,
+		AuthenticationController.addUser);
+	app.put('/api/users',
+		VerifyJsonPolicy.verifyJson,
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		PermissionControllerPolicy.validatePermissions,
+		AuthenticationController.updateUserPermission);
 	app.post('/api/auth/forgot-password',
 		apiSpeedLimiter,
 		VerifyJsonPolicy.verifyJson,
@@ -85,24 +99,10 @@ module.exports = (app) => {
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationControllerPolicy.validatePassword,
 		AuthenticationController.resetPassword);
-	app.post('/api/addUser',
-		VerifyJsonPolicy.verifyJson,
-		apiSpeedLimiter,
-		AuthenticationControllerPolicy.authenticateToken,
-		PermissionControllerPolicy.checkCreatorPermissions,
-		AuthenticationControllerPolicy.recaptchaPolicy,
-		PermissionControllerPolicy.validatePermissions,
-		AuthenticationController.addUser);
-	app.put('/api/updateUserPermission',
-		VerifyJsonPolicy.verifyJson,
-		apiSpeedLimiter,
-		AuthenticationControllerPolicy.authenticateToken,
-		PermissionControllerPolicy.validatePermissions,
-		AuthenticationController.updateUserPermission);
-	app.get('/api/contribuor-name',
-		apiSpeedLimiter,
-		AuthenticationControllerPolicy.authenticateToken,
-		AuthenticationController.getContributorName);
+	// app.get('/api/contribuor-name',
+	// 	apiSpeedLimiter,
+	// 	AuthenticationControllerPolicy.authenticateToken,
+	// 	AuthenticationController.getContributorName);
 	app.get('/api/contributors/:contributorId',
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,

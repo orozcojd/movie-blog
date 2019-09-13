@@ -1,5 +1,5 @@
 const {Tags} = require('../models');
-
+const {sortAlpha} = require('../helpers/Helpers');
 module.exports = {
 	/**
    * GET REQUEST
@@ -13,7 +13,7 @@ module.exports = {
 			const tags = await Tags.find(
 				req.query
 			);
-			res.send(tags);
+			res.send(tags.sort(sortAlpha()));
 		}
 		catch (err) {
 			res.status(400).send({

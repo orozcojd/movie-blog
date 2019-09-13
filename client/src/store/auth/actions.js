@@ -17,7 +17,7 @@ export default {
 		else {
 			await dispatch('setToken', res.data)
 			await dispatch('setUser', res.data.user)
-			await dispatch('contributorName')
+			await dispatch('getContributor', res.data.user.contributorId)
 			return res
 		}
 
@@ -53,7 +53,8 @@ export default {
 		else {
 			await dispatch('setToken', response.data)
 			await dispatch('setUser', response.data.user)
-			await dispatch('contributorName')
+			await dispatch('getContributor', response.data.user.contributorId)
+			// await dispatch('contributorName')
 			return Promise.resolve()
 		}
 	},
@@ -170,21 +171,21 @@ export default {
 	setPermission({commit}) {
 		commit(types.SET_PERMISSION)
 	},
-	/**
-	 * GET
-	 * Calls api to get the current logged in user's name and commits mutation
-	 * @param {commit} param0 
-	 */
-	async contributorName({commit, dispatch}) {
-		const [err, name] = await to(Api.ApiAdmin().get('/api/contribuor-name'))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-		}
-		else {
-			localStorage.setItem('unsolicited-contributor', JSON.stringify(name.data))
-			commit(types.SET_ADMIN_CONTRIBUTOR, name.data)
-		}
-	},
+	// /**
+	//  * GET
+	//  * Calls api to get the current logged in user's name and commits mutation
+	//  * @param {commit} param0 
+	//  */
+	// async contributorName({commit, dispatch}) {
+	// 	const [err, name] = await to(Api.ApiAdmin().get('/api/contribuor-name'))
+	// 	if(err) {
+	// 		dispatch('errors/handleConnectionError', err.response, {root: true})
+	// 	}
+	// 	else {
+	// 		localStorage.setItem('unsolicited-contributor', JSON.stringify(name.data))
+	// 		commit(types.SET_ADMIN_CONTRIBUTOR, name.data)
+	// 	}
+	// },
 	async getContributor({commit, dispatch}, id) {
 		const [err, contributor] = await to(Api.ApiAdmin().get(`/api/contributors/${id}`))
 		if(err) {

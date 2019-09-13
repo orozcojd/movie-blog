@@ -165,48 +165,49 @@
         align-center
       >
         <v-flex
-          v-for="(tag, i) in sortedTags"
+          v-for="(tag, i) in tags"
           :key="i"
-          md4
+          lg3
+          sm6
           xs12
           style="padding: 15px"
         >
           <v-card>
             <v-container>
               <h2 align="left">
-                {{ sortedTags[i].name }}
+                {{ tags[i].name }}
               </h2>
               <v-text-field
-                :value="sortedTags[i].name"
+                :value="tags[i].name"
                 :rules="tagRules"
                 :counter="35"
                 label="Tag Name"
-                :disabled="permission.name === 'CONTRIBUTOR' && sortedTags[i].realm"
+                :disabled="permission.name === 'CONTRIBUTOR' && tags[i].realm"
                 @input="updateTag($event, 'name', tag._id)"
               />
               <v-switch
                 v-if="enforcePermission(adminPerm)"
-                :input-value="sortedTags[i].realm"
+                :input-value="tags[i].realm"
                 label="Use Tag as Realm"
                 @change="updateTag($event, 'realm', tag._id)"
               />
-              <div v-if="enforcePermission(adminPerm) && sortedTags[i].realm">
+              <div v-if="enforcePermission(adminPerm) && tags[i].realm">
                 <v-text-field
                   :rules="imageRules"
-                  :value="sortedTags[i].img"
+                  :value="tags[i].img"
                   required
                   label="Realm Image"
                   hint="Enter the image URL from lensdump"
-                  :disabled="!(enforcePermission(guesCPerm) || sortedTags[i].realm)"
+                  :disabled="!(enforcePermission(guesCPerm) || tags[i].realm)"
                   @input="updateTag($event, 'img', tag._id)"
                 />
                 <v-text-field
                   :rules="imageRules"
-                  :value="sortedTags[i].lazyImg"
+                  :value="tags[i].lazyImg"
                   required
                   label="Realm Medium Image"
                   hint="Enter the medium size image URL from lensdump"
-                  :disabled="!(enforcePermission(guesCPerm) || sortedTags[i].realm)"
+                  :disabled="!(enforcePermission(guesCPerm) || tags[i].realm)"
                   @input="updateTag($event, 'lazyImg', tag._id)"
                 />
               </div>
@@ -275,12 +276,10 @@ export default {
 		headTitle() {
 			return `Admin Edit Tags - ${this.siteTitle}}`
 		},
-		sortedTags() {
-			return this.tags.slice().sort(this.sortAlpha())
-		},
+
 		chipTags: {
 			get() {
-				return this.tags.map(tag => ({...tag, chip:true})).sort(this.sortAlpha())
+				return this.tags.map(tag => ({...tag, chip:true}))
 			},
 			set(value) {
 				this.SET_TAGS({
@@ -315,15 +314,7 @@ export default {
 			'postTags',
 			'deleteTags',
 			'updateTags',
-			'setSnackbar'
 		]),
-		sortAlpha() {
-			return (a,b) => {
-				if(a.name < b.name)return -1;
-				if(a.name > b.name) return 1;
-				return 0;
-			}
-		},
 		enforcePermission(options) {
 			return options.includes(this.permission.name)
 		},

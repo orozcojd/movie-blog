@@ -1,10 +1,10 @@
 <template>
   <div>
-    <admin-post-form
-      v-show="loaded && !preview"
-    >
+    <admin-post-form v-show="loaded && !preview">
       <v-flex>
-        <div align="right">
+        <div
+          align="right"
+        >
           <v-btn
             @click="previewPost"
           >
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { mapActions, mapState, mapGetters } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import Article from '@/Model/Article'
 export default {
 	name: 'AdminEditPost',
@@ -48,9 +48,9 @@ export default {
 		...mapState('auth',['user', 'contributor']),
 		...mapState('admin', ['article', 'tags'])
 	},
-	async created() {
+	async mounted() {
 		await this.getContributor(this.user.contributorId)
-
+		if(!this.tags.length) await this.fetchTags()
 		const id = this.$route.params.id
 		if(id) {
 			await this.fetchArticleApi(id)
@@ -63,6 +63,7 @@ export default {
 	},
 	methods: {
 		...mapActions('auth', ['getContributor']),
+		...mapActions('admin',['fetchTags']),
 		...mapActions('admin',[
 			'setArticle',
 			'prepareArticle',

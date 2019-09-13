@@ -229,14 +229,10 @@ export default {
 	},
 	async mounted () {
 		await this.fetchPermissions()
-		if(!this.token.token) {
-			await this.getSetToken()		
-		}
+		if(!this.token.token) await this.getSetToken()
 		await this.setPermission()
 		await this.getTags()
-		if(this.tags && !this.tags.length){
-			await this.fetchTags()
-		}
+		if(!this.tags.length) await this.fetchTags()
 		this.onResize()
 		this.loaded = true
 	},

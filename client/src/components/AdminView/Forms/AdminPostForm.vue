@@ -91,6 +91,7 @@
             deletable-chips
           />
           <tip-tap
+            v-if="article.body"
             align="left"
             class="editor"
           />

@@ -89,7 +89,7 @@ export default {
 	 * @param {Object} payload 
 	 */
 	async addUser({commit, dispatch}, payload) {
-		const [err, response] = await to(Api.ApiAdmin().post('/api/addUser', payload))
+		const [err, response] = await to(Api.ApiAdmin().post('/api/users', payload))
 		if(err) {
 			dispatch('errors/handleConnectionError', err.response, {root: true})
 			return Promise.reject()
