@@ -6,7 +6,17 @@ module.exports = () => ({
 	},
 	adminContributor: {},
 	user: null,
-	contributor: {},
+	contributor: {
+		name: null,
+		bio: null,
+		img: null,
+		twitter: null,
+		facebook:null,
+		instagram: null
+	},
 	permissions: [],
-	permission: {}
+	permission: {
+		name: null,
+		level: null
+	}
 })
