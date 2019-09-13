@@ -384,8 +384,11 @@ export default {
 			// if delete tags was commented out - this code is unreachable
 			if(this.removedTags.length && !this.addTagReqRunning) {
 				this.addTagReqRunning = true
-				await this.deleteTags(this.removedTags)
-					.then(() => this.addRemoveBtnType = 'success')
+				await this.deleteTags({data: {tags:this.removedTags, permission: this.permission._id}})
+					.then(() => {
+						this.addRemoveBtnType = 'success'
+						this.addTagReqRunning = false
+					})
 					.catch(() => {
 						this.addRemoveBtnType = 'error'
 					})

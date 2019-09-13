@@ -19,8 +19,11 @@ module.exports = {
 		}
 	},
 	async validatePermissions(req, res, next) {
+		console.log(req.body);
 		const permissions = await Permissions.find();
 		const permission = permissions.find(p => {
+			console.log(p._id);
+			console.log(req.body);
 			return p._id.toString() === req.body.permission;
 		});
 		if(!permission) res.status(404).send({error: 'Inavlid permission id.'});

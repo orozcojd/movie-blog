@@ -86,13 +86,14 @@ module.exports = {
 	async deleteTags (req, res) {
 		try {
 			let tags = [];
-			for(let i = 0; i< req.body.length; i++) {
+			const data = req.body.tags;
+			for(let i = 0; i< data.length; i++) {
 				let tag = await Tags.deleteOne({
-					_id: req.body[i]._id
+					_id: data[i]._id
 				});
 				tags.push({
 					deleteCount: tag.n,
-					id: req.body[i]._id
+					id: data[i]._id
 				});
 			}
 			let reducer = (accumulate, currentVal) => ({deleteCount: accumulate.deleteCount + currentVal.deleteCount});
