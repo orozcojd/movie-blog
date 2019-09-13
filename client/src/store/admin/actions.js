@@ -170,10 +170,8 @@ export default {
 	 * @param {Array} payload 
 	 */
 	async deleteTags ({commit, dispatch}, payload) {
-		let params = {
-			data: payload
-		}
-		const [err, res] = await to(Api.ApiAdmin().delete('/api/tags', params))
+		console.log(payload)
+		const [err, res] = await to(Api.ApiAdmin().delete('/api/tags', payload))
 		if(err) {
 			dispatch('errors/handleConnectionError', err.response, {root: true})
 			return Promise.reject()
