@@ -88,6 +88,12 @@ module.exports = (app) => {
 		AuthenticationControllerPolicy.authenticateToken,
 		PermissionControllerPolicy.validatePermissions,
 		AuthenticationController.updateUserPermission);
+	app.delete('/api/users/:userId',
+		VerifyJsonPolicy.verifyJson,
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		PermissionControllerPolicy.validatePermissions,
+		AuthenticationController.deleteUser);
 	app.post('/api/auth/forgot-password',
 		apiSpeedLimiter,
 		VerifyJsonPolicy.verifyJson,
@@ -157,6 +163,7 @@ module.exports = (app) => {
 		VerifyJsonPolicy.verifyJson,
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
+		PermissionControllerPolicy.validatePermissions,
 		PermissionControllerPolicy.checkCreatorPermissions,
 		TagsController.deleteTags);
 

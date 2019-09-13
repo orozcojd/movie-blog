@@ -294,13 +294,23 @@ module.exports = {
 			});
 		}
 	},
-	/**
-	 * 
-		{
-			permission: String,
-			id: String
+	async deleteUser(req, res) {
+		try {
+			const deleteCount = await User.deleteOne({
+				_id: req.params.userId
+			});
+			res.send({
+				deleteCount: deleteCount,
+				id: req.params.userId
+			});
+		}catch (err) {
+			res.status(400).send({
+				error: 'Unexpected error has occurred trying to update permission.',
+				
+			});
 		}
-	 */
+	},
+	
 	async updateUserPermission(req, res) {
 		try {
 			const user = await User.findById(req.body.id);
