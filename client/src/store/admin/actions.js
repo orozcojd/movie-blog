@@ -170,7 +170,6 @@ export default {
 	 * @param {Array} payload 
 	 */
 	async deleteTags ({commit, dispatch}, payload) {
-		console.log(payload)
 		const [err, res] = await to(Api.ApiAdmin().delete('/api/tags', payload))
 		if(err) {
 			dispatch('errors/handleConnectionError', err.response, {root: true})

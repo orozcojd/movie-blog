@@ -15,9 +15,9 @@ export default {
 			return Promise.reject()
 		}
 		else {
-			await dispatch('setToken', res.data)
-			await dispatch('setUser', res.data.user)
-			await dispatch('getContributor', res.data.user.contributorId)
+			dispatch('setToken', res.data)
+			dispatch('setUser', res.data.user)
+			dispatch('getContributor', res.data.user.contributorId)
 			return res
 		}
 
@@ -150,7 +150,7 @@ export default {
 	},
 	getSetContributor ({commit}) {
 		const contributor = JSON.parse(localStorage.getItem('unsolicited-contributor'))
-		commit(types.SET_ADMIN_CONTRIBUTOR, contributor)
+		commit(types.SET_CONTRIBUTOR, contributor)
 	},
 	/**
 	 * Calls API and fetches user permissions, then commits to store
@@ -191,6 +191,7 @@ export default {
 		if(err) {
 			dispatch('errors/handleConnectionError', err.response, {root: true})
 		}
+		localStorage.setItem('unsolicited-contributor', JSON.stringify(contributor.data))
 		commit(types.SET_CONTRIBUTOR, contributor.data)
 		return contributor.data
 	},

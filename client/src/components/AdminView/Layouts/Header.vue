@@ -28,7 +28,7 @@
         >
           <template v-slot:activator>
             <v-list-tile>
-              <v-list-tile-title v-text="contributorName" />
+              <v-list-tile-title v-text="contributor.name" />
             </v-list-tile>
           </template>
           <v-list-tile
@@ -182,7 +182,7 @@ export default {
 		...mapState('auth', [
 			'user',
 			'token',
-			'adminContributor',
+			'contributor',
 			'permission',
 			'permissions'
 		]),
@@ -192,9 +192,6 @@ export default {
 			'getPermissionName'
 		]),
 		...mapGetters('posts', ['siteTitle']),
-		contributorName() {
-			return this.adminContributor ? this.adminContributor.name : ''
-		},
 		realmTitle () {
 			return this.toggleDown ? 'Realms' : 'more realms'
 		},
@@ -235,6 +232,7 @@ export default {
 		if(!this.tags.length) await this.fetchTags()
 		this.onResize()
 		this.loaded = true
+		console.log(this.contributor)
 	},
 	beforeDestroy() {
 		this.$store.unregisterModule('admin')
