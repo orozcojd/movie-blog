@@ -12,15 +12,18 @@ const ContributorSchema = new Schema({
 	bio: String,
 	twitter: {
 		type: String,
-		default: null
+		default: null,
+		lowercase: true
 	},
 	instagram: {
 		type: String,
-		default: null
+		default: null,
+		lowercase: true
 	},
 	facebook: {
 		type: String,
-		default: null
+		default: null,
+		lowercase: true
 	}
 });
 

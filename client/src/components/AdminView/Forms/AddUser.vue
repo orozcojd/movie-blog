@@ -136,7 +136,6 @@ export default {
 	},
 	mounted() {
 		this.user.id = this.adminUser._id
-		console.log(this.permissions)
 	},
 	methods: {
 		...mapActions('admin',[

@@ -12,7 +12,8 @@ let articleSchema = new Schema({
 	},
 	author: {
 		type: String,
-		required: true
+		required: true,
+		lowercase: true
 	},
 	body: String,
 	draft: {

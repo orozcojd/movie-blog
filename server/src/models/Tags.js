@@ -5,7 +5,7 @@ let tagSchema = new Schema({
 	name: {
 		type: String,
 		unique: true,
-		set: v => v.toLowerCase().trim(),
+		lowercase: true
 	},
 	img: {
 		type: String,

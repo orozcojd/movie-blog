@@ -154,7 +154,7 @@ export default {
 			if(!this.recaptcha.verified)
 				return
 			this.login({
-				email: this.credentials.email,
+				email: this.credentials.email.toLowerCase(),
 				password: this.credentials.password,
 				recaptchaToken: this.recaptcha.token
 			})
