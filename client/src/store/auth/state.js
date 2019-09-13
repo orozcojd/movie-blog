@@ -4,7 +4,6 @@ module.exports = () => ({
 		refreshToken: null,
 		tokenDetails: null
 	},
-	adminContributor: {},
 	user: null,
 	contributor: {},
 	permissions: [],

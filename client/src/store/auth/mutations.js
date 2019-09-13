@@ -64,10 +64,6 @@ export default {
 			window.localStorage.removeItem('unsolicited-user')
 		}
 	},
-	
-	[types.SET_ADMIN_CONTRIBUTOR] (state, contributor) {
-		state.adminContributor = contributor
-	},
 	[types.SET_CONTRIBUTOR] (state, contributor) {
 		state.contributor = contributor
 	},

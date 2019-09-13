@@ -176,7 +176,7 @@ export default {
 		}
 	},
 	async mounted() {
-		await this.getContributor(this.user.contributorId)
+		if(!this.contributor.name) await this.getContributor(this.user.contributorId)
 	},
 	methods: {
 		...mapActions('auth',[
