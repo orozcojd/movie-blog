@@ -32,6 +32,7 @@ export default {
 	 */
 	[types.NEW_ARTICLE] (state) {		
 		let found = state.tags.find(tag => tag._id === state.article.realm)
+		console.log(found)
 		let realmObj = {}
 		if(!!found && found !== -1) {
 			realmObj._id = found._id

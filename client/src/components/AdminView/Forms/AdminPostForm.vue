@@ -91,7 +91,7 @@
             deletable-chips
           />
           <tip-tap
-            v-if="article.body"
+            v-if="article.author"
             align="left"
             class="editor"
           />
@@ -175,6 +175,9 @@ export default {
 			tagChoices: 'tags',
 			snackbar: 'snackbar'
 		}),
+		loadTipTap() {
+			return 1
+		},
 		headTitle() {
 			return this.article.title ? `Admin Edit - ${this.article.title}` : 'Admin Create Article - Unsolocited.mp3'
 		},
@@ -257,6 +260,7 @@ export default {
 				return this.article.tags
 			},
 			set(value) {
+				console.log(value)
 				this.updateArticleContent({
 					type: 'tags',
 					value: value
@@ -300,6 +304,9 @@ export default {
 				this.$router.push({name: adminCategories.name})
 			}
 		}
+	},
+	mounted() {
+		console.log('mounted this form')
 	},
 	methods: {
 		...mapActions('admin',[

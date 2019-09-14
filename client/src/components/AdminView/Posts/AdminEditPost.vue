@@ -1,6 +1,8 @@
 <template>
   <div>
-    <admin-post-form v-show="loaded && !preview">
+    <admin-post-form
+      v-if="article.author && !preview"
+    >
       <v-flex>
         <div
           align="right"
@@ -57,7 +59,8 @@ export default {
 			await this.prepareArticle()
 		}
 		else {
-			this.setArticle(new Article({author: this.contributor.name}))
+			console.log('new article')
+			await this.setArticle(new Article({author: this.contributor.name}))
 		}
 		this.loaded = true
 	},
