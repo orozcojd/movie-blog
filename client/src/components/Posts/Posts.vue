@@ -3,6 +3,19 @@
     fluid
     class="content"
   >
+    <div class="slider-container">
+      <div class="ib">
+        Los Angeles
+      </div>
+      <div class="slide-wrapper">
+        <v-slider
+          v-model="slider"
+        />
+      </div>
+      <div class="ib">
+        New York
+      </div>
+    </div>
     <vue-headful
       :title="siteTitle"
       description="Description from vue-headful"
@@ -60,6 +73,7 @@ export default {
 	},
 	data () {
 		return {
+			slider: 50
 		}
 	},
 	computed: {
@@ -129,7 +143,27 @@ export default {
   .post-preview {
     cursor: pointer;
   }
-  h2{
+  h2 {
     font-size: 3rem;
   }
+  .slider-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
+    margin-top: 1em;
+  }
+  .slider-container h6 {
+    margin: 0;
+  }
+  .slide-wrapper {
+    margin: 0 10px;
+    width: 70%;
+  }
+  .ib {
+    display: flex;
+    align-items: center;
+  }
+
 </style>
