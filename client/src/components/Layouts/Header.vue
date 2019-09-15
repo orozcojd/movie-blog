@@ -129,14 +129,11 @@ export default {
 	computed: {
 		...mapState('posts', [
 			'viewedArticles',
-			'tags',
+			'realms',
 		]),
 		...mapGetters('posts', ['siteTitle']),
 		realmTitle () {
 			return this.toggleDown ? 'Realms' : 'more realms'
-		},
-		realms () {
-			return this.tags.filter(tag => tag.realm === true)
 		},
 		sideNavRealms() {
 			if(this.toggleDown) {
@@ -148,8 +145,7 @@ export default {
 		}
 	},
 	async mounted () {
-		if(!this.tags.length)
-			await this.getTags()
+		if(!this.realms.length) await this.getTags({params: {realm: true}})
 		this.onResize()
 	},
 	methods: {
@@ -247,7 +243,7 @@ export default {
  }
  .sidenav-realm {
    text-transform: uppercase;
-   font-size: .7em;
+   font-size: .5em;
    height: 48px;
    cursor: pointer;
  }

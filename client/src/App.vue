@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-app>
-      <v-content>
+      <v-content class="content">
         <admin-header v-if="isUserLoggedin" />
         <Header v-else />
         <div v-if="errors && errors.length">
@@ -85,6 +85,7 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css?family=Mitr|Roboto&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Manjari&display=swap');
+
 #route-content {
   min-height: 100vh;
 }

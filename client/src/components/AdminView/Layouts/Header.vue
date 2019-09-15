@@ -48,54 +48,53 @@
             </v-list-tile-action>
           </v-list-tile>
         </v-list-group>
-        <v-list-tile v-if="tagShow.end < 9">
-          <v-list-tile-title class="sidenav-title">
-            {{ realmTitle }}
-          </v-list-tile-title>
-        </v-list-tile>
-        <div class="sidenav-realms flex-col">
+        <div v-if="tagShow.end < 9">
           <div
-            v-for="(realm, i) in sideNavRealms"
-            :key="i"
-            class="sidenav-realm"
-            @click="navigateTo('tag-view', { 
-              id: realm.ref_id,
-              tagName: realm.name,
-            })"
+            class="sidenav-title"
           >
-            {{ realm.name }}
+            {{ realmTitle }}
+          </div>
+          <div class="mt-title flex-col">
+            <div
+              v-for="(realm, i) in sideNavRealms"
+              :key="i"
+              class="sidenav-realm"
+              @click="navigateTo('tag-view', { 
+                id: realm.ref_id,
+                tagName: realm.name,
+              })"
+            >
+              {{ realm.name }}
+            </div>
           </div>
         </div>
-        <v-list-group
+        <div
           v-if="viewedArticles.length"
           value="true"
-          class="contain-group"
         >
-          <template v-slot:activator>
-            <v-list-tile>
-              <v-list-tile-title class="sidenav-title">
-                recently visited
-              </v-list-tile-title>
-            </v-list-tile>
-          </template>
-          <v-list-tile
-            v-for="viewed in viewedArticles"
-            :key="viewed.id"
-            @click="navigateTo('article-view', { 
-              id: viewed.id,
-            })"
-          >
-            <v-list-tile-action>
+          <div class="sidenav-title">
+            recently visited
+          </div>
+          <div class="mt-title">
+            <div 
+              v-for="viewed in viewedArticles"
+              :key="viewed.id"
+              class="flex-row recent-container"
+              @click="navigateTo('article-view', { 
+                id: viewed.id,
+              })"
+            >
               <v-img
                 style="margin-right: 5px;"
                 :src="viewed.img"
+                max-width="70"
               />
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>{{ viewed.title }}</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-        </v-list-group>
+              <div class="recents-overflow">
+                {{ viewed.title }}
+              </div>
+            </div>
+          </div>
+        </div>
       </v-list>
     </v-navigation-drawer>
     <v-toolbar
@@ -106,7 +105,10 @@
       clipped-left
       class="nav-items"
     >
-      <v-toolbar-side-icon @click.stop="drawerLeft = !drawerLeft" />
+      <v-toolbar-side-icon 
+        v-if="tagShow.end < 9 || viewedArticles.length"
+        @click.stop="drawerLeft = !drawerLeft" 
+      />
       <div
         class="main-title"
         @click="$router.push('/')"
@@ -228,11 +230,11 @@ export default {
 		await this.fetchPermissions()
 		if(!this.token.token) await this.getSetToken()
 		await this.setPermission()
-		await this.getTags()
+		// await this.getTags({params: {realm: true}})
+		// await this.getTags({params: {realm: false}})
 		if(!this.tags.length) await this.fetchTags()
 		this.onResize()
 		this.loaded = true
-		console.log(this.contributor)
 	},
 	beforeDestroy() {
 		this.$store.unregisterModule('admin')
@@ -336,12 +338,6 @@ export default {
   max-height: 432px;
   overflow: scroll;
 }
-.v-toolbar__content, .flex-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-}
 .nav-tile {
   font-size: 1em;
 }
@@ -354,23 +350,48 @@ export default {
   justify-content: start;
   font-size: .8em;
  }
- .sidenav-realms {
-   margin-top: .5em;
+ .mt-title {
+   margin-top: 1em;
  }
  .sidenav-realm {
    text-transform: uppercase;
-   font-size: 1em;
+   font-size: .5em;
    height: 48px;
    cursor: pointer;
  }
  .sidenav-title {
-   font-size: 1.5em;
+   font-size: 1em;
+   border-bottom: .1px solid #767676;
+   padding: 16px 16px;
+  //  height: 1.5em;
  }
  .flex-col {
    display: flex;
    padding: 0 16px;
    flex-direction: column;
-
  }
+ .v-toolbar__content, .flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 100%;
+}
+.recent-container {
+  padding: 8px 8px 8px 16px;
+  font-size: 14px;
+  height: 60x;
+  cursor: pointer;
+}
+.recent-container:hover {
+  color: #5c6bc0;
+}
+.recents-overflow {
+  overflow: hidden;
+  width: 80%;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical; 
+  text-overflow: ellipsis;
+}
 </style>
 

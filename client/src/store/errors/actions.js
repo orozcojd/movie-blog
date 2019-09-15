@@ -10,6 +10,6 @@ export default {
 	async handleConnectionError({commit}, err) {
 		const message = prepareErrorMessage(err)
 		commit(types.ADD_ERRORS, message)
-		setTimeout(() => {commit(types.POP_ERROR)}, 3000)
+		setTimeout(() => {commit(types.POP_ERROR)}, 4000)
 	}
 }

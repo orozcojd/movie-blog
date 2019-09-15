@@ -112,7 +112,7 @@ export default {
 
 <style lang="scss" scoped>
   .content {
-    max-width: 1920px
+    max-width: 1400px;
   }
   .container {
     padding-top: 0 !important;

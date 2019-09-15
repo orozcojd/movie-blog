@@ -26,7 +26,7 @@ module.exports = {
 	},
 	ratelimits: {
 		login: process.env.OPENSHIFT_LOGIN_RATELIMIT || 1000,
-		default: process.env.OPENSHIFT_DEFAULT_RATELIMIT || 1000,
+		default: process.env.OPENSHIFT_DEFAULT_RATELIMIT || 10000,
 		api: process.env.OPENSHIFT_API_RATELIMIT || 1000,
 		adduser: process.env.OPENSHIFT_ADDUSER_RATELIMIT || 1000
 	},

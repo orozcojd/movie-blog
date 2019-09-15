@@ -7,6 +7,12 @@ let tagSchema = new Schema({
 		unique: true,
 		lowercase: true
 	},
+	urlTag: {
+		type: String,
+		required: true,
+		unique: true,
+		lowercase: true
+	},
 	img: {
 		type: String,
 		default: null

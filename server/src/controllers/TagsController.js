@@ -10,9 +10,11 @@ module.exports = {
    */
 	async getTags (req, res) {
 		try {
+			console.log(req.query);
 			const tags = await Tags.find(
 				req.query
 			);
+			console.log(tags);
 			res.send(tags.sort(sortAlpha()));
 		}
 		catch (err) {
@@ -33,7 +35,8 @@ module.exports = {
 			
 			let tags = [];
 			for(let i = 0; i< req.body.length; i++) {
-				let tag = await Tags.create(req.body[i]);
+				let preTag = {...req.body[i], urlTag: req.body[i].name.split(' ').join('-')};
+				let tag = await Tags.create(preTag);
 				tags.push(tag);
 			}
 			res.send({
@@ -43,6 +46,7 @@ module.exports = {
 
 		}
 		catch (err) {
+			console.log(err);
 			let error = 'An error has occured trying to add tags';
 			if(err.code === 11000) {
 				error = 'Tag already exists! Please check existing tag names.';
@@ -64,7 +68,7 @@ module.exports = {
 			let tags = req.body;
 			let updated = [];
 			for(let i = 0; i< tags.length; i++) {
-				let tag = tags[i];
+				let tag = {...tags[i], urlTag: tags[i].name.split(' ').join('-')};
 				const updatedTag = await Tags.findByIdAndUpdate(
 					tag._id,
 					tag,

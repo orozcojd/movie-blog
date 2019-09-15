@@ -28,21 +28,22 @@
         >
           <v-card-title 
             primary-title
-            class="flex-between"
+            class="title-container"
           >
             <div id="latest-title">
-              <h2>
+              <h4>
                 <b>
                   {{ article.title }}
                 </b>
-              </h2>
-              <!-- <br>
+              </h4>
+            </div>
+            <div id="latest-description">
               <p 
                 class="card-description"
                 align="left"
               >
                 {{ article.thumbnailDescription }}
-              </p> -->
+              </p>
               <!-- </p> -->
             </div>
             <div
@@ -81,14 +82,27 @@ export default {
 </script>
 
 <style scoped>
-.flex-between {
+.title-container {
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
 }
-
+  .title-container {
+    padding-top: 24px;
+  }
+  .card-description {
+    font-size: 16px;
+  }
+@media (min-width: 960px) and (max-width: 1100px){
+    .title-container {
+      padding-top: 0;
+    }
+    .card-description {
+      font-size: 14px;
+    }
+}
 /* remove margins from latest post*/
 h2 {
   margin-top: 0 !important;

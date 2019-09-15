@@ -113,21 +113,25 @@ export default {
 			commit(types.SET_CONTRIBUTOR, contributor.data)
 		}
 	},
+	setTags ({commit}, payload) {
+		console.log('inside setTags')
+		commit(types.SET_TAGS, payload)
+	},
 	/**
 	 * GET
 	 * Calls api to get all tags and commits muation to 
 	 * set state tags array to retrieved result
 	 * @param {commit} param0 
 	 */
-	async getTags ({commit, dispatch}, options = {}) {
+	async getTags ({commit, dispatch}, options = {params: {realm: false}}) {
 		// let tags = (await Api.ApiGeneral().get('tags', options)).data
-		let err, tags
-		[err, tags] = await to(Api.ApiGeneral().get('/tags', options))
+		
+		const [err, tags] = await to(Api.ApiGeneral().get('/tags', options))
 		if(err) {
 			dispatch('errors/handleConnectionError', err.response, {root: true})
 		}
 		else {
-			commit(types.FETCH_TAGS, tags.data)
+			commit(types.FETCH_TAGS, {tags: tags.data, realm: options.params.realm})
 		}
 	},
 	/**

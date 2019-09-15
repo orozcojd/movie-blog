@@ -11,7 +11,6 @@ export default {
 	[types.FETCH_ARTICLE] (state, payload) {
 		state.article = payload
 		state.infiniteArticles.push(payload)
-
 	},
 	/**
 	 * Sets articles array to payload
@@ -30,7 +29,8 @@ export default {
 	 * @param {Array} payload 
 	 */
 	[types.FETCH_TAGS] (state, payload) {
-		state.tags = payload
+		if(payload.realm) state.realms = payload.tags
+		else state.tags = [...state.realms, payload.tags]
 	},
 	/**
 	 * Sets articles object to payload
@@ -55,8 +55,6 @@ export default {
 	[types.SET_CONTRIBUTOR] (state, contributor) {
 		state.contributor = contributor
 	},
-
-
 	/**
 	 * Array Spreads array and pushes into state infiniteArticles array
 	 * Increments state pageNo by one and adds Ids to vuex associated
@@ -83,7 +81,6 @@ export default {
 			state.unAssociatedArticles.pageNo +=1
 		}
 		else {
-			console.log('HERE SETTING TO TRUE')
 			state.maxArticlesReached = true
 		}
 	},
@@ -109,6 +106,10 @@ export default {
 	 */
 	[types.SET_TAG] (state, payload) {
 		state.tag = payload
+	},
+	[types.SET_TAGS] (state, payload) {
+		state.realms = payload.filter(tag => tag.realm === true)
+		state.tags = payload
 	},
 	/**
 	 * Splices state tags array by value of payload

@@ -38,7 +38,7 @@
               )"
             >
               <small> 
-                {{ article.author }}
+                {{ titleCase(article.author) }}
               </small>
             </a>
           </div>
@@ -227,6 +227,13 @@ export default {
 				if(tag)
 					return tag.name.trim()
 			}
+		},
+		titleCase(word) {
+			let title = word.toLowerCase().split(' ')
+			for(let i = 0; i < title.length; i++) {
+				title[i] = title[i].charAt(0).toUpperCase() + title[i].slice(1)
+			}
+			return title.join(' ')
 		},
 		upperCaseString(str) {
 			if(!str)

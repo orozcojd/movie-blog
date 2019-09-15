@@ -81,6 +81,9 @@ export default {
 		store.dispatch('posts/fetchArticle', (to.params.id))
 		next()
 	},
+	async created() {
+		if(!this.tags.length) await this.getTags({params: {realm: false}})
+	},
 	mounted() {
 		this.init()
 	},
@@ -95,7 +98,8 @@ export default {
 			'getNextArticles',
 			'resetNextArticles',
 			'setMaxRelated',
-			'setArticle'
+			'setArticle',
+			'getTags'
 		]),
 		...mapMutations('posts',['PUSH_VIEWED']),
 		async loadMore() {

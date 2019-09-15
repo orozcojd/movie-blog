@@ -147,7 +147,6 @@ module.exports = (app) => {
 		apiSpeedLimiter,
 		AuthenticationController.rejectToken);
 
-
 	/* Admin Tag Routes */
 	app.post('/api/tags',
 		VerifyJsonPolicy.verifyJson,

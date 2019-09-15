@@ -5,6 +5,7 @@ module.exports = () => ({
 	infiniteArticles: [],
 	viewedArticles: [],
 	tags: [],
+	realms: [],
 	tag: {},
 	page: 1,
 	pages: null,

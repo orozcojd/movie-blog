@@ -114,6 +114,8 @@ export default {
 			dispatch('errors/handleConnectionError', err.response, {root: true})
 		}
 		else {
+			console.log('inside fetchTags')
+			dispatch('posts/setTags', data.data, {root: true})
 			commit(types.SET_TAGS, data.data)
 		}
 	},
