@@ -16,7 +16,7 @@ export default {
 	getUser: (state) => {
 		return state.user
 	},
-	getPermissionName: (state) => {
-		return state.permission.name
+	getAclUser: (state) => {
+		return state.aclUser
 	}
 }

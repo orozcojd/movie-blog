@@ -1,6 +1,9 @@
 import Api from '@/services/Api'
 import types from '@/store/types'
 import to from '@/store/to'
+import Vue from 'vue'
+import defineAbilitiesFor from '@/Authentication/ability';
+import { abilitiesPlugin } from '@casl/vue'
 export default {
 	/**
 	 * Logs in user if validated by backend and
@@ -20,7 +23,6 @@ export default {
 			dispatch('getContributor', res.data.user.contributorId)
 			return res
 		}
-
 	},
 	/**
 	 * Commits mutations to set token and user to null
@@ -136,9 +138,16 @@ export default {
 	 * Gets user name from local storage and sets it to state 
 	 * @param {commit} param0 
 	 */
-	getSetUser ({commit}) {
+	async getSetUser ({commit, dispatch}) {
 		const user = JSON.parse(localStorage.getItem('unsolicited-user'))
+		const [err, aclUser] = await to(Api.ApiAdmin().get('/api/user-permission'))
+		if(err) {
+			dispatch('errors/handleConnectionError', err.response, {root: true})
+			return Promise.reject()
+		}
+		Vue.use(abilitiesPlugin, defineAbilitiesFor(aclUser.data.aclUser))
 		commit(types.SET_USER, user)
+		commit(types.SET_ACL_USER, aclUser.data.aclUser)
 	},
 	/**
 	 * Commits mutation to update contributor object attribute
@@ -162,30 +171,9 @@ export default {
 			dispatch('errors/handleConnectionError', err.response, {root: true})
 			return Promise.reject()
 		}
+		
 		commit(types.FETCH_PERMISSIONS, permissions.data)
 	},
-	/**
-	 * Commits to store to set permission matching user permission ID
-	 * @param {commit} param0 
-	 */
-	setPermission({commit}) {
-		commit(types.SET_PERMISSION)
-	},
-	// /**
-	//  * GET
-	//  * Calls api to get the current logged in user's name and commits mutation
-	//  * @param {commit} param0 
-	//  */
-	// async contributorName({commit, dispatch}) {
-	// 	const [err, name] = await to(Api.ApiAdmin().get('/api/contribuor-name'))
-	// 	if(err) {
-	// 		dispatch('errors/handleConnectionError', err.response, {root: true})
-	// 	}
-	// 	else {
-	// 		localStorage.setItem('unsolicited-contributor', JSON.stringify(name.data))
-	// 		commit(types.SET_ADMIN_CONTRIBUTOR, name.data)
-	// 	}
-	// },
 	async getContributor({commit, dispatch}, id) {
 		const [err, contributor] = await to(Api.ApiAdmin().get(`/api/contributors/${id}`))
 		if(err) {

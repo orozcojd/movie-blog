@@ -36,6 +36,7 @@
         Edit
       </v-btn>
       <v-btn
+        v-if="$can('delete', 'Post')"
         color="error"
         :ripple="false"
         align="left"

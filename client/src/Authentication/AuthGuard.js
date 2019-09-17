@@ -4,7 +4,7 @@ export function adminGuard() {
 	/*
 			If user is logged in, allow access admin routes
 			otherwise redirect to main page
-		*/
+	*/
 	return (to, from, next) => {
 		if(!store.getters['auth/isUserLoggedin']) {
 			store.dispatch('auth/getSetToken')
@@ -35,8 +35,7 @@ export function	loggedInRedirect() {
 export function validatePermissions() {
 	return (to, from, next) => {
 		if(!to.meta.requiresAuth) return next()
-		const hasPermission = to.meta.roles.includes(store.getters['auth/getPermissionName'])
-		if(!hasPermission) return next('/admin')
+		if(!to.meta.allowed()) return next('/admin')
 		return next()
 	}
 }

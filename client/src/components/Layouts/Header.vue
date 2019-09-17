@@ -76,7 +76,7 @@
       class="nav-items"
     >
       <v-toolbar-side-icon 
-        v-if="tagShow.end < 9 || viewedArticles.length"
+        v-if="tagShow.end <= 9"
         @click.stop="drawerLeft = !drawerLeft" 
       />
       <div

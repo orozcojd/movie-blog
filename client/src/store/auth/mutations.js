@@ -10,15 +10,6 @@ export default {
 		state.permissions = payload
 	},
 	/**
-	 * Sets state permission object equal to matched id of user permission
-	 * @param {Vuex state} state 
-	 */
-	[types.SET_PERMISSION] (state) {
-		state.permission = state.permissions.find(p => {
-			return state.user.permission === p._id.toString()
-		})
-	},
-	/**
 	 * Sets state token to payload token
    * adds/removes token to/from local storage
 	 * @param {Vuex state} state 
@@ -63,6 +54,9 @@ export default {
 		else{ 
 			window.localStorage.removeItem('unsolicited-user')
 		}
+	},
+	[types.SET_ACL_USER] (state, payload) {
+		state.aclUser = payload
 	},
 	[types.SET_CONTRIBUTOR] (state, contributor) {
 		state.contributor = contributor

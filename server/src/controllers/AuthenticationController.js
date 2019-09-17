@@ -17,6 +17,36 @@ let refreshTokens = [];
 // User.find({
 // }).remove().exec();
 
+let rules = [
+	{
+		'actions': ['read'],
+		'subject': 'all'
+	},
+	{
+		'actions': ['update', 'delete'],
+		'subject': 'Post',
+		'conditions': {
+			'contributorId': '${user.contributorId}'
+		}
+	},
+	{
+		'actions': ['create', 'read', 'update', 'delete'],
+		'subject': 'Post',
+		'conditions': {
+			'user': '${user}'
+		}
+	}
+];
+let user = {
+	contributorId: 1,
+	email: 'sample@gmail.com',
+	_id: 2,
+	permission: {
+		level: 1,
+		name: 'CREATOR',
+		_id: 1234
+	}
+};
 
 module.exports = {
 
@@ -34,7 +64,7 @@ module.exports = {
 				error: 'Please enter valid credentials'
 			});
 		}
-		passport.authenticate('local', (err, user, info) => {			
+		passport.authenticate('local', async (err, user, info) => {			
 			if (err) {
 				return res.status(404).send({
 					error: 'Something went wrong trying to log you in.'
@@ -44,10 +74,13 @@ module.exports = {
 				const token = user.generateToken();
 				const refreshToken = randomToken.uid(256);
 				refreshTokens[refreshToken] = user.email;
+				// const permission = await Permissions.findById(user.permission);
+				
 				res.status(200).send({
+					'aclRules': rules,
 					'token': token,
 					'refreshToken': refreshToken,
-					'user': {_id: user._id, email: user.email, contributorId: user.contributorId, permission: user.permission}
+					'user': {_id: user._id, email: user.email, contributorId: user.contributorId}
 				});
 			} else {
 				res.status(401).send(info);
@@ -139,7 +172,18 @@ module.exports = {
 			});
 		}
 	},
-
+	async getFullUser (req, res) {
+		try {
+			const user = await User.findById(req.userId).lean();
+			let permission = await Permissions.findById(user.permission);
+			let aclUser = {_id: user._id, email: user.email, contributorId: user.contributorId, permission};
+			res.status(200).send({aclUser: aclUser, aclRules: rules});
+		} catch (err) {
+			res.status(400).send({
+				error: 'Unexpected error has occurred trying to get user permission info'
+			});
+		}
+	},
 	/**
 	 * POST
 	 * Retrieves the contributor name mapped from the user ID in the request.
@@ -159,74 +203,7 @@ module.exports = {
 			});
 		}
 	},
-	/**
-	 * GET REQUEST
-	 * Given the contributor id in the req params, returns the contributor model
-	 * if found otherwise a 404 response
-	 * @param {Object} req 
-	 * @param {Object} res 
-	 */
-	async getContributor (req, res) {
-		const id = req.params.contributorId;
-		try {
-			const contributor = await Contributor.findOne({_id: id});
-			if(contributor) {
-				console.log(contributor);
-				res.send(contributor);
-			}
-			else {
-				console.log('inside else');
-				res.status(404).send({
-					error: 'The resource is not found'
-				});
-			}
-		} catch (err) {
-			console.log(err);
-			res.status(400).send({
-				error: 'Unexpected error has occurred'
-			});
-		}
-	},
 
-	/**
-	 * PUT REQUEST
-	 * Updates the contributor info in the db and returns the updated Model
-	 * @param {Object} req 
-	 * @param {Object} res 
-	 */
-	async updateContributor (req, res) {
-		try {
-			const contributorId = req.params.contributorId;
-			let contributorName = await Contributor.findOne({_id: contributorId});
-			contributorName = contributorName.name;
-			const updateName = req.body.name !== contributorName;
-			const contributor = await Contributor.findOneAndUpdate(
-				{_id: contributorId},
-				contributorHelpers.updateSocialLinks(req.body),
-				{new: true}
-			);
-			let updated;
-			if(updateName) {
-				updated = await Post.updateMany({contributorId: contributorId}, {
-					author: req.body.name
-				});
-			}
-			let message = 'Contributor information Updated! ';
-			if(updated) {
-				message += updated.nModified.toString() + ' Article(s) were updated reflecting name change.';
-			}
-			res.send({
-				contributor: contributorHelpers.stripSocialLinks(contributor),
-				message: message
-			});
-
-		} catch(err) {
-			res.status(400).send({
-				error: 'Unexpected error has occurred'
-			});
-		}
-
-	},
 	/**
 	 * GET REQUEST
 	 * Returns all users found in the database

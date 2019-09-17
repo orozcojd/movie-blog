@@ -24,6 +24,10 @@ const ContributorSchema = new Schema({
 		type: String,
 		default: null,
 		lowercase: true
+	},
+	__type: {
+		type: String,
+		default: 'Contributor'
 	}
 });
 

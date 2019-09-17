@@ -10,6 +10,10 @@ const PermissionSchema = new Schema({
 		type: String,
 		required: true,
 		unique: true
+	},
+	__type: {
+		type: String,
+		default: 'Permission'
 	}
 });
 

@@ -1,14 +1,16 @@
 //routes are used for declaring routes to all the controllers
 
 const AuthenticationController = require('./controllers/AuthenticationController');
+const ContributorController = require('./controllers/ContributorController');
 const ArticlesController = require('./controllers/ArticlesController');
-const AdminArticleController = require('./controllers/AdminArticleController');
 const TagsController = require('./controllers/TagsController');
-const AdminContributorController = require('./controllers/AdminContributorController');
 const PermissionController = require('./controllers/PermissionController');
+const AdminArticleController = require('./controllers/AdminArticleController');
+const AdminContributorController = require('./controllers/AdminContributorController');
 const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy');
 const PermissionControllerPolicy = require('./policies/PermissionControllerPolicy');
 const VerifyJsonPolicy = require('./policies/VerifyJsonPolicy');
+
 // const jwt = require('express-jwt');
 // const config = require('./config/config');\
 
@@ -63,13 +65,18 @@ module.exports = (app) => {
 		ArticlesController.articlesByContributor);
 	app.get('/contributors/:contributorId',
 		appSpeedLimiter,
-		AuthenticationController.getContributor);
+		ContributorController.getContributor);
 	app.get('/contributors',
 		appSpeedLimiter,
-		AdminArticleController.contributors);
+		ContributorController.contributors);
 
 
 	/* Admin User Routes */
+	app.get('/api/user-permission',
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationController.getFullUser,
+	);
 	app.get('/api/users',
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
@@ -118,7 +125,7 @@ module.exports = (app) => {
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationControllerPolicy.contributorAccessControl,
-		AuthenticationController.updateContributor);
+		AdminContributorController.updateContributor);
 	
 	/** permissions */
 	app.get('/api/permissions',

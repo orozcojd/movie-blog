@@ -11,11 +11,10 @@ module.exports = {
 	async getTags (req, res) {
 		try {
 			console.log(req.query);
-			const tags = await Tags.find(
+			let tags = await Tags.find(
 				req.query
-			);
-			console.log(tags);
-			res.send(tags.sort(sortAlpha()));
+			).lean();
+			res.send(tags.map(tag => { return {...tag, __type: 'Tag'};}).sort(sortAlpha()));
 		}
 		catch (err) {
 			res.status(400).send({

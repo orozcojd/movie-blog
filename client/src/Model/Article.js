@@ -19,6 +19,7 @@ class Article {
 		this.realm = realm._id
 		this.tags = tags.map(tag => tag._id)
 		this.contributorId = contributorId
+		this.__type = 'Post'
 	}
 }
 export default Article

@@ -5,7 +5,7 @@
   >
     <div class="slider-container">
       <div class="ib">
-        Los Angeles
+        West Coast
       </div>
       <div class="slide-wrapper">
         <v-slider
@@ -13,7 +13,7 @@
         />
       </div>
       <div class="ib">
-        New York
+        East Coast
       </div>
     </div>
     <vue-headful
@@ -44,19 +44,26 @@
       most recent
     </h2>
     <timeline
-      :articles="articles.slice(1)"
+      :articles="timelineArticles"
     />
     <br><br>
-    <h2
-      class="mb-sm"
-      align="left"
-    >
-      weekly updates
-    </h2>
+    <div v-if="weeklyArticles.length">
+      <h2
+        class="mb-sm"
+        align="left"
+      >
+        weekly updates
+      </h2>
 
-    <display-articles 
-      :articles="articles.slice(6)"
-    />
+      <display-articles 
+        :articles="weeklyArticles"
+      />
+    </div>
+    <div v-else>
+      <h2>
+        Stay tuned for more articles
+      </h2>
+    </div>
   </v-container>
 </template>
 
@@ -79,6 +86,12 @@ export default {
 	computed: {
 		...mapState('posts', ['articles']),
 		...mapGetters('posts', ['siteTitle']),
+		timelineArticles() {
+			return this.articles.slice(1,5)
+		},
+		weeklyArticles() {
+			return this.articles.slice(6)
+		}
 	},
 	beforeRouteEnter (to, from, next) {
 		let options = {

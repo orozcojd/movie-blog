@@ -9,6 +9,8 @@ const AboutContributor = ()  => import('@/components/AdminView/Forms/AboutContri
 const EditUsers = () => import('@/components/AdminView/Forms/EditUsers')
 import {adminGuard} from '@/Authentication/AuthGuard'
 import * as types from '@/constants/types'
+import ability from '@/Authentication/ability'
+import store from '@/store'
 
 const adminRoutes = [
 	{
@@ -26,14 +28,14 @@ const adminRoutes = [
 				name: types.addUser.name,
 				component: AddUser,
 				beforeEnter: adminGuard(),
-				meta: {requiresAuth: true, roles: ['CREATOR', 'ADMINISTRATOR']},
+				meta: {requiresAuth: true, allowed: () => ability(store.getters['auth/getAclUser']).can('view', 'User')},
 			},
 			{
 				path: types.editUsers.path,
 				name: types.editUsers.name,
 				component: EditUsers,
 				beforeEnter: adminGuard(),
-				meta: {requiresAuth: true, roles: ['CREATOR']}
+				meta: {requiresAuth: true, allowed: () => ability(store.getters['auth/getAclUser']).can('view', 'Users')}
 			},
 			{
 				path: types.adminArticleView.path,

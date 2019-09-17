@@ -11,18 +11,16 @@ import infiniteScroll from 'vue-infinite-scroll'
 import InterceptorService from '@/services/InterceptorService'
 import { sync } from 'vuex-router-sync'
 import vueHeadful from 'vue-headful';
-
-Vue.component('vue-headful', vueHeadful);
-
-// font-awesome icons import
+import { abilitiesPlugin } from '@casl/vue'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { dom } from '@fortawesome/fontawesome-svg-core'
-// import { faFacebookSquare } from '@fortawesome/free-solid-svg-icons'
 import { faFacebookSquare, faTwitterSquare, faInstagram } from '@fortawesome/free-brands-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
- 
-
 import VueProgressBar from 'vue-progressbar'
+import ability from './Authentication/ability'
+
+Vue.component('vue-headful', vueHeadful);
+Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 Vue.use(VueProgressBar, {
 	color: '#9982c0',
@@ -31,15 +29,11 @@ Vue.use(VueProgressBar, {
 })
 dom.watch()
 library.add(faFacebookSquare,faTwitterSquare, faInstagram)
- 
-Vue.component('font-awesome-icon', FontAwesomeIcon)
 
-// import colors from 'vuetify/es5/util/colors'
-
-// run interceptors
 InterceptorService()
 
 Vue.config.productionTip = false
+ 
 Vue.use(infiniteScroll)
 Vue.use(Vuetify, {
 	options:{

@@ -52,7 +52,7 @@
           />
           <v-text-field
             :value="user.id"
-            label="ID"
+            label="Your User ID"
             disabled
             required 
           />
@@ -67,6 +67,7 @@
             <v-btn
               type="submit"
               :color="submitColor"
+              :disabled="disabled"
             >
               Submit
             </v-btn>
@@ -110,7 +111,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('auth', {adminUser: 'user', perms: 'permissions', permission: 'permission'}),
+		...mapState('auth', {adminUser: 'user', perms: 'permissions', aclUser: 'aclUser'}),
 		...mapState('admin',['snackbar']),
 		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
@@ -120,10 +121,13 @@ export default {
 			return this.snackbar.value
 		},
 		permissions() {
-			if(this.permission.name === 'CREATOR') return this.perms
+			if(this.aclUser.permission.name === 'CREATOR') return this.perms
 			return this.perms.filter(p => {
 				return p.name !== 'CREATOR'
 			})
+		},
+		disabled() {
+			return !this.$can('create', 'User')
 		}
 	},
 	watch: {
@@ -163,6 +167,7 @@ export default {
 			}, this.snackbar.timeout)
 		},
 		async submit () {
+			if(this.disabled) return
 			await this.addUser({...this.user, recaptchaToken: this.recaptcha.token})
 				.then(() => this.submitColor = 'success')
 				.catch(() => this.submitColor = 'error')

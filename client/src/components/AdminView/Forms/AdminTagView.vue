@@ -34,7 +34,7 @@
         class="mb-med"
       >
         <h2 align="left">
-          Add or Delete Tags
+          Add Tags
         </h2>
         <div 
           class="section"
@@ -85,7 +85,7 @@
         </div>
       </v-flex>
       <v-flex
-        v-if="enforcePermission(guesCPerm)"
+        v-if="$can('delete', 'Tag')"
         xs12
         md6
         class="mb-med"
@@ -142,6 +142,7 @@
           Cancel
         </v-btn>
         <v-btn
+          :disabled="!$can('update', 'Tag')"
           :loading="addTagReqRunning"
           :color="addRemoveBtnType"
           @click="addRemoveTags"
@@ -178,27 +179,27 @@
                 {{ tags[i].name }}
               </h2>
               <v-text-field
+                :disabled="!$can('update', tag)"
                 :value="tags[i].name"
                 :rules="tagRules"
                 :counter="35"
                 label="Tag Name"
-                :disabled="permission.name === 'CONTRIBUTOR' && tags[i].realm"
                 @input="updateTag($event, 'name', tag._id)"
               />
               <v-switch
-                v-if="enforcePermission(adminPerm)"
                 :input-value="tags[i].realm"
                 label="Use Tag as Realm"
+                :disabled="!$can('update', tag, 'realm')"
                 @change="updateTag($event, 'realm', tag._id)"
               />
-              <div v-if="enforcePermission(adminPerm) && tags[i].realm">
+              <div>
                 <v-text-field
                   :rules="imageRules"
                   :value="tags[i].img"
                   required
                   label="Realm Image"
+                  :disabled="!$can('update', tag, 'image')"
                   hint="Enter the image URL from lensdump"
-                  :disabled="!(enforcePermission(guesCPerm) || tags[i].realm)"
                   @input="updateTag($event, 'img', tag._id)"
                 />
                 <v-text-field
@@ -206,8 +207,8 @@
                   :value="tags[i].lazyImg"
                   required
                   label="Realm Medium Image"
+                  :disabled="!$can('update', tag, 'image')"
                   hint="Enter the medium size image URL from lensdump"
-                  :disabled="!(enforcePermission(guesCPerm) || tags[i].realm)"
                   @input="updateTag($event, 'lazyImg', tag._id)"
                 />
               </div>
@@ -222,6 +223,7 @@
           Cancel
         </v-btn>
         <v-btn
+          :disabled="!$can('update', 'Tag')"
           :loading="editTagReqRunning"
           :color="editNameBtnType"
           @click="updateTagInfo"
@@ -256,22 +258,20 @@ export default {
 			newTagRules: AdminMainValidation.newTagRules,
 			imageRules: FormValidation.imageRules,
 			addTagReqRunning: false,
-			editTagReqRunning: false,
-			creatorPerm: ['CREATOR'],
-			adminPerm: ['CREATOR', 'ADMINISTRATOR', 'GUEST'],
-			guestPerm: ['CREATOR', 'ADMINISTRATOR', 'CONTRIBUTOR', 'GUEST'],
-			guesCPerm: ['CREATOR', 'GUEST']
+			editTagReqRunning: false
 		}
 	},
 	computed: {
-		disabled() {
-			return !(!!this.user && this.user.permission === 1)
-		},
-		...mapState('auth', ['user', 'permission']),
+		...mapState('auth', ['user', 'aclUser']),
 		...mapState('admin',[
 			'tags',
 			'snackbar'
 		]),
+		viewableTags() {
+			return this.tags.filter(tag => {
+				return this.$can('update', tag)
+			})
+		},
 		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
 			return `Admin Edit Tags - ${this.siteTitle}}`
@@ -297,10 +297,8 @@ export default {
 			return this.snackbar.value
 		}
 	},
-
-	async mounted() {
-		await this.fetchTags()
-		
+	mounted () {
+		console.log(this.$ability)
 	},
 	methods: {
 		...mapMutations('admin',[
@@ -316,7 +314,7 @@ export default {
 			'updateTags',
 		]),
 		enforcePermission(options) {
-			return options.includes(this.permission.name)
+			return options.includes(this.aclUser.permission.name)
 		},
 		updateTag(val, type, id) {
 			this.EDIT_TAG_VAL({
@@ -367,7 +365,6 @@ export default {
 			})
 			this.removedTags.splice(this.removedTags.indexOf(tag), 1)
 		},
-
 		async addRemoveTags() {
 			if(this.addedTags.length && !this.addTagReqRunning){
 				this.addTagReqRunning = true
@@ -384,7 +381,7 @@ export default {
 			// if delete tags was commented out - this code is unreachable
 			if(this.removedTags.length && !this.addTagReqRunning) {
 				this.addTagReqRunning = true
-				await this.deleteTags({data: {tags:this.removedTags, permission: this.permission._id}})
+				await this.deleteTags({data: {tags:this.removedTags, permission: this.aclUser.permission._id}})
 					.then(() => {
 						this.addRemoveBtnType = 'success'
 						this.addTagReqRunning = false

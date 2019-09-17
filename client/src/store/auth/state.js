@@ -13,9 +13,6 @@ module.exports = () => ({
 		facebook:null,
 		instagram: null
 	},
-	permissions: [],
-	permission: {
-		name: null,
-		level: null
-	}
+	aclUser: null,
+	permissions: []
 })

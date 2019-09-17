@@ -21,7 +21,6 @@
           <h1>Password Reset</h1>
         </div>
         <v-card
-          
           class="card-padding"
         >
           <v-form

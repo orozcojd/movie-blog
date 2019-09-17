@@ -3,6 +3,7 @@
     v-if="loaded"
     class="post-content"
     fluid
+		
   >
     <vue-headful
       :title="headTitle"

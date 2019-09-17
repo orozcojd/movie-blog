@@ -59,6 +59,7 @@
           >
             <v-btn
               :color="submitColor"
+              :disabled="disabled"
               @click="validate"
             >
               Submit
@@ -165,6 +166,9 @@ export default {
 		},
 		snackVal() {
 			return this.snackbar.value
+		},
+		disabled () {
+			return !this.$can('update', this.contributor)
 		}
 	},
 	watch: {
@@ -198,6 +202,7 @@ export default {
 			}
 		},
 		async submit (){
+			if(this.disabled) return
 			const contributor = new Contributor(this.contributor)
 			const payload = {...contributor, userId: this.user._id, id: this.contributor._id}
 			await this.updateContributorBio(payload)

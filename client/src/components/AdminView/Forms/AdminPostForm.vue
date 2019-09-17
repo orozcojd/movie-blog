@@ -91,7 +91,7 @@
             deletable-chips
           />
           <tip-tap
-            v-if="article.author"
+            v-if="article._id"
             align="left"
             class="editor"
           />
@@ -116,12 +116,14 @@
             >
               <v-btn
                 :color="validation.draft"
+                :disabled="disabled"
                 @click.prevent="draft=true;validate('draft')"
               >
                 Draft
               </v-btn>
               <v-btn
                 :color="validation.submit"
+                :disabled="disabled"
                 @click.prevent="draft=false; validate('submit')"
               >
                 Submit
@@ -175,9 +177,6 @@ export default {
 			tagChoices: 'tags',
 			snackbar: 'snackbar'
 		}),
-		loadTipTap() {
-			return 1
-		},
 		headTitle() {
 			return this.article.title ? `Admin Edit - ${this.article.title}` : 'Admin Create Article - Unsolocited.mp3'
 		},
@@ -260,7 +259,6 @@ export default {
 				return this.article.tags
 			},
 			set(value) {
-				console.log(value)
 				this.updateArticleContent({
 					type: 'tags',
 					value: value
@@ -278,12 +276,16 @@ export default {
 				})
 			}
 		},
-		snackVal() {
-			return this.snackbar.value
-		}
 		/* 
 			end mapping state.article attributes to vuex mutations
 		*/
+		snackVal() {
+			return this.snackbar.value
+		},
+		disabled() {
+			if(!this.article._id) {return !this.$can('create', 'Post')}
+			return !this.$can('update', this.article)
+		}
 	},
 	watch: {
 		realm(val) {
@@ -305,8 +307,8 @@ export default {
 			}
 		}
 	},
-	mounted() {
-		console.log('mounted this form')
+	mounted () {
+		console.log(this.article)
 	},
 	methods: {
 		...mapActions('admin',[
@@ -333,7 +335,7 @@ export default {
 			}
 		},
 		async submit (btnType) {
-			if (this.requestRunning) {
+			if (this.requestRunning || this.disabled) {
 				return
 			}
 			this.requestRunning = true

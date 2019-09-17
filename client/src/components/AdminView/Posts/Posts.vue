@@ -64,7 +64,7 @@ export default {
 				}
 			}
 		}
-		await this.fetchArticlesApi(options)
+		await this.fetchArticlesApi(options)	
 	},
 	methods: {
 		...mapActions('admin',['fetchArticlesApi'])

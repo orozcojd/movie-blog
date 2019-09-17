@@ -8,7 +8,6 @@
     />
     <h4>Admin Actions</h4>
     <v-layout
-      v-if="permission.name"
       row
       wrap
       justify-start
@@ -51,14 +50,14 @@ import * as types from '@/constants/types'
 export default {
 	name: 'AdminCategories',
 	computed: {
-		...mapState('auth',['user', 'permission']),
+		...mapState('auth',['user', 'aclUser', 'permission']),
 		...mapGetters('posts', ['siteTitle']),
 		headTitle() {
 			return `Admin Main - ${this.siteTitle}`
 		},
 		viewableCategories () {
 			return this.categories.filter(category => {
-				return category.roles.includes(this.permission.name)
+				return category.show()
 			})
 		},
 		categories() {
@@ -66,13 +65,13 @@ export default {
 				{
 					title: 'Create Post',
 					to: {name: types.adminCreatePost.name},
-					roles: ['CREATOR', 'ADMINISTRATOR', 'CONTRIBUTOR', 'GUEST'],
-					onEnter: () => { this.clearArticle()}
+					onEnter: () => { this.clearArticle()},
+					show: () => {return this.$can('view', 'Post')}
 				},
 				{
 					title: 'Edit Posts',
 					to: {name: types.adminEditPosts.name},
-					roles: ['CREATOR', 'ADMINISTRATOR', 'CONTRIBUTOR', 'GUEST']
+					show: () => {return this.$can('view', 'Post')}
 				},
 				{
 					title: 'Edit Drafts',
@@ -82,27 +81,27 @@ export default {
 							drafts: true,
 						}
 					},
-					roles: ['CREATOR', 'ADMINISTRATOR', 'CONTRIBUTOR', 'GUEST']
+					show: () => {return this.$can('view', 'Post')},
 				},
 				{
 					title: 'Edit Contributor Details',
 					to: {name: types.adminAboutContributor.name},
-					roles: ['CREATOR', 'ADMINISTRATOR', 'CONTRIBUTOR', 'GUEST']
+					show: () => {return this.$can('view', 'Contributor')}
 				},
 				{
 					title: 'Edit Admin Users',
 					to: {name: types.editUsers.name},
-					roles: ['CREATOR'],
+					show: () => {return this.$can('view', 'Users')}
 				},
 				{
 					title: 'Add Admin User',
 					to: {name: types.addUser.name},
-					roles: ['CREATOR', 'ADMINISTRATOR']
+					show: () => {return this.$can('view', 'User')}
 				},
 				{
 					title: 'Edit Tags',
 					to: {name: types.adminEditMain.name},
-					roles: ['CREATOR', 'ADMINISTRATOR', 'CONTRIBUTOR', 'GUEST']
+					show: () => {return this.$can('view', 'Tag')}
 				}
 			]
 		}

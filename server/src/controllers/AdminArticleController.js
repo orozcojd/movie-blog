@@ -136,21 +136,5 @@ module.exports = {
 				error: 'An error has occured trying to delete the article',
 			});
 		}
-	},
-	/**
-	 * Finds all contributors and returns the array in the response
-	 * @param {Object} req 
-	 * @param {Object} res 
-	 */
-	async contributors(req, res) {
-		try {
-			const contributors = await Contributor.find().lean();
-			res.send(contributors);
-		} catch (err) {
-			res.status(400).send({
-				error: 'An error has occured trying to get contributors',
-			});
-		}
-
 	}
 };

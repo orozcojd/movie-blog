@@ -5,7 +5,7 @@
     :dense="dense"
   >
     <v-timeline-item
-      v-for="article in articles.slice(1,5)"
+      v-for="article in articles"
       :key="article.id"
       small
       :left="left"
@@ -71,6 +71,7 @@ export default {
 		}, 100))
 	},
 	mounted() {
+		// console.log(this.articles)
 		this.loaded = true
 	},
 	methods: {

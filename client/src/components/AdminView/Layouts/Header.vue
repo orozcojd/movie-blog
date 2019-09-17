@@ -34,7 +34,7 @@
           <v-list-tile
             to="/admin"
           >
-            <v-list-tile-title>{{ permission.name }}</v-list-tile-title>
+            <v-list-tile-title>{{ aclUser.permission.name }}</v-list-tile-title>
             <v-list-tile-action>
               <v-icon>supervisor_account</v-icon>
             </v-list-tile-action>
@@ -106,7 +106,7 @@
       class="nav-items"
     >
       <v-toolbar-side-icon 
-        v-if="tagShow.end < 9 || viewedArticles.length"
+        v-if="tagShow.end <= 9"
         @click.stop="drawerLeft = !drawerLeft" 
       />
       <div
@@ -185,13 +185,12 @@ export default {
 			'user',
 			'token',
 			'contributor',
-			'permission',
-			'permissions'
+			'permissions',
+			'aclUser'
 		]),
 		...mapGetters('auth', [
 			'isUserLoggedin',
-			'getUser',
-			'getPermissionName'
+			'getUser'
 		]),
 		...mapGetters('posts', ['siteTitle']),
 		realmTitle () {
@@ -229,9 +228,8 @@ export default {
 	async mounted () {
 		await this.fetchPermissions()
 		if(!this.token.token) await this.getSetToken()
-		await this.setPermission()
-		// await this.getTags({params: {realm: true}})
-		// await this.getTags({params: {realm: false}})
+		await this.getTags({params: {realm: true}})
+		await this.getTags({params: {realm: false}})
 		if(!this.tags.length) await this.fetchTags()
 		this.onResize()
 		this.loaded = true
@@ -243,10 +241,10 @@ export default {
 		...mapActions('admin',['fetchTags']),
 		...mapActions('posts',['getTags']),
 		...mapActions('auth', [
+			'setAclUser',
 			'getSetToken',
 			'setUser',
 			'fetchPermissions',
-			'setPermission',
 			'logOut'
 		]),
 		...mapActions('admin', ['setSnackbar']),

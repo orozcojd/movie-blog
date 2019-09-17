@@ -15,7 +15,10 @@ let articleSchema = new Schema({
 		required: true,
 		lowercase: true
 	},
-	body: String,
+	body: {
+		type: String,
+		default: ''
+	},
 	draft: {
 		type: Boolean,
 		default: false
@@ -35,8 +38,14 @@ let articleSchema = new Schema({
 		trim: true,
 		minlength: 1
 	},
-	imgCred: String,
-	thumbnailDescription: String,
+	imgCred: {
+		type: String,
+		required: true
+	},
+	thumbnailDescription: {
+		type: String,
+		default: ''
+	},
 	contributorId: {
 		type: String,
 		required: true
@@ -45,6 +54,10 @@ let articleSchema = new Schema({
 	meta: {
 		votes: Number,
 		favs: Number
+	},
+	__type: {
+		type: String,
+		default: 'Post'
 	}
 }, {timestamps: { createdAt: 'created_at'} });
 module.exports = mongoose.model('Blog', articleSchema);

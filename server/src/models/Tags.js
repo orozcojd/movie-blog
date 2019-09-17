@@ -24,6 +24,10 @@ let tagSchema = new Schema({
 	realm: {
 		type: Boolean,
 		default: false
+	},
+	__type: {
+		type: 'String',
+		default: 'Tag'
 	}
 });
 module.exports = mongoose.model('Tags', tagSchema);
