@@ -10,7 +10,6 @@
           />
         </div>
         <router-view
-          v-if="realms.length"
           id="route-content"
           :key="$route.fullPath"
         />
