@@ -62,6 +62,7 @@
               @click="navigateTo('tag-view', { 
                 id: realm.ref_id,
                 tagName: realm.name,
+                urlTag: realm.urlTag
               })"
             >
               {{ realm.name }}
@@ -126,6 +127,7 @@
           @click="navigateTo('tag-view', { 
             id: realm.ref_id,
             tagName: realm.name,
+            urlTag: realm.urlTag
           })"
         >
           {{ realm.name }}
@@ -353,7 +355,7 @@ export default {
  }
  .sidenav-realm {
    text-transform: uppercase;
-   font-size: .5em;
+   font-size: .8em;
    height: 48px;
    cursor: pointer;
  }

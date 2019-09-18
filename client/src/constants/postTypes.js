@@ -7,7 +7,7 @@ export const articleView = {
 	name: 'article-view'
 }
 export const tagView = {
-	path: '/tag/:tagName',
+	path: '/tag/:urlTag',
 	name: 'tag-view'
 }
 export const aboutContributor = {

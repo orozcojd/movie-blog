@@ -18,7 +18,7 @@ export default {
 
 			// if no _id found in params, find tag in tags array 
 			if(!to.params._id) {
-				tag = store.state.posts.tags.find(tag => tag.name === to.params.tagName)
+				tag = store.state.posts.tags.find(tag => tag.urlTag === to.params.urlTag)
 			}
 			
 			// if tag not found, redirect

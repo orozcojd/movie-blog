@@ -9,7 +9,7 @@
         <loading-post />
       </card-view>
     </div>
-    <div v-show="loaded">
+    <div v-if="loaded">
       <post
         v-for="(article, index) in infiniteArticles"
         :key="index"
@@ -86,24 +86,29 @@ export default {
 	},
 	mounted() {
 		this.init()
+		console.log('mounted again')
+		console.log(this.maxRelatedReached)
 	},
 	methods: {
 		init() {
-			this.setMaxRelated(false)
 			this.resetNextArticles()
 			window.scrollTo(0,0);			
+			this.loaded = true
 		},
 		...mapActions('posts', [
 			'fetchArticle',
 			'getNextArticles',
 			'resetNextArticles',
-			'setMaxRelated',
+			// 'setMaxRelated',
 			'setArticle',
 			'getTags'
 		]),
 		...mapMutations('posts',['PUSH_VIEWED']),
 		async loadMore() {
-			if(!this.loaded || this.maxArticlesReached || this.busy){
+			console.log(`${this.loaded} ${this.maxArticlesReached} ${this.busy}`)
+			if(!this.loaded && this.maxArticlesReached && this.busy){
+				console.log('dont load any more!')
+				console.log(`${this.loaded} ${this.maxArticlesReached} ${this.busy}`)
 				return
 			}
 			this.busy = true

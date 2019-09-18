@@ -19,11 +19,12 @@
               href="#"
               @click.prevent="navigateTo({
                 _id: article.realm,
-                name: articleRealm
+                tag: articleRealm,
+                urlTag: articleRealm.urlTag
               })"
             >
               <small>
-                {{ upperCaseString(articleRealm) }}
+                {{ upperCaseString(articleRealm.name) }}
               </small>
             </a>
             |
@@ -105,9 +106,10 @@
                   class="hover-bold"
                   @click.prevent="navigateTo({
                     _id: tag,
-                    name: convertTagIdToName(tag)
+                    tag: convertTagIdToName(tag),
+                    urlTag: convertTagIdToName(tag).urlTag
                   })"
-                >{{ upperCaseString(convertTagIdToName(tag)) }}
+                >{{ upperCaseString(convertTagIdToName(tag).name) }}
                 </a>
               </v-chip>
             </li>
@@ -224,8 +226,7 @@ export default {
 		convertTagIdToName (id) {
 			if(this.tags && this.tags.length){
 				const tag = this.tags.find(tag => tag._id === id)
-				if(tag)
-					return tag.name.trim()
+				return tag
 			}
 		},
 		titleCase(word) {
@@ -254,8 +255,9 @@ export default {
 			this.$router.push({
 				name: 'tag-view',
 				params: {
-					tagName: tag.name,
-					id: tag._id
+					tag: tag.tag,
+					id: tag._id,
+					urlTag: tag.urlTag
 				},
 			})
 		}

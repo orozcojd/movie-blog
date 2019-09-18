@@ -61,7 +61,7 @@
     </div>
     <div v-else>
       <h2>
-        Stay tuned for more articles
+        more articles are on the way!
       </h2>
     </div>
   </v-container>

@@ -89,6 +89,7 @@ export default {
 	 * @param {Vuex state} state 
 	 */
 	[types.RESET_NEXT_ARTICLES] (state) {
+		state.maxRelatedReached = false
 		state.infiniteArticles = []
 		state.associatedArticles = {
 			pageNo: 1,

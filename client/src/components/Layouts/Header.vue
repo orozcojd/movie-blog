@@ -33,6 +33,7 @@
               @click="navigateTo('tag-view', { 
                 id: realm.ref_id,
                 tagName: realm.name,
+                urlTag: realm.urlTag
               })"
             >
               {{ realm.name }}
@@ -96,6 +97,7 @@
           @click="navigateTo('tag-view', { 
             id: realm.ref_id,
             tagName: realm.name,
+            urlTag: realm.urlTag
           })"
         >
           {{ realm.name }}
@@ -226,9 +228,6 @@ export default {
   max-height: 432px;
   overflow: scroll;
 }
-.nav-tile {
-  font-size: 1em;
-}
 .nav-realm {
   cursor: pointer;
   text-transform: uppercase;
@@ -243,7 +242,7 @@ export default {
  }
  .sidenav-realm {
    text-transform: uppercase;
-   font-size: .5em;
+   font-size: .8em;
    height: 48px;
    cursor: pointer;
  }

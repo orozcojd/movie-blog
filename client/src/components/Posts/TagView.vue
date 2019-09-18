@@ -34,6 +34,16 @@
         </v-container>
       </v-img>
     </v-layout>
+    <v-container
+      v-else
+      fluid
+    >
+      <v-layout>
+        <v-flex>
+          <h1>{{ tag.name }}</h1>
+        </v-flex>
+      </v-layout>
+    </v-container>
     <display-articles 
       v-if="articles.length"
       :articles="articles"
@@ -44,6 +54,7 @@
       align-center
       row
       fill-height
+      class="mt-lg"
     >
       <v-flex>
         <h1>Articles will be coming soon!</h1>
@@ -97,8 +108,11 @@ export default {
 			}
 		}
 	},
+	mounted() {
+		console.log(this.tag)
+	},
 	async created() {
-		const urlTag = this.$route.params.tagName
+		const urlTag = this.$route.params.urlTag
 		const page = this.$route.query.page
 		let payload = {
 			params: {
@@ -108,8 +122,8 @@ export default {
 			}
 		}
 		this.loaded = true
-		if(this.tag.name !== urlTag) {
-			let newTag = this.tags.find(tag => tag.name === urlTag)
+		if(this.tag.urlTag !== urlTag) {
+			let newTag = this.tags.find(tag => tag.urlTag === urlTag)
 			if(!newTag) {
 				// if tag does not exist, go back to previous route
 				this.$router.go(-1)
@@ -123,6 +137,10 @@ export default {
 		payload.query = this.tag._id
 		await this.getArticlesByTag(payload)
 	},
+	beforeRouteUpdate(to, from, next) {
+		// store.dispatch('posts/setTag', (to.params.id))
+		next()
+	},
 	methods: {
 		...mapActions('posts',[
 			'getArticlesByTag',
@@ -133,6 +151,12 @@ export default {
 </script>
 
 <style scoped>
+	.mt-lg {
+		margin-top: 1em;
+	}
+	h1 {
+		margin: 0;
+	}
 	.mb-lg {
 		margin-bottom: 5em;
 	}
