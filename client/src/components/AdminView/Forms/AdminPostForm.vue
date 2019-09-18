@@ -91,7 +91,7 @@
             deletable-chips
           />
           <tip-tap
-            v-if="article._id"
+            v-if="load"
             align="left"
             class="editor"
           />
@@ -148,6 +148,12 @@ export default {
 	name: 'AdminPostForm',
 	components: {
 		TipTap: () => import('@/components/Tools/TipTap')
+	},
+	props: {
+		load: {
+			type: Boolean,
+			required: true
+		}
 	},
 	data () {
 		return {

@@ -47,12 +47,8 @@ export default {
 		commit(types.SET_SNACKBAR, payload)
 	},
 	async postArticle ({commit, dispatch}, payload) {
-		const [err, article] = await to(Api.ApiAdmin().post('/api/articles/', payload))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
+		const article = await to(Api.ApiAdmin().post('/api/articles/', payload))
+		if(article) {
 			commit(types.POST_ARTICLE, article.data)
 			dispatch('setSnackbar', {
 				type: 'text',
@@ -69,12 +65,8 @@ export default {
 	 * @param {Object} payload 
 	 */
 	async updateArticle ({commit, dispatch}, payload) {
-		const [err, article] = await to(Api.ApiAdmin().put(`/api/articles/${payload.id}`, payload.article))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
+		const article = await to(Api.ApiAdmin().put(`/api/articles/${payload.id}`, payload.article))
+		if(article) {
 			commit(types.UPDATE_ARTICLE, article.data)
 			dispatch('setSnackbar', {
 				type: 'text',
@@ -89,12 +81,8 @@ export default {
 	 * @param {Object} payload 
 	 */
 	async addUser({commit, dispatch}, payload) {
-		const [err, response] = await to(Api.ApiAdmin().post('/api/users', payload))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
+		const response = await to(Api.ApiAdmin().post('/api/users', payload))
+		if(response) {
 			dispatch('setSnackbar', {
 				type: 'text',
 				value: response.data.message,
@@ -109,11 +97,8 @@ export default {
 	 * @param {commit} param0 
 	 */
 	async fetchTags ({commit, dispatch}, options = {}) {
-		const [err, data] = await to(Api.ApiAdmin().get('/tags', options))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-		}
-		else {
+		const data = await to(Api.ApiAdmin().get('/tags', options))
+		if(data) {
 			dispatch('posts/setTags', data.data, {root: true})
 			commit(types.SET_TAGS, data.data)
 		}
@@ -126,12 +111,8 @@ export default {
 	 * @param {Array} payload 
 	 */
 	async postTags({commit, dispatch}, payload) {
-		const [err, tags] = await to(Api.ApiAdmin().post('/api/tags', payload))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
+		const tags = await to(Api.ApiAdmin().post('/api/tags', payload))
+		if(tags) {
 			commit(types.ADD_TAGS, tags.data)
 			dispatch('setSnackbar', {
 				type: 'text',
@@ -148,12 +129,8 @@ export default {
 	 * @param {Array} payload 
 	 */
 	async updateTags ({commit, dispatch}, payload) {
-		let [err, tags] = await to(Api.ApiAdmin().put('/api/tags', payload))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
+		let tags = await to(Api.ApiAdmin().put('/api/tags', payload))
+		if(tags) {
 			commit(types.SET_TAGS, tags.data.tags)
 			dispatch('setSnackbar', {
 				type: 'text',
@@ -171,12 +148,8 @@ export default {
 	 * @param {Array} payload 
 	 */
 	async deleteTags ({commit, dispatch}, payload) {
-		const [err, res] = await to(Api.ApiAdmin().delete('/api/tags', payload))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
+		const res = await to(Api.ApiAdmin().delete('/api/tags', payload))
+		if(res) {
 			commit(types.REMOVE_TAG, res.data)
 			dispatch('setSnackbar', {
 				type: 'text',
@@ -192,13 +165,9 @@ export default {
 	 * @param {commit} param0 
 	 * @param {String} id 
 	 */
-	async fetchArticleApi ({commit, dispatch}, id) {
-		const [err, article] = await to(Api.ApiAdmin().get(`/api/articles/${id}`))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
+	async fetchArticleApi ({commit}, id) {
+		const article = await to(Api.ApiAdmin().get(`/api/articles/${id}`))
+		if(article) {
 			commit(types.FETCH_ARTICLE, article.data)
 			return article.data
 		}
@@ -210,13 +179,9 @@ export default {
 	 * set state articles array to retrieved articles
 	 * @param {commit} param0 
 	 */
-	async fetchArticlesApi ({commit, dispatch}, payload) {
-		const [err, articles] = await to(Api.ApiAdmin().get('/api/articles', payload.params))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
+	async fetchArticlesApi ({commit}, payload) {
+		const articles = await to(Api.ApiAdmin().get('/api/articles', payload.params))
+		if(articles) {
 			commit(types.FETCH_ARTICLES, articles.data)
 			return articles.data
 		}
@@ -229,13 +194,9 @@ export default {
 	 * @param {commit} param0 
 	 * @param {String} payload 
 	 */
-	async deleteArticle ({commit, dispatch}, payload) {
-		const [err, deleteCount] = await to(Api.ApiAdmin().delete(`/api/articles/${payload}`, payload))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
+	async deleteArticle ({commit}, payload) {
+		const deleteCount = await to(Api.ApiAdmin().delete(`/api/articles/${payload}`, payload))
+		if(deleteCount) {
 			commit(types.DELETE_ARTICLE, deleteCount.data)
 			return deleteCount.data
 		}

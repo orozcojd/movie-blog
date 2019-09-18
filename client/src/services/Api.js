@@ -45,7 +45,7 @@ export default {
 					originalRequest.headers['Authorization'] = getHeader()
 					originalRequest._retry = false
 				}).catch(() => {
-					store.dispatch('logOut')
+					store.dispatch('auth/logOut')
 					router.push({
 						name: 'root'
 					})

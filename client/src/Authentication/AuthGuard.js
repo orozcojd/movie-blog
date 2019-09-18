@@ -13,8 +13,7 @@ export function adminGuard() {
 			next()
 		}
 		else {
-			console.log('not logged in!')
-			next('/')
+			next('/404')
 		}
 	}
 }

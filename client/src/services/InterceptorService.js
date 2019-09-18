@@ -1,6 +1,4 @@
 import axios from 'axios'
-import store from '@/store/index'
-
 export default () => {
 	return axios.interceptors.response.use((response) => {
 		// Do something with response data

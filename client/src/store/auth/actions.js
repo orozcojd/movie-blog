@@ -12,15 +12,12 @@ export default {
 	 * @param {object} payload 
 	 */
 	async login({commit, dispatch}, payload) {
-		const [err, res] = await to(Api.ApiGeneral().post('login', payload))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
+		const res = await to(Api.ApiGeneral().post('login', payload))
+		if(res) {
 			dispatch('setToken', res.data)
 			dispatch('setUser', res.data.user)
 			dispatch('getContributor', res.data.user.contributorId)
+			dispatch('getSetUser', res.data.user)
 			return res
 		}
 	},
@@ -45,14 +42,10 @@ export default {
 	 * @param {*} payload 
 	 */
 	async resetPassword ({commit, dispatch}, payload) {
-		const [err, response] = await to(Api.ApiGeneral({
+		const response = await to(Api.ApiGeneral({
 			headers: { 'Authorization': `Bearer ${payload.token}` }
 		}).post('/api/auth/reset-password', payload.password))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
+		if(response) {
 			await dispatch('setToken', response.data)
 			await dispatch('setUser', response.data.user)
 			await dispatch('getContributor', response.data.user.contributorId)
@@ -65,13 +58,9 @@ export default {
 	 * @param {*} param0 
 	 * @param {*} payload 
 	 */
-	async passwordReset({commit, dispatch}, payload) {
-		const [err, submission] = await to(Api.ApiGeneral().post('/api/auth/forgot-password', payload))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
+	async passwordReset({commit}, payload) {
+		const submission = await to(Api.ApiGeneral().post('/api/auth/forgot-password', payload))
+		if(submission) {
 			return submission.data
 		}
 	},
@@ -82,11 +71,8 @@ export default {
 	 * @param {Object} payload 
 	 */
 	async refreshToken ({commit, dispatch}, payload) {
-		const [err, token] = await to(Api.ApiGeneral().post('/tokens', payload))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-		}
-		else {
+		const token = await to(Api.ApiGeneral().post('/tokens', payload))
+		if(token) {
 			dispatch('setTokenAttr', token.data)
 		}
 	},
@@ -120,11 +106,8 @@ export default {
 	 * @param {commit} param0 
 	 * @param {Object} refreshToken 
 	 */
-	async removeRefreshTkn ({commit, dispatch}, refreshToken) {
-		const [err] = await to(Api.ApiAdmin().post('/tokens/removeRefresh', refreshToken))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-		}
+	async removeRefreshTkn ({commit}, refreshToken) {
+		await to(Api.ApiAdmin().post('/tokens/removeRefresh', refreshToken))
 	},
 	/**
 	 * Commits mutations to set user to param user
@@ -138,16 +121,18 @@ export default {
 	 * Gets user name from local storage and sets it to state 
 	 * @param {commit} param0 
 	 */
-	async getSetUser ({commit, dispatch}) {
-		const user = JSON.parse(localStorage.getItem('unsolicited-user'))
-		const [err, aclUser] = await to(Api.ApiAdmin().get('/api/user-permission'))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		Vue.use(abilitiesPlugin, defineAbilitiesFor(aclUser.data.aclUser))
+	async getSetUser ({commit, dispatch}, user = null) {
+		if(!user) user = JSON.parse(localStorage.getItem('unsolicited-user'))
+		dispatch('getSetAclUser')
 		commit(types.SET_USER, user)
-		commit(types.SET_ACL_USER, aclUser.data.aclUser)
+
+	},
+	async getSetAclUser ({commit}) {
+		const aclUser = await to(Api.ApiAdmin().get('/api/user-permission'))
+		if(aclUser){
+			Vue.use(abilitiesPlugin, defineAbilitiesFor(aclUser.data.aclUser))
+			commit(types.SET_ACL_USER, aclUser.data.aclUser)
+		}
 	},
 	/**
 	 * Commits mutation to update contributor object attribute
@@ -165,23 +150,20 @@ export default {
 	 * Calls API and fetches user permissions, then commits to store
 	 * @param {commit} param0 
 	 */
-	async fetchPermissions ({commit, dispatch}) {
-		const [err, permissions] = await to(Api.ApiAdmin().get('/api/permissions'))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
+	async fetchPermissions ({commit}) {
+		const permissions = await to(Api.ApiAdmin().get('/api/permissions'))
+		if(permissions) {
+			commit(types.FETCH_PERMISSIONS, permissions.data)		
 		}
-		
-		commit(types.FETCH_PERMISSIONS, permissions.data)
 	},
-	async getContributor({commit, dispatch}, id) {
-		const [err, contributor] = await to(Api.ApiAdmin().get(`/api/contributors/${id}`))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
+	async getContributor({commit}, id) {
+		const contributor = await to(Api.ApiAdmin().get(`/api/contributors/${id}`))
+		if(contributor) {
+			localStorage.setItem('unsolicited-contributor', JSON.stringify(contributor.data))
+			commit(types.SET_CONTRIBUTOR, contributor.data)
+			return contributor.data
 		}
-		localStorage.setItem('unsolicited-contributor', JSON.stringify(contributor.data))
-		commit(types.SET_CONTRIBUTOR, contributor.data)
-		return contributor.data
+
 	},
 	/**
 	 * PUT
@@ -191,12 +173,8 @@ export default {
 	 * @param {Object} id 
 	 */
 	async updateContributorBio({commit, dispatch}, payload) {
-		const [err, response] = await to(Api.ApiAdmin().put(`/api/contributors/${payload.id}`, payload))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return Promise.reject()
-		}
-		else {
+		const response = await to(Api.ApiAdmin().put(`/api/contributors/${payload.id}`, payload))
+		if(response) {
 			commit(types.UPDATE_CONTRIBUTOR, response.data.contributor)
 			dispatch('admin/setSnackbar', {
 				type: 'text',

@@ -11,6 +11,7 @@
         v-for="article in articles"
         :key="article.id"
         md4
+        sm6
         xs12
       >
         <tile-preview
@@ -37,7 +38,3 @@ export default {
 	}
 }
 </script>
-
-<style scoped>
-
-</style>

@@ -27,17 +27,14 @@ export default function (user) {
 		can(['view'], ['Contributor', 'Post', 'Tag'])
 		cannot(['view'], ['Users', 'User'])
 	}
-	// return new Ability(rules)
 	return new Ability(rules, {
 		subjectName(subject) {
 			if (!subject || typeof subject === 'string') {
-				console.log(subject)
 				return subject;
 			}
 			const Type = typeof subject === 'object' ? subject.__type : subject;
 			return Type
 		}
-		// implement your logic here which detects subject's name
 	})
 	
 }

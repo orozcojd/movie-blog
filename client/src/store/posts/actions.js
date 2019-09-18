@@ -9,12 +9,9 @@ export default {
 	 * set state articles array to retrieved articles
 	 * @param {commit} param0 
 	 */
-	async fetchArticles ({commit, dispatch}, payload) {
-		const [err, articles] = await to(Api.ApiGeneral().get('/articles', payload.params))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-		}
-		else {
+	async fetchArticles ({commit}, payload) {
+		const articles = await to(Api.ApiGeneral().get('/articles', payload.params))
+		if(articles) {
 			commit(types.FETCH_ARTICLES, articles.data)
 		}
 	},
@@ -29,11 +26,8 @@ export default {
 	 * @param {String} id 
 	 */
 	async fetchArticle ({commit, dispatch}, id) {
-		const [err, article] = await to(Api.ApiGeneral().get(`/articles/${id}`))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-		}
-		else {
+		const article = await to(Api.ApiGeneral().get(`/articles/${id}`))
+		if(article) {
 			dispatch('copyRelatedTags', article.data)
 			dispatch('setArticleViewed', article.data)
 			commit(types.FETCH_ARTICLE, article.data)
@@ -46,12 +40,9 @@ export default {
 	 * @param {commit} param0 
 	 * @param {Object} payload 
 	 */
-	async fetchArticleByContributor({commit, dispatch}, payload) {
-		const [err, articles] = await to(Api.ApiGeneral().get(`/articlesByContributor/${payload.query}`, payload.params))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-		}
-		else {
+	async fetchArticleByContributor({commit}, payload) {
+		const articles = await to(Api.ApiGeneral().get(`/articlesByContributor/${payload.query}`, payload.params))
+		if(articles) {
 			commit(types.FETCH_BY_CONTRIBUTOR, articles.data)
 		}
 	},
@@ -69,17 +60,15 @@ export default {
 		const params = {
 			params: payload
 		}
-		const [err, nextArticles] = await to(Api.ApiGeneral().get('/infinite-articles', params))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-			return
+		const nextArticles = await to(Api.ApiGeneral().get('/infinite-articles', params))
+		if(nextArticles){
+			if(!payload.latestUnrelated && nextArticles.data.message.length) 
+				commit(types.FETCH_NEXT_ARTICLES, nextArticles.data)
+			else if(!payload.latestUnrelated && !nextArticles.data.message.length)
+				dispatch('setMaxRelated', true)
+			else
+				commit(types.FETCH_UNRELATED_ARTICLES, nextArticles.data)
 		}
-		if(!payload.latestUnrelated && nextArticles.data.message.length) 
-			commit(types.FETCH_NEXT_ARTICLES, nextArticles.data)
-		else if(!payload.latestUnrelated && !nextArticles.data.message.length)
-			dispatch('setMaxRelated', true)
-		else
-			commit(types.FETCH_UNRELATED_ARTICLES, nextArticles.data)
 	},
 	/**
 	 * GET
@@ -88,12 +77,9 @@ export default {
 	 * @param {commit} param0 
 	 * @param {String} tag 
 	 */
-	async getArticlesByTag ({commit, dispatch}, payload) {
-		const [err, articles] = await to(Api.ApiGeneral().get(`/tag/${payload.query}`, payload.params))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-		}
-		else {
+	async getArticlesByTag ({commit}, payload) {
+		const articles = await to(Api.ApiGeneral().get(`/tag/${payload.query}`, payload.params))
+		if(articles) {
 			commit(types.FETCH_BY_TAG, articles.data)
 		}
 	},
@@ -104,17 +90,13 @@ export default {
 	 * @param {commit} param0 
 	 * @param {String} id 
 	 */
-	async getContributorBio({commit, dispatch}, id) {
-		const [err, contributor] = await to(Api.ApiGeneral().get(`/contributors/${id}`))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-		}
-		else {
+	async getContributorBio({commit}, id) {
+		const contributor = await to(Api.ApiGeneral().get(`/contributors/${id}`))
+		if(contributor) {
 			commit(types.SET_CONTRIBUTOR, contributor.data)
 		}
 	},
 	setTags ({commit}, payload) {
-		console.log('inside setTags')
 		commit(types.SET_TAGS, payload)
 	},
 	/**
@@ -123,14 +105,10 @@ export default {
 	 * set state tags array to retrieved result
 	 * @param {commit} param0 
 	 */
-	async getTags ({commit, dispatch}, options = {params: {realm: false}}) {
+	async getTags ({commit}, options = {params: {realm: false}}) {
 		// let tags = (await Api.ApiGeneral().get('tags', options)).data
-		
-		const [err, tags] = await to(Api.ApiGeneral().get('/tags', options))
-		if(err) {
-			dispatch('errors/handleConnectionError', err.response, {root: true})
-		}
-		else {
+		const tags = await to(Api.ApiGeneral().get('/tags', options))
+		if(tags) {
 			commit(types.FETCH_TAGS, {tags: tags.data, realm: options.params.realm})
 		}
 	},

@@ -1,8 +1,8 @@
 import types from './types'
-
 function prepareErrorMessage(err) {
+	if(typeof err === 'string') return err
 	const errorStatus = err ? err.status : '500';
-	const errorMessage = err? err.data.error : 'INTERNAL SERVER ERROR'
+	const errorMessage = err ? err.data.error : 'INTERNAL SERVER ERROR'
 	const msg = `${errorStatus} - ${errorMessage}`
 	return msg
 }

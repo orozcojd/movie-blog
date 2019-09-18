@@ -2,7 +2,7 @@
   <div id="app">
     <v-app>
       <v-content class="content">
-        <admin-header v-if="isUserLoggedin" />
+        <admin-header v-if="isUserLoggedin && aclUser" />
         <Header v-else />
         <div v-if="errors && errors.length">
           <display-errors 
@@ -39,7 +39,7 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('auth', ['token']),
+		...mapState('auth', ['token', 'aclUser']),
 		...mapState('errors', ['errors']),
 		...mapGetters('auth', [
 			'isUserLoggedin'
