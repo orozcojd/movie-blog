@@ -109,7 +109,6 @@ export default {
 		}
 	},
 	mounted() {
-		console.log(this.tag)
 	},
 	async created() {
 		const urlTag = this.$route.params.urlTag
@@ -126,7 +125,7 @@ export default {
 			let newTag = this.tags.find(tag => tag.urlTag === urlTag)
 			if(!newTag) {
 				// if tag does not exist, go back to previous route
-				this.$router.go(-1)
+				this.$router.go('/404')
 			}
 			else {
 				this.setTag(newTag)

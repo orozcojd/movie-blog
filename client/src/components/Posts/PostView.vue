@@ -9,7 +9,7 @@
         <loading-post />
       </card-view>
     </div>
-    <div v-if="loaded">
+    <div v-if="loaded && tags.length">
       <post
         v-for="(article, index) in infiniteArticles"
         :key="index"
