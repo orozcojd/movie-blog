@@ -220,6 +220,9 @@ export default {
 		await this.setContent()
 		this.$emit('setloaded')
 		this.loaded = true
+		console.log(this.tags)
+		console.log(this.realms)
+		console.log(this.article)
 	},
 	methods: {
 		...mapMutations('posts', ['PUSH_VIEWED']),
