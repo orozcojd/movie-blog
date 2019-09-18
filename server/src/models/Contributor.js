@@ -30,7 +30,6 @@ const ContributorSchema = new Schema({
 		default: 'Contributor'
 	}
 });
-
 ContributorSchema.methods.createContributor = async function(contributor) {
 	this.name = contributor.name;
 	this.img = contributor.img;
