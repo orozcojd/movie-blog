@@ -86,8 +86,6 @@ export default {
 	},
 	mounted() {
 		this.init()
-		console.log('mounted again')
-		console.log(this.maxRelatedReached)
 	},
 	methods: {
 		init() {
@@ -105,10 +103,7 @@ export default {
 		]),
 		...mapMutations('posts',['PUSH_VIEWED']),
 		async loadMore() {
-			console.log(`${this.loaded} ${this.maxArticlesReached} ${this.busy}`)
 			if(!this.loaded && this.maxArticlesReached && this.busy){
-				console.log('dont load any more!')
-				console.log(`${this.loaded} ${this.maxArticlesReached} ${this.busy}`)
 				return
 			}
 			this.busy = true

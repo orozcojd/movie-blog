@@ -10,6 +10,7 @@
           />
         </div>
         <router-view
+          v-if="realms.length"
           id="route-content"
           :key="$route.fullPath"
         />
@@ -40,6 +41,7 @@ export default {
 	},
 	computed: {
 		...mapState('auth', ['token', 'aclUser']),
+		...mapState('posts', ['realms']),
 		...mapState('errors', ['errors']),
 		...mapGetters('auth', [
 			'isUserLoggedin'

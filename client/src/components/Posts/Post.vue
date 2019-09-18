@@ -239,7 +239,7 @@ export default {
 		upperCaseString(str) {
 			if(!str)
 				return
-			let strArr = str.split('-')
+			let strArr = str.split(' ')
 			let upperArr = []
 			for(let i = 0; i < strArr.length; i++) {
 				let str = strArr[i]

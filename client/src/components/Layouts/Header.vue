@@ -147,7 +147,11 @@ export default {
 		}
 	},
 	async mounted () {
-		if(!this.realms.length) await this.getTags({params: {realm: true}})
+		if(!this.realms.length) {
+			await this.getTags({params: {realm: true}})
+			await this.getTags({params: {realm: false}})
+		}
+		
 		this.onResize()
 	},
 	methods: {
