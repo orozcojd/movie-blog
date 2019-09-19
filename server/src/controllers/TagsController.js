@@ -1,4 +1,4 @@
-const {Tags} = require('../models');
+const {Tags, Post} = require('../models');
 const {sortAlpha} = require('../helpers/Helpers');
 module.exports = {
 	/**
@@ -31,13 +31,13 @@ module.exports = {
    */
 	async addTags (req, res) {
 		try {
-			
 			let tags = [];
 			for(let i = 0; i< req.body.length; i++) {
-				let preTag = {...req.body[i], urlTag: req.body[i].name.split(' ').join('-')};
-				let tag = await Tags.create(preTag);
+				// should probably validate if tag exists
+				let tag = await Tags.create(req.body[i]);
 				tags.push(tag);
 			}
+			console.log(tags);
 			res.send({
 				tags: tags,
 				message: 'Your new tags were added!'
@@ -66,15 +66,31 @@ module.exports = {
 		try {
 			let tags = req.body;
 			let updated = [];
+			let updatedTag;
+			let updateArticle;
+			// let modifiedPosts = 0;
+			// await Tags.updateMany({}, {"$set": {"prev": urlTag.$}});
 			for(let i = 0; i< tags.length; i++) {
-				let tag = {...tags[i], urlTag: tags[i].name.split(' ').join('-')};
-				const updatedTag = await Tags.findByIdAndUpdate(
+				let prev = tags[i].prev;
+				let urlTag = tags[i].name.split(' ').join('-');
+				let tag = {...tags[i], urlTag: urlTag, prev: urlTag}; /* set urlTag and prev */
+				
+				updatedTag = await Tags.findByIdAndUpdate(
 					tag._id,
 					tag,
 					{new: true}
 				);
 				updated.push(updatedTag);
+				updateArticle = await Post.updateMany({tags: prev}, {
+					$set: { 'tags.$': urlTag }
+				});
+				// modifiedPosts += updateArticle.nModified;
+				updateArticle = await Post.updateMany({realm: prev}, {
+					realm: urlTag
+				});
+				// modifiedPosts += updateArticle.nModified;
 			}
+			console.log(tags)
 			res.send({
 				tags: updated,
 				message: 'Your tag edits were saved!'
@@ -90,21 +106,41 @@ module.exports = {
 		try {
 			let tags = [];
 			const data = req.body.tags;
+			let rejected = [];
+			console.log(data)
 			for(let i = 0; i< data.length; i++) {
-				let tag = await Tags.deleteOne({
-					_id: data[i]._id
-				});
-				tags.push({
-					deleteCount: tag.n,
-					id: data[i]._id
-				});
+				// search for tags in posts - cant delete
+				let inPost = await Post.countDocuments({$or: [{realm: data[i].urlTag}, {tags: data[i].urlTag}]});
+				if(inPost > 0 ) { rejected.push(data[i].name); }
+				else {
+					let tag = await Tags.deleteOne({
+						_id: data[i]._id
+					});
+					tags.push({
+						deleteCount: tag.n,
+						id: data[i].urlTag
+					});
+				}
 			}
-			let reducer = (accumulate, currentVal) => ({deleteCount: accumulate.deleteCount + currentVal.deleteCount});
-			res.send(tags.reduce(reducer));
+			console.log(tags)
+			let reducer =  (accumulate, currentVal) => ({deleteCount: accumulate.deleteCount + currentVal.deleteCount});
+			res.send({
+				deleted: {
+					exists: tags.length ? true : false,
+					tags: tags.map(tag => tag.id),
+					count: tags.length ? tags.reduce(reducer) : null
+				},
+				rejected: {
+					error: rejected.length ? true : false,
+					message: `The following tags exist in article and could not be deleted: ${JSON.stringify(rejected)}`
+				}
+			});
+			// res.send(tags);
 		}
 		catch (err) {
+			console.log(err)
 			res.status(400).send({
-				error: 'An error has occured trying to add tags',
+				error: 'An error has occured trying to delete tags',
 			});
 		}
 	},

@@ -7,6 +7,7 @@ export default (promise) => {
 		})
 			.catch(err => {
 				app.$Progress.fail()
+				console.log(err.response)
 				store.dispatch('errors/handleConnectionError', err.response, {root: true})
 				return null;
 			});

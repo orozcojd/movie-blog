@@ -71,9 +71,8 @@
             v-model="realm"
             :items="tagChoices"
             :rules="realmRules"
-            :counter="20"
             item-text="name"
-            item-value="name"
+            item-value="urlTag"
             label="Realm"
             return-object
             required
@@ -313,9 +312,6 @@ export default {
 			}
 		}
 	},
-	mounted () {
-		console.log(this.article)
-	},
 	methods: {
 		...mapActions('admin',[
 			'updateArticle',
@@ -346,11 +342,13 @@ export default {
 			}
 			this.requestRunning = true
 			this.validation.cancelDisabled = true
+			console.log(this.article)
 			if (this.$route.params.id) {
 				let payload = {
 					article: new Article(this.article),
 					id: this.$route.params.id
 				}
+				console.log(payload)
 				await this.updateArticle(payload)
 					.then(() => {
 						this.submitCallback(btnType)

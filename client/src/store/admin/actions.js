@@ -150,12 +150,17 @@ export default {
 	async deleteTags ({commit, dispatch}, payload) {
 		const res = await to(Api.ApiAdmin().delete('/api/tags', payload))
 		if(res) {
-			commit(types.REMOVE_TAG, res.data)
-			dispatch('setSnackbar', {
-				type: 'text',
-				value: `Deleted the ${res.data.deleteCount} tag(s) selected.`,
-				show: true
-			})
+			if(res.data.deleted.exists) {
+				commit(types.REMOVE_TAG, res.data.deleted.tags)
+				dispatch('setSnackbar', {
+					type: 'text',
+					value: `Deleted the ${res.data.deleted.count.deleteCount} tag(s) selected.`,
+					show: true
+				})
+			}
+			if(res.data.rejected.error) {
+				dispatch('errors/handleConnectionError', res.data.rejected.message, {root: true})
+			}
 		}
 	},
 	/**
@@ -168,6 +173,7 @@ export default {
 	async fetchArticleApi ({commit}, id) {
 		const article = await to(Api.ApiAdmin().get(`/api/articles/${id}`))
 		if(article) {
+			console.log(article.data)
 			commit(types.FETCH_ARTICLE, article.data)
 			return article.data
 		}

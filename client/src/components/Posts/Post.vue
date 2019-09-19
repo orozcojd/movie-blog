@@ -19,12 +19,12 @@
               href="#"
               @click.prevent="navigateTo({
                 _id: article.realm,
-                tag: articleRealm,
-                urlTag: articleRealm.urlTag
+                tag: article.realm,
+                urlTag: article.realm
               })"
             >
               <small>
-                {{ upperCaseString(articleRealm.name) }}
+                {{ article.realm }}
               </small>
             </a>
             |
@@ -106,10 +106,10 @@
                   class="hover-bold"
                   @click.prevent="navigateTo({
                     _id: tag,
-                    tag: convertTagIdToName(tag),
-                    urlTag: convertTagIdToName(tag).urlTag
+                    tag: tag,
+                    urlTag: tag
                   })"
-                >{{ upperCaseString(convertTagIdToName(tag).name) }}
+                >{{ tag }}
                 </a>
               </v-chip>
             </li>
@@ -253,6 +253,7 @@ export default {
 			await this.editor.setContent(this.article.body, true)
 		},
 		navigateTo (tag) {
+			console.log(tag)
 			this.$router.push({
 				name: 'tag-view',
 				params: {

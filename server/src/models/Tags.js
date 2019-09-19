@@ -26,8 +26,16 @@ let tagSchema = new Schema({
 		default: false
 	},
 	__type: {
-		type: 'String',
+		type: String,
 		default: 'Tag'
-	}
+	},
+	prev: {
+		type: String,
+		default: null
+	},
+	contributorId: {
+		type: String,
+		required: true
+	},
 });
 module.exports = mongoose.model('Tags', tagSchema);

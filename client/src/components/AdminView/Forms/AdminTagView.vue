@@ -239,6 +239,7 @@
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import AdminMainValidation from '@/components/Tools/AdminMainValidation'
 import FormValidation from '@/components/Tools/FormValidation'
+import Tag from '@/Model/Tag'
 
 export default {
 	name: 'AdminEditTags',
@@ -276,7 +277,6 @@ export default {
 		headTitle() {
 			return `Admin Edit Tags - ${this.siteTitle}}`
 		},
-
 		chipTags: {
 			get() {
 				return this.tags.map(tag => ({...tag, chip:true}))
@@ -288,17 +288,9 @@ export default {
 				})
 			}
 		},
-		realmSelection: {
-			get() {
-				return this.ta
-			}
-		},
 		snackVal() {
 			return this.snackbar.value
 		}
-	},
-	mounted () {
-		console.log(this.$ability)
 	},
 	methods: {
 		...mapMutations('admin',[
@@ -308,7 +300,6 @@ export default {
 			'EDIT_TAG_VAL',
 		]),
 		...mapActions('admin',[
-			'fetchTags',
 			'postTags',
 			'deleteTags',
 			'updateTags',
@@ -325,8 +316,9 @@ export default {
 		},
 		updateTagInfo() {
 			if (this.$refs.editNameForm.validate() && !this.editTagReqRunning) {
-				this.editTagReqRunning = true
-				this.updateTags(this.tags)
+        this.editTagReqRunning = true
+        // console.log(this.tags.map(tag => new Tag({...tag, contributorId: this.aclUser.contributorId})))
+				this.updateTags(this.tags.map(tag => new Tag({...tag, contributorId: this.aclUser.contributorId})))
 					.then(() => {
 						this.editTagReqRunning = false
 						this.editNameBtnType = 'success'
@@ -368,13 +360,14 @@ export default {
 		async addRemoveTags() {
 			if(this.addedTags.length && !this.addTagReqRunning){
 				this.addTagReqRunning = true
-				await this.postTags(this.addedTags.map(name => ({name: name})))
+				await this.postTags(this.addedTags.map(tag => new Tag({name: tag, contributorId: this.aclUser.contributorId})))
 					.then(() => {
 						this.addTagReqRunning = false
 						this.addRemoveBtnType = 'success'
 						this.addedTags = []
 					})
-					.catch(() => {
+					.catch((err) => {
+						console.log(err)
 						this.addRemoveBtnType = 'error'
 					})
 			}
@@ -392,6 +385,7 @@ export default {
 			}
 			setTimeout(() => {
 				this.addRemoveBtnType = 'default'
+				this.addTagReqRunning = false
 			}, this.snackbar.timeout)
 		}
 	}

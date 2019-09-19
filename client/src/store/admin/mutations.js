@@ -15,6 +15,7 @@ export default {
 	 * @param {array} payload 
 	 */
 	[types.FETCH_ARTICLE] (state, payload) {
+		console.log(payload)
 		state.article = payload
 	},
 	/**
@@ -31,18 +32,19 @@ export default {
 	 * @param {Vuex state} state 
 	 */
 	[types.NEW_ARTICLE] (state) {		
-		let found = state.tags.find(tag => tag._id === state.article.realm)
-		console.log(found)
+		let found = state.tags.find(tag => tag.urlTag === state.article.realm)
 		let realmObj = {}
+		console.log(state.article.realm)
 		if(!!found && found !== -1) {
 			realmObj._id = found._id
 			realmObj.name = found.name
 			realmObj.img = found.image
+			realmObj.urlTag = found.urlTag
 		}
 		state.article.realm = realmObj
 		// copy tags objects
 		found = state.tags.filter(function(tag) {
-			return this.indexOf(tag._id) >= 0 ;
+			return this.indexOf(tag.urlTag) >= 0 ;
 		},state.article.tags)
 		let copiedTags = []
 		for(let i = 0; i < found.length; i++) {
@@ -51,9 +53,11 @@ export default {
 			tmp._id = current._id
 			tmp.name = current.name
 			tmp.img = current.img
+			tmp.urlTag = current.urlTag
 			copiedTags.push(tmp)
 		}
 		state.article.tags = copiedTags
+		console.log(state.article)
 	},
 	/**
 	 * Finds the index of matching _id in articles array and updates value
@@ -116,9 +120,8 @@ export default {
 	 */
 	[types.ADD_TAGS] (state, payload) {
 		const tags = payload.tags
-		for(let i = 0; i < tags.length; i++) {
-			state.tags.push(tags[i])
-		}
+		state.tags.push(...tags)
+
 	},
 	/**
 	 * Sets state tags array to payload
@@ -142,7 +145,10 @@ export default {
 	 * @param {number} payload 
 	 */
 	[types.REMOVE_POST_TAG] (state, payload) {
-		state.article.tags.splice(payload, 1)
+		for(let i = 0; i < payload.length; i++) {
+			state.article.tags.splice(payload[i], 1)
+		}
+		
 	},
 	/**
 	 * Find matching _id in state tags array and sets val of tag 

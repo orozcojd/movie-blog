@@ -210,6 +210,7 @@ export default {
 			},
 		},
 		realms () {
+      console.log(this.tags)
 			return this.tags.filter(tag => tag.realm === true)
 		},
 		sideNavRealms() {
