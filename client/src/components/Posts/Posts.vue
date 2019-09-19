@@ -105,18 +105,6 @@ export default {
 		store.dispatch('posts/fetchArticles', options)
 		next()
 	},
-	async mounted () {
-		// let options = {
-		// 	params: {
-		// 		params: {
-		// 			limit: 15,
-		// 		},
-		// 		extend: false
-		// 	}
-		// }
-		// await this.fetchArticles(options)
-		// .catch(err => console.log(err))
-	},
 	methods: {
 		...mapActions('posts',['fetchArticles'])
 	}

@@ -11,9 +11,7 @@ export default {
 	 */
 	async fetchArticles ({commit}, payload) {
 		const articles = await to(Api.ApiGeneral().get('/articles', payload.params))
-		if(articles) {
-			commit(types.FETCH_ARTICLES, articles.data)
-		}
+		if(articles) commit(types.FETCH_ARTICLES, articles.data)
 	},
 	setArticleViewed ({commit}, article) {
 		commit(types.PUSH_VIEWED, {...article, id: article._id})
@@ -42,9 +40,8 @@ export default {
 	 */
 	async fetchArticleByContributor({commit}, payload) {
 		const articles = await to(Api.ApiGeneral().get(`/articlesByContributor/${payload.query}`, payload.params))
-		if(articles) {
-			commit(types.FETCH_BY_CONTRIBUTOR, articles.data)
-		}
+		if(articles) commit(types.FETCH_BY_CONTRIBUTOR, articles.data)
+		
 	},
 	async copyRelatedTags({commit}, payload) {
 		commit(types.COPY_RELATED_TAGS, payload)
@@ -79,10 +76,8 @@ export default {
 	 */
 	async getArticlesByTag ({commit}, payload) {
 		const articles = await to(Api.ApiGeneral().get(`/tag/${payload.query}`, payload.params))
-		console.log(articles.data)
-		if(articles) {
-			commit(types.FETCH_BY_TAG, articles.data)
-		}
+		if(articles) commit(types.FETCH_BY_TAG, articles.data)
+		
 	},
 	/**
 	 * GET
@@ -93,9 +88,8 @@ export default {
 	 */
 	async getContributorBio({commit}, id) {
 		const contributor = await to(Api.ApiGeneral().get(`/contributors/${id}`))
-		if(contributor) {
-			commit(types.SET_CONTRIBUTOR, contributor.data)
-		}
+		if(contributor) commit(types.SET_CONTRIBUTOR, contributor.data)
+		
 	},
 	setTags ({commit}, payload) {
 		commit(types.SET_TAGS, payload)
@@ -109,9 +103,8 @@ export default {
 	async getTags ({commit}, options = {params: {realm: false}}) {
 		// let tags = (await Api.ApiGeneral().get('tags', options)).data
 		const tags = await to(Api.ApiGeneral().get('/tags', options))
-		if(tags) {
-			commit(types.FETCH_TAGS, {tags: tags.data, realm: options.params.realm})
-		}
+		if(tags) commit(types.FETCH_TAGS, {tags: tags.data, realm: options.params.realm})
+		
 	},
 	/**
 	 * Commits mutation to reset infinite scroll objects

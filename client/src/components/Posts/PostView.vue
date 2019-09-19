@@ -34,7 +34,6 @@
 <script>
 import { mapState, mapMutations, mapActions } from 'vuex'
 import store from '@/store'
-// import LoadingPost from '@/components/Loading/post'
 export default {
 	name: 'PostView',
 	components: {
@@ -81,6 +80,7 @@ export default {
 	},
 	beforeRouteEnter (to, from, next) {
 		store.dispatch('posts/fetchArticle', (to.params.id))
+		store.dispatch('posts/resetNextArticles')
 		next()
 	},
 	async created() {
@@ -91,7 +91,6 @@ export default {
 	},
 	methods: {
 		init() {
-			this.resetNextArticles()
 			window.scrollTo(0,0);			
 			this.loaded = true
 		},
@@ -99,7 +98,6 @@ export default {
 			'fetchArticle',
 			'getNextArticles',
 			'resetNextArticles',
-			// 'setMaxRelated',
 			'setArticle',
 			'getTags'
 		]),
@@ -124,7 +122,6 @@ export default {
 					latestUnrelated: true
 				})
 			}
-			// this.busy = false
 		}
 	}
 }

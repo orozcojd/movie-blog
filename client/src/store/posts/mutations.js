@@ -90,6 +90,7 @@ export default {
 	 */
 	[types.RESET_NEXT_ARTICLES] (state) {
 		state.maxRelatedReached = false
+		state.maxArticlesReached = false
 		state.infiniteArticles = []
 		state.associatedArticles = {
 			pageNo: 1,

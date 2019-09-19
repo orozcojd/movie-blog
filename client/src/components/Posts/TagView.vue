@@ -109,8 +109,6 @@ export default {
 			}
 		}
 	},
-	mounted() {
-	},
 	async beforeRouteUpdate(to, from, next) {
 		const page = this.$route.query.page
 		let payload = {
@@ -120,7 +118,6 @@ export default {
 				}
 			}
 		}
-		console.log('inside before route update')
 		if(to.params.urlTag !== from.params.urlTag) {
 			const urlTag = to.params.urlTag
 			let tag = this.tags.find(tag => tag.urlTag === urlTag)
@@ -134,7 +131,6 @@ export default {
 	async created() {
 		if(!this.tags.length) await this.getTags()
 		const urlTag = this.$route.params.urlTag
-		console.log(urlTag)
 		const page = this.$route.query.page
 		let payload = {
 			params: {
@@ -143,11 +139,7 @@ export default {
 				}
 			}
 		}
-		console.log(this.tags)
-		console.log(this.realms)
-		// if(this.tag.urlTag !== urlTag) {
 		let tag = this.tags.find(tag => tag.urlTag === urlTag)
-		console.log(tag)
 		if(tag) {
 			this.setTag(tag)
 			payload.query = tag._id
@@ -155,7 +147,6 @@ export default {
 			this.loaded = true
 		}
 		else {
-			console.log('inside else')
 			this.$router.go('/404')
 		}
 	
