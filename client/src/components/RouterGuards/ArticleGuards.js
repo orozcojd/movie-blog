@@ -12,15 +12,16 @@ export default {
 			// console.log('ENTERED GUARD')
 			if(!store.state.posts.tags.length) {
 				// console.log('REQUEST FOR TAGS MADE')
-				await store.dispatch('posts/getTags')
+				store.dispatch('posts/getTags')
 			}
 			let tag
-
+			console.log(to.params)
+			console.log(store.state.posts.tags)
 			// if no _id found in params, find tag in tags array 
-			if(!to.params._id) {
+			if(!to.params.name) {
 				tag = store.state.posts.tags.find(tag => tag.urlTag === to.params.urlTag)
 			}
-			
+			console.log(tag)
 			// if tag not found, redirect
 			if(!tag) {
 				next('/404')

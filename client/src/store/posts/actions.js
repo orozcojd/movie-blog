@@ -79,6 +79,7 @@ export default {
 	 */
 	async getArticlesByTag ({commit}, payload) {
 		const articles = await to(Api.ApiGeneral().get(`/tag/${payload.query}`, payload.params))
+		console.log(articles.data)
 		if(articles) {
 			commit(types.FETCH_BY_TAG, articles.data)
 		}

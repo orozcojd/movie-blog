@@ -223,6 +223,7 @@ export default {
 		console.log(this.tags)
 		console.log(this.realms)
 		console.log(this.article)
+		console.log(this.realm)
 	},
 	methods: {
 		...mapMutations('posts', ['PUSH_VIEWED']),
@@ -231,6 +232,7 @@ export default {
 				const tag = this.tags.find(tag => tag._id === id)
 				return tag
 			}
+			return ''
 		},
 		titleCase(word) {
 			let title = word.toLowerCase().split(' ')

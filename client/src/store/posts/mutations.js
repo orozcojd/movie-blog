@@ -30,7 +30,7 @@ export default {
 	 */
 	[types.FETCH_TAGS] (state, payload) {
 		if(payload.realm) state.realms = payload.tags
-		else state.tags = [...state.realms, payload.tags]
+		else state.tags = [...state.realms, ...payload.tags]
 	},
 	/**
 	 * Sets articles object to payload

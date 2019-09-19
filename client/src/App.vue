@@ -52,6 +52,7 @@ export default {
 		if(!this.token.token) {
 			await this.getSetToken()
 		}
+		await this.getTags({params: {realm: true}})
 		this.$Progress.finish()
 	},
 	created () {
@@ -78,7 +79,8 @@ export default {
 		})
 	},
 	methods: {
-		...mapActions('auth', ['getSetToken'])
+		...mapActions('auth', ['getSetToken']),
+		...mapActions('posts',['getTags']),
 	}
 }
 </script>

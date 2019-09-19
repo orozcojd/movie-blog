@@ -1,5 +1,8 @@
 <template>
-  <div v-resize="onResize">
+  <div 
+    v-if="loaded"
+    v-resize="onResize"
+  >
     <v-navigation-drawer
       v-model="drawerLeft"
       left
@@ -31,7 +34,6 @@
               :key="i"
               class="sidenav-realm"
               @click="navigateTo('tag-view', { 
-                id: realm.ref_id,
                 tagName: realm.name,
                 urlTag: realm.urlTag
               })"
@@ -95,7 +97,6 @@
           :key="i"
           class="nav-realm"
           @click="navigateTo('tag-view', { 
-            id: realm.ref_id,
             tagName: realm.name,
             urlTag: realm.urlTag
           })"
@@ -113,6 +114,7 @@ export default {
 	name: 'Header',
 	data() {
 		return {
+			loaded: false,
 			drawerLeft: false,
 			windowSize: {
 				x: 0,
@@ -147,11 +149,11 @@ export default {
 		}
 	},
 	async mounted () {
-		if(!this.realms.length) {
-			await this.getTags({params: {realm: true}})
-			await this.getTags({params: {realm: false}})
-		}
-		
+		// if(!this.realms.length) {
+		// await this.getTags({params: {realm: true}})
+		// await this.getTags({params: {realm: false}})
+		// }
+		this.loaded = true
 		this.onResize()
 	},
 	methods: {
@@ -182,18 +184,8 @@ export default {
 				this.toggleDown = false		
 			}
 		},
-		titleCase(word) {
-			let title = word.toLowerCase().split(' ')
-			for(let i = 0; i < title.length; i++) {
-				title[i] = title[i].charAt(0).toUpperCase() + title[i].slice(1)
-			}
-			return title.join(' ')
-		},
-
-		goTo(route) {
-			this.$router.push(route)
-		},
 		navigateTo (name, params) {
+			console.log(params)
 			this.$router.push({
 				name: name,
 				params: params,

@@ -9,13 +9,15 @@
         <loading-post />
       </card-view>
     </div>
-    <div v-if="loaded && tags.length">
-      <post
-        v-for="(article, index) in infiniteArticles"
-        :key="index"
-        :article="article"
-        @setloaded="loaded = true; busy = false"
-      />
+    <div v-if="loaded">
+      <div v-if="tags.length">
+        <post
+          v-for="(article, index) in infiniteArticles"
+          :key="index"
+          :article="article"
+          @setloaded="loaded = true; busy = false"
+        />
+      </div>
       <div
         v-if="busy && !maxArticlesReached"
         class="text-center"
@@ -82,7 +84,7 @@ export default {
 		next()
 	},
 	async created() {
-		if(!this.tags.length) await this.getTags({params: {realm: false}})
+		if(!this.tags.length) await this.getTags()
 	},
 	mounted() {
 		this.init()

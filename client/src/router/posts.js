@@ -23,7 +23,7 @@ const postRoutes = [
 		path: types.tagView.path,
 		name: types.tagView.name,
 		component: TagView,
-		beforeEnter: ArticleGuard.tagViewGuard(),
+		// beforeEnter: ArticleGuard.tagViewGuard(),
 		props: true
 	},
 	{

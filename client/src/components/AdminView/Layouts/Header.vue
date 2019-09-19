@@ -275,22 +275,12 @@ export default {
 				this.toggleDown = false		
 			}
 		},
-		titleCase(word) {
-			let title = word.toLowerCase().split(' ')
-			for(let i = 0; i < title.length; i++) {
-				title[i] = title[i].charAt(0).toUpperCase() + title[i].slice(1)
-			}
-			return title.join(' ')
-		},
 		logout () {
 			this.logOut().then(() => {
 				this.$router.push({
 					name: 'root'
 				})
 			})
-		},
-		goTo(route) {
-			this.$router.push(route)
 		},
 		navigateTo (name, params) {
 			this.$router.push({

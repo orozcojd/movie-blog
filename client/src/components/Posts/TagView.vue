@@ -88,6 +88,7 @@ export default {
 		...mapState('posts', [
 			'articles',
 			'tags',
+			'realms',
 			'tag',
 			'pages',
 			'page'
@@ -110,8 +111,7 @@ export default {
 	},
 	mounted() {
 	},
-	async created() {
-		const urlTag = this.$route.params.urlTag
+	async beforeRouteUpdate(to, from, next) {
 		const page = this.$route.query.page
 		let payload = {
 			params: {
@@ -120,30 +120,54 @@ export default {
 				}
 			}
 		}
-		this.loaded = true
-		if(this.tag.urlTag !== urlTag) {
-			let newTag = this.tags.find(tag => tag.urlTag === urlTag)
-			if(!newTag) {
-				// if tag does not exist, go back to previous route
-				this.$router.go('/404')
-			}
-			else {
-				this.setTag(newTag)
-				payload.query = newTag._id
-				await this.getArticlesByTag(payload)
+		console.log('inside before route update')
+		if(to.params.urlTag !== from.params.urlTag) {
+			const urlTag = to.params.urlTag
+			let tag = this.tags.find(tag => tag.urlTag === urlTag)
+			if(!tag) return this.$router.go('/404')
+			this.setTag(tag)
+			payload.query = tag._id
+			await this.getArticlesByTag(payload)
+		}
+		next()
+	},
+	async created() {
+		if(!this.tags.length) await this.getTags()
+		const urlTag = this.$route.params.urlTag
+		console.log(urlTag)
+		const page = this.$route.query.page
+		let payload = {
+			params: {
+				params: {
+					page: page
+				}
 			}
 		}
-		payload.query = this.tag._id
-		await this.getArticlesByTag(payload)
-	},
-	beforeRouteUpdate(to, from, next) {
-		// store.dispatch('posts/setTag', (to.params.id))
-		next()
+		console.log(this.tags)
+		console.log(this.realms)
+		// if(this.tag.urlTag !== urlTag) {
+		let tag = this.tags.find(tag => tag.urlTag === urlTag)
+		console.log(tag)
+		if(tag) {
+			this.setTag(tag)
+			payload.query = tag._id
+			await this.getArticlesByTag(payload)
+			this.loaded = true
+		}
+		else {
+			console.log('inside else')
+			this.$router.go('/404')
+		}
+	
+		// }
+		// payload.query = this.tag._id
+		// await this.getArticlesByTag(payload)
 	},
 	methods: {
 		...mapActions('posts',[
 			'getArticlesByTag',
-			'setTag'
+			'setTag',
+			'getTags'
 		])
 	}
 }
