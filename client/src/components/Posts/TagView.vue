@@ -154,7 +154,6 @@ export default {
 	}
 }
 </script>
-
 <style scoped>
 	.mt-lg {
 		margin-top: 1em;
