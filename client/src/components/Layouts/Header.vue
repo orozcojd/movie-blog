@@ -150,7 +150,7 @@ export default {
 	},
 	async mounted () {
 		// if(!this.realms.length) {
-		// await this.getTags({params: {realm: true}})
+		await this.getTags({params: {realm: true}})
 		// await this.getTags({params: {realm: false}})
 		// }
 		this.loaded = true
@@ -185,7 +185,6 @@ export default {
 			}
 		},
 		navigateTo (name, params) {
-			console.log(params)
 			this.$router.push({
 				name: name,
 				params: params,

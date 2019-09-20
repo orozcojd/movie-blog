@@ -17,7 +17,6 @@ module.exports = {
 				});
 			}
 		} catch (err) {
-			console.log(err);
 			res.status(400).send({
 				error: 'Unexpected error has occurred'
 			});
@@ -31,7 +30,6 @@ module.exports = {
 	 */
 	async updateContributor (req, res) {
 		try {
-			console.log('updateContributor');
 			const contributorId = req.params.contributorId;
 			let contributorName = await Contributor.findOne({_id: contributorId});
 			contributorName = contributorName.name;

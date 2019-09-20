@@ -97,7 +97,7 @@ export default {
 	 * @param {commit} param0 
 	 */
 	async fetchTags ({commit, dispatch}, options = {}) {
-		const data = await to(Api.ApiAdmin().get('/tags', options))
+		const data = await to(Api.ApiAdmin().get('/tags'))
 		if(data) {
 			dispatch('posts/setTags', data.data, {root: true})
 			commit(types.SET_TAGS, data.data)
@@ -173,7 +173,6 @@ export default {
 	async fetchArticleApi ({commit}, id) {
 		const article = await to(Api.ApiAdmin().get(`/api/articles/${id}`))
 		if(article) {
-			console.log(article.data)
 			commit(types.FETCH_ARTICLE, article.data)
 			return article.data
 		}

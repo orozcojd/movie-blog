@@ -54,6 +54,9 @@ module.exports = (app) => {
 	app.get('/tags',
 		appSpeedLimiter,
 		TagsController.getTags);
+	app.get('/tags/:tagName',
+		appSpeedLimiter,
+		TagsController.getTag);
 	app.get('/tag/:tagName',
 		appSpeedLimiter,
 		ArticlesController.articlesByTag);

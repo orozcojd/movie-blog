@@ -17,14 +17,10 @@
             <a
               class="hover-bold"
               href="#"
-              @click.prevent="navigateTo({
-                _id: article.realm,
-                tag: article.realm,
-                urlTag: article.realm
-              })"
+              @click.prevent="navigateTo({urlTag: article.realm})"
             >
               <small>
-                {{ article.realm }}
+                {{ titleCase(article.realm) }}
               </small>
             </a>
             |
@@ -90,7 +86,6 @@
             points of interest
           </div>
           <ul
-            v-if="article.tags && article.tags.length"
             align="left"
             class="tag-list"
           >
@@ -104,12 +99,8 @@
               >
                 <a
                   class="hover-bold"
-                  @click.prevent="navigateTo({
-                    _id: tag,
-                    tag: tag,
-                    urlTag: tag
-                  })"
-                >{{ tag }}
+                  @click.prevent="navigateTo({urlTag: tag})"
+                >{{ titleCase(tag) }}
                 </a>
               </v-chip>
             </li>
@@ -124,7 +115,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapMutations } from 'vuex'
 import ParagraphAlignmentNode from '@/components/Tools/ParagraphAlignment'
 import Iframe from '@/components/Tools/Iframe'
 import { Editor, EditorContent} from 'tiptap'
@@ -197,7 +188,6 @@ export default {
 		}
 	},
 	computed: {
-		...mapState('posts',['tags']),
 		articleDate() {
 			let date = new Date(this.article.updatedAt).toLocaleString('en-us', 
 				{ 
@@ -210,11 +200,6 @@ export default {
 				})
 			return date
 		},
-		articleRealm() {
-			if(this.article.realm)
-				return this.convertTagIdToName(this.article.realm)
-			return null
-		}
 	},
 	async mounted () {
 		await this.setContent()
@@ -223,42 +208,21 @@ export default {
 	},
 	methods: {
 		...mapMutations('posts', ['PUSH_VIEWED']),
-		convertTagIdToName (id) {
-			if(this.tags && this.tags.length){
-				const tag = this.tags.find(tag => tag._id === id)
-				return tag
-			}
-			return ''
-		},
 		titleCase(word) {
-			let title = word.toLowerCase().split(' ')
+			let title = word.toLowerCase().split('-')
 			for(let i = 0; i < title.length; i++) {
 				title[i] = title[i].charAt(0).toUpperCase() + title[i].slice(1)
 			}
 			return title.join(' ')
-		},
-		upperCaseString(str) {
-			if(!str)
-				return
-			let strArr = str.split(' ')
-			let upperArr = []
-			for(let i = 0; i < strArr.length; i++) {
-				let str = strArr[i]
-				upperArr.push(str.charAt(0).toUpperCase() + str.slice(1))
-			}
-			return upperArr.join(' ')
 		},
 		async setContent () {
 			await this.editor.clearContent(true)
 			await this.editor.setContent(this.article.body, true)
 		},
 		navigateTo (tag) {
-			console.log(tag)
 			this.$router.push({
 				name: 'tag-view',
 				params: {
-					tag: tag.tag,
-					id: tag._id,
 					urlTag: tag.urlTag
 				},
 			})

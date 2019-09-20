@@ -210,7 +210,7 @@ export default {
 			},
 		},
 		realms () {
-      console.log(this.tags)
+			// eslint-disable-next-line no-console
 			return this.tags.filter(tag => tag.realm === true)
 		},
 		sideNavRealms() {
@@ -231,9 +231,8 @@ export default {
 	async mounted () {
 		await this.fetchPermissions()
 		if(!this.token.token) await this.getSetToken()
-		await this.getTags({params: {realm: true}})
-		await this.getTags({params: {realm: false}})
-		if(!this.tags.length) await this.fetchTags()
+		// await this.getTags({params: {realm: true}})
+		if(!this.tags.length) await this.fetchTags({params: {realm: true}})
 		this.onResize()
 		this.loaded = true
 	},
@@ -242,7 +241,7 @@ export default {
 	},
 	methods: {
 		...mapActions('admin',['fetchTags']),
-		...mapActions('posts',['getTags']),
+		// ...mapActions('posts',['getTags']),
 		...mapActions('auth', [
 			'setAclUser',
 			'getSetToken',

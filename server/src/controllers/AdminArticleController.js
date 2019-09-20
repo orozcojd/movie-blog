@@ -92,7 +92,6 @@ module.exports = {
 				_id: req.body.contributorId
 			}).lean();
 			req.body.author = contributor.name;
-			console.log(req.body);
 			const article = await Post.findOneAndUpdate(
 				{contributorId: req.body.contributorId, _id: req.params.articleId},
 				req.body,

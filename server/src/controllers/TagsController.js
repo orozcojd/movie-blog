@@ -1,6 +1,24 @@
 const {Tags, Post} = require('../models');
 const {sortAlpha} = require('../helpers/Helpers');
 module.exports = {
+
+	async getTag (req, res) {
+		try {
+			const tag = await Tags.findOne(
+				{urlTag: req.params.tagName}
+			).lean();
+			res.send({
+				tag: tag,
+				exists: tag ? true : false
+			});
+		}
+		catch (err) {
+			res.status(400).send({
+				error: 'An error has occured trying to get tags',
+			});
+		}
+	},
+
 	/**
    * GET REQUEST
    * Gets all tag names in db and returns array of tags
@@ -10,7 +28,6 @@ module.exports = {
    */
 	async getTags (req, res) {
 		try {
-			console.log(req.query);
 			let tags = await Tags.find(
 				req.query
 			).lean();
@@ -37,7 +54,6 @@ module.exports = {
 				let tag = await Tags.create(req.body[i]);
 				tags.push(tag);
 			}
-			console.log(tags);
 			res.send({
 				tags: tags,
 				message: 'Your new tags were added!'
@@ -45,7 +61,6 @@ module.exports = {
 
 		}
 		catch (err) {
-			console.log(err);
 			let error = 'An error has occured trying to add tags';
 			if(err.code === 11000) {
 				error = 'Tag already exists! Please check existing tag names.';

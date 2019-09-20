@@ -46,6 +46,11 @@ const postRoutes = [
 		path: types.notFound.path,
 		name: types.notFound.name,
 		component: NotFound
+	},
+	{
+		path: '*',
+		name: '404',
+		component: NotFound
 	}
 ]
 export default postRoutes

@@ -15,7 +15,6 @@ export default {
 	 * @param {array} payload 
 	 */
 	[types.FETCH_ARTICLE] (state, payload) {
-		console.log(payload)
 		state.article = payload
 	},
 	/**
@@ -34,7 +33,6 @@ export default {
 	[types.NEW_ARTICLE] (state) {		
 		let found = state.tags.find(tag => tag.urlTag === state.article.realm)
 		let realmObj = {}
-		console.log(state.article.realm)
 		if(!!found && found !== -1) {
 			realmObj._id = found._id
 			realmObj.name = found.name
@@ -57,7 +55,6 @@ export default {
 			copiedTags.push(tmp)
 		}
 		state.article.tags = copiedTags
-		console.log(state.article)
 	},
 	/**
 	 * Finds the index of matching _id in articles array and updates value

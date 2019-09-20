@@ -91,8 +91,25 @@ export default {
 		if(contributor) commit(types.SET_CONTRIBUTOR, contributor.data)
 		
 	},
+	/**
+	 * Commits mutation to set state tag object to payload tag
+	 * @param {commit} param0 
+	 * @param {Object} payload 
+	 */
+	setTag ({commit}, payload) {
+		commit(types.SET_TAG, payload)
+	},
 	setTags ({commit}, payload) {
 		commit(types.SET_TAGS, payload)
+	},
+	async fetchTag ({commit, dispatch}, payload) {
+		const tag = await to(Api.ApiGeneral().get(`/tags/${payload}`))
+		if(tag && tag.data.exists) {
+			commit(types.SET_TAG, tag.data.tag)
+		}
+		else {
+			return Promise.reject()
+		}
 	},
 	/**
 	 * GET
@@ -112,15 +129,6 @@ export default {
 	 */
 	async resetNextArticles({commit}) {
 		commit(types.RESET_NEXT_ARTICLES)
-	},
-	
-	/**
-	 * Commits mutation to set state tag object to payload tag
-	 * @param {commit} param0 
-	 * @param {Object} payload 
-	 */
-	async setTag ({commit}, payload) {
-		commit(types.SET_TAG, payload)
 	},
 	/**
 	 * Commits mutation to toggle state variable to payload

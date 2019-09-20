@@ -10,7 +10,7 @@
       </card-view>
     </div>
     <div v-if="loaded">
-      <div v-if="tags.length">
+      <div>
         <post
           v-for="(article, index) in infiniteArticles"
           :key="index"
@@ -50,7 +50,7 @@ export default {
 	computed: {
 		...mapState('posts', [
 			'article',
-			'tags',
+			// 'tags',
 			'associatedArticles',
 			'infiniteArticles',
 			'unAssociatedArticles',
@@ -83,9 +83,9 @@ export default {
 		store.dispatch('posts/resetNextArticles')
 		next()
 	},
-	async created() {
-		if(!this.tags.length) await this.getTags()
-	},
+	// async created() {
+	// 	if(!this.tags.length) await this.getTags()
+	// },
 	mounted() {
 		this.init()
 	},
@@ -99,7 +99,7 @@ export default {
 			'getNextArticles',
 			'resetNextArticles',
 			'setArticle',
-			'getTags'
+			// 'getTags'
 		]),
 		...mapMutations('posts',['PUSH_VIEWED']),
 		async loadMore() {

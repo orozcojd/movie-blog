@@ -23,6 +23,6 @@ export const contactView = {
 	name: 'contact'
 }
 export const notFound = {
-	path: '*',
+	path: '/404',
 	name: 'not-found'
 }

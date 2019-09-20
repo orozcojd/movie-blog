@@ -62,6 +62,7 @@
     </v-layout>
     <v-layout justify-center>
       <v-pagination
+				v-if="articles.length"
         v-model="pageNo"
         :length="pages"
         color="#5c6bc0"
@@ -87,8 +88,6 @@ export default {
 	computed: {
 		...mapState('posts', [
 			'articles',
-			'tags',
-			'realms',
 			'tag',
 			'pages',
 			'page'
@@ -111,6 +110,7 @@ export default {
 	},
 	async beforeRouteUpdate(to, from, next) {
 		const page = this.$route.query.page
+		const urlTag = to.params.urlTag
 		let payload = {
 			params: {
 				params: {
@@ -118,18 +118,17 @@ export default {
 				}
 			}
 		}
-		if(to.params.urlTag !== from.params.urlTag) {
-			const urlTag = to.params.urlTag
-			let tag = this.tags.find(tag => tag.urlTag === urlTag)
-			if(!tag) return this.$router.go('/404')
-			this.setTag(tag)
-			payload.query = tag._id
+		if(urlTag !== from.params.urlTag) {
+			await this.fetchTag(urlTag)
+				.catch(() => this.$router.push({name: 'not-found'}))
+			payload.query = urlTag
 			await this.getArticlesByTag(payload)
+				.catch(() => {})
+			this.loaded = true
 		}
 		next()
 	},
 	async created() {
-		if(!this.tags.length) await this.getTags()
 		const urlTag = this.$route.params.urlTag
 		const page = this.$route.query.page
 		let payload = {
@@ -139,26 +138,18 @@ export default {
 				}
 			}
 		}
-		let tag = this.tags.find(tag => tag.urlTag === urlTag)
-		if(tag) {
-			this.setTag(tag)
-			payload.query = tag._id
-			await this.getArticlesByTag(payload)
-			this.loaded = true
-		}
-		else {
-			this.$router.go('/404')
-		}
-	
-		// }
-		// payload.query = this.tag._id
-		// await this.getArticlesByTag(payload)
+		await this.fetchTag(urlTag)
+			.catch(() => this.$router.push({name: 'not-found'}))
+		payload.query = urlTag
+		await this.getArticlesByTag(payload)
+			.catch(() => {})
+		this.loaded = true
 	},
 	methods: {
 		...mapActions('posts',[
 			'getArticlesByTag',
 			'setTag',
-			'getTags'
+			'fetchTag'
 		])
 	}
 }
