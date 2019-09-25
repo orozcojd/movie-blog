@@ -243,9 +243,9 @@ export default {
  }
  .sidenav-title {
    font-size: 1em;
+   font-weight: 900;
    border-bottom: .1px solid #767676;
    padding: 16px 16px;
-  //  height: 1.5em;
  }
  .flex-col {
    display: flex;
