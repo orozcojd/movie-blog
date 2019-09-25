@@ -9,24 +9,22 @@
         <loading-post />
       </card-view>
     </div>
-    <div v-if="loaded">
-      <div>
-        <post
-          v-for="(article, index) in infiniteArticles"
-          :key="index"
-          :article="article"
-          @setloaded="loaded = true; busy = false"
-        />
-      </div>
-      <div
-        v-if="busy && !maxArticlesReached"
-        class="text-center"
-        align="center"
-      >
-        <card-view>
-          <loading-post />
-        </card-view>
-      </div>
+    <div>
+      <post
+        v-for="(article, index) in infiniteArticles"
+        :key="index"
+        :article="article"
+        @setloaded="loaded = true; busy = false"
+      />
+    </div>
+    <div
+      v-if="loaded && busy && !maxArticlesReached"
+      class="text-center"
+      align="center"
+    >
+      <card-view>
+        <loading-post />
+      </card-view>
     </div>
   </div>
 </template>
@@ -75,6 +73,7 @@ export default {
 	},
 	beforeRouteUpdate(to, from, next) {
 		this.loaded = false
+		store.dispatch('posts/resetNextArticles')
 		store.dispatch('posts/fetchArticle', (to.params.id))
 		next()
 	},
@@ -83,27 +82,22 @@ export default {
 		store.dispatch('posts/resetNextArticles')
 		next()
 	},
-	// async created() {
-	// 	if(!this.tags.length) await this.getTags()
-	// },
 	mounted() {
 		this.init()
 	},
 	methods: {
 		init() {
 			window.scrollTo(0,0);			
-			this.loaded = true
 		},
 		...mapActions('posts', [
 			'fetchArticle',
 			'getNextArticles',
 			'resetNextArticles',
 			'setArticle',
-			// 'getTags'
 		]),
 		...mapMutations('posts',['PUSH_VIEWED']),
 		async loadMore() {
-			if(!this.loaded && this.maxArticlesReached && this.busy){
+			if(!this.loaded || (this.maxArticlesReached && this.busy)){
 				return
 			}
 			this.busy = true
