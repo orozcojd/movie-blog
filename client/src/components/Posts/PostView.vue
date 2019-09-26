@@ -98,11 +98,8 @@ export default {
 		...mapMutations('posts',['PUSH_VIEWED']),
 		async loadMore() {
 			if(!this.loaded || this.maxArticlesReached || this.busy){
-				console.log('cant load more')
 				return
 			}
-			console.log(`${this.loaded} ${this.maxArticlesReached} ${this.busy}`)
-			console.log('about to load more!')
 			this.busy = true
 			if(!this.maxRelatedReached) {
 				await this.getNextArticles({
