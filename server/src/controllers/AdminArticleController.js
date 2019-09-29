@@ -1,6 +1,4 @@
-const {Post} = require('../models');
-let {Contributor} = require('../models');
-let {User} = require('../models');
+const {User, Contributor, Review, Post} = require('../models');
 
 
 module.exports = {
@@ -12,6 +10,7 @@ module.exports = {
    * @param {Object} res 
    */
 	async index (req, res) {
+		console.log('inside ');
 		try {
 			let options = {};
 			if(req.query.skip)
@@ -24,7 +23,7 @@ module.exports = {
 		}
 		catch (err) {
 			res.status(400).send({
-				error: 'An error has occured trying to get articles',
+				error: 'An error has occurred trying to get articles',
 			});
 		}
 	},
@@ -52,11 +51,67 @@ module.exports = {
 			res.status(200).send(article);
 		} catch (err) {
 			res.status(400).send({
-				error: 'An error has occured trying to get articles',
+				error: 'An error has occurred trying to get articles',
 			});
 		}
 	},
-
+	async reviewArticles (req, res) {
+		try {
+			let status = req.query.status;
+			let conditions = [];
+			let lookup = {};
+			switch(status){
+			case 'ED':
+				conditions = [{ $eq: [ '$contributorId',  req.body.contributorId ] }, { $eq: [ '$status',  status ] }];
+				break;
+			case 'IR':
+				conditions = [{ $eq: [ '$status',  status ] }];
+				lookup = { $eq: [ '$currReviewer', req.body.contributorId ] };
+				break;
+			default: 
+				status = 'NR';
+				conditions = [{ $ne: [ '$contributorId',  req.body.contributorId ] }, { $eq: [ '$status',  status ] }];
+				break;
+			}
+			
+			const posts = await Post.aggregate([
+				{
+					$match:
+						{ $expr:
+							{ $and: conditions } 
+						}
+				},
+				{ '$addFields': { 'article_id': { '$toString': '$_id' }}},
+				{ $lookup: {
+					from: 'reviews',
+					let: { art_id: '$article_id' },
+					pipeline: [
+						{ $match:
+							{ $expr:
+								{ $and:
+								[
+									{ $eq: [ '$postId', '$$art_id' ] },
+									lookup
+								]
+								}
+							}
+						}
+					],
+					as: 'review'
+				}
+				}, {$unwind: '$review'},
+				{
+					$project: {'tags': 0, 'body': 0, 'review': {currReviewer: 0, reviewerId: 0, contributorId: 0} }
+				}
+			]);
+			res.send(posts);
+		} catch (err) {
+			console.log(err);
+			res.status(400).send({
+				error: 'An error has occurred trying to get articles for review',
+			});
+		}
+	},
 	/**
    * POST REQUEST
    * creates Post article from schema and sends the returned
@@ -66,15 +121,21 @@ module.exports = {
    */
 	async postArticle (req, res) {
 		try {
-			const article = await Post.create(req.body);
+			// console.log(req.body);
+			// console.log(req.userId);
+			let {status, __type, ...update} = req.body;
+			const article = await Post.create(update);
+			const reviewer = await Review.create({postId: article._id, contributorId: req.body.contributorId});
+			console.log(reviewer);
 			res.send({
 				article: article,
 				message: 'Article was created!'
 			});
 		}
 		catch (err) {
+			console.log(err);
 			res.status(400).send({
-				error: 'An error has occured trying to create articles',
+				error: 'An error has occurred trying to create articles',
 			});
 		}
 	},
@@ -112,7 +173,7 @@ module.exports = {
 		}
 		catch (err) {
 			res.status(400).send({
-				error: 'An error has occured trying to update the article',
+				error: 'An error has occurred trying to update the article',
 			});
 		}
 	},
@@ -135,7 +196,7 @@ module.exports = {
 		}
 		catch (err) {
 			res.status(400).send({
-				error: 'An error has occured trying to delete the article',
+				error: 'An error has occurred trying to delete the article',
 			});
 		}
 	}

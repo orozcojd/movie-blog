@@ -103,6 +103,7 @@ export default {
 	 */
 	[types.DELETE_ARTICLE] (state, payload) {
 		let count = payload.deleteCount.n
+		console.log(count)
 		if (!count) {
 			return
 		}
@@ -169,5 +170,9 @@ export default {
 		if(payload.show) {
 			Vue.set(state.snackbar, 'value', true)
 		}
-	}
+	},
+	/*********************************** */
+	// [types.REVIEW_ARTICLES] (state, payload) {
+
+	// }
 }

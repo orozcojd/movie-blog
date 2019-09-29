@@ -10,7 +10,7 @@ const AdminContributorController = require('./controllers/AdminContributorContro
 const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy');
 const PermissionControllerPolicy = require('./policies/PermissionControllerPolicy');
 const VerifyJsonPolicy = require('./policies/VerifyJsonPolicy');
-
+const ReviewController = require('./controllers/ReviewController');
 // const jwt = require('express-jwt');
 // const config = require('./config/config');\
 
@@ -146,6 +146,17 @@ module.exports = (app) => {
 		AuthenticationControllerPolicy.authenticateToken,
 		PermissionController.updatePermissions
 	);
+	/* Review */
+	app.get('/api/review',
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		ReviewController.getReviews
+	);
+	app.post('/api/review/:revId/claim', 
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		ReviewController.claimArticles	
+	);
 
 	/* Refresh Token */
 	app.post('/tokens',
@@ -180,12 +191,15 @@ module.exports = (app) => {
 	app.get('/api/articles', 
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
-		AdminArticleController.index	
-	);
+		AdminArticleController.index);
 	app.get('/api/articles/:articleId', 
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
-		AdminArticleController.fetchArticle );
+		AdminArticleController.fetchArticle);
+	app.get('/api/review-articles',
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		AdminArticleController.reviewArticles);
 	app.post('/api/articles',
 		VerifyJsonPolicy.verifyJson,
 		apiSpeedLimiter,
@@ -198,7 +212,6 @@ module.exports = (app) => {
 		AuthenticationControllerPolicy.contributorAccessControl,
 		AdminArticleController.update);
 	app.delete('/api/articles/:articleId',
-		VerifyJsonPolicy.verifyJson,
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationControllerPolicy.contributorAccessControl,

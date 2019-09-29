@@ -3,7 +3,7 @@
     fluid
     class="content"
   >
-    <div class="slider-container">
+    <!-- <div class="slider-container">
       <div class="ib">
         West Coast
       </div>
@@ -15,7 +15,7 @@
       <div class="ib">
         East Coast
       </div>
-    </div>
+    </div> -->
     <vue-headful
       :title="siteTitle"
       description="Description from vue-headful"

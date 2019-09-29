@@ -1,7 +1,15 @@
 <template>
   <div>
+    <v-container 
+      class="form-title"
+      fluid
+    >
+      <h1>
+        Create your article.
+      </h1>
+    </v-container>
     <admin-post-form
-      v-if="load && !preview"
+      v-if="loaded && !preview"
       :load="load"
     >
       <v-flex>
@@ -85,5 +93,7 @@ export default {
 </script>
 
 <style scoped>
-
+.form-title h1 {
+	margin-bottom: 0;
+}
 </style>

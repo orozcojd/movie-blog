@@ -47,3 +47,11 @@ export const passReset = {
 	path: 'password-reset',
 	name: 'pass-reset',
 }
+export const reviewArticles = {
+	path: '',
+	name: 'review'
+}
+export const revAvail = {
+	path: 'articles',
+	name: 'article-review'
+}

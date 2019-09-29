@@ -17,7 +17,8 @@
         <tile-preview
           class="post-preview"
           :article="article"
-          to="article-view" 
+          to="article-view"
+          :review="review"
         />
       </v-flex>
     </v-layout>
@@ -34,6 +35,10 @@ export default {
 		articles: {
 			type: Array,
 			required: true
+		},
+		review: {
+			type: Boolean,
+			default: false
 		}
 	}
 }

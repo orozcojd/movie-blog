@@ -7,6 +7,10 @@ const AdminTagView = () => import('@/components/AdminView/Forms/AdminTagView')
 const AddUser = () => import('@/components/AdminView/Forms/AddUser')
 const AboutContributor = ()  => import('@/components/AdminView/Forms/AboutContributor')
 const EditUsers = () => import('@/components/AdminView/Forms/EditUsers')
+const Review = () => import('@/components/AdminView/Reviews')
+const RPosts = () => import('@/components/AdminView/Reviews/ReviewPosts')
+const rCategories = () => import('@/components/AdminView/Reviews/Categories')
+
 import {adminGuard} from '@/Authentication/AuthGuard'
 import * as types from '@/constants/types'
 import ability from '@/Authentication/ability'
@@ -82,6 +86,24 @@ const adminRoutes = [
 				props: true,
 				component: AboutContributor,
 				beforeEnter: adminGuard()
+			},
+			{
+				path: 'review',
+				component: Review,
+				children: [
+					{
+						path: '',
+						name: types.reviewArticles.name,
+						component: rCategories,
+						beforeEnter: adminGuard()
+					},
+					{
+						path: 'articles',
+						name: types.revAvail.name,
+						component: RPosts,
+						beforeEnter: adminGuard()
+					}
+				]
 			}
 		]
 	}

@@ -1,4 +1,4 @@
-let {Contributor} = require('../models');
+const {Contributor} = require('../models');
 
 module.exports = {
 	/**
@@ -13,7 +13,7 @@ module.exports = {
 		try {
 			const contributor = await Contributor.findOne({_id: id});
 			if(contributor) {
-				console.log(contributor);
+				// console.log(contributor);
 				res.send(contributor);
 			}
 			else {

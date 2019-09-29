@@ -194,7 +194,7 @@ module.exports = {
 		try {
 			const currUser = await User.findById(req.userId).lean();
 			const contributor = await Contributor.findById(currUser.contributorId).lean();
-			console.log(contributor);
+			// console.log(contributor);
 			res.status(200).send({name: contributor.name});
 			
 		} catch (err) {

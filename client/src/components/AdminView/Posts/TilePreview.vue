@@ -24,6 +24,7 @@
       </div>
     </v-card-title>
     <v-layout
+      v-if="!review"
       row
       fill-height
       justify-space-between
@@ -43,6 +44,19 @@
         @click="dialog = true"
       >
         Delete
+      </v-btn>
+    </v-layout>
+    <v-layout
+      v-else
+      row
+      fill-height
+      justify-space-between
+      align-end
+    >
+      <v-btn
+        @click="claim(article)"
+      >
+        Claim
       </v-btn>
     </v-layout>
     <v-layout
@@ -89,6 +103,9 @@ export default {
 		article: {
 			type: Object,
 			required: true
+		},
+		review: {
+			type: Boolean
 		}
 	},
 	data () {
@@ -108,8 +125,13 @@ export default {
 				}
 			})
 		},
-		deletePost (articleId) {
-			this.deleteArticle(articleId)
+		async deletePost (articleId) {
+			await this.deleteArticle(articleId)
+			this.dialog = false
+		},
+		async claim(article) {
+      console.log(article)
+      console.log()
 		}
 	}
 }

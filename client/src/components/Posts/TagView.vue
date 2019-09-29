@@ -62,7 +62,7 @@
     </v-layout>
     <v-layout justify-center>
       <v-pagination
-				v-if="articles.length"
+        v-if="articles.length"
         v-model="pageNo"
         :length="pages"
         color="#5c6bc0"

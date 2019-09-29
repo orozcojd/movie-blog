@@ -1,6 +1,7 @@
 import Api from '@/services/Api'
 import types from '@/store/types'
 import to from '@/store/to'
+import { reviewArticles } from '../../constants/types'
 
 export default {
 	/**
@@ -200,10 +201,21 @@ export default {
 	 * @param {String} payload 
 	 */
 	async deleteArticle ({commit}, payload) {
-		const deleteCount = await to(Api.ApiAdmin().delete(`/api/articles/${payload}`, payload))
+		const deleteCount = await to(Api.ApiAdmin().delete(`/api/articles/${payload}`))
+		console.log(payload)
+		console.log(deleteCount)
 		if(deleteCount) {
 			commit(types.DELETE_ARTICLE, deleteCount.data)
 			return deleteCount.data
+		}
+	},
+
+	/****************** Reviews ****************** */
+	async reviewArticles({commit}, options) {
+		const articles = await to(Api.ApiAdmin().get('api/review-articles', options))
+		console.log(articles)
+		if(articles) {
+			commit(types.FETCH_ARTICLES, articles.data)
 		}
 	}
 }

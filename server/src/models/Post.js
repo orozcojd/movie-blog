@@ -4,6 +4,7 @@
 const mongoose = require('mongoose');
 
 let Schema = mongoose.Schema;
+const STATUS = ['AP', 'IR', 'NR', 'ED', 'DR'];
 
 let articleSchema = new Schema({
 	title: {
@@ -50,14 +51,20 @@ let articleSchema = new Schema({
 		type: String,
 		required: true
 	},
-	comments: [{body: String, date: Date, user: String}],
-	meta: {
-		votes: Number,
-		favs: Number
+	revId: {
+		type: String
+	},
+	status: {
+		type: String,
+		default: 'NR',
+		enum: STATUS
 	},
 	__type: {
 		type: String,
 		default: 'Post'
 	}
 }, {timestamps: { createdAt: 'created_at'} });
+articleSchema.methods.updateStatus = async function(status) {
+	this.status = status;
+};
 module.exports = mongoose.model('Blog', articleSchema);

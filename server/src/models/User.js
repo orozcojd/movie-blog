@@ -73,6 +73,7 @@ UserSchema.methods.generateToken = function() {
 	// expiry.setSeconds(expiry.getSeconds() + 10);
 	return jwt.sign({
 		_id: this._id,
+		contributorId: this.contributorId,
 		email: this.email,
 		exp: parseInt(expiry.getTime() / 1000)
 	},
@@ -84,6 +85,8 @@ UserSchema.methods.generatePwToken = function() {
 	expiry.setHours(expiry.getHours() + 3);
 	const token = jwt.sign({
 		_id: this._id,
+		contributorId: this.contributorId,
+		email: this.email,
 		exp: parseInt(expiry.getTime() / 1000)
 	},
 	config.authentication.jwtSecret);

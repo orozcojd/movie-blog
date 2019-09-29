@@ -84,6 +84,11 @@ export default {
 					show: () => {return this.$can('view', 'Post')},
 				},
 				{
+					title: 'Review Articles',
+					to: {name: types.reviewArticles.name},
+					show: () => {return true}
+				},
+				{
 					title: 'Edit Contributor Details',
 					to: {name: types.adminAboutContributor.name},
 					show: () => {return this.$can('view', 'Contributor')}

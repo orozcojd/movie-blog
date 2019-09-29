@@ -163,7 +163,7 @@ export default {
 					this.$router.push({
 						path: '/admin'
 					})
-					this.$ability.update(data.rules)
+					// this.$ability.update(data.rules)
 				})
 				.catch(() => this.recaptcha.verified = false) 
 		}

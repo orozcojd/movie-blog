@@ -18,6 +18,8 @@ module.exports = {
 		try {
 			let options = {};
 			let trimArticle = {};
+			console.log(req.query);
+
 			if(req.query.skip)
 				options.skip = parseInt(req.query.skip);
 			if(req.query.limit)
@@ -27,7 +29,6 @@ module.exports = {
 			query.draft = false;
 			trimArticle = {title: 1, author: 1, img: 1, updatedAt: 1, thumbnailDescription: 1};
 			const articles = await Post.find(query,trimArticle, options).lean();
-			
 			res.send(articles);   
 		}
 		catch (err) {

@@ -6,9 +6,6 @@
     <vue-headful
       :title="headTitle"
     />
-    <h1 align="left">
-      Create your article.
-    </h1>
     <v-layout
       align-center
       justify-start

@@ -13,6 +13,7 @@ export function adminGuard() {
 			next()
 		}
 		else {
+			store.dispatch('auth/logOut')
 			next('/404')
 		}
 	}

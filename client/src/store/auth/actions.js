@@ -18,8 +18,9 @@ export default {
 			dispatch('setUser', res.data.user)
 			dispatch('getContributor', res.data.user.contributorId)
 			dispatch('getSetUser', res.data.user)
-			return res
+			return Promise.resolve(res)
 		}
+		return Promise.reject()
 	},
 	/**
 	 * Commits mutations to set token and user to null
