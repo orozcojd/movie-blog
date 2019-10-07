@@ -11,6 +11,7 @@ const AuthenticationControllerPolicy = require('./policies/AuthenticationControl
 const PermissionControllerPolicy = require('./policies/PermissionControllerPolicy');
 const VerifyJsonPolicy = require('./policies/VerifyJsonPolicy');
 const ReviewController = require('./controllers/ReviewController');
+const ParamValidationPolicy = require('./policies/ParamValidationPolicy');
 // const jwt = require('express-jwt');
 // const config = require('./config/config');\
 
@@ -26,13 +27,13 @@ const authSpeedLimiter = slowDown({
 
 const apiSpeedLimiter = slowDown({
 	windowMs: 15 * 60 * 1000, 
-	delayAfter: 50, 
+	delayAfter: 1000, 
 	delayMs: 100
 });
 
 const appSpeedLimiter = slowDown({
 	windowMs: 15 * 60 * 1000, 
-	delayAfter: 500, 
+	delayAfter: 1000, 
 	delayMs: 1000
 });
 
@@ -150,14 +151,16 @@ module.exports = (app) => {
 	app.get('/api/review',
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
-		ReviewController.getReviews
-	);
+		ReviewController.getReviews);
 	app.post('/api/review/:revId/claim', 
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
-		ReviewController.claimArticles	
-	);
-
+		ReviewController.claimArticles	);
+	app.post('/api/review/:revId/update',
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		// ParamValidationPolicy.validateParams()
+		ReviewController.updateRevStatus);
 	/* Refresh Token */
 	app.post('/tokens',
 		apiSpeedLimiter,
@@ -200,6 +203,10 @@ module.exports = (app) => {
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
 		AdminArticleController.reviewArticles);
+	app.get('/api/review-articles/:id',
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		AdminArticleController.reviewArticle);
 	app.post('/api/articles',
 		VerifyJsonPolicy.verifyJson,
 		apiSpeedLimiter,

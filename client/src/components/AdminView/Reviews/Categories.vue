@@ -3,7 +3,10 @@
     fluid
     grid-list-lg
   >
-    <v-layout>
+    <v-layout
+      row
+      wrap
+    >
       <v-flex
         v-for="(category,index) in viewableCategories"
         :key="index"
@@ -12,25 +15,9 @@
         sm4
         lg3
       >
-        <v-card>
-          <v-card-title primary-title>
-            <div>
-              <h3 class="headline mb-0">
-                {{ category.title }}
-              </h3>
-            </div>
-          </v-card-title>
-          <v-card-actions>
-            <v-btn
-              flat
-              color="orange"
-              :ripple="false"
-              @click="navigateTo(category)"
-            >
-              View
-            </v-btn>
-          </v-card-actions>
-        </v-card>
+        <category
+          :category="category"
+        />
       </v-flex>
     </v-layout>
   </v-container>
@@ -38,30 +25,42 @@
 
 <script>
 import * as types from '@/constants/types'
-import { mapActions } from 'vuex'
+import Category from '@/components/AdminView/Components/Category'
+
 export default {
 	name: 'Reviews',
-	data () {
-		return {
-		}
+	components: {
+		Category
 	},
 	computed: {
 		categories() {
 			return [
 				{
-					title: 'Your Articles',
-					// to: {name: types.revAvail.name},
+					title: 'Articles to fix',
+					to: {name: 'edit-review'},
 					// onEnter: () => { this.clearArticle()},
 					show: () => {return this.$can('view', 'Post')}
 				},
 				{
-					title: 'Articles You Claimed',
-					// to: {name: types.adminCreatePost.name},
+					title: 'Articles awaiting review',
+					to: {name: 'await-review'},
 					// onEnter: () => { this.clearArticle()},
 					show: () => {return this.$can('view', 'Post')}
 				},
 				{
-					title: 'Articles to Review',
+					title: 'Articles in review',
+					to: {name: 'in-review'},
+					// onEnter: () => { this.clearArticle()},
+					show: () => {return this.$can('view', 'Post')}
+				},
+				{
+					title: 'Articles you claimed',
+					to: {name: 'claimed'},
+					// onEnter: () => { this.clearArticle()},
+					show: () => {return this.$can('view', 'Post')}
+				},
+				{
+					title: 'Articles to review',
 					to: {name: types.revAvail.name},
 					// onEnter: () => { this.clearArticle()},
 					show: () => {return this.$can('view', 'Post')}

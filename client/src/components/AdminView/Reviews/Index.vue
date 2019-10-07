@@ -1,12 +1,11 @@
 <template>
-  <v-container fluid>
-    <h1>Review</h1>
+  <div>
+    <!-- <h1>Review</h1> -->
     <router-view />
-  </v-container>
+  </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
 export default {
 	name: 'ReviewPosts',
 	data () {

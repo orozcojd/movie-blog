@@ -8,8 +8,8 @@ const AddUser = () => import('@/components/AdminView/Forms/AddUser')
 const AboutContributor = ()  => import('@/components/AdminView/Forms/AboutContributor')
 const EditUsers = () => import('@/components/AdminView/Forms/EditUsers')
 const Review = () => import('@/components/AdminView/Reviews')
-const RPosts = () => import('@/components/AdminView/Reviews/ReviewPosts')
 const rCategories = () => import('@/components/AdminView/Reviews/Categories')
+const ReviewArticle = () => import('@/components/AdminView/Reviews/ReviewArticle')
 
 import {adminGuard} from '@/Authentication/AuthGuard'
 import * as types from '@/constants/types'
@@ -64,14 +64,14 @@ const adminRoutes = [
 				path: types.adminEditPosts.path,
 				name: types.adminEditPosts.name,
 				component: AdminPosts,
-				props: { drafts: false },
+				props: { status: 'AP' },
 				beforeEnter: adminGuard()
 			},
 			{
 				path: types.adminEditDrafts.path,
 				name: types.adminEditDrafts.name,
 				component: AdminPosts,
-				props: { drafts: true },
+				props: { status: 'DR' },
 				beforeEnter: adminGuard()
 			},
 			{
@@ -100,7 +100,35 @@ const adminRoutes = [
 					{
 						path: 'articles',
 						name: types.revAvail.name,
-						component: RPosts,
+						component: AdminPosts,
+						props: { status: 'NR', review: true },
+						beforeEnter: adminGuard()
+					},
+					{
+						path: 'articles/:id',
+						name: 'review-articles',
+						component: ReviewArticle,
+						beforeEnter: adminGuard()
+					},
+					{
+						path: 'edits',
+						name: 'edit-review',
+						component: AdminPosts,
+						props: { status: 'ED' },
+						beforeEnter: adminGuard()
+					},
+					{
+						path: 'in-review',
+						name: 'in-review',
+						component: AdminPosts,
+						props: { status: 'IR' },
+						beforeEnter: adminGuard()
+					},
+					{
+						path: 'claimed',
+						name: 'claimed',
+						component: AdminPosts,
+						props: { status: 'IR', reviewer: true },
 						beforeEnter: adminGuard()
 					}
 				]

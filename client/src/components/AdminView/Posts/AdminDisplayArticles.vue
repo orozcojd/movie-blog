@@ -19,6 +19,7 @@
           :article="article"
           to="article-view"
           :review="review"
+          :reviewer="reviewer"
         />
       </v-flex>
     </v-layout>
@@ -37,6 +38,10 @@ export default {
 			required: true
 		},
 		review: {
+			type: Boolean,
+			default: false
+		},
+		reviewer: {
 			type: Boolean,
 			default: false
 		}

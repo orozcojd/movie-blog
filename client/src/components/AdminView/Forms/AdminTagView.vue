@@ -316,8 +316,8 @@ export default {
 		},
 		updateTagInfo() {
 			if (this.$refs.editNameForm.validate() && !this.editTagReqRunning) {
-        this.editTagReqRunning = true
-        // console.log(this.tags.map(tag => new Tag({...tag, contributorId: this.aclUser.contributorId})))
+				this.editTagReqRunning = true
+				// console.log(this.tags.map(tag => new Tag({...tag, contributorId: this.aclUser.contributorId})))
 				this.updateTags(this.tags.map(tag => new Tag({...tag, contributorId: this.aclUser.contributorId})))
 					.then(() => {
 						this.editTagReqRunning = false

@@ -14,6 +14,15 @@
         xs12
         md10
       >
+        <div v-if="article.review.comments">
+          <h6>
+            Comments from Reviewer
+          </h6>
+          <v-textarea
+            v-model="article.review.comments"
+            :disabled="true"
+          />
+        </div>
         <v-form
           ref="form"
           v-model="valid"
@@ -308,6 +317,9 @@ export default {
 				this.$router.push({name: adminCategories.name})
 			}
 		}
+	},
+	mounted() {
+		console.log(this.article)
 	},
 	methods: {
 		...mapActions('admin',[

@@ -17,6 +17,50 @@ module.exports = {
 			});
 		}
 	},
+
+	async updateRevStatus (req, res) {
+		try {
+			let error = {};
+			console.log(req.body.comments);
+			const revId = req.params.revId;
+			const currUser = req.body.contributorId;
+			const rev = await Review.findById(revId);
+			const notAuthorized = rev.currReviewer !== currUser;
+			const accept = req.body.accept;
+			if(notAuthorized) { 
+				error.status = 403;
+				error.message = 'You are not authorized to update this review';
+				error.error = true;
+			}
+			else if(typeof accept !== 'boolean') {
+				error.status = 400;
+				error.message = 'Missing or invalid param [accept]';
+				error.error = true;
+			}
+			if(error.error) {
+				return res.status(error.status).send({error: error.message});
+			}
+			let status;
+			if(accept) status = 'AP';
+			else status = 'ED';
+			const review = await Review.findByIdAndUpdate(revId, { // release current reviewer
+				currReviewer: null,
+				comments: req.body.comments
+			},
+			{new: true});
+			console.log(review);
+			await Post.findByIdAndUpdate(review.postId, {
+				status: status
+			}).then(() => { return res.status(200).send(); });
+			return res.status(400).send({error: 'Unexpected error occurred trying to update post review'});
+
+		} catch(err) {
+			console.log(err);
+			res.status(400).send({
+				error: 'Unexpected error occurred trying to update post review'
+			});
+		}
+	},
 	async claimArticles (req, res) {
 		try {
 			const curUID = req.body.contributorId;

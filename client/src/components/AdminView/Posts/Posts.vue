@@ -7,15 +7,25 @@
       fluid
       grid-list-md
     >
-      <h1>
-        Edit your {{ postType }}
-      </h1>
-      <div v-if="!filterArticles.length">
-        When you {{ description }}, it will appear here.
+      <div v-if="!reviewer">
+        <h1 v-if="status==='NR'">
+          Articles available for review
+        </h1>
+        <h1 v-else>
+          {{ action }} your {{ postType }}
+        </h1>
+        <div v-if="!articles.length">
+          {{ description }}
+        </div>
+      </div>
+      <div v-else>
+        <h1>Articles you claimed for review</h1>
       </div>
     </v-container>
-    <admin-display-articles 
-      :articles="filterArticles"
+    <admin-display-articles
+      :articles="articles"
+      :reviewer="reviewer"
+      :review="review"
     />
   </div>
 </template>
@@ -29,45 +39,64 @@ export default {
 		AdminDisplayArticles
 	},
 	props: {
-		drafts: {
+		status: {
+			type: String,
+			required: true
+		},
+		review: {
 			type: Boolean,
-			default: false,
-			required: false
+			default: false
+		},
+		reviewer: {
+			type: Boolean,
+			default: false
 		}
 	},
 	computed: {
 		...mapState('admin',['articles']),
 		...mapState('auth', ['user']),
 		...mapGetters('posts', ['siteTitle']),
-		filterArticles () {
-			return this.articles.filter(article => article.draft === this.drafts)
-		},
 		headTitle () {
-			let type = 'Posts'
-			if(this.drafts)
-				type = 'Drafts'
-			return `Admin View ${type} - ${this.siteTitle}`
+			return `Admin View ${this.postType} - ${this.siteTitle}`
+		},
+		action() {
+			return this.status === 'ED' ? 'Review' : 'Edit'
 		},
 		postType () {
-			return this.drafts ? 'Drafts' : 'Posts'
+			return this.status === 'DR' ? 'Drafts' : 'Posts'
 		},
 		description () {
-			return this.drafts ? 'create a draft' : 'publish a post'
+			let description;
+			switch(this.status){
+			case 'DR':
+				description = 'When you create a draft, it will appear here.'
+				break;
+			case 'AP':
+				description = 'When your submitted post gets approved, it will appear here.'
+				break;
+			case 'NR':
+				description = 'When contributors submit posts for review, it will appear here.'
+				break;
+			default: 
+				description = 'When your post is reviewed and rejected, it will appear here.'
+			}
+			return description
 		}
 	},
 	async mounted () {
 		const options = {
 			params: {
-				params: {
-					draft: this.drafts,
-					contributorId: this.user.contributorId
-				}
+				status: this.status,
+				reviewer: this.reviewer
+				// contributorId: this.user.contributorId
 			}
 		}
-		await this.fetchArticlesApi(options)	
+		const inReview = this.$route.fullPath.indexOf('review') >= 0
+		if(inReview) await this.reviewArticles(options)
+		else await this.fetchArticlesApi(options)	
 	},
 	methods: {
-		...mapActions('admin',['fetchArticlesApi'])
+		...mapActions('admin',['fetchArticlesApi', 'reviewArticles'])
 	}
 }
 </script>

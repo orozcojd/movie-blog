@@ -24,7 +24,39 @@
       </div>
     </v-card-title>
     <v-layout
-      v-if="!review"
+      v-if="review"
+      row
+      fill-height
+      justify-space-between
+      align-end
+    >
+      <v-btn
+        @click="claim(article)"
+      >
+        Claim
+      </v-btn>
+    </v-layout>
+    <v-layout
+      v-else-if="reviewer"
+      row
+      fill-height
+      justify-space-between
+      align-end
+    >
+      <!-- <v-btn
+        color="error"
+        @click="unclaim(article)"
+      >
+        unclaim
+      </v-btn> -->
+      <v-btn
+        @click="reviewArticle(article)"
+      >
+        review
+      </v-btn>
+    </v-layout>
+    <v-layout
+      v-else
       row
       fill-height
       justify-space-between
@@ -32,7 +64,7 @@
     >
       <v-btn
         :ripple="false"
-        @click="navigateTo(article._id)"
+        @click="navigateTo('admin-edit-post', article._id)"
       >
         Edit
       </v-btn>
@@ -44,19 +76,6 @@
         @click="dialog = true"
       >
         Delete
-      </v-btn>
-    </v-layout>
-    <v-layout
-      v-else
-      row
-      fill-height
-      justify-space-between
-      align-end
-    >
-      <v-btn
-        @click="claim(article)"
-      >
-        Claim
       </v-btn>
     </v-layout>
     <v-layout
@@ -106,6 +125,10 @@ export default {
 		},
 		review: {
 			type: Boolean
+		},
+		reviewer: {
+			type: Boolean,
+			default: false
 		}
 	},
 	data () {
@@ -115,11 +138,13 @@ export default {
 	},
 	methods: {
 		...mapActions('admin',[
-			'deleteArticle'
+			'deleteArticle',
+			'claimArticle'
 		]),
-		navigateTo (articleId) {
+		...mapActions('error',['handleConnectionError']),
+		navigateTo (name, articleId) {
 			this.$router.push({
-				name: 'admin-edit-post',
+				name: name,
 				params: {
 					id: articleId
 				}
@@ -130,8 +155,20 @@ export default {
 			this.dialog = false
 		},
 		async claim(article) {
-      console.log(article)
-      console.log()
+			await this.claimArticle(article.review._id)
+				.then(() => this.navigateTo('review-articles', article.review._id))
+				.catch((err) => {
+					this.handleConnectionError(err)
+					this.$router.push('/admin')
+				})
+		},
+		reviewArticle(article) {
+			this.$router.push({
+				name: 'review-articles',
+				params: {
+					id: article.review._id
+				}
+			})
 		}
 	}
 }

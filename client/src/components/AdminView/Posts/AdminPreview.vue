@@ -3,7 +3,6 @@
     v-if="loaded"
     class="post-content"
     fluid
-		
   >
     <vue-headful
       :title="headTitle"
@@ -18,7 +17,7 @@
               class="hover-bold"
             >
               <small>
-                {{ upperCaseString(articleRealm) }}
+                {{ article.realm }}
               </small>
             </a>
             |
@@ -78,13 +77,8 @@
                 class="tag"
               >
                 <a
-                  
                   class="hover-bold"
-                  @click.prevent="navigateTo({
-                    _id: tag,
-                    name: convertTagIdToName(tag)
-                  })"
-                >{{ upperCaseString(tag.name) }}</a>
+                >{{ upperCaseString(tag) }}</a>
               </li>
             </ul>
           </small>
@@ -101,7 +95,6 @@ import ParagraphAlignmentNode from '@/components/Tools/ParagraphAlignment'
 import Iframe from '@/components/Tools/Iframe'
 import captionComment from '@/components/Tools/captionComment'
 import { Editor, EditorContent } from 'tiptap'
-import { adminCreatePost, adminEditPost } from '@/constants/types'
 import {
 	Blockquote,
 	CodeBlock,
@@ -187,22 +180,12 @@ export default {
 				})
 			return (this.article ? date : null)
 		},
-		articleRealm() {
-			return (this.article && this.article.realm ? this.convertTagIdToName(this.article.realm._id) : null)
-		}
 	},
 	async mounted() {
 		await this.setContent()
 		this.loaded = true
 	},
 	methods: {
-		displayTag(tag) {
-			return tag._id ? this.upperCaseString(this.convertTagIdToName(tag._id)) : this.upperCaseString(this.convertTagIdToName(tag))
-		},
-		convertTagIdToName (id) {
-			const foundTag = this.tags.find(tag => tag._id === id)
-			return (foundTag ? foundTag.name.trim() : null)
-		},
 		upperCaseString(str) {
 			if(str !== null && str !== undefined){
 				let strArr = str.split(' ')
@@ -218,14 +201,6 @@ export default {
 		async setContent () {
 			await this.editor.clearContent(true)
 			await this.editor.setContent(this.article.body, true)
-		},
-		goBack () {
-			if(!this.$route.params.id) {
-				this.$router.push({name: adminCreatePost.name})
-			}
-			else {
-				this.$router.push({name: adminEditPost.name})
-			}
 		}
 	}
 }

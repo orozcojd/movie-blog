@@ -26,7 +26,7 @@ module.exports = {
 				options.limit = parseInt(req.query.limit);
 			options.sort = {created_at: 'desc'};
 			let query = {};
-			query.draft = false;
+			query.status = 'AP';
 			trimArticle = {title: 1, author: 1, img: 1, updatedAt: 1, thumbnailDescription: 1};
 			const articles = await Post.find(query,trimArticle, options).lean();
 			res.send(articles);   

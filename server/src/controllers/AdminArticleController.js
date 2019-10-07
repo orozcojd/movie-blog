@@ -10,18 +10,21 @@ module.exports = {
    * @param {Object} res 
    */
 	async index (req, res) {
-		console.log('inside ');
 		try {
 			let options = {};
+			console.log(req.body.contributorId);
+			const query = {status: req.query.status, contributorId: req.body.contributorId};
 			if(req.query.skip)
 				options.skip = parseInt(req.query.skip);
 			if(req.query.limit)
 				options.limit = parseInt(req.query.limit);
 			options.sort = {created_at: 'desc'};
-			const articles = await Post.find(req.query,{}, options).lean();
+			const articles = await Post.find(query, {}, options).lean();
+			console.log(articles);
 			res.send(articles);   
 		}
 		catch (err) {
+			console.log(err);
 			res.status(400).send({
 				error: 'An error has occurred trying to get articles',
 			});
@@ -47,17 +50,40 @@ module.exports = {
 					error: 'You are unauthorized to make changes to this account!'
 				});
 				return; 
-			}
-			res.status(200).send(article);
+			}			
+			const review = await Review.findOne({postId: article._id}).lean();
+			res.status(200).send({...article, review: review});
 		} catch (err) {
 			res.status(400).send({
 				error: 'An error has occurred trying to get articles',
 			});
 		}
 	},
+	async reviewArticle (req, res) {
+		try {
+			const contributor = req.body.contributorId;
+			const status = 'IR';
+			console.log(req.params.id);
+			const review = await Review.findById(req.params.id).lean();
+			console.log(review);
+			const article = await Post.findById(review.postId).lean();
+			const isReviewer = review.currReviewer === contributor;
+			const inReview = article.status === status;
+			if(isReviewer && inReview) res.status(200).send({...article, review});
+			else res.status(403).send({error: 'Requested document does not exist'});
+
+		} catch (err) {
+			console.log(err);
+			res.status(400).send({
+				error: 'An error has occurred trying to get article for review',
+			});
+		}
+	},
 	async reviewArticles (req, res) {
 		try {
+			console.log(req.query);
 			let status = req.query.status;
+			const reviewer = req.query.reviewer ? req.query.reviewer : 'false';
 			let conditions = [];
 			let lookup = {};
 			switch(status){
@@ -66,14 +92,18 @@ module.exports = {
 				break;
 			case 'IR':
 				conditions = [{ $eq: [ '$status',  status ] }];
-				lookup = { $eq: [ '$currReviewer', req.body.contributorId ] };
+				if(JSON.parse(reviewer)) {
+					lookup = { $eq: [ '$currReviewer', req.body.contributorId ] };
+				}
+				else {
+					lookup = { $eq: [ '$contributorId', req.body.contributorId ] };
+				}
 				break;
 			default: 
 				status = 'NR';
 				conditions = [{ $ne: [ '$contributorId',  req.body.contributorId ] }, { $eq: [ '$status',  status ] }];
 				break;
 			}
-			
 			const posts = await Post.aggregate([
 				{
 					$match:
@@ -126,7 +156,6 @@ module.exports = {
 			let {status, __type, ...update} = req.body;
 			const article = await Post.create(update);
 			const reviewer = await Review.create({postId: article._id, contributorId: req.body.contributorId});
-			console.log(reviewer);
 			res.send({
 				article: article,
 				message: 'Article was created!'
@@ -153,9 +182,11 @@ module.exports = {
 				_id: req.body.contributorId
 			}).lean();
 			req.body.author = contributor.name;
+			req.body.status = 'NR';
+			let {__type, ...update} = req.body;
 			const article = await Post.findOneAndUpdate(
 				{contributorId: req.body.contributorId, _id: req.params.articleId},
-				req.body,
+				update,
 				{new: true}
 			);
 			// let article = {};
