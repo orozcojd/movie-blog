@@ -6,11 +6,15 @@ module.exports = {
    * Given the userId from the token request, cross-validates
    * the contributorId from from the user in db to the contributorId
    * in the request - returns true if valid otherwise false
+	 * todo - fix bug enabling users to delete -- needs access control
    * @param {Object} req 
    */
 	async authenticateRequest (req) {
 		const contributorId = req.body.contributorId;
 		const verifyUser = await User.findById(req.userId);
+		console.log(req.params.articleId);
+		console.log(verifyUser);
+		console.log(contributorId);
 		if(verifyUser) {	
 			const isArticleContributor = (verifyUser.contributorId === contributorId);
 			const isAdminContributor = (verifyUser.contributorId === req.body.id);

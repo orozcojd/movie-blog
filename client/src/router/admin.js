@@ -98,6 +98,12 @@ const adminRoutes = [
 						beforeEnter: adminGuard()
 					},
 					{
+						path: 'articles/:id',
+						name: 'review-articles',
+						component: ReviewArticle,
+						beforeEnter: adminGuard()
+					},
+					{
 						path: 'articles',
 						name: types.revAvail.name,
 						component: AdminPosts,
@@ -105,9 +111,10 @@ const adminRoutes = [
 						beforeEnter: adminGuard()
 					},
 					{
-						path: 'articles/:id',
-						name: 'review-articles',
-						component: ReviewArticle,
+						path: 'await-review',
+						name: 'await-review',
+						component: AdminPosts,
+						props: { status: 'NR', review: false},
 						beforeEnter: adminGuard()
 					},
 					{

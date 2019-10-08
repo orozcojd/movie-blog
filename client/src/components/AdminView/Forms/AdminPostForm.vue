@@ -14,7 +14,7 @@
         xs12
         md10
       >
-        <div v-if="article.review.comments">
+        <div v-if="article.review && article.review.comments">
           <h6>
             Comments from Reviewer
           </h6>

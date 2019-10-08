@@ -187,8 +187,8 @@ export default {
 	},
 	methods: {
 		upperCaseString(str) {
-			if(str !== null && str !== undefined){
-				let strArr = str.split(' ')
+			if(str){
+				let strArr = str.split('-')
 				let upperArr = []
 				for(let i = 0; i < strArr.length; i++) {
 					let str = strArr[i]

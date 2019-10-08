@@ -12,7 +12,6 @@ module.exports = {
 	async index (req, res) {
 		try {
 			let options = {};
-			console.log(req.body.contributorId);
 			const query = {status: req.query.status, contributorId: req.body.contributorId};
 			if(req.query.skip)
 				options.skip = parseInt(req.query.skip);
@@ -20,7 +19,6 @@ module.exports = {
 				options.limit = parseInt(req.query.limit);
 			options.sort = {created_at: 'desc'};
 			const articles = await Post.find(query, {}, options).lean();
-			console.log(articles);
 			res.send(articles);   
 		}
 		catch (err) {
@@ -63,9 +61,7 @@ module.exports = {
 		try {
 			const contributor = req.body.contributorId;
 			const status = 'IR';
-			console.log(req.params.id);
 			const review = await Review.findById(req.params.id).lean();
-			console.log(review);
 			const article = await Post.findById(review.postId).lean();
 			const isReviewer = review.currReviewer === contributor;
 			const inReview = article.status === status;
@@ -81,8 +77,8 @@ module.exports = {
 	},
 	async reviewArticles (req, res) {
 		try {
-			console.log(req.query);
 			let status = req.query.status;
+			const review = req.query.review;
 			const reviewer = req.query.reviewer ? req.query.reviewer : 'false';
 			let conditions = [];
 			let lookup = {};
@@ -101,7 +97,11 @@ module.exports = {
 				break;
 			default: 
 				status = 'NR';
-				conditions = [{ $ne: [ '$contributorId',  req.body.contributorId ] }, { $eq: [ '$status',  status ] }];
+				if(JSON.parse(review)) {
+					conditions = [{ $ne: [ '$contributorId',  req.body.contributorId ] }, { $eq: [ '$status',  status ] }];
+				}
+				else
+					conditions = [{ $eq: [ '$contributorId',  req.body.contributorId ] }, { $eq: [ '$status',  status ] }];
 				break;
 			}
 			const posts = await Post.aggregate([
@@ -183,6 +183,7 @@ module.exports = {
 			}).lean();
 			req.body.author = contributor.name;
 			req.body.status = 'NR';
+			if(req.body.draft) req.body.status = 'DR';
 			let {__type, ...update} = req.body;
 			const article = await Post.findOneAndUpdate(
 				{contributorId: req.body.contributorId, _id: req.params.articleId},
@@ -216,14 +217,15 @@ module.exports = {
    * @param {Object} res 
    */
 	async delete (req, res) {
-		try {			
-			const deleteCount = await Post.deleteOne({
-				_id: req.params.articleId
-			});
-			res.send({
-				deleteCount: deleteCount,
-				id: req.params.articleId
-			});
+		try {
+			
+			// const deleteCount = await Post.deleteOne({
+			// 	_id: req.params.articleId
+			// });
+			// res.send({
+			// 	deleteCount: deleteCount,
+			// 	id: req.params.articleId
+			// });
 		}
 		catch (err) {
 			res.status(400).send({

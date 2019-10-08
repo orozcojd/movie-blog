@@ -1,5 +1,6 @@
 const {Review, Post} = require('../models');
 // Review.find().remove().exec();
+// Post.find().remove().exec();
 module.exports = {
 
 	/**

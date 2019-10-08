@@ -26,7 +26,7 @@
 <script>
 import * as types from '@/constants/types'
 import Category from '@/components/AdminView/Components/Category'
-
+import { mapActions } from 'vuex'
 export default {
 	name: 'Reviews',
 	components: {
@@ -38,31 +38,31 @@ export default {
 				{
 					title: 'Articles to fix',
 					to: {name: 'edit-review'},
-					// onEnter: () => { this.clearArticle()},
+					onEnter: () => { this.clearArticles()},
 					show: () => {return this.$can('view', 'Post')}
 				},
 				{
 					title: 'Articles awaiting review',
 					to: {name: 'await-review'},
-					// onEnter: () => { this.clearArticle()},
+					onEnter: () => { this.clearArticles()},
 					show: () => {return this.$can('view', 'Post')}
 				},
 				{
 					title: 'Articles in review',
 					to: {name: 'in-review'},
-					// onEnter: () => { this.clearArticle()},
+					onEnter: () => { this.clearArticles()},
 					show: () => {return this.$can('view', 'Post')}
 				},
 				{
 					title: 'Articles you claimed',
 					to: {name: 'claimed'},
-					// onEnter: () => { this.clearArticle()},
+					onEnter: () => { this.clearArticles()},
 					show: () => {return this.$can('view', 'Post')}
 				},
 				{
 					title: 'Articles to review',
 					to: {name: types.revAvail.name},
-					// onEnter: () => { this.clearArticle()},
+					onEnter: () => { this.clearArticles()},
 					show: () => {return this.$can('view', 'Post')}
 				},
 			]
@@ -78,6 +78,7 @@ export default {
 		
 	},
 	methods: {
+		...mapActions('admin',['clearArticles']),		
 		navigateTo(category) {
 			if(category.onEnter) {
 				category.onEnter()

@@ -7,19 +7,12 @@
       fluid
       grid-list-md
     >
-      <div v-if="!reviewer">
-        <h1 v-if="status==='NR'">
-          Articles available for review
-        </h1>
-        <h1 v-else>
-          {{ action }} your {{ postType }}
-        </h1>
-        <div v-if="!articles.length">
-          {{ description }}
-        </div>
-      </div>
-      <div v-else>
-        <h1>Articles you claimed for review</h1>
+      <h1>
+        {{ header }}
+      </h1>
+ 
+      <div v-if="!articles.length">
+        {{ description }}
       </div>
     </v-container>
     <admin-display-articles
@@ -52,6 +45,12 @@ export default {
 			default: false
 		}
 	},
+	data() {
+		return {
+			header: '',
+			description: ''
+		}
+	},
 	computed: {
 		...mapState('admin',['articles']),
 		...mapState('auth', ['user']),
@@ -65,38 +64,62 @@ export default {
 		postType () {
 			return this.status === 'DR' ? 'Drafts' : 'Posts'
 		},
-		description () {
-			let description;
-			switch(this.status){
-			case 'DR':
-				description = 'When you create a draft, it will appear here.'
-				break;
-			case 'AP':
-				description = 'When your submitted post gets approved, it will appear here.'
-				break;
-			case 'NR':
-				description = 'When contributors submit posts for review, it will appear here.'
-				break;
-			default: 
-				description = 'When your post is reviewed and rejected, it will appear here.'
-			}
-			return description
-		}
+
 	},
 	async mounted () {
+		this.init()
 		const options = {
 			params: {
 				status: this.status,
-				reviewer: this.reviewer
-				// contributorId: this.user.contributorId
+				reviewer: this.reviewer,
+				review: this.review
 			}
 		}
+		
 		const inReview = this.$route.fullPath.indexOf('review') >= 0
+		console.log(this.status)
 		if(inReview) await this.reviewArticles(options)
 		else await this.fetchArticlesApi(options)	
 	},
 	methods: {
-		...mapActions('admin',['fetchArticlesApi', 'reviewArticles'])
+		...mapActions('admin',['fetchArticlesApi', 'reviewArticles']),
+		init() {
+			switch(this.status){
+			case 'DR':
+				this.header = this.action + ' ' + this.postType
+				this.description = 'When you create a draft, it will appear here.'
+				break;
+			case 'AP':
+				this.header = this.action + ' ' + this.postType
+				this.description = 'When your submitted post gets approved, it will appear here.'
+				break;
+			case 'NR':
+				if(this.review === true){
+					this.header = 'Articles to Review'
+					this.description = 'When contributors submit posts for review, it will appear here.'
+				}
+				else {
+					this.header = this.action + ' ' + this.postType
+					this.description = 'When your submitted articles are waiting to be claimed for review, it will appear here.'
+				}
+				break;
+			case 'IR':
+				if(this.reviewer) {
+					this.header = 'Review Articles'
+					this.description = 'When you claim an article for review, it will appear here.'
+				}
+				else {
+					this.header = this.action + ' ' + this.postType
+					this.description = 'When you submit a post and a reviewer claims it for review, it will appear here.'
+				}
+				break;
+			default: 
+				this.header = this.action + ' ' + this.postType
+				this.description = 'When your post is reviewed and rejected, it will appear here.'
+				break;
+			}
+		}
 	}
+	
 }
 </script>

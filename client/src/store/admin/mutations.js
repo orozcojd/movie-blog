@@ -87,7 +87,9 @@ export default {
 	[types.CLEAR_ARTICLE] (state) {
 		state.article = {}
 	},
-
+	[types.CLEAR_ARTICLES] (state) {
+		state.articles = []
+	},
 	/**
 	 * Adds new article to front of state articles array
 	 * @param {Vuex state} state 

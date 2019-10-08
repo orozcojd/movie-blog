@@ -1,29 +1,22 @@
 <template>
-  <v-card>
+  <v-card
+    class="card-category"
+    @click="navigateTo(category)"
+  >
     <v-card-title primary-title>
       <div>
-        <h3 class="headline mb-0">
+        <h3 class="headline">
           {{ category.title }}
         </h3>
       </div>
     </v-card-title>
-    <v-card-actions>
-      <v-btn
-        flat
-        color="orange"
-        :ripple="false"
-        @click="navigateTo(category)"
-      >
-        View
-      </v-btn>
-    </v-card-actions>
   </v-card>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 export default {
-	name: 'Blank',
+	name: 'Category',
 	props: {
 		category: {
 			type: Object,
@@ -41,3 +34,12 @@ export default {
 	}
 }
 </script>
+
+<style scoped>
+  .card-category {
+    cursor: pointer;
+  }
+  .card-category:hover {
+    background-color: #bdc3e5;
+  }
+</style>

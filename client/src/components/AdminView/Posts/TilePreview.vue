@@ -22,64 +22,69 @@
           {{ article.updatedAt }}
         </div>
       </div>
-    </v-card-title>
-    <v-layout
-      v-if="review"
-      row
-      fill-height
-      justify-space-between
-      align-end
-    >
-      <v-btn
-        @click="claim(article)"
+      <hr>
+      <v-layout
+        v-if="review"
+        row
+        wrap
+        fill-height
+        justify-space-between
+        align-end
       >
-        Claim
-      </v-btn>
-    </v-layout>
-    <v-layout
-      v-else-if="reviewer"
-      row
-      fill-height
-      justify-space-between
-      align-end
-    >
-      <!-- <v-btn
+        <v-btn
+          @click="claim(article)"
+        >
+          Claim
+        </v-btn>
+      </v-layout>
+      <v-layout
+        v-else-if="reviewer"
+        row
+        wrap
+        fill-height
+        justify-space-between
+        align-end
+      >
+        <!-- <v-btn
         color="error"
         @click="unclaim(article)"
       >
         unclaim
       </v-btn> -->
-      <v-btn
-        @click="reviewArticle(article)"
+        <v-btn
+          @click="reviewArticle(article)"
+        >
+          review
+        </v-btn>
+      </v-layout>
+      <v-layout
+        v-else
+        row
+        wrap
+        fill-height
+        justify-space-between
+        align-end
       >
-        review
-      </v-btn>
-    </v-layout>
+        <v-btn
+          v-if="$can('delete', 'Post')"
+          color="error"
+          :ripple="false"
+          align="left"
+          @click="dialog = true"
+        >
+          Delete
+        </v-btn>
+        <v-btn
+          :ripple="false"
+          @click="navigateTo('admin-edit-post', article._id)"
+        >
+          Edit
+        </v-btn>
+      </v-layout>
+    </v-card-title>
     <v-layout
-      v-else
       row
-      fill-height
-      justify-space-between
-      align-end
-    >
-      <v-btn
-        :ripple="false"
-        @click="navigateTo('admin-edit-post', article._id)"
-      >
-        Edit
-      </v-btn>
-      <v-btn
-        v-if="$can('delete', 'Post')"
-        color="error"
-        :ripple="false"
-        align="left"
-        @click="dialog = true"
-      >
-        Delete
-      </v-btn>
-    </v-layout>
-    <v-layout
-      row
+      wrap
       justify-center
     >
       <v-dialog
@@ -135,6 +140,9 @@ export default {
 		return {
 			dialog: false
 		}
+	},
+	mounted() {
+		console.log(this.article)
 	},
 	methods: {
 		...mapActions('admin',[

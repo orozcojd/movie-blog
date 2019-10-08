@@ -38,7 +38,9 @@ export default {
 	clearArticle ({commit}) {
 		commit(types.CLEAR_ARTICLE)
 	},
-	
+	clearArticles ({commit}) {
+		commit(types.CLEAR_ARTICLES)
+	},
 	/**
 	 * Commits mutation to set vuex snackbar to value in payload
 	 * @param {commit} param0 
@@ -185,8 +187,8 @@ export default {
 	 * set state articles array to retrieved articles
 	 * @param {commit} param0 
 	 */
-	async fetchArticlesApi ({commit}, payload) {
-		const articles = await to(Api.ApiAdmin().get('/api/articles', payload.params))
+	async fetchArticlesApi ({commit}, params) {
+		const articles = await to(Api.ApiAdmin().get('/api/articles', params))
 		if(articles) {
 			commit(types.FETCH_ARTICLES, articles.data)
 			return articles.data
