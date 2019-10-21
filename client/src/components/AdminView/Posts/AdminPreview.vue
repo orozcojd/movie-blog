@@ -17,7 +17,7 @@
               class="hover-bold"
             >
               <small>
-                {{ article.realm }}
+                {{ upperCaseString(realm) }}
               </small>
             </a>
             |
@@ -25,7 +25,7 @@
               class="hover-bold"
             >
               <small> 
-                {{ article.author }}
+                {{ upperCaseString(article.author) }}
               </small>
             </a>
           </div>
@@ -180,6 +180,10 @@ export default {
 				})
 			return (this.article ? date : null)
 		},
+		realm() {
+			return typeof this.article.realm === 'object' ? this.article.realm.name : this.article.realm
+		}
+
 	},
 	async mounted() {
 		await this.setContent()
@@ -187,7 +191,8 @@ export default {
 	},
 	methods: {
 		upperCaseString(str) {
-			if(str){
+			if(str) {
+				str = typeof str === 'object' ? str.name : str
 				let strArr = str.split('-')
 				let upperArr = []
 				for(let i = 0; i < strArr.length; i++) {

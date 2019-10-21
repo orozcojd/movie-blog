@@ -151,8 +151,6 @@ module.exports = {
    */
 	async postArticle (req, res) {
 		try {
-			// console.log(req.body);
-			// console.log(req.userId);
 			let {status, __type, ...update} = req.body;
 			const article = await Post.create(update);
 			const reviewer = await Review.create({postId: article._id, contributorId: req.body.contributorId});

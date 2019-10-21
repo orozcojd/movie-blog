@@ -67,4 +67,5 @@ let articleSchema = new Schema({
 articleSchema.methods.updateStatus = async function(status) {
 	this.status = status;
 };
+
 module.exports = mongoose.model('Blog', articleSchema);
