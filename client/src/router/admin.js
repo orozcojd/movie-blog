@@ -7,7 +7,7 @@ const AdminTagView = () => import('@/components/AdminView/Forms/AdminTagView')
 const AddUser = () => import('@/components/AdminView/Forms/AddUser')
 const AboutContributor = ()  => import('@/components/AdminView/Forms/AboutContributor')
 const EditUsers = () => import('@/components/AdminView/Forms/EditUsers')
-const Review = () => import('@/components/AdminView/Reviews')
+const Review = () => import('@/components/AdminView/Reviews/Index')
 const rCategories = () => import('@/components/AdminView/Reviews/Categories')
 const ReviewArticle = () => import('@/components/AdminView/Reviews/ReviewArticle')
 
