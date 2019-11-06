@@ -30,7 +30,10 @@ export default {
 	 * TODO: refactor code export copies to tools
 	 * @param {Vuex state} state 
 	 */
-	[types.NEW_ARTICLE] (state) {		
+	[types.NEW_ARTICLE] (state) {
+		if(Object.entries(state.article).length === 0 && state.article.constructor === Object) {
+			return
+		}
 		let found = state.tags.find(tag => tag.urlTag === state.article.realm)
 		let realmObj = {}
 		if(!!found && found !== -1) {
@@ -105,7 +108,6 @@ export default {
 	 */
 	[types.DELETE_ARTICLE] (state, payload) {
 		let count = payload.deleteCount.n
-		console.log(count)
 		if (!count) {
 			return
 		}

@@ -318,9 +318,6 @@ export default {
 			}
 		}
 	},
-	mounted() {
-		console.log(this.article)
-	},
 	methods: {
 		...mapActions('admin',[
 			'updateArticle',

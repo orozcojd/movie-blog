@@ -62,6 +62,12 @@ export default {
 			return this.$route.params.id ? Boolean(this.article._id) : true
 		}
 	},
+	beforeUpdate() {
+		this.clearArticle()
+	},
+	created() {
+		this.clearArticle()
+	},
 	async mounted() {
 		await this.getContributor(this.user.contributorId)
 		if(!this.tags.length) await this.fetchTags()
@@ -79,6 +85,7 @@ export default {
 		...mapActions('auth', ['getContributor']),
 		...mapActions('admin',['fetchTags']),
 		...mapActions('admin',[
+			'clearArticle',
 			'setArticle',
 			'prepareArticle',
 			'fetchArticleApi',
