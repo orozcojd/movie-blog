@@ -12,15 +12,15 @@ module.exports = () => ({
 	associatedArticles: {
 		pageNo: 1,
 		articleIds: [],
-		tags: []
+		tags: [],
 	},
 	maxRelatedReached: false,
 	maxArticlesReached: false,
 	unAssociatedArticles: {
-		pageNo: 1
+		pageNo: 1,
 	},
 	strings: {
-		title: 'threepointO'
+		title: 'threepointO',
 	},
-	pagesVisibile: 7
-})
+	pagesVisibile: 7,
+});

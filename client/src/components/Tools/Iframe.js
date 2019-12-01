@@ -1,9 +1,8 @@
-import { Node } from 'tiptap'
+import { Node } from 'tiptap';
 
 export default class Iframe extends Node {
-
 	get name() {
-		return 'iframe'
+		return 'iframe';
 	}
 
 	get schema() {
@@ -17,16 +16,16 @@ export default class Iframe extends Node {
 			selectable: false,
 			parseDOM: [{
 				tag: 'iframe',
-				getAttrs: dom => ({
+				getAttrs: (dom) => ({
 					src: dom.getAttribute('src'),
 				}),
 			}],
-			toDOM: node => ['iframe', {
+			toDOM: (node) => ['iframe', {
 				src: node.attrs.src,
 				frameborder: 0,
 				allowfullscreen: 'true',
 			}],
-		}
+		};
 	}
 
 	get view() {
@@ -35,12 +34,12 @@ export default class Iframe extends Node {
 			computed: {
 				src: {
 					get() {
-						return this.node.attrs.src
+						return this.node.attrs.src;
 					},
 					set(src) {
 						this.updateAttrs({
 							src,
-						})
+						});
 					},
 				},
 			},
@@ -50,7 +49,6 @@ export default class Iframe extends Node {
           <input class="iframe__input" @paste.stop type="text" v-model="src" v-if="editable" />
         </div>
       `,
-		}
+		};
 	}
-
 }

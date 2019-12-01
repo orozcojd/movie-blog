@@ -1,8 +1,9 @@
-const Login = () => import('@/components/Auth/Login')
-const Index = () => import('@/components/Auth/Index')
-const PasswordReset = () => import('@/components/AdminView/Forms/PasswordReset')
-import {loggedInRedirect} from '@/Authentication/AuthGuard'
-import { adminLogin, passReset } from '@/constants/types'
+import { loggedInRedirect } from '@/Authentication/AuthGuard';
+import { adminLogin, passReset } from '@/constants/types';
+
+const Login = () => import('@/components/Auth/Login');
+const Index = () => import('@/components/Auth/Index');
+const PasswordReset = () => import('@/components/AdminView/Forms/PasswordReset');
 
 const authRoutes = [
 	{
@@ -14,17 +15,17 @@ const authRoutes = [
 				name: adminLogin.name,
 				component: Login,
 				canReuse: false,
-				beforeEnter: loggedInRedirect()
+				beforeEnter: loggedInRedirect(),
 			},
 			{
 				path: passReset.path,
 				name: passReset.name,
 				component: PasswordReset,
 				canReuse: false,
-				beforeEnter: loggedInRedirect()
-			}
-		]
-	}
-]
+				beforeEnter: loggedInRedirect(),
+			},
+		],
+	},
+];
 
-export default authRoutes
+export default authRoutes;

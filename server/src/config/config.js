@@ -1,7 +1,7 @@
 /* */
 module.exports = {
 	env: {
-		
+
 	},
 	appname: process.env.OPENSHIFT_APP_NAME || 'threepointO',
 	port: process.env.OPENSHIFT_NODEJS_PORT || 8081,
@@ -19,7 +19,7 @@ module.exports = {
 		superUser: process.env.OPENSHIFT_SUPER_USER || 1,
 		AdminUser: process.env.OPENSHIFT_ADMIN_USER || 2,
 		creator: process.env.OPENSHIFT_CREATOR_PERMISSION || 3,
-		recaptchaSecret: process.env.OPENSHIFT_RECAPTCHA
+		recaptchaSecret: process.env.OPENSHIFT_RECAPTCHA,
 	},
 	nodemailer: {
 		admin: 'System Administrator',
@@ -28,7 +28,7 @@ module.exports = {
 		login: process.env.OPENSHIFT_LOGIN_RATELIMIT || 1000,
 		default: process.env.OPENSHIFT_DEFAULT_RATELIMIT || 10000,
 		api: process.env.OPENSHIFT_API_RATELIMIT || 1000,
-		adduser: process.env.OPENSHIFT_ADDUSER_RATELIMIT || 1000
+		adduser: process.env.OPENSHIFT_ADDUSER_RATELIMIT || 1000,
 	},
 	googleOauth: {
 		user: process.env.OPENSHIFT_NODEMAILER_USER,
@@ -37,6 +37,6 @@ module.exports = {
 		uri: process.env.OPENSHIFT_NODEMAILER_URI,
 		token: process.env.OPENSHIFT_OAUTH_TOKEN,
 		refresh: process.env.OPENSHIFT_OAUTH_REFRESH,
-		expires: process.env.OPENSHIFT_OAUTH_EXPIRES
-	}
+		expires: process.env.OPENSHIFT_OAUTH_EXPIRES,
+	},
 };

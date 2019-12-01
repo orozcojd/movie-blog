@@ -1,4 +1,4 @@
-import store from '@/store/index'
+import store from '@/store/index';
 
 export default {
 	/**
@@ -8,30 +8,29 @@ export default {
 	 * action to set state tag to tag matched
 	 */
 	tagViewGuard() {
-		return async function(to, from, next) {
+		return async function (to, from, next) {
 			// console.log('ENTERED GUARD')
-			if(!store.state.posts.tags.length) {
+			if (!store.state.posts.tags.length) {
 				// console.log('REQUEST FOR TAGS MADE')
-				store.dispatch('posts/getTags')
+				store.dispatch('posts/getTags');
 			}
-			let tag
-			console.log(to.params)
-			console.log(store.state.posts.tags)
-			// if no _id found in params, find tag in tags array 
-			if(!to.params.name) {
-				tag = store.state.posts.tags.find(tag => tag.urlTag === to.params.urlTag)
+			let tag;
+			console.log(to.params);
+			console.log(store.state.posts.tags);
+			// if no _id found in params, find tag in tags array
+			if (!to.params.name) {
+				tag = store.state.posts.tags.find((tag) => tag.urlTag === to.params.urlTag);
 			}
-			console.log(tag)
+			console.log(tag);
 			// if tag not found, redirect
-			if(!tag) {
-				next('/404')
-			}
-			else {
+			if (!tag) {
+				next('/404');
+			} else {
 				// this.tag = tag.name.split('-').join(" ")
 				// await store.dispatch('getArticlesByTag',tag._id)
-				store.dispatch('posts/setTag', tag)
-				next()
+				store.dispatch('posts/setTag', tag);
+				next();
 			}
-		}	
-	}
-}
+		};
+	},
+};

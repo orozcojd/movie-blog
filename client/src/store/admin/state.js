@@ -6,6 +6,6 @@ module.exports = () => ({
 	snackbar: {
 		text: '',
 		timeout: 4000,
-		value: false
-	}
-})
+		value: false,
+	},
+});

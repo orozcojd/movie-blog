@@ -5,4 +5,4 @@ export default {
 	// getTagsLength: (state) => {
 	// 	return state.tags.length
 	// }
-}
+};

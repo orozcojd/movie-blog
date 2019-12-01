@@ -1,4 +1,4 @@
-import store from '@/store'
+import store from '@/store';
 
 export function adminGuard() {
 	/*
@@ -6,39 +6,37 @@ export function adminGuard() {
 			otherwise redirect to main page
 	*/
 	return (to, from, next) => {
-		if(!store.getters['auth/isUserLoggedin']) {
-			store.dispatch('auth/getSetToken')
+		if (!store.getters['auth/isUserLoggedin']) {
+			store.dispatch('auth/getSetToken');
 		}
-		if(store.getters['auth/isUserLoggedin']) {
-			next()
+		if (store.getters['auth/isUserLoggedin']) {
+			next();
+		} else {
+			store.dispatch('auth/logOut');
+			next('/404');
 		}
-		else {
-			store.dispatch('auth/logOut')
-			next('/404')
-		}
-	}
+	};
 }
 export function	loggedInRedirect() {
-	/* 
+	/*
 			If user is logged in redirect to admin
 			otherwise allow user to access login page
 		*/
 	return (to, from, next) => {
-		if(store.getters['auth/isUserLoggedin']) {
-			next('/admin')
+		if (store.getters['auth/isUserLoggedin']) {
+			next('/admin');
+		} else {
+			next();
 		}
-		else {
-			next()
-		}
-	}
+	};
 }
 export function validatePermissions() {
 	return (to, from, next) => {
-		if(!to.meta.requiresAuth) return next()
-		if(!to.meta.allowed()) return next('/admin')
-		return next()
-	}
+		if (!to.meta.requiresAuth) return next();
+		if (!to.meta.allowed()) return next('/admin');
+		return next();
+	};
 }
 export function	getHeader() {
-	return `Bearer ${localStorage.getItem('unsolicited-session-token')}`
+	return `Bearer ${localStorage.getItem('unsolicited-session-token')}`;
 }

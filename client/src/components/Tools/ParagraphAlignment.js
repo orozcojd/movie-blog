@@ -1,10 +1,9 @@
-import { toggleBlockType } from 'tiptap-commands'
-import { Node } from 'tiptap'
+import { toggleBlockType } from 'tiptap-commands';
+import { Node } from 'tiptap';
 
 export default class ParagraphNode extends Node {
-
 	get name() {
-		return 'paragraph'
+		return 'paragraph';
 	}
 
 	get schema() {
@@ -19,15 +18,15 @@ export default class ParagraphNode extends Node {
 			draggable: false,
 			parseDOM: [{
 				tag: 'p',
-				getAttrs: node => ({
+				getAttrs: (node) => ({
 					textAlign: node.style.textAlign,
 				}),
 			}],
-			toDOM: node => ['p', { style: `text-align: ${node.attrs.textAlign}` }, 0],
-		}
-	}
-	commands({ type, schema }) {
-		return attrs => toggleBlockType(type, schema.nodes.paragraph, attrs)
+			toDOM: (node) => ['p', { style: `text-align: ${node.attrs.textAlign}` }, 0],
+		};
 	}
 
+	commands({ type, schema }) {
+		return (attrs) => toggleBlockType(type, schema.nodes.paragraph, attrs);
+	}
 }

@@ -1,16 +1,17 @@
 const mongoose = require('mongoose');
-let Schema = mongoose.Schema;
+
+const Schema = mongoose.Schema;
 
 // const STATUS = ['AP', 'IR', 'NR', 'ED', 'DR'];
 
-let reviewSchema = new Schema({
+const reviewSchema = new Schema({
 	currReviewer: {
 		type: String,
-		default: null
+		default: null,
 	},
 	reviewerId: {
-		type: [String],
-		default: []
+		type: [ String ],
+		default: [],
 	},
 	// status: {
 	// 	type: String,
@@ -20,18 +21,18 @@ let reviewSchema = new Schema({
 	postId: {
 		type: String,
 		required: true,
-		unique: true
+		unique: true,
 	},
 	contributorId: {
 		type: String,
-		required: true
+		required: true,
 	},
 	comments: {
-		type: String
+		type: String,
 	},
 	__type: {
 		type: String,
-		default: 'Review'
+		default: 'Review',
 	},
 });
 module.exports = mongoose.model('Review', reviewSchema);

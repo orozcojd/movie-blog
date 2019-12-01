@@ -1,0 +1,17 @@
+mongodump --host Cluster0-shard-0/cluster0-shard-00-00-g74ql.gcp.mongodb.net:27017,cluster0-shard-00-01-g74ql.gcp.mongodb.net:27017,cluster0-shard-00-02-g74ql.gcp.mongodb.net:27017 --ssl --username jondorozco --password joZsu9-gukcyg-syppij --authenticationDatabase admin --db personalblog
+
+mongoexport --host Cluster0-shard-0/cluster0-shard-00-00-g74ql.gcp.mongodb.net:27017,cluster0-shard-00-01-g74ql.gcp.mongodb.net:27017,cluster0-shard-00-02-g74ql.gcp.mongodb.net:27017 --ssl --username jondorozco --password joZsu9-gukcyg-syppij --authenticationDatabase admin --db qa-threepointo --collection blogs --type json --out blogs
+
+
+mongoimport --host Cluster0-shard-0/cluster0-shard-00-00-g74ql.gcp.mongodb.net:27017,cluster0-shard-00-01-g74ql.gcp.mongodb.net:27017,cluster0-shard-00-02-g74ql.gcp.mongodb.net:27017 --ssl --username jondorozco --password joZsu9-gukcyg-syppij --authenticationDatabase admin --db personalblog --collection tags --type json --file tags
+
+mongoexport --db personalblog --collection tags --type json --out tags
+
+db.tags.find({}).forEach( function (doc) {
+  doc.prev = doc.urlTag; 
+  db.tags.save(doc); 
+});
+
+
+mongo "mongodb+srv://cluster0-g74ql.gcp.mongodb.net/test" --username jondorozco
+

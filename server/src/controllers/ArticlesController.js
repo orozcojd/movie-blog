@@ -1,4 +1,4 @@
-const {Post} = require('../models');
+const { Post } = require('../models');
 // Post.find().remove().exec();
 // Tags.collection.dropAllIndexes(function (err, results) {
 // });
@@ -10,28 +10,31 @@ module.exports = {
 	/**
    * GET REQUEST
    * Tets all posts and limits to 12 posts. send array of articles
-   * If no error -- otherwise sends 400 error 
-   * @param {Object} req 
-   * @param {Object} res 
+   * If no error -- otherwise sends 400 error
+   * @param {Object} req
+   * @param {Object} res
    */
 	async index (req, res) {
 		try {
-			let options = {};
+			const options = {};
 			let trimArticle = {};
 			console.log(req.query);
 
-			if(req.query.skip)
+			if (req.query.skip)
 				options.skip = parseInt(req.query.skip);
-			if(req.query.limit)
+			if (req.query.limit)
 				options.limit = parseInt(req.query.limit);
-			options.sort = {created_at: 'desc'};
-			let query = {};
+			options.sort = { created_at: 'desc' };
+			const query = {};
 			query.status = 'AP';
-			trimArticle = {title: 1, author: 1, img: 1, updatedAt: 1, thumbnailDescription: 1};
-			const articles = await Post.find(query,trimArticle, options).lean();
-			res.send(articles);   
-		}
-		catch (err) {
+			trimArticle = { title: 1,
+				author: 1,
+				img: 1,
+				updatedAt: 1,
+				thumbnailDescription: 1 };
+			const articles = await Post.find(query, trimArticle, options).lean();
+			res.send(articles);
+		} catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get articles',
 			});
@@ -39,61 +42,66 @@ module.exports = {
 	},
 	/**
    * GET REQUEST
-   * Gets all posts by tag name (tag) and limits to 12 posts. 
-   * Send array of articles if no error -- otherwise sends 400 error 
-   * @param {Object} req 
-   * @param {Object} res 
+   * Gets all posts by tag name (tag) and limits to 12 posts.
+   * Send array of articles if no error -- otherwise sends 400 error
+   * @param {Object} req
+   * @param {Object} res
    */
 	async articlesByTag (req, res) {
 		try {
 			const size = 12;
 			let trimArticle = {};
 			let pageNo = parseInt(req.query.page);
-			let query = {};
-			pageNo = (pageNo >= 0) ? pageNo : 1;
-			let count = await Post.countDocuments({$or: [{tags: req.params.tagName},{realm: req.params.tagName}]}) ;
+			const query = {};
+			pageNo = pageNo >= 0 ? pageNo : 1;
+			const count = await Post.countDocuments({ $or: [ { tags: req.params.tagName }, { realm: req.params.tagName } ] });
 			query.skip = size * (pageNo - 1);
 			query.limit = size;
-			query.sort = {created_at: 'desc'};
-			trimArticle = {title: 1, author: 1, img: 1, thumbnailDescription: 1};
+			query.sort = { created_at: 'desc' };
+			trimArticle = { title: 1,
+				author: 1,
+				img: 1,
+				thumbnailDescription: 1 };
 			const articles = await Post
 				.find({
-					$or: [{tags: req.params.tagName},{realm: req.params.tagName}]
+					$or: [ { tags: req.params.tagName }, { realm: req.params.tagName } ],
 				}, trimArticle, query).lean();
 			const response = {
-				'message': articles,
-				'pages': Math.ceil(count/size),
-				'pageNo': pageNo
+				message: articles,
+				pages: Math.ceil(count / size),
+				pageNo,
 			};
 			res.send(response);
-		}
-		catch (err) {
+		} catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get article tag',
 			});
 		}
 	},
-	async articlesByContributor(req, res) {
+	async articlesByContributor (req, res) {
 		try {
 			const size = 12;
 			let trimArticle = {};
 			let pageNo = parseInt(req.query.page);
-			let query = {};
-			pageNo = (pageNo >= 0) ? pageNo : 1;
+			const query = {};
+			pageNo = pageNo >= 0 ? pageNo : 1;
 
-			let count = await Post.countDocuments({contributorId: req.params.contributorId});
+			const count = await Post.countDocuments({ contributorId: req.params.contributorId });
 			query.skip = size * (pageNo - 1);
 			query.limit = size;
-			query.sort = {created_at: 'desc'};
-			trimArticle = {title: 1, author: 1, img: 1, thumbnailDescription: 1};
+			query.sort = { created_at: 'desc' };
+			trimArticle = { title: 1,
+				author: 1,
+				img: 1,
+				thumbnailDescription: 1 };
 			const articles = await Post.find({
-				contributorId: req.params.contributorId
+				contributorId: req.params.contributorId,
 			}, trimArticle, query).lean();
 
 			const response = {
-				'message': articles,
-				'pages': Math.ceil(count/size),
-				'pageNo': pageNo
+				message: articles,
+				pages: Math.ceil(count / size),
+				pageNo,
 
 			};
 			res.send(response);
@@ -107,45 +115,44 @@ module.exports = {
 	/**
 	 * Gets associated articles by TAG or REALM otherwise sends latest
 	 * articles sorted by created_at
-	 * articles 
-	 * @param {Object} req 
-	 * @param {Object} res 
+	 * articles
+	 * @param {Object} req
+	 * @param {Object} res
 	 */
-	async associatedArticles(req, res) {
+	async associatedArticles (req, res) {
 		try {
 			const pageNo = isNaN(req.query.pageNo) ? 1 : req.query.pageNo;
 			const currId = req.query.id;
 			const size = 5;
-			let options = {};
-			let query = {};
+			const options = {};
+			const query = {};
 			query.draft = false;
 			options.skip = size * (pageNo - 1);
 			options.limit = size;
 
-			options.sort = {created_at: 'desc'};
-			if(req.query.latestUnrelated === 'true') {
+			options.sort = { created_at: 'desc' };
+			if (req.query.latestUnrelated === 'true')
 				query.$and = [
-					{realm: {$nin: req.query.relatedTags}},
-					{tags: {$nin: req.query.relatedTags}},
-					{_id: { $ne: currId }}
+					{ realm: { $nin: req.query.relatedTags } },
+					{ tags: { $nin: req.query.relatedTags } },
+					{ _id: { $ne: currId } },
 				];
-			}
+
 			else {
 				const tags = req.query.relatedTags;
 				query.$and = [
-					{$or: [{realm: {$in: tags}}, {tags: {$in: tags}}]},
-					{$or: [{_id: { $ne: currId }}]}
+					{ $or: [ { realm: { $in: tags } }, { tags: { $in: tags } } ] },
+					{ $or: [ { _id: { $ne: currId } } ] },
 				];
 			}
 			const article = await Post
 				.find(query, {}, options).lean();
 			const response = {
-				'message': article,
-				'pageNo': pageNo
+				message: article,
+				pageNo,
 			};
 			res.send(response);
-		}
-		catch (err) {
+		} catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get associated articles',
 			});
@@ -155,26 +162,25 @@ module.exports = {
 	/**
    * GET REQUEST BY ID
    * Finds the article by id and sends the reponse if id is valid
-   * otherwise sends 400 error 
-   * @param {Object} req 
-   * @param {Object} res 
+   * otherwise sends 400 error
+   * @param {Object} req
+   * @param {Object} res
    */
 	async articlesById (req, res) {
 		try {
 			const article = await Post.findById(req.params.articleId).lean();
-			if(article) {
+			if (article)
 				res.send(article);
-			}
-			else {
+
+			else
 				res.status(404).send({
 					error: 'Article was not found.',
 				});
-			}
-		}
-		catch (err) {
+
+		} catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get articles',
 			});
 		}
-	}
+	},
 };

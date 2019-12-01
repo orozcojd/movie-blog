@@ -1,70 +1,70 @@
 /**
- * Schema for an Article  
+ * Schema for an Article
  */
 const mongoose = require('mongoose');
 
-let Schema = mongoose.Schema;
-const STATUS = ['AP', 'IR', 'NR', 'ED', 'DR'];
+const Schema = mongoose.Schema;
+const STATUS = [ 'AP', 'IR', 'NR', 'ED', 'DR' ];
 
-let articleSchema = new Schema({
+const articleSchema = new Schema({
 	title: {
 		type: String,
-		required: true
+		required: true,
 	},
 	author: {
 		type: String,
 		required: true,
-		lowercase: true
+		lowercase: true,
 	},
 	body: {
 		type: String,
-		default: ''
+		default: '',
 	},
 	draft: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	realm: {
 		type: String,
-		required: true
+		required: true,
 	},
-	tags: [String],
+	tags: [ String ],
 	lazyImg: {
 		type: String,
-		required: true
+		required: true,
 	},
 	img: {
 		type: String,
 		required: true,
 		trim: true,
-		minlength: 1
+		minlength: 1,
 	},
 	imgCred: {
 		type: String,
-		required: true
+		required: true,
 	},
 	thumbnailDescription: {
 		type: String,
-		default: ''
+		default: '',
 	},
 	contributorId: {
 		type: String,
-		required: true
+		required: true,
 	},
 	revId: {
-		type: String
+		type: String,
 	},
 	status: {
 		type: String,
 		default: 'NR',
-		enum: STATUS
+		enum: STATUS,
 	},
 	__type: {
 		type: String,
-		default: 'Post'
-	}
-}, {timestamps: { createdAt: 'created_at'} });
-articleSchema.methods.updateStatus = async function(status) {
+		default: 'Post',
+	},
+}, { timestamps: { createdAt: 'created_at' } });
+articleSchema.methods.updateStatus = async function (status) {
 	this.status = status;
 };
 module.exports = mongoose.model('Blog', articleSchema);

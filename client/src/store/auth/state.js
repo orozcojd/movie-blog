@@ -2,7 +2,7 @@ module.exports = () => ({
 	token: {
 		token: null,
 		refreshToken: null,
-		tokenDetails: null
+		tokenDetails: null,
 	},
 	user: null,
 	contributor: {
@@ -10,9 +10,9 @@ module.exports = () => ({
 		bio: null,
 		img: null,
 		twitter: null,
-		facebook:null,
-		instagram: null
+		facebook: null,
+		instagram: null,
 	},
 	aclUser: null,
-	permissions: []
-})
+	permissions: [],
+});

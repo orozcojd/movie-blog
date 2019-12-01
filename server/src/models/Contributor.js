@@ -1,36 +1,37 @@
 const mongoose = require('mongoose');
-let Schema = mongoose.Schema;
+
+const Schema = mongoose.Schema;
 
 
 const ContributorSchema = new Schema({
 	name: {
 		type: String,
 		required: true,
-		unique: true
+		unique: true,
 	},
 	img: String,
 	bio: String,
 	twitter: {
 		type: String,
 		default: null,
-		lowercase: true
+		lowercase: true,
 	},
 	instagram: {
 		type: String,
 		default: null,
-		lowercase: true
+		lowercase: true,
 	},
 	facebook: {
 		type: String,
 		default: null,
-		lowercase: true
+		lowercase: true,
 	},
 	__type: {
 		type: String,
-		default: 'Contributor'
-	}
+		default: 'Contributor',
+	},
 });
-ContributorSchema.methods.createContributor = async function(contributor) {
+ContributorSchema.methods.createContributor = async function (contributor) {
 	this.name = contributor.name;
 	this.img = contributor.img;
 	this.bio = contributor.bio;

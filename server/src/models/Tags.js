@@ -1,41 +1,42 @@
 const mongoose = require('mongoose');
-let Schema = mongoose.Schema;
 
-let tagSchema = new Schema({
+const Schema = mongoose.Schema;
+
+const tagSchema = new Schema({
 	name: {
 		type: String,
 		unique: true,
-		lowercase: true
+		lowercase: true,
 	},
 	urlTag: {
 		type: String,
 		required: true,
 		unique: true,
-		lowercase: true
+		lowercase: true,
 	},
 	img: {
 		type: String,
-		default: null
+		default: null,
 	},
 	lazyImg: {
 		type: String,
-		default: null
+		default: null,
 	},
 	realm: {
 		type: Boolean,
-		default: false
+		default: false,
 	},
 	__type: {
 		type: String,
-		default: 'Tag'
+		default: 'Tag',
 	},
 	prev: {
 		type: String,
-		default: null
+		default: null,
 	},
 	contributorId: {
 		type: String,
-		required: true
+		required: true,
 	},
 });
 module.exports = mongoose.model('Tags', tagSchema);

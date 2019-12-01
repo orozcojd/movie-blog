@@ -1,28 +1,28 @@
 export const root = {
 	path: '/',
-	name: 'root'
-}
+	name: 'root',
+};
 export const articleView = {
 	path: '/article/:id',
-	name: 'article-view'
-}
+	name: 'article-view',
+};
 export const tagView = {
 	path: '/tag/:urlTag',
-	name: 'tag-view'
-}
+	name: 'tag-view',
+};
 export const aboutContributor = {
 	path: '/contributors/:contributor/:id',
-	name: 'about-contributor'
-}
+	name: 'about-contributor',
+};
 export const aboutView = {
 	path: '/about',
-	name: 'about'
-}
+	name: 'about',
+};
 export const contactView = {
 	path: '/contact',
-	name: 'contact'
-}
+	name: 'contact',
+};
 export const notFound = {
 	path: '/404',
-	name: 'not-found'
-}
+	name: 'not-found',
+};

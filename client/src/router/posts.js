@@ -1,30 +1,31 @@
-const Posts = () => import('@/components/Posts/Posts')
-const PostView = () => import('@/components/Posts/PostView')
-const TagView = () => import('@/components/Posts/TagView')
-const NotFound = () => import('@/components/Layouts/NotFound')
-const ContributorView = () => import('@/components/Layouts/ContributorPreview')
-const AboutView = () => import('@/components/Footer/About')
-const ContactView = () => import('@/components/Footer/Contact')
-import ArticleGuard from '@/components/RouterGuards/ArticleGuards'
+import ArticleGuard from '@/components/RouterGuards/ArticleGuards';
 
-import * as types from '@/constants/postTypes'
+import * as types from '@/constants/postTypes';
+
+const Posts = () => import('@/components/Posts/Posts');
+const PostView = () => import('@/components/Posts/PostView');
+const TagView = () => import('@/components/Posts/TagView');
+const NotFound = () => import('@/components/Layouts/NotFound');
+const ContributorView = () => import('@/components/Layouts/ContributorPreview');
+const AboutView = () => import('@/components/Footer/About');
+const ContactView = () => import('@/components/Footer/Contact');
 const postRoutes = [
 	{
 		path: types.root.path,
 		name: types.root.name,
-		component: Posts
+		component: Posts,
 	},
 	{
 		path: types.articleView.path,
 		name: types.articleView.name,
-		component: PostView
+		component: PostView,
 	},
 	{
 		path: types.tagView.path,
 		name: types.tagView.name,
 		component: TagView,
 		// beforeEnter: ArticleGuard.tagViewGuard(),
-		props: true
+		props: true,
 	},
 	{
 		path: types.aboutContributor.path,
@@ -35,22 +36,22 @@ const postRoutes = [
 	{
 		path: types.aboutView.path,
 		name: types.aboutView.name,
-		component: AboutView
+		component: AboutView,
 	},
 	{
 		path: types.contactView.path,
 		name: types.contactView.name,
-		component: ContactView
+		component: ContactView,
 	},
 	{
 		path: types.notFound.path,
 		name: types.notFound.name,
-		component: NotFound
+		component: NotFound,
 	},
 	{
 		path: '*',
 		name: '404',
-		component: NotFound
-	}
-]
-export default postRoutes
+		component: NotFound,
+	},
+];
+export default postRoutes;

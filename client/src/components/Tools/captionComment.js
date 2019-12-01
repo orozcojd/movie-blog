@@ -1,12 +1,12 @@
-import { Node } from 'tiptap'
-import { toggleBlockType, setBlockType, textblockTypeInputRule } from 'tiptap-commands'
+import { Node } from 'tiptap';
+import { toggleBlockType, setBlockType, textblockTypeInputRule } from 'tiptap-commands';
 
 export default class captionComment extends Node {
-
 	get name() {
-		return 'caption_comment'
+		return 'caption_comment';
 	}
-	/* 
+
+	/*
 			doc: {content: "paragraph+"},
 			paragraph: {
 				content: "text*",
@@ -21,14 +21,14 @@ export default class captionComment extends Node {
 			defining: true,
 			draggable: false,
 			parseDOM: [
-				{ tag: 'div', preserveWhitespace: 'full'},
+				{ tag: 'div', preserveWhitespace: 'full' },
 			],
-			toDOM: () => ['div', {style: 'text-align: start', class:"light-contrast img-capt neg-margin-top" }, 0],
-		}
+			toDOM: () => ['div', { style: 'text-align: start', class: 'light-contrast img-capt neg-margin-top' }, 0],
+		};
 	}
 
 	commands({ type, schema }) {
-		return () => toggleBlockType(type, schema.nodes.paragraph)
+		return () => toggleBlockType(type, schema.nodes.paragraph);
 	}
 
 	// keys({ type }) {
@@ -41,5 +41,4 @@ export default class captionComment extends Node {
 	// 		textblockTypeInputRule(/^```$/, type),
 	// 	]
 	// }
-
 }

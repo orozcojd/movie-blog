@@ -15,11 +15,12 @@ module.exports = {
     // https://github.com/standard/standard/blob/master/docs/RULES-en.md
     // 'standard',
     'eslint:recommended',
-    'plugin:vue/recommended'
+    "plugin:vue/recommended",
+    'plugin:vue/strongly-recommended',
   ],
   // required to lint *.vue files
   plugins: [
-    'vue'
+    'vue',
   ],
   
   // add your custom rules here
@@ -28,6 +29,7 @@ module.exports = {
     'generator-star-spacing': 'off',
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    "indent": ["error", "tab"]
+    "indent": ["error", "tab"],
+    "space-before-blocks": "error",
   }
 }

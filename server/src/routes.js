@@ -1,4 +1,4 @@
-//routes are used for declaring routes to all the controllers
+// routes are used for declaring routes to all the controllers
 
 const AuthenticationController = require('./controllers/AuthenticationController');
 const ContributorController = require('./controllers/ContributorController');
@@ -22,23 +22,23 @@ const authSpeedLimiter = slowDown({
 	windowMs: 15 * 60 * 1000, // 15 minutes
 	delayAfter: 5, // allow 5 requests to go at full-speed, then...
 	delayMs: 500, // 6th request has a 100ms delay, 7th has a 200ms delay, 8th gets 300ms, etc.
-	skipSuccessfulRequests: true
+	skipSuccessfulRequests: true,
 });
 
 const apiSpeedLimiter = slowDown({
-	windowMs: 15 * 60 * 1000, 
-	delayAfter: 1000, 
-	delayMs: 100
+	windowMs: 15 * 60 * 1000,
+	delayAfter: 1000,
+	delayMs: 100,
 });
 
 const appSpeedLimiter = slowDown({
-	windowMs: 15 * 60 * 1000, 
-	delayAfter: 1000, 
-	delayMs: 1000
+	windowMs: 15 * 60 * 1000,
+	delayAfter: 1000,
+	delayMs: 1000,
 });
 
-module.exports = (app) => {
-	app.get('/', 
+module.exports = app => {
+	app.get('/',
 		appSpeedLimiter,
 		ArticlesController.root);
 	app.post('/login',
@@ -130,7 +130,7 @@ module.exports = (app) => {
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationControllerPolicy.contributorAccessControl,
 		AdminContributorController.updateContributor);
-	
+
 	/** permissions */
 	app.get('/api/permissions',
 		apiSpeedLimiter,
@@ -152,10 +152,10 @@ module.exports = (app) => {
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
 		ReviewController.getReviews);
-	app.post('/api/review/:revId/claim', 
+	app.post('/api/review/:revId/claim',
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
-		ReviewController.claimArticles	);
+		ReviewController.claimArticles);
 	app.post('/api/review/:revId/update',
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
@@ -166,7 +166,7 @@ module.exports = (app) => {
 		apiSpeedLimiter,
 		VerifyJsonPolicy.verifyJson,
 		AuthenticationController.refreshToken);
-	app.post('/tokens/removeRefresh', 
+	app.post('/tokens/removeRefresh',
 		VerifyJsonPolicy.verifyJson,
 		apiSpeedLimiter,
 		AuthenticationController.rejectToken);
@@ -191,11 +191,11 @@ module.exports = (app) => {
 		TagsController.deleteTags);
 
 	/* Admin Article Routes */
-	app.get('/api/articles', 
+	app.get('/api/articles',
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
 		AdminArticleController.index);
-	app.get('/api/articles/:articleId', 
+	app.get('/api/articles/:articleId',
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
 		AdminArticleController.fetchArticle);

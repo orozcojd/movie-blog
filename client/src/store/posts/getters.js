@@ -1,5 +1,3 @@
 export default {
-	siteTitle: (state) => {
-		return state.strings.title
-	}
-}
+	siteTitle: (state) => state.strings.title,
+};

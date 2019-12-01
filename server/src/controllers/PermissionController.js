@@ -1,4 +1,4 @@
-const {Permissions} = require('../models');
+const { Permissions } = require('../models');
 
 module.exports = {
 	async getPermissions (req, res) {
@@ -15,7 +15,7 @@ module.exports = {
 	async addPermissions (req, res) {
 		try {
 			const permissions = await Permissions.create(req.body);
-			res.status(200).send({permissions: permissions});
+			res.status(200).send({ permissions });
 		} catch (e) {
 			res.status(400).send({
 				error: 'Most likely, permission already exists.',
@@ -27,14 +27,14 @@ module.exports = {
 			const permissions = await Permissions.findByIdAndUpdate(
 				req.body._id,
 				req.body,
-				{new: true}
+				{ new: true }
 			);
-			res.status(200).send({permissions: permissions});
+			res.status(200).send({ permissions });
 		} catch (e) {
 			console.log(e);
 			res.status(400).send({
 				error: 'An error has occured trying to get articles',
 			});
 		}
-	}
+	},
 };

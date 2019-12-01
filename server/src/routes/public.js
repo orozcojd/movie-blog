@@ -10,17 +10,18 @@ const authSpeedLimiter = slowDown({
 	windowMs: 15 * 60 * 1000, // 15 minutes
 	delayAfter: 5, // allow 5 requests to go at full-speed, then...
 	delayMs: 500, // 6th request has a 100ms delay, 7th has a 200ms delay, 8th gets 300ms, etc.
-	skipSuccessfulRequests: true
+	skipSuccessfulRequests: true,
 });
 
 const appSpeedLimiter = slowDown({
-	windowMs: 15 * 60 * 1000, 
-	delayAfter: 500, 
-	delayMs: 1000
+	windowMs: 15 * 60 * 1000,
+	delayAfter: 500,
+	delayMs: 1000,
 });
-const express = require('express'), router = express.Router();
+const express = require('express'),
+	router = express.Router();
 
-router.get('/', 
+router.get('/',
 	appSpeedLimiter,
 	ArticlesController.root);
 router.post('/login',

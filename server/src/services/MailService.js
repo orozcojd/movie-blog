@@ -2,7 +2,7 @@ const nodemailer = require('nodemailer');
 const config = require('../config/config');
 const { google } = require('googleapis');
 
-function getOauthClient(user) {
+function getOauthClient (user) {
 	// Generate a url that asks permissions for Gmail scopes
 	// const GMAIL_SCOPES = [
 	// 	'https://mail.google.com/',
@@ -36,13 +36,13 @@ function getOauthClient(user) {
 			clientSecret: config.googleOauth.secret,
 			refreshToken: config.googleOauth.refresh,
 			accessToken: config.googleOauth.token,
-			expires: config.googleOauth.expires
-		}
+			expires: config.googleOauth.expires,
+		},
 	};
 	user.name = config.googleOauth.user;
 	return params;
 }
-async function getLocalClient(user) {
+async function getLocalClient (user) {
 	const testAccount = await nodemailer.createTestAccount();
 	const params = {
 		host: 'smtp.ethereal.email',
@@ -50,30 +50,31 @@ async function getLocalClient(user) {
 		secure: false,
 		auth: {
 			user: testAccount.user,
-			pass: testAccount.pass
+			pass: testAccount.pass,
 		},
-		sendmail: true
+		sendmail: true,
 	};
 	user.name = testAccount.user;
 	return params;
 }
 module.exports = {
-	async sendResetPwEmail(user, contributor) {
+	async sendResetPwEmail (user, contributor) {
 		const islocal = Boolean(process.env.NODE_ENV !== 'production');
-		let emailuser = {
-			name: ''
+		const emailuser = {
+			name: '',
 		};
 		const params = islocal ? await getLocalClient(emailuser) : await getOauthClient(emailuser);
 		const transporter = nodemailer.createTransport(params);
-		const resetLink = `${config.apiDomain}:8080/?#/auth/password-reset?token=${user.resetToken}`;
+		const resetLink = `${ config.apiDomain }:8080/?#/auth/password-reset?token=${ user.resetToken }`;
 		await transporter.sendMail({
-			from :`"${config.nodemailer.admin}" <${emailuser.name}>`,
+			from: `"${ config.nodemailer.admin }" <${ emailuser.name }>`,
 			to: user.email, // list of receivers
-			subject: `${config.appname} - Password Reset`, // Subject line
+			subject: `${ config.appname } - Password Reset`, // Subject line
 			html: '<h1> Password Reset </h1> <div> Hello ' + contributor.name + ', you are receiving this email because '
-      + ' you have initiated a request for a password reset. Follow the link below to continue with the process. </div>' 
-      + '<div> <a target="_blank" href=" ' + resetLink + '">' + resetLink + '</a> </div>'
-		},(err, success) => {
+      + ' you have initiated a request for a password reset. Follow the link below to continue with the process. </div>'
+      + '<div> <a target="_blank" href=" ' + resetLink + '">' + resetLink + '</a> </div>',
+		}, (err, success) => {
+			console.log(success);
 		});
-	}
+	},
 };
