@@ -11,7 +11,6 @@ module.exports = {
 			return res.status(400).send({
 				error: 'Recaptcha Token required!',
 			});
-
 		const verifyCaptchaOptions = {
 			uri: 'https://www.google.com/recaptcha/api/siteverify',
 			json: true,

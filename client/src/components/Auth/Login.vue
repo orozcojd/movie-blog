@@ -54,7 +54,7 @@
               </div>
               <vue-recaptcha
                 ref="recaptcha"
-                sitekey="6LdbmbQUAAAAAFqSXxy-GYvQwfYMcvpRkLTcUlgG"
+                :sitekey="captchaKey"
                 :load-recaptcha-script="true"
                 theme="dark"
                 @expired="onCaptchaExpired"
@@ -91,6 +91,7 @@
 import AdminRules from '@/components/Tools/AdminMainValidation'
 import { mapActions, mapGetters } from 'vuex'
 import VueRecaptcha from 'vue-recaptcha';
+
 export default {
 	name: 'Login',
 	components: {
@@ -99,6 +100,7 @@ export default {
 	},
 	data () {
 		return {
+      captchaKey: process.env.CAPTCHA_SITE_KEY,
 			recaptcha: {
 				token: '',
 				verified: false

@@ -39,7 +39,6 @@ module.exports = {
 		try {
 			if (!req.params.articleId)
 				return res.status(422).json({ message: 'Invalid Article identifier.' });
-
 			const user = await User.findById(req.userId);
 			const article = await Post.findById(req.params.articleId).lean();
 			const isNotArticleContr = user.contributorId !== article.contributorId;
@@ -49,6 +48,7 @@ module.exports = {
 				});
 				return;
 			}
+			console.log(article);
 			const review = await Review.findOne({ postId: article._id }).lean();
 			res.status(200).send({ ...article,
 				review });
@@ -65,6 +65,7 @@ module.exports = {
 			const review = await Review.findById(req.params.id).lean();
 			const article = await Post.findById(review.postId).lean();
 			const isReviewer = review.currReviewer === contributor;
+			console.log(article);
 			const inReview = article.status === status;
 			if (isReviewer && inReview) res.status(200).send({ ...article,
 				review });

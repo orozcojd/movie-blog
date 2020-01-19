@@ -51,7 +51,7 @@ module.exports = app => {
 		ArticlesController.index);
 	app.get('/articles/:articleId',
 		appSpeedLimiter,
-		ArticlesController.articlesById),
+		ArticlesController.articlesById);
 	app.get('/tags',
 		appSpeedLimiter,
 		TagsController.getTags);

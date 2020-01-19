@@ -22,12 +22,11 @@ module.exports = {
 	async updateRevStatus (req, res) {
 		try {
 			const error = {};
-			console.log(req.body.comments);
 			const revId = req.params.revId;
-			const currUser = req.body.contributorId;
 			const rev = await Review.findById(revId);
-			const notAuthorized = rev.currReviewer !== currUser;
+			const notAuthorized = rev.currReviewer !== req.body.contributorId;
 			const accept = req.body.accept;
+			console.log(req.body);
 			if (notAuthorized) {
 				error.status = 403;
 				error.message = 'You are not authorized to update this review';
@@ -48,11 +47,10 @@ module.exports = {
 				comments: req.body.comments,
 			},
 			{ new: true });
-			console.log(review);
 			await Post.findByIdAndUpdate(review.postId, {
 				status,
 			}).then(() => res.status(200).send());
-			return res.status(400).send({ error: 'Unexpected error occurred trying to update post review' });
+			// return res.status(400).send({ error: 'Unexpected error occurred trying to update post review' });
 
 		} catch (err) {
 			console.log(err);
@@ -91,11 +89,9 @@ module.exports = {
 				});
 				return res.send(review);
 			}
-			console.log(err);
 			return res.status(403).send({
 				error: err,
 			});
-
 		} catch (err) {
 			console.log(err);
 			res.status(400).send({

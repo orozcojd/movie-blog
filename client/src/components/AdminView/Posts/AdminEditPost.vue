@@ -10,7 +10,7 @@
     </v-container>
     <admin-post-form
       v-if="loaded && !preview"
-      :load="load"
+      :load="loaded"
     >
       <v-flex>
         <div
@@ -62,10 +62,7 @@ export default {
 			return this.$route.params.id ? Boolean(this.article._id) : true
 		}
 	},
-	beforeUpdate() {
-		this.clearArticle()
-	},
-	created() {
+	beforeDestroy() {
 		this.clearArticle()
 	},
 	async mounted() {

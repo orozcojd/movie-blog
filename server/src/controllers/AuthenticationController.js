@@ -37,16 +37,16 @@ const rules = [
 		},
 	},
 ];
-const user = {
-	contributorId: 1,
-	email: 'sample@gmail.com',
-	_id: 2,
-	permission: {
-		level: 1,
-		name: 'CREATOR',
-		_id: 1234,
-	},
-};
+// const user = {
+// 	contributorId: 1,
+// 	email: 'sample@gmail.com',
+// 	_id: 2,
+// 	permission: {
+// 		level: 1,
+// 		name: 'CREATOR',
+// 		_id: 1234,
+// 	},
+// };
 
 module.exports = {
 
@@ -59,11 +59,11 @@ module.exports = {
 	 * @param {Object} res
 	 */
 	login (req, res) {
+		console.log(req);
 		if (!req.body.email.trim() || !req.body.password.trim())
 			return res.status(403).send({
 				error: 'Please enter valid credentials',
 			});
-
 		passport.authenticate('local', async (err, user, info) => {
 			if (err)
 				return res.status(404).send({
@@ -103,8 +103,6 @@ module.exports = {
 				return res.status(400).send({
 					error: 'Email is required!',
 				});
-
-
 			const email = req.body.email;
 			const user = await User.findOne({ email });
 			if (user) {
@@ -113,7 +111,6 @@ module.exports = {
 				user.save(async err => {
 					if (!err)
 						await sendResetPwEmail(user, contributor);
-
 				});
 			}
 			res.status(200).send({ message: 'If your email exists, you will receive instructions to reset your password.' });

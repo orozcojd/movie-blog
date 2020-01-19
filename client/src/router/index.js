@@ -13,7 +13,7 @@ Vue.use(Router);
 const routes = postRoutes.concat(adminRoutes).concat(authRoutes);
 const router = new Router({
 	routes,
-	// mode: 'history'
+	mode: 'history'
 });
 router.beforeEach(validatePermissions());
 export default router;

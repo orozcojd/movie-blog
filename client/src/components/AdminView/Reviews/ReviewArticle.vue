@@ -53,16 +53,18 @@ export default {
 				this.comments = this.article.review.comments
 			})
 			.catch(err => {
-				console.log(err)
+				this.$router.push({name: 'review'})
 			})
 		console.log(this.article)
 		
 	},
+	beforeDestroy() {
+		this.clearArticle()
+	},
 	methods: {
-		...mapActions('admin', ['reviewArticlesId', 'updateArticleStatus']),
+		...mapActions('admin', ['reviewArticlesId', 'updateArticleStatus', 'clearArticle']),
 		...mapActions('error',['handleConnectionError']),
 		submit(status) {
-			console.log()
 			this.updateArticleStatus({
 				id: this.article.review._id,
 				accept: status,

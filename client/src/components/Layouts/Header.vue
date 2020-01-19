@@ -84,7 +84,7 @@
       />
       <div
         class="main-title"
-        @click="$router.push('/')"
+        @click="$router.push('/').catch(err => {})"
       >
         {{ siteTitle }}
       </div>
@@ -188,7 +188,7 @@ export default {
 			this.$router.push({
 				name: name,
 				params: params,
-			})
+			}).catch(err => {})
 		}
 	}
 }

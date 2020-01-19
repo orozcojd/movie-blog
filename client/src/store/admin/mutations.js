@@ -59,6 +59,7 @@ export default {
 			copiedTags.push(tmp);
 		}
 		state.article.tags = copiedTags;
+		console.log(state.article)
 	},
 	/**
 	 * Finds the index of matching _id in articles array and updates value

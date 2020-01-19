@@ -19,7 +19,7 @@ module.exports = {
 		superUser: process.env.OPENSHIFT_SUPER_USER || 1,
 		AdminUser: process.env.OPENSHIFT_ADMIN_USER || 2,
 		creator: process.env.OPENSHIFT_CREATOR_PERMISSION || 3,
-		recaptchaSecret: process.env.OPENSHIFT_RECAPTCHA,
+		recaptchaSecret: process.env.OPENSHIFT_RECAPTCHA || '"6Lewn9AUAAAAADiHZxVd9iy0WNX8U5tmoZf7j3h-"', // localhost key
 	},
 	nodemailer: {
 		admin: 'System Administrator',

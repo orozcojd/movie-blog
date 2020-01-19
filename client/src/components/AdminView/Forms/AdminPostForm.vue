@@ -348,13 +348,11 @@ export default {
 			}
 			this.requestRunning = true
 			this.validation.cancelDisabled = true
-			console.log(this.article)
 			if (this.$route.params.id) {
 				let payload = {
 					article: new Article(this.article),
 					id: this.$route.params.id
 				}
-				console.log(payload)
 				await this.updateArticle(payload)
 					.then(() => {
 						this.submitCallback(btnType)

@@ -112,7 +112,7 @@
       />
       <div
         class="main-title"
-        @click="$router.push('/')"
+        @click="$router.push('/').catch(err => {})"
       >
         {{ siteTitle }}
       </div>
@@ -279,7 +279,7 @@ export default {
 			this.logOut().then(() => {
 				this.$router.push({
 					name: 'root'
-				})
+				}).catch(err => {})
 			})
 		},
 		navigateTo (name, params) {
@@ -287,7 +287,7 @@ export default {
 				name: name,
 				params: params,
 				// query: {page: 1}
-			})
+			}).catch(err => {})
 		},
 		snackClose() {
 			this.setSnackbar({

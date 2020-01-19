@@ -1,5 +1,6 @@
 'use strict'
 module.exports = {
 	NODE_ENV: '"production"',
-	ROOT_API: JSON.stringify(process.env.ROOT_API)
+	ROOT_API: JSON.stringify(process.env.ROOT_API),
+	CAPTCHA_SITE_KEY: '"6LdbmbQUAAAAAFqSXxy-GYvQwfYMcvpRkLTcUlgG"'
 }
