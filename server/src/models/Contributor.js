@@ -8,6 +8,7 @@ const ContributorSchema = new Schema({
 		type: String,
 		required: true,
 		unique: true,
+		lowercase: true,
 	},
 	img: String,
 	bio: String,

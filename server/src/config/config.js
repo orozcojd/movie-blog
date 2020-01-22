@@ -1,16 +1,12 @@
 /* */
-module.exports = {
-	env: {
-
-	},
+const env = process.env.NODE_ENV;
+const development = production = {
 	appname: process.env.OPENSHIFT_APP_NAME || 'threepointO',
 	port: process.env.OPENSHIFT_NODEJS_PORT || 8081,
 	serverIp: process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
 	apiDomain: process.env.OPENSHIFT_DOMAIN || 'http://localhost',
 	db: {
 		database: process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost:27017/personalblog',
-		// user: process.OPENSHIFT_MONGODB_DB_USER || 'jonorozco',
-		// password: process.env.OPENSHIFT_MONGODB_DB_PASS || 'personalblog',
 	},
 	authentication: {
 		jwtSecret: process.env.OPENSHIFT_JWT_SECRET || 'secret',
@@ -40,3 +36,36 @@ module.exports = {
 		expires: process.env.OPENSHIFT_OAUTH_EXPIRES,
 	},
 };
+const test = {
+	appname: 'threepointO',
+	port: 8082,
+	serverIp: '0.0.0.0',
+	apiDomain: 'http://localhost',
+	db: {
+		database: 'mongodb://localhost:27017/test',
+	},
+	authentication: {
+		jwtSecret: 'secret',
+		tmpUser: 'jonathan',
+		tmpPsswrd: 'password',
+		superUser: 1,
+		AdminUser: 2,
+		creator: 3,
+		recaptchaSecret: '"6Lewn9AUAAAAADiHZxVd9iy0WNX8U5tmoZf7j3h-"', // localhost key
+	},
+	nodemailer: {
+		admin: 'System Administrator',
+	},
+	ratelimits: {
+		login: 1000,
+		default: 10000,
+		api: 1000,
+		adduser: 1000,
+	},
+};
+const config = {
+	development,
+	test,
+	production,
+};
+module.exports = config[env];

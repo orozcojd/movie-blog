@@ -16,5 +16,7 @@ mongoose.connect(config.db.database, {
 	}, err => {
 		console.log(err);
 	});
-console.log(process.env.NODE_ENV);
+
 app.listen(config.port, config.serverIp);
+
+module.exports = app; // for testing

@@ -59,17 +59,17 @@ module.exports = {
 	 * @param {Object} res
 	 */
 	login (req, res) {
-		console.log(req);
 		if (!req.body.email.trim() || !req.body.password.trim())
 			return res.status(403).send({
 				error: 'Please enter valid credentials',
 			});
 		passport.authenticate('local', async (err, user, info) => {
-			if (err)
+			if (err) {
+				console.log(err);
 				return res.status(404).send({
 					error: 'Something went wrong trying to log you in.',
 				});
-
+			}
 			if (user) {
 				const token = user.generateToken();
 				const refreshToken = randomToken.uid(256);
@@ -198,8 +198,7 @@ module.exports = {
 		try {
 			const currUser = await User.findById(req.userId).lean();
 			const contributor = await Contributor.findById(currUser.contributorId).lean();
-			// console.log(contributor);
-			res.status(200).send({ name: contributor.name });
+			res.status(200).send({ name: contributor.name.toLowerCase() });
 
 		} catch (err) {
 			res.status(400).send({

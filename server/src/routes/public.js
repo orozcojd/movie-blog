@@ -34,7 +34,7 @@ router.get('/articles',
 	ArticlesController.index);
 router.get('/articles/:articleId',
 	appSpeedLimiter,
-	ArticlesController.articlesById),
+	ArticlesController.articlesById);
 router.get('/tags',
 	appSpeedLimiter,
 	TagsController.getTags);

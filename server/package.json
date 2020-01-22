@@ -7,11 +7,12 @@
     "start": "NODE_ENV='production' node src/server.js",
     "dev": "NODE_ENV='development' ./node_modules/nodemon/bin/nodemon.js src/server.js --exec 'npm run lint && node'",
     "lint": "eslint",
-    "test": "mocha"
+    "test": "NODE_ENV='test' mocha --timeout 2000 --opts src/test/mocha.opts src/test"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.19.2",
     "bcrypt": "^3.0.7",
     "body-parser": "^1.19.0",
     "chai": "^4.2.0",
@@ -40,6 +41,7 @@
   },
   "devDependencies": {
     "babel-eslint": "^10.0.2",
+    "chai-http": "^4.3.0",
     "eslint-config-recommended": "^4.0.0"
   }
 }

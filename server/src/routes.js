@@ -116,10 +116,10 @@ module.exports = app => {
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationControllerPolicy.validatePassword,
 		AuthenticationController.resetPassword);
-	// app.get('/api/contribuor-name',
-	// 	apiSpeedLimiter,
-	// 	AuthenticationControllerPolicy.authenticateToken,
-	// 	AuthenticationController.getContributorName);
+	app.get('/api/contributors',
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		AuthenticationController.getContributorName);
 	app.get('/api/contributors/:contributorId',
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
@@ -191,34 +191,34 @@ module.exports = app => {
 		TagsController.deleteTags);
 
 	/* Admin Article Routes */
-	app.get('/api/articles',
-		apiSpeedLimiter,
-		AuthenticationControllerPolicy.authenticateToken,
-		AdminArticleController.index);
-	app.get('/api/articles/:articleId',
-		apiSpeedLimiter,
-		AuthenticationControllerPolicy.authenticateToken,
-		AdminArticleController.fetchArticle);
-	app.get('/api/review-articles',
+	app.get('/api/articles/review/',
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
 		AdminArticleController.reviewArticles);
-	app.get('/api/review-articles/:id',
+	app.get('/api/articles/review/:id/',
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
 		AdminArticleController.reviewArticle);
-	app.post('/api/articles',
+	app.get('/api/articles/',
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		AdminArticleController.index);
+	app.get('/api/articles/:articleId/',
+		apiSpeedLimiter,
+		AuthenticationControllerPolicy.authenticateToken,
+		AdminArticleController.fetchArticle);
+	app.post('/api/articles/',
 		VerifyJsonPolicy.verifyJson,
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
 		AdminArticleController.postArticle);
-	app.put('/api/articles/:articleId',
+	app.put('/api/articles/:articleId/',
 		VerifyJsonPolicy.verifyJson,
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationControllerPolicy.contributorAccessControl,
 		AdminArticleController.update);
-	app.delete('/api/articles/:articleId',
+	app.delete('/api/articles/:articleId/',
 		apiSpeedLimiter,
 		AuthenticationControllerPolicy.authenticateToken,
 		AuthenticationControllerPolicy.contributorAccessControl,

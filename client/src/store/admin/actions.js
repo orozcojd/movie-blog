@@ -218,7 +218,7 @@ export default {
 		}
 	},
 	async reviewArticlesId({ commit }, id) {
-		const article = await to(Api.ApiAdmin().get(`/api/review-articles/${id}`));
+		const article = await to(Api.ApiAdmin().get(`/api/articles/review/${id}`));
 		commit(types.FETCH_ARTICLE, article.data);
 	},
 	async updateArticleStatus({ commit }, payload) {

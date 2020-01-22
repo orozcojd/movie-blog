@@ -1,5 +1,5 @@
-const { User, Contributor, Review, Post } = require('../models');
-
+const { User, Contributor, Review, Post, ReviewStatus } = require('../models');
+const url = require('url');
 
 module.exports = {
 	/**
@@ -12,7 +12,8 @@ module.exports = {
 	async index (req, res) {
 		try {
 			const options = {};
-			const query = { status: req.query.status,
+			const queryObject = url.parse(req.url, true).query;
+			const query = { ...queryObject,
 				contributorId: req.body.contributorId };
 			if (req.query.skip)
 				options.skip = parseInt(req.query.skip);
@@ -42,17 +43,17 @@ module.exports = {
 			const user = await User.findById(req.userId);
 			const article = await Post.findById(req.params.articleId).lean();
 			const isNotArticleContr = user.contributorId !== article.contributorId;
-			if (isNotArticleContr) {
-				res.status(403).send({
+			if (isNotArticleContr)
+				return res.status(403).send({
 					error: 'You are unauthorized to make changes to this account!',
 				});
-				return;
-			}
-			console.log(article);
+				// return;
+
 			const review = await Review.findOne({ postId: article._id }).lean();
 			res.status(200).send({ ...article,
 				review });
 		} catch (err) {
+			console.log(err);
 			res.status(400).send({
 				error: 'An error has occurred trying to get articles',
 			});
@@ -65,7 +66,6 @@ module.exports = {
 			const review = await Review.findById(req.params.id).lean();
 			const article = await Post.findById(review.postId).lean();
 			const isReviewer = review.currReviewer === contributor;
-			console.log(article);
 			const inReview = article.status === status;
 			if (isReviewer && inReview) res.status(200).send({ ...article,
 				review });
@@ -80,12 +80,15 @@ module.exports = {
 	},
 	async reviewArticles (req, res) {
 		try {
+			console.log('INSIDE');
+			const query = url.parse(req.url, true).query;
+			console.log(query);
 			let status = req.query.status;
 			const review = req.query.review;
 			const reviewer = req.query.reviewer ? req.query.reviewer : 'false';
 			let conditions = [];
 			let lookup = {};
-			switch (status) {
+			switch (query.status) {
 			case 'ED':
 				conditions = [ { $eq: [ '$contributorId', req.body.contributorId ] }, { $eq: [ '$status', status ] } ];
 				break;
@@ -154,8 +157,10 @@ module.exports = {
 	async postArticle (req, res) {
 		try {
 			const { status, __type, ...update } = req.body;
+			const contributor = await Contributor.findById(req.body.contributorId);
+			update.author = contributor.name;
 			const article = await Post.create(update);
-			const reviewer = await Review.create({ postId: article._id,
+			await Review.create({ postId: article._id,
 				contributorId: req.body.contributorId });
 			res.send({
 				article,
@@ -177,12 +182,14 @@ module.exports = {
    */
 	async update (req, res) {
 		try {
+
 			// find contributor name and update article content
 			const contributor = await Contributor.findOne({
 				_id: req.body.contributorId,
 			}).lean();
 			req.body.author = contributor.name;
 			req.body.status = 'NR';
+
 			if (req.body.draft) req.body.status = 'DR';
 			const { __type, ...update } = req.body;
 			const article = await Post.findOneAndUpdate(
@@ -191,16 +198,13 @@ module.exports = {
 				update,
 				{ new: true }
 			);
-			// let article = {};
-			if (article)
-				res.send({
-					article,
-					message: 'Article was updated!',
-				});
-			 else
-				res.status(404).send({
-					error: 'Oops! The article you are trying to update does not exist.',
-				});
+			if (article) res.send({
+				article,
+				message: 'Article was updated!',
+			});
+			else res.status(404).send({
+				error: 'Oops! The article you are trying to update does not exist.',
+			});
 
 		} catch (err) {
 			res.status(400).send({
@@ -217,14 +221,21 @@ module.exports = {
    */
 	async delete (req, res) {
 		try {
+			const posts = await Post.find();
+			const deleteCount = await Post.deleteOne({
+				_id: req.params.articleId,
+				contributorId: req.body.contributorId,
+			});
+			if (!deleteCount.n)
+				res.status(404).send({
+					error: 'Oops! The article you are trying to delete does not exist.',
+				});
+			else
+				res.send({
+					deleteCount,
+					id: req.params.articleId,
+				});
 
-			// const deleteCount = await Post.deleteOne({
-			// 	_id: req.params.articleId
-			// });
-			// res.send({
-			// 	deleteCount: deleteCount,
-			// 	id: req.params.articleId
-			// });
 		} catch (err) {
 			res.status(400).send({
 				error: 'An error has occurred trying to delete the article',

@@ -12,9 +12,6 @@ module.exports = {
 	async authenticateRequest (req) {
 		const contributorId = req.body.contributorId;
 		const verifyUser = await User.findById(req.userId);
-		console.log(req.params.articleId);
-		console.log(verifyUser);
-		console.log(contributorId);
 		if (verifyUser) {
 			const isArticleContributor = verifyUser.contributorId === contributorId;
 			const isAdminContributor = verifyUser.contributorId === req.body.id;
