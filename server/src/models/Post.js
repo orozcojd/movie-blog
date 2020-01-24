@@ -2,9 +2,11 @@
  * Schema for an Article
  */
 const mongoose = require('mongoose');
+const Status = require('./ReviewStatus');
 
 const Schema = mongoose.Schema;
-const STATUS = [ 'AP', 'IR', 'NR', 'ED', 'DR' ];
+const status = [ Status.approved, Status.editing,
+	Status.inReview, Status.needsReview, Status.draft ];
 
 const articleSchema = new Schema({
 	title: {
@@ -51,13 +53,13 @@ const articleSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	revId: {
-		type: String,
-	},
+	// revId: {
+	// 	type: String,
+	// },
 	status: {
 		type: String,
-		default: 'NR',
-		enum: STATUS,
+		default: Status.needsReview,
+		enum: status,
 	},
 	__type: {
 		type: String,

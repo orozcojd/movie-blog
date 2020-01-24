@@ -1,13 +1,9 @@
 /* eslint-disable no-undef */
-const axios = require('axios');
+
 const { Post } = require('../../models');
+const { login } = require('../Authorization/Helpers');
+const { api } = require('../Helpers');
 
-
-const api = headers => axios.create({
-	baseURL: 'http://localhost:8082/',
-	timeout: 1000,
-	headers: { ...headers },
-});
 const getPostSchema = ({ contributorId, full }) => {
 	let article = {
 		title: 'article title',
@@ -30,31 +26,26 @@ const getPostSchema = ({ contributorId, full }) => {
 	};
 	return article;
 };
-
 module.exports = {
-	async login ({ email, password }) {
-		const creds = {
-			user: null,
-			contributor: null,
-			token: null,
-		};
-		const res = await api().post('/login', {
-			email,
-			password,
-		});
-		creds.token = `Bearer ${ res.data.token }`;
-		creds.user = res.data.user;
-		const token = await api({
-			Authorization: creds.token,
-		}).get('/api/contributors');
-		creds.contributor = token.data.name;
-		return creds;
-	},
 	async createDefaultPost (contributorId, numPosts = 1) {
-    for(i = 0; i < numPosts; i++) {
-      await Post.create(getPostSchema({ contributorId }));
-    }
-		
+		const posts = [];
+		for (i = 0; i < numPosts; i++)
+			await Post.create(getPostSchema({ contributorId }));
+	},
+	async postArticle ({ email, password, posts = 1 }) {
+		const creds = await login({ email,
+			password });
+		token = creds.token;
+		const postArr = [];
+		for (let i = 0; i < posts; i++) {
+			const post = await api({ Authorization: token })
+				.post('/api/articles', getPostSchema({ contributorId: creds.user.contributorId }));
+			postArr.push(post.data.article);
+		}
+		return postArr;
+	},
+	async updatePost ({ _id, status = ReviewStatus.needsReview }) {
+		return await Post.findByIdAndUpdate(_id, { status }, { new: true });
 	},
 	getPostSchema,
 };

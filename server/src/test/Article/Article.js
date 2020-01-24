@@ -5,8 +5,10 @@ const server = require('../../server');
 const should = require('chai').should();
 const expect = require('chai').expect;
 const assert = require('chai').assert;
-const { Post } = require('../../models');
-const { login, createDefaultPost, getPostSchema } = require('./Helpers.js');
+const { Post, ReviewStatus, Review } = require('../../models');
+const { createDefaultPost, getPostSchema, postArticle, updatePost } = require('./Helpers');
+const { login } = require('../Authorization/Helpers');
+const { updateReview } = require('../Review/Helpers');
 
 chai.use(chaiHttp);
 let API_TOKEN = null;
@@ -16,6 +18,9 @@ let CONTRIBUTOR = null;
 describe('Posts', () => {
 	beforeEach(async () => { // Before each test we empty the database
 		Post.remove({}, err => {
+			if (err) return err;
+		});
+		Review.remove({}, err => {
 			if (err) return err;
 		});
 		try {
@@ -319,15 +324,6 @@ describe('Posts', () => {
 		it('it should not allow you to delete a post that isnt yours', async () => {
 			const article = getPostSchema({ contributorId: USER.contributorId });
 			const post = await Post.create(article);
-
-			// login to user2
-			// const login = await chai.request(server)
-			// 	.post('/login')
-			// 	.send({
-			// 		email: 'camille.tsalik@gmail.com',
-			// 		password: 'password',
-			// 	});
-			// API_TOKEN = `Bearer ${ login.body.token }`;
 			const token = await login({ // login and get new jwt token
 				email: 'camille.tsalik@gmail.com',
 				password: 'password',
@@ -342,17 +338,97 @@ describe('Posts', () => {
 			res.body.should.have.property('error').eql('Oops! The article you are trying to delete does not exist.');
 		});
 	});
+});
+
+describe('GET Posts involving Reviews', () => {
+	const numPosts = 100; // number of posts to be created before each test
+	const reviewStatus = [ ReviewStatus.needsReview, ReviewStatus.approved, ReviewStatus.editing,
+		ReviewStatus.inReview, ReviewStatus.draft ];
+
+	beforeEach(async () => { // Before each test we empty the database
+		Post.remove({}, err => {
+			if (err) return err;
+		});
+		Review.remove({}, err => {
+			if (err) return err;
+		});
+		try {
+			const defaultCreds = { // login and get new jwt token
+				email: 'socaljorozco@gmail.com',
+				password: 'password',
+			};
+			const res = await login(defaultCreds);
+			API_TOKEN = res.token;
+			USER = res.user;
+			CONTRIBUTOR = res.contribu;
+
+			const posts = await postArticle({ // create 10 posts with user1
+				email: 'socaljorozco@gmail.com',
+				password: 'password',
+				posts: numPosts,
+			});
+			for (let i = 0; i < posts.length; i++) // update status of reviews
+				await updatePost({
+					_id: posts[i]._id,
+					status: reviewStatus[i % reviewStatus.length], // apply different status for every post
+				});
+		} catch (err) {
+			return err;
+		}
+	});
 	describe('GET /api/articles/review', () => {
-		it('it should GET the requested articles for review', async () => {
-			// const article = getPostSchema({ contributorId: USER.contributorId });
-			// const post = await Post.create(article);
-			const numPosts = 10;
-			await createDefaultPost(USER.contributorId, numPosts); // create 10 posts
+		it('it should GET the requested articles for review that have status need review', async () => {
 			const res = await chai.request(server)
-				.get('/api/articles/review?status=NR')
+				.get(`/api/articles/review?status=${ ReviewStatus.needsReview }&review=false&reviewer=false`)
 				.set('Authorization', API_TOKEN);
+			const expectedLen = numPosts / reviewStatus.length;
 			res.should.have.status(200);
-			res.body.should.be.a('array').eql(numPosts);
+			res.body.should.be.a('array');
+			res.body.should.have.length(expectedLen);
+		});
+		it('it should return a select number of contributors articles when \
+		status is NR and Review is false', async () => {
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.needsReview }&review=false&reviewer=false`)
+				.set('Authorization', API_TOKEN);
+			const expectedLen = numPosts / reviewStatus.length;
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(expectedLen);
+
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.needsReview }&review=false&rever=true`)
+				.set('Authorization', API_TOKEN);
+
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(expectedLen);
+		});
+		it('it should return a select number of contributors articles when \
+		status is NR and Review is false', async () => {
+			const token = await login({ // login and get new jwt token
+				email: 'camille.tsalik@gmail.com',
+				password: 'password',
+			});
+			API_TOKEN = token.token;
+
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.needsReview }&review=false&reviewer=false`)
+				.set('Authorization', API_TOKEN);
+
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(0);
+
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.needsReview }&review=false&reviewer=true`)
+				.set('Authorization', API_TOKEN);
+
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(0);
 		});
 	});
 });

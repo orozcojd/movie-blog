@@ -9,6 +9,8 @@ chai.use(chaiHttp);
 describe('/api/articles', () => {
 	beforeEach(done => { // Before each test we empty the database
 		Post.remove({}, err => {
+		});
+		Review.remove({}, err => {
 			done();
 		});
 	});

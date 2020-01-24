@@ -80,32 +80,29 @@ module.exports = {
 	},
 	async reviewArticles (req, res) {
 		try {
-			console.log('INSIDE');
 			const query = url.parse(req.url, true).query;
 			console.log(query);
-			let status = req.query.status;
-			const review = req.query.review;
-			const reviewer = req.query.reviewer ? req.query.reviewer : 'false';
+			const status = query.status;
+			const review = query.review ? query.review : 'false';
+			const reviewer = query.reviewer ? query.reviewer : 'false';
 			let conditions = [];
 			let lookup = {};
-			switch (query.status) {
-			case 'ED':
+			switch (status) {
+			case ReviewStatus.editing:
 				conditions = [ { $eq: [ '$contributorId', req.body.contributorId ] }, { $eq: [ '$status', status ] } ];
 				break;
-			case 'IR':
+			case ReviewStatus.inReview:
 				conditions = [ { $eq: [ '$status', status ] } ];
 				if (JSON.parse(reviewer))
 					lookup = { $eq: [ '$currReviewer', req.body.contributorId ] };
-
 				else
 					lookup = { $eq: [ '$contributorId', req.body.contributorId ] };
-
 				break;
 			default:
-				status = 'NR';
+				// status = ReviewStatus.needsReview;
+
 				if (JSON.parse(review))
 					conditions = [ { $ne: [ '$contributorId', req.body.contributorId ] }, { $eq: [ '$status', status ] } ];
-
 				else
 					conditions = [ { $eq: [ '$contributorId', req.body.contributorId ] }, { $eq: [ '$status', status ] } ];
 				break;

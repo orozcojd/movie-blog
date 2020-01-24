@@ -7,7 +7,7 @@
     "start": "NODE_ENV='production' node src/server.js",
     "dev": "NODE_ENV='development' ./node_modules/nodemon/bin/nodemon.js src/server.js --exec 'npm run lint && node'",
     "lint": "eslint",
-    "test": "NODE_ENV='test' mocha --timeout 2000 --opts src/test/mocha.opts src/test"
+    "test": "NODE_ENV='test' mocha --timeout 6000 --opts src/test/mocha.opts src/test"
   },
   "author": "",
   "license": "ISC",
