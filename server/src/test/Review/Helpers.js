@@ -7,10 +7,9 @@ module.exports = {
 	getReviewSchema ({ contributorId, postId, currReviewer = null }) {
 		return {
 			currReviewer,
-			reviewerId: [],
+			// reviewerId: [],
 			postId,
 			contributorId,
-			__v: 0,
 		};
 	},
 	async updateReview ({ contributorId, postId, currReviewer = null,

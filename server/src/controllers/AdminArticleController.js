@@ -47,13 +47,10 @@ module.exports = {
 				return res.status(403).send({
 					error: 'You are unauthorized to make changes to this account!',
 				});
-				// return;
-
 			const review = await Review.findOne({ postId: article._id }).lean();
 			res.status(200).send({ ...article,
 				review });
 		} catch (err) {
-			console.log(err);
 			res.status(400).send({
 				error: 'An error has occurred trying to get articles',
 			});
@@ -61,18 +58,17 @@ module.exports = {
 	},
 	async reviewArticle (req, res) {
 		try {
-			const contributor = req.body.contributorId;
-			const status = 'IR';
 			const review = await Review.findById(req.params.id).lean();
+			if (!review) return res.status(404).send({ error: 'The article requested cannot be found.' });
 			const article = await Post.findById(review.postId).lean();
-			const isReviewer = review.currReviewer === contributor;
-			const inReview = article.status === status;
-			if (isReviewer && inReview) res.status(200).send({ ...article,
+			// const isReviewer = review.currReviewer === req.body.contributorId;
+			// const inReview = article.status === ReviewStatus.inReview;
+			// if (isReviewer && inReview) res.status(200).send({ ...article,
+			// 	review });
+			res.status(200).send({ ...article,
 				review });
-			else res.status(403).send({ error: 'Requested document does not exist' });
-
 		} catch (err) {
-			console.log(err);
+			// console.log(err);
 			res.status(400).send({
 				error: 'An error has occurred trying to get article for review',
 			});
@@ -81,7 +77,6 @@ module.exports = {
 	async reviewArticles (req, res) {
 		try {
 			const query = url.parse(req.url, true).query;
-			console.log(query);
 			const status = query.status;
 			const review = query.review ? query.review : 'false';
 			const reviewer = query.reviewer ? query.reviewer : 'false';
@@ -218,7 +213,6 @@ module.exports = {
    */
 	async delete (req, res) {
 		try {
-			const posts = await Post.find();
 			const deleteCount = await Post.deleteOne({
 				_id: req.params.articleId,
 				contributorId: req.body.contributorId,

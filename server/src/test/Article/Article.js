@@ -8,7 +8,7 @@ const assert = require('chai').assert;
 const { Post, ReviewStatus, Review } = require('../../models');
 const { createDefaultPost, getPostSchema, postArticle, updatePost } = require('./Helpers');
 const { login } = require('../Authorization/Helpers');
-const { updateReview } = require('../Review/Helpers');
+const { getReviewSchema } = require('../Review/Helpers');
 
 chai.use(chaiHttp);
 let API_TOKEN = null;
@@ -340,11 +340,11 @@ describe('Posts', () => {
 	});
 });
 
-describe('GET Posts involving Reviews', () => {
-	const numPosts = 100; // number of posts to be created before each test
+describe('GET /api/articles/review', () => {
+	const numPosts = 10; // number of posts to be created before each test
 	const reviewStatus = [ ReviewStatus.needsReview, ReviewStatus.approved, ReviewStatus.editing,
 		ReviewStatus.inReview, ReviewStatus.draft ];
-
+	const expectedLen = numPosts / reviewStatus.length;
 	beforeEach(async () => { // Before each test we empty the database
 		Post.remove({}, err => {
 			if (err) return err;
@@ -377,36 +377,43 @@ describe('GET Posts involving Reviews', () => {
 		}
 	});
 	describe('GET /api/articles/review', () => {
-		it('it should GET the requested articles for review that have status need review', async () => {
-			const res = await chai.request(server)
-				.get(`/api/articles/review?status=${ ReviewStatus.needsReview }&review=false&reviewer=false`)
-				.set('Authorization', API_TOKEN);
-			const expectedLen = numPosts / reviewStatus.length;
-			res.should.have.status(200);
-			res.body.should.be.a('array');
-			res.body.should.have.length(expectedLen);
-		});
 		it('it should return a select number of contributors articles when \
 		status is NR and Review is false', async () => {
 			const res = await chai.request(server)
-				.get(`/api/articles/review?status=${ ReviewStatus.needsReview }&review=false&reviewer=false`)
+				.get(`/api/articles/review?status=${ ReviewStatus.needsReview }&review=false&rewer=false`)
 				.set('Authorization', API_TOKEN);
-			const expectedLen = numPosts / reviewStatus.length;
+
 			res.should.have.status(200);
 			res.body.should.be.a('array');
 			res.body.should.have.length(expectedLen);
 
 			// following query should have no effect
 			const response = await chai.request(server)
-				.get(`/api/articles/review?status=${ ReviewStatus.needsReview }&review=false&rever=true`)
+				.get(`/api/articles/review?status=${ ReviewStatus.needsReview }&review=false&revier=true`)
 				.set('Authorization', API_TOKEN);
 
 			response.should.have.status(200);
 			response.body.should.be.a('array');
 			response.body.should.have.length(expectedLen);
 		});
-		it('it should return a select number of contributors articles when \
-		status is NR and Review is false', async () => {
+		it('it should not return any articles when Review=true \
+		and no other contributor created articles', async () => {
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.needsReview }&review=true&reviewer=false`)
+				.set('Authorization', API_TOKEN);
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(0);
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.needsReview }&review=true&revier=true`)
+				.set('Authorization', API_TOKEN);
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(0);
+		});
+		it('it should not return any articles when requester hasnt posted  \
+		any articles and status is NR and Review is false', async () => {
 			const token = await login({ // login and get new jwt token
 				email: 'camille.tsalik@gmail.com',
 				password: 'password',
@@ -429,6 +436,349 @@ describe('GET Posts involving Reviews', () => {
 			response.should.have.status(200);
 			response.body.should.be.a('array');
 			response.body.should.have.length(0);
+		});
+
+		/* status editing */
+		it('it should return requested articles when status is editing\
+		and jwt matches article contributor', async () => {
+
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.editing }&review=false&reviewer=false`)
+				.set('Authorization', API_TOKEN);
+
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(expectedLen);
+
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.editing }&review=true&reviewer=true`)
+				.set('Authorization', API_TOKEN);
+
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(expectedLen);
+		});
+		it('it should not return any articles when requester hasnt posted  \
+		any articles and status is editing', async () => {
+
+			const token = await login({ // login and get new jwt token
+				email: 'camille.tsalik@gmail.com',
+				password: 'password',
+			});
+			API_TOKEN = token.token;
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.editing }&review=false&reviewer=false`)
+				.set('Authorization', API_TOKEN);
+
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(0);
+
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.editing }&review=true&reviewer=true`)
+				.set('Authorization', API_TOKEN);
+
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(0);
+		});
+
+		/* status in review */
+		it('it should return requested articles when status is in review\
+		and jwt matches article contributor', async () => {
+
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.inReview }&review=false&reviewer=false`)
+				.set('Authorization', API_TOKEN);
+
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(expectedLen);
+
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.inReview }&review=true&reviewer=false`)
+				.set('Authorization', API_TOKEN);
+
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(expectedLen);
+		});
+		it('it should not return requested articles when status is in review\
+		and jwt matches article contributor and reviewer is true', async () => {
+
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.inReview }&review=false&reviewer=true`)
+				.set('Authorization', API_TOKEN);
+
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(0);
+
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.inReview }&review=true&reviewer=true`)
+				.set('Authorization', API_TOKEN);
+
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(0);
+		});
+
+		it('it should return requested articles when status is in review\
+		and jwt matches reviewer contributorId and reviewer is true', async () => {
+
+			const p = await Post.find({ status: ReviewStatus.inReview });
+
+			const token = await login({ // login and get new jwt token
+				email: 'camille.tsalik@gmail.com',
+				password: 'password',
+			});
+			API_TOKEN = token.token;
+
+
+			p.map(async a => { // set currReview to be contributorId of user2
+				await Review.findOneAndUpdate({ postId: a._id }, { currReviewer: token.user.contributorId });
+			});
+
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.inReview }&review=false&reviewer=true`)
+				.set('Authorization', API_TOKEN);
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(expectedLen); // should be len of posts / len of status array
+
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.inReview }&review=true&reviewer=true`)
+				.set('Authorization', API_TOKEN);
+
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(expectedLen);
+		});
+
+
+
+		/* status is approved */
+		it('it should return a select number of contributors articles when \
+		status is approved and Review is false', async () => {
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.approved }&review=false&rewer=false`)
+				.set('Authorization', API_TOKEN);
+
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(expectedLen);
+
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.approved }&review=false&revier=true`)
+				.set('Authorization', API_TOKEN);
+
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(expectedLen);
+		});
+		it('it should not return any articles when Review=true \
+		and no other contributor created articles', async () => {
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.approved }&review=true&reviewer=false`)
+				.set('Authorization', API_TOKEN);
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(0);
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.approved }&review=true&revier=true`)
+				.set('Authorization', API_TOKEN);
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(0);
+		});
+		it('it should not return any articles when requester hasnt posted  \
+		any articles and status is approved and Review is false', async () => {
+			const token = await login({ // login and get new jwt token
+				email: 'camille.tsalik@gmail.com',
+				password: 'password',
+			});
+			API_TOKEN = token.token;
+
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.approved }&review=false&reviewer=false`)
+				.set('Authorization', API_TOKEN);
+
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(0);
+
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.approved }&review=false&reviewer=true`)
+				.set('Authorization', API_TOKEN);
+
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(0);
+		});
+
+		/* status is draft */
+		it('it should return a select number of contributors articles when \
+		status is approved and Review is false', async () => {
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.draft }&review=false&rewer=false`)
+				.set('Authorization', API_TOKEN);
+
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(expectedLen);
+
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.draft }&review=false&revier=true`)
+				.set('Authorization', API_TOKEN);
+
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(expectedLen);
+		});
+		it('it should not return any articles when Review=true \
+		and no other contributor created articles', async () => {
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.draft }&review=true&reviewer=false`)
+				.set('Authorization', API_TOKEN);
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(0);
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.draft }&review=true&revier=true`)
+				.set('Authorization', API_TOKEN);
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(0);
+		});
+		it('it should not return any articles when requester hasnt posted  \
+		any articles and status is draft and Review is false', async () => {
+			const token = await login({ // login and get new jwt token
+				email: 'camille.tsalik@gmail.com',
+				password: 'password',
+			});
+			API_TOKEN = token.token;
+
+			const res = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.draft }&review=false&reviewer=false`)
+				.set('Authorization', API_TOKEN);
+
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(0);
+
+			// following query should have no effect
+			const response = await chai.request(server)
+				.get(`/api/articles/review?status=${ ReviewStatus.draft }&review=false&reviewer=true`)
+				.set('Authorization', API_TOKEN);
+
+			response.should.have.status(200);
+			response.body.should.be.a('array');
+			response.body.should.have.length(0);
+		});
+
+		it('it should not return any articles when status is not provided in query', async () => {
+			const res = await chai.request(server)
+				.get('/api/articles/review')
+				.set('Authorization', API_TOKEN);
+			res.should.have.status(200);
+			res.body.should.be.a('array');
+			res.body.should.have.length(0);
+		});
+	});
+});
+
+/* GET posts by revID */
+describe('GET Post and Review by Review ID', () => {
+	const numPosts = 10; // number of posts to be created before each test
+	const reviewStatus = [ ReviewStatus.needsReview, ReviewStatus.approved, ReviewStatus.editing,
+		ReviewStatus.inReview, ReviewStatus.draft ];
+	beforeEach(async () => { // Before each test we empty the database
+		Post.remove({}, err => {
+			if (err) return err;
+		});
+		Review.remove({}, err => {
+			if (err) return err;
+		});
+		try {
+			const defaultCreds = { // login and get new jwt token
+				email: 'socaljorozco@gmail.com',
+				password: 'password',
+			};
+			const res = await login(defaultCreds);
+			API_TOKEN = res.token;
+			USER = res.user;
+			CONTRIBUTOR = res.contribu;
+
+			const posts = await postArticle({ // create 10 posts with user1
+				email: 'socaljorozco@gmail.com',
+				password: 'password',
+				posts: numPosts,
+			});
+			for (let i = 0; i < posts.length; i++) // update status of reviews
+				await updatePost({
+					_id: posts[i]._id,
+					status: reviewStatus[i % reviewStatus.length], // apply different status for every post
+				});
+		} catch (err) {
+			return err;
+		}
+	});
+	describe('GET /api/articles/review by ID', () => {
+		it('it should not return any articles when Review=true \
+			and no other contributor created articles', async () => {
+
+			const post = new Post(getPostSchema({ contributorId: USER.contributorId,
+				full: true }));
+			const pSaved = await Post.create(post);
+			const review = new Review(getReviewSchema({ postId: pSaved._id,
+				contributorId: USER.contributorId }));
+			const rSaved = await Review.create(review);
+			const res = await chai.request(server)
+				.get(`/api/articles/review/${ rSaved._id }`)
+				.set('Authorization', API_TOKEN);
+			res.should.have.status(200);
+			res.body.should.be.a('object');
+			res.body.should.have.property('author').eql(pSaved.author);
+			res.body.should.have.property('body').eql(pSaved.body);
+			res.body.should.have.property('draft').eql(pSaved.draft);
+			res.body.should.have.property('tags').eql(pSaved.tags);
+			res.body.should.have.property('status').eql(pSaved.status);
+			res.body.should.have.property('title').eql(pSaved.title);
+			res.body.should.have.property('_id').eql(pSaved._id.toString());
+			res.body.should.have.property('realm').eql(pSaved.realm);
+			res.body.should.have.property('review').should.be.a('object');
+			res.body.review.should.have.property('_id')
+				.eql(rSaved._id.toString());
+			res.body.review.should.have.property('contributorId')
+				.eql(USER.contributorId);
+			res.body.review.should.have.property('postId')
+				.eql(pSaved._id.toString());
+		});
+		it('it should not return any articles when Review=true \
+		and no other contributor created articles', async () => {
+
+			const post = new Post(getPostSchema({ contributorId: USER.contributorId,
+				full: true }));
+			const pSaved = await Post.create(post);
+			const review = new Review(getReviewSchema({ postId: pSaved._id,
+				contributorId: USER.contributorId }));
+			const rSaved = await Review.create(review);
+			const res = await chai.request(server)
+				.get(`/api/articles/review/${ rSaved._id }`)
+				.set('Authorization', API_TOKEN);
+			res.should.have.status(200);
+			res.body.should.be.a('object');
+			res.body.should.have.property('author').eql(pSaved.author);
 		});
 	});
 });
