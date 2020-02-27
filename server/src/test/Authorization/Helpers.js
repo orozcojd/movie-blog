@@ -1,5 +1,4 @@
-const axios = require('axios');
-const { api } = require('../Helpers');
+const { api } = require('../Services/api');
 
 const login = async ({ email, password }) => {
 	const creds = {

@@ -68,7 +68,8 @@ export default {
 	 * @param {Object} payload
 	 */
 	async updateArticle({ commit, dispatch }, payload) {
-		const article = await to(Api.ApiAdmin().put(`/api/articles/${payload.id}`, payload.article));
+		const article = await to(Api.ApiAdmin().put(`/api/articles/${payload.id}`,
+			payload.article));
 		if (article) {
 			commit(types.UPDATE_ARTICLE, article.data);
 			dispatch('setSnackbar', {

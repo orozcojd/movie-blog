@@ -70,7 +70,7 @@ export default {
 	 * @param {String} tag
 	 */
 	async getArticlesByTag({ commit }, payload) {
-		const articles = await to(Api.ApiGeneral().get(`/tag/${payload.query}`, payload.params));
+		const articles = await to(Api.ApiGeneral().get(`articles/tag/${payload.query}`, payload.params));
 		if (articles) commit(types.FETCH_BY_TAG, articles.data);
 	},
 	/**

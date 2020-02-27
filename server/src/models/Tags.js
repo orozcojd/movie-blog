@@ -7,6 +7,7 @@ const tagSchema = new Schema({
 		type: String,
 		unique: true,
 		lowercase: true,
+		required: true,
 	},
 	urlTag: {
 		type: String,
@@ -39,4 +40,7 @@ const tagSchema = new Schema({
 		required: true,
 	},
 });
-module.exports = mongoose.model('Tags', tagSchema);
+module.exports = {
+	Tags: mongoose.model('Tags', tagSchema),
+	tagSchema,
+};

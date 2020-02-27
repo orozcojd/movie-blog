@@ -46,19 +46,14 @@ module.exports = app => {
 		AuthenticationControllerPolicy.recaptchaPolicy,
 		authSpeedLimiter,
 		AuthenticationController.login);
+
 	app.get('/articles',
 		appSpeedLimiter,
 		ArticlesController.index);
 	app.get('/articles/:articleId',
 		appSpeedLimiter,
 		ArticlesController.articlesById);
-	app.get('/tags',
-		appSpeedLimiter,
-		TagsController.getTags);
-	app.get('/tags/:tagName',
-		appSpeedLimiter,
-		TagsController.getTag);
-	app.get('/tag/:tagName',
+	app.get('/articles/tag/:tagName',
 		appSpeedLimiter,
 		ArticlesController.articlesByTag);
 	app.get('/infinite-articles',
@@ -67,6 +62,12 @@ module.exports = app => {
 	app.get('/articlesByContributor/:contributorId',
 		appSpeedLimiter,
 		ArticlesController.articlesByContributor);
+	app.get('/tags',
+		appSpeedLimiter,
+		TagsController.getTags);
+	app.get('/tags/:tagName',
+		appSpeedLimiter,
+		TagsController.getTag);
 	app.get('/contributors/:contributorId',
 		appSpeedLimiter,
 		ContributorController.getContributor);

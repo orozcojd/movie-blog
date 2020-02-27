@@ -10,6 +10,7 @@ require('./config/passport');
 
 mongoose.connect(config.db.database, {
 	useNewUrlParser: true,
+	useUnifiedTopology: true,
 })
 	.then(() => {
 		console.log('success');

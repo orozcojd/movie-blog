@@ -53,7 +53,8 @@ UserSchema.methods.hashPassword = async function (password) {
 		.then(salt => bcrypt.hash(password, salt, null))
 		.then(hash => {
 			this.hash = hash;
-		});
+		}
+		);
 };
 UserSchema.methods.updatePermission = async function (permission) {
 	this.permission = permission;

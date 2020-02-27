@@ -8,6 +8,8 @@ const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const config = require('./config/config');
 
+
+
 const loginLimit = rateLimit({
 	windowMs: 15 * 60 * 100,
 	max: config.ratelimits.login,
@@ -35,7 +37,8 @@ const app = express();
 // API declarations
 app.use(bodyParser.json({ limit: '300kb',
 	extended: true }));
-app.use(bodyParser.urlencoded({ limit: '300kb' }));
+app.use(bodyParser.urlencoded({ extended: true,
+	limit: '300kb' }));
 
 app.use(flash());
 app.use(helmet.hidePoweredBy());

@@ -1,4 +1,4 @@
-const { Post } = require('../models');
+const { Post, ReviewStatus } = require('../models');
 // Post.find().remove().exec();
 // Tags.collection.dropAllIndexes(function (err, results) {
 // });
@@ -9,7 +9,7 @@ module.exports = {
 	},
 	/**
    * GET REQUEST
-   * Tets all posts and limits to 12 posts. send array of articles
+   * Gets all posts and limits to 12 posts. send array of articles
    * If no error -- otherwise sends 400 error
    * @param {Object} req
    * @param {Object} res
@@ -18,8 +18,6 @@ module.exports = {
 		try {
 			const options = {};
 			let trimArticle = {};
-			console.log(req.query);
-
 			if (req.query.skip)
 				options.skip = parseInt(req.query.skip);
 			if (req.query.limit)
@@ -34,6 +32,44 @@ module.exports = {
 				thumbnailDescription: 1 };
 			const articles = await Post.find(query, trimArticle, options).lean();
 			res.send(articles);
+		} catch (err) {
+			res.status(400).send({
+				error: 'An error has occured trying to get articles',
+			});
+		}
+	},
+
+	/**
+   * GET REQUEST BY ID
+   * Finds the article by id and sends the reponse if id is valid
+   * otherwise sends 400 error
+   * @param {Object} req
+   * @param {Object} res
+   */
+	async articlesById (req, res) {
+		try {
+			const article = await Post.findOne({
+				_id: req.params.articleId,
+				status: ReviewStatus.approved,
+			}, '-status')
+				.populate({
+					path: 'realm',
+					select: '-contributorId',
+				})
+				.populate({
+					path: 'tags',
+					select: '-contributorId',
+				})
+				.lean();
+			if (article)
+				res.send(article);
+				// console.log('article');
+				// console.log(article);
+			else
+				res.status(404).send({
+					error: 'Article was not found.',
+				});
+
 		} catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get articles',
@@ -102,7 +138,6 @@ module.exports = {
 				message: articles,
 				pages: Math.ceil(count / size),
 				pageNo,
-
 			};
 			res.send(response);
 
@@ -155,31 +190,6 @@ module.exports = {
 		} catch (err) {
 			res.status(400).send({
 				error: 'An error has occured trying to get associated articles',
-			});
-		}
-	},
-
-	/**
-   * GET REQUEST BY ID
-   * Finds the article by id and sends the reponse if id is valid
-   * otherwise sends 400 error
-   * @param {Object} req
-   * @param {Object} res
-   */
-	async articlesById (req, res) {
-		try {
-			const article = await Post.findById(req.params.articleId).lean();
-			if (article)
-				res.send(article);
-
-			else
-				res.status(404).send({
-					error: 'Article was not found.',
-				});
-
-		} catch (err) {
-			res.status(400).send({
-				error: 'An error has occured trying to get articles',
 			});
 		}
 	},

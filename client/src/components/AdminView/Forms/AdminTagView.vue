@@ -90,14 +90,10 @@
         md6
         class="mb-med"
       >
-        <h2 align="left">
+        <h2>
           Established Tags
         </h2>
-        <div 
-          class="section"
-          align="left"
-        >
-          <!-- @input="remove(tag)" -->
+        <div class="section">
           <v-chip
             v-for="(tag, index) in chipTags"
             :key="index"

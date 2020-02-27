@@ -51,7 +51,6 @@ export default {
 			await dispatch('setToken', response.data);
 			await dispatch('setUser', response.data.user);
 			await dispatch('getContributor', response.data.user.contributorId);
-			// await dispatch('contributorName')
 			return Promise.resolve();
 		}
 	},

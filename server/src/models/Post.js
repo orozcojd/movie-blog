@@ -3,6 +3,7 @@
  */
 const mongoose = require('mongoose');
 const Status = require('./ReviewStatus');
+const { tagSchema, Tags } = require('./Tags');
 
 const Schema = mongoose.Schema;
 const status = [ Status.approved, Status.editing,
@@ -22,15 +23,17 @@ const articleSchema = new Schema({
 		type: String,
 		default: '',
 	},
-	draft: {
-		type: Boolean,
-		default: false,
-	},
+	// draft: {
+	// 	type: Boolean,
+	// 	default: false,
+	// },
 	realm: {
-		type: String,
+		type: Schema.Types.ObjectId,
+		ref: Tags,
 		required: true,
 	},
-	tags: [ String ],
+	tags: [ { type: Schema.Types.ObjectId,
+		ref: Tags } ],
 	lazyImg: {
 		type: String,
 		required: true,
