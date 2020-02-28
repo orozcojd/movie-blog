@@ -1,4 +1,4 @@
-const { Post, ReviewStatus } = require('../models');
+const { Post, ReviewStatus, Tags } = require('../models');
 // Post.find().remove().exec();
 // Tags.collection.dropAllIndexes(function (err, results) {
 // });
@@ -48,6 +48,7 @@ module.exports = {
    */
 	async articlesById (req, res) {
 		try {
+			// console.log(await Tags.find;())
 			const article = await Post.findOne({
 				_id: req.params.articleId,
 				status: ReviewStatus.approved,
@@ -85,6 +86,7 @@ module.exports = {
    */
 	async articlesByTag (req, res) {
 		try {
+			// console.log(req.query);
 			const size = 12;
 			let trimArticle = {};
 			let pageNo = parseInt(req.query.page);
@@ -101,14 +103,25 @@ module.exports = {
 			const articles = await Post
 				.find({
 					$or: [ { tags: req.params.tagName }, { realm: req.params.tagName } ],
-				}, trimArticle, query).lean();
+				}, trimArticle, query)
+				.populate({
+					path: 'realm',
+					select: '-contributorId',
+				})
+				.populate({
+					path: 'tags',
+					select: '-contributorId',
+				})
+				.lean();
 			const response = {
 				message: articles,
 				pages: Math.ceil(count / size),
 				pageNo,
 			};
+			console.log(response);
 			res.send(response);
 		} catch (err) {
+			console.log(err);
 			res.status(400).send({
 				error: 'An error has occured trying to get article tag',
 			});
