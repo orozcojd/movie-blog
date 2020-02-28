@@ -2,17 +2,15 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const server = require('../server');
 const should = require('chai').should();
-const { User, Contributor, Review, Post } = require('../models');
+const { User, Contributor, Review, Post, Tags } = require('../models');
 
 chai.use(chaiHttp);
 
 describe('/api/articles', () => {
-	beforeEach(done => { // Before each test we empty the database
-		Post.remove({}, err => {
-		});
-		Review.remove({}, err => {
-			done();
-		});
+	beforeEach(async () => { // Before each test we empty the database
+		await Post.remove().exec();
+		await Tags.remove().exec();
+		await Review.remove().exec();
 	});
 
 	describe('/GET post', () => {
