@@ -70,4 +70,5 @@ module.exports = {
 		return await Post.findByIdAndUpdate(_id, { status }, { new: true });
 	},
 	getPostSchema,
+	createTag,
 };

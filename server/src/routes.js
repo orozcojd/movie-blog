@@ -53,7 +53,7 @@ module.exports = app => {
 	app.get('/articles/:articleId',
 		appSpeedLimiter,
 		ArticlesController.articlesById);
-	app.get('/articles/tags/:tagName',
+	app.get('/articles/tags/:tagId',
 		appSpeedLimiter,
 		ArticlesController.articlesByTag);
 	app.get('/infinite-articles',

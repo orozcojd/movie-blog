@@ -48,7 +48,6 @@ module.exports = {
    */
 	async articlesById (req, res) {
 		try {
-			// console.log(await Tags.find;())
 			const article = await Post.findOne({
 				_id: req.params.articleId,
 				status: ReviewStatus.approved,
@@ -64,8 +63,6 @@ module.exports = {
 				.lean();
 			if (article)
 				res.send(article);
-				// console.log('article');
-				// console.log(article);
 			else
 				res.status(404).send({
 					error: 'Article was not found.',
@@ -86,24 +83,26 @@ module.exports = {
    */
 	async articlesByTag (req, res) {
 		try {
-			// console.log(req.query);
 			const size = 12;
-			let trimArticle = {};
+			const options = {};
+			const query = {
+				$and: [
+					{ $or: [ { tags: req.params.tagId }, { realm: req.params.tagId } ] },
+					{ status: ReviewStatus.approved },
+				],
+			};
 			let pageNo = parseInt(req.query.page);
-			const query = {};
 			pageNo = pageNo >= 0 ? pageNo : 1;
-			const count = await Post.countDocuments({ $or: [ { tags: req.params.tagName }, { realm: req.params.tagName } ] });
-			query.skip = size * (pageNo - 1);
-			query.limit = size;
-			query.sort = { created_at: 'desc' };
-			trimArticle = { title: 1,
+			const count = !req.query.count ? await Post.countDocuments(query) : req.query.count;
+			options.skip = size * (pageNo - 1);
+			options.limit = size;
+			options.sort = { created_at: 'desc' };
+			const trimArticle = { title: 1,
 				author: 1,
 				img: 1,
 				thumbnailDescription: 1 };
 			const articles = await Post
-				.find({
-					$or: [ { tags: req.params.tagName }, { realm: req.params.tagName } ],
-				}, trimArticle, query)
+				.find(query, trimArticle, options)
 				.populate({
 					path: 'realm',
 					select: '-contributorId',
@@ -114,11 +113,11 @@ module.exports = {
 				})
 				.lean();
 			const response = {
-				message: articles,
+				results: articles,
 				pages: Math.ceil(count / size),
+				count,
 				pageNo,
 			};
-			console.log(response);
 			res.send(response);
 		} catch (err) {
 			console.log(err);

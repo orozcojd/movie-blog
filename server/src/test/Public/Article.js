@@ -17,6 +17,8 @@ const CONTRIBUTOR = null;
 let createdTags = [];
 const status = [ ReviewStatus.approved, ReviewStatus.editing, ReviewStatus.inReview,
 	ReviewStatus.needsReview, ReviewStatus.draft ];
+const notApproved = [ ReviewStatus.editing, ReviewStatus.inReview,
+	ReviewStatus.needsReview, ReviewStatus.draft ];
 const tags = [ { name: 'artistic',
 	realm: false }, { name: 'technology',
 	realm: false }, { name: 'cultural',
@@ -24,9 +26,9 @@ const tags = [ { name: 'artistic',
 { name: 'furistic',
 	realm: false }, { name: 'monetary',
 	realm: false }, { name: 'musical',
-	realm: false }, { name: 'cinematic',
-	realm: false }, { name: 'opinionated',
-	realm: false } ];
+	realm: true }, { name: 'cinematic',
+	realm: true }, { name: 'opinionated',
+	realm: true } ];
 
 async function createTags (contributorId, createdTags) {
 	for (let i = 0; i < tags.length; i++) {
@@ -186,8 +188,6 @@ describe('Posts', () => {
 		});
 
 		it('it should not return posts that are not published, given an ID', async () => {
-			const notApproved = [ ReviewStatus.editing, ReviewStatus.inReview,
-				ReviewStatus.needsReview, ReviewStatus.draft ];
 			for (let i = 0; i < notApproved.length; i++) {
 				const payload = await getPostSchema({ status: notApproved[i % 4],
 					contributorId: USER.contributorId,
@@ -230,29 +230,90 @@ describe('Posts', () => {
 	 * TEST CASES FOR GET /ARTICLES/TAGS/:TAGNAME
 	 */
 	describe('/GET post by TAG name', () => {
+		const totalPosts = 100;
+		let noRealmTags = [];
+		let realmTags = [];
 		beforeEach(async () => {
 			expected = [];
+			createdTags = [];
 			await Post.remove().exec();
 			await Tags.remove().exec();
 			await Review.remove().exec();
-			// const totalPosts = 100;
-			// for (let i = 0; i < totalPosts; i++) {
-			// 	const schema = getPostSchema({ status: notApproved[i % 4],
-			// 		contributorId: USER.contributorId,
-			// 		full: true,
-			// 		tags: i % 2 === 0 ? tags : tags2,
-			// 		realm: realm[i % 2] });
-			// 	await Post.create(schema);
-			// }
+			await createTags(USER.contributorId, createdTags);
+			noRealmTags = createdTags.filter(t => t.realm === false);
+			realmTags = createdTags.filter(t => t.realm === true);
 
+			for (let i = 0; i < totalPosts; i++) {
+				const schema = await getPostSchema({ status: status[i % 5],
+					contributorId: USER.contributorId,
+					full: true,
+					/* split half posts to contain partial tags array */
+					tags: i % 2 === 0 ? noRealmTags.slice(0, 3) : noRealmTags.slice(3, 5),
+					realm: realmTags[i % realmTags.length] });
+				// console.log(schema);
+				await Post.create(schema);
+			}
 		});
-		// it('it should GET the posts by tag name', async () => {
-		// 	const res = await chai.request(server)
-		// 		.get('/articles/tags/artistic');
-		// 	console.log(res.body);
-		// 	res.body.should.be.a('Array');
-		// 	res.body.should.have.length(50);
-
-		// });
+		it('it should GET the posts by tag name with matching tags', async () => {
+			/* artistic tag is found in tags */
+			const tag = createdTags.find(t => t.name === 'artistic');
+			const expectedLength = Math.ceil(totalPosts / (status.length + noRealmTags.length));
+			const res = await chai.request(server)
+				.get(`/articles/tags/${ tag._id }`);
+			res.body.should.be.a('object');
+			res.body.should.have.property('results');
+			res.body.results.should.have.length(expectedLength);
+			res.body.should.have.property('pageNo');
+			res.body.should.have.property('count');
+			res.body.should.have.property('pages');
+			const comparison = deepContain(res.body.results, tag);
+			expect(comparison).to.equal(true, 'response results deep comparison ');
+		});
 	});
 });
+
+/**
+ * Loops through Array of articles and returns
+ * @param {Array} array
+ * @param {Object} object
+ */
+function deepContain (array, object) {
+
+	let totalCount = 0;
+	array.forEach(item => {
+		/* check for tag values */
+		item.tags.forEach(tag => {
+			let valMatchCount = 0;
+			for (const k of Object.keys(tag)) {
+				const val1 = typeof tag[k] === Object ? tag[k].toString() : tag[k];
+				const val2 = typeof object[k] === Object ? object[k].toString() : object[k];
+				if (val1 == val2)
+					++valMatchCount;
+				else
+					break;
+				if (valMatchCount === Object.keys(object).length) {
+					++totalCount;
+					valMatchCount = 0;
+				}
+			}
+		});
+		/* check for realm values */
+		for (const k of Object.keys(item.realm)) {
+			const tag = item.realm;
+
+			const val1 = typeof tag[k] === Object ? tag[k].toString() : tag[k];
+			const val2 = typeof object[k] === Object ? object[k].toString() : object[k];
+			if (val1 == val2)
+				++valMatchCount;
+			else
+				valMatchCount = 0;
+			if (valMatchCount === Object.keys(object).length) {
+				++totalCount;
+				valMatchCount = 0;
+			}
+		}
+
+	});
+	// console.log(totalCount)
+	return totalCount === array.length; // contains no record of matching object
+}
