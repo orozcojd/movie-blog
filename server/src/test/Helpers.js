@@ -4,6 +4,17 @@ const { api } = require('./Services/api');
 
 
 let tagNames = [];
+const tags = [ { name: 'artistic',
+	realm: false }, { name: 'technology',
+	realm: false }, { name: 'cultural',
+	realm: false },
+{ name: 'furistic',
+	realm: false }, { name: 'monetary',
+	realm: false }, { name: 'musical',
+	realm: true }, { name: 'cinematic',
+	realm: true }, { name: 'opinionated',
+	realm: true } ];
+
 function newTagNames () {
 	tagNames = [];
 	for (let i = 0; i < 3; i++)
@@ -68,6 +79,19 @@ module.exports = {
 	},
 	async updatePost ({ _id, status = ReviewStatus.needsReview }) {
 		return await Post.findByIdAndUpdate(_id, { status }, { new: true });
+	},
+	async createTags (contributorId, createdTags) {
+		for (let i = 0; i < tags.length; i++) {
+			const tag = await Tags.create({
+				img: null,
+				lazyImg: null,
+				realm: tags[i].realm,
+				name: tags[i].name,
+				urlTag: tags[i].name.split(' ').join('-'),
+				contributorId,
+			});
+			createdTags.push(tag.toObject());
+		}
 	},
 	getPostSchema,
 	createTag,

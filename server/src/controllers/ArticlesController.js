@@ -95,7 +95,6 @@ module.exports = {
 			pageNo = pageNo >= 0 ? pageNo : 1;
 			const count = !req.query.count ? await Post.countDocuments(query) : req.query.count;
 			// const count = await Post.countDocuments(query)
-			console.log(count);
 			options.skip = size * (pageNo - 1);
 			options.limit = size;
 			options.sort = { created_at: 'desc' };
