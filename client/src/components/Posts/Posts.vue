@@ -41,7 +41,7 @@
     <h2
       align="left"
     >
-      most recent
+      most recent! 
     </h2>
     <timeline
       :articles="timelineArticles"

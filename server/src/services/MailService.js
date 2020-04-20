@@ -65,7 +65,7 @@ module.exports = {
 		};
 		const params = islocal ? await getLocalClient(emailuser) : await getOauthClient(emailuser);
 		const transporter = nodemailer.createTransport(params);
-		const resetLink = `${ config.apiDomain }:8080/?#/auth/password-reset?token=${ user.resetToken }`;
+		const resetLink = `${ config.apiDomain }:8081/?#/auth/password-reset?token=${ user.resetToken }`;
 		await transporter.sendMail({
 			from: `"${ config.nodemailer.admin }" <${ emailuser.name }>`,
 			to: user.email, // list of receivers

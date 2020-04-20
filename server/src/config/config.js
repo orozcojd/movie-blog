@@ -6,7 +6,7 @@ const development = production = {
 	serverIp: process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0',
 	apiDomain: process.env.OPENSHIFT_DOMAIN || 'http://localhost',
 	db: {
-		database: process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://localhost:27017/personalblog',
+		database: process.env.OPENSHIFT_MONGODB_DB_URL || 'mongodb://mongodatabase/personalblog',
 	},
 	authentication: {
 		jwtSecret: process.env.OPENSHIFT_JWT_SECRET || 'secret',
