@@ -5,14 +5,21 @@ services:
   vue: # name of the first service
     build: client # specify the directory of the Dockerfile
     ports:
-      - "8080:80" # specify port forewarding
+      - "8080:8080" # specify port forewarding
     volumes:
       - ./client:/app # will enable changes made to the vue app reflect in the container
-
+      - '/app/node_modules'
+    stdin_open: true
+    tty: true
+    environment:
+      - CHOKIDAR_USEPOLLING=true
   express: #name of the second service
     build: server # specify the directory of the Dockerfile
     ports:
       - "8081:8081" #specify ports forewarding
+    volumes:
+      - './server:/app'
+      - '/app/node_modules'
     links: # creates connection to service with name of service as the host name
       - mongodatabase
 
@@ -20,5 +27,3 @@ services:
     image: mongo # specify image to build container from
     ports:
       - "27017:27017" # specify port forewarding
-    volumes:
-      - /Users/jonathanorozco/Documents/GitHub.nosync/mongodb/data:/data/db

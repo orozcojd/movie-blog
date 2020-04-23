@@ -46,7 +46,8 @@ module.exports = app => {
 		AuthenticationControllerPolicy.recaptchaPolicy,
 		authSpeedLimiter,
 		AuthenticationController.login);
-
+	
+		
 	app.get('/articles',
 		appSpeedLimiter,
 		ArticlesController.index);

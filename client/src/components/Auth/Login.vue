@@ -91,7 +91,6 @@
 import AdminRules from '@/components/Tools/AdminMainValidation'
 import { mapActions, mapGetters } from 'vuex'
 import VueRecaptcha from 'vue-recaptcha';
-
 export default {
 	name: 'Login',
 	components: {
@@ -124,7 +123,11 @@ export default {
 		headTitle() {
 			return `${this.siteTitle()} - Login`
 		}
-	},
+  },
+  mounted() {
+    console.log('mounted')
+  },
+
 	methods: {
 		verifyLoginCaptcha (token) {
 			this.recaptcha.token = token

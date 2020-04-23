@@ -1,16 +1,17 @@
 FROM mhart/alpine-node
 
 WORKDIR /app
-
 COPY package*.json ./
-
 RUN apk --no-cache add --virtual builds-deps build-base python
 
-# Install project dependencies
-RUN npm install
+# Install nodemon for hot reload
+RUN npm install -g nodemon
 
-COPY . .
+# Install project dependencies
+RUN npm config set registry http://registry.npmjs.org/ && npm install
+
+COPY src /app
 
 EXPOSE 8081
 
-CMD ["npm", "start"]
+CMD ["npm", "run", "dev"]
